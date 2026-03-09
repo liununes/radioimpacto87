@@ -3,8 +3,10 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "@/hooks/useAuth";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import AdminLogin from "./pages/AdminLogin";
 import AdminLayout from "./pages/AdminLayout";
 import AdminHome from "./pages/admin/AdminHome";
 import AdminStreaming from "./pages/admin/AdminStreaming";
@@ -21,25 +23,28 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<AdminHome />} />
-            <Route path="streaming" element={<AdminStreaming />} />
-            <Route path="locutores" element={<AdminLocutores />} />
-            <Route path="programacao" element={<AdminProgramacao />} />
-            <Route path="slides" element={<AdminSlides />} />
-            <Route path="fotos" element={<AdminFotos />} />
-            <Route path="pedidos" element={<AdminPedidos />} />
-            <Route path="noticias" element={<AdminNoticias />} />
-            <Route path="sobre" element={<AdminSobre />} />
-          </Route>
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminHome />} />
+              <Route path="streaming" element={<AdminStreaming />} />
+              <Route path="locutores" element={<AdminLocutores />} />
+              <Route path="programacao" element={<AdminProgramacao />} />
+              <Route path="slides" element={<AdminSlides />} />
+              <Route path="fotos" element={<AdminFotos />} />
+              <Route path="pedidos" element={<AdminPedidos />} />
+              <Route path="noticias" element={<AdminNoticias />} />
+              <Route path="sobre" element={<AdminSobre />} />
+            </Route>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
