@@ -1,11 +1,27 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Play, Pause, Volume2, VolumeX } from "lucide-react";
+import { getProgramaAtual } from "@/lib/radioStore";
 
 const RadioPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.7);
   const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const [liveInfo, setLiveInfo] = useState<{ programa: string; locutor: string; foto: string } | null>(null);
+
+  useEffect(() => {
+    const check = () => {
+      const atual = getProgramaAtual();
+      if (atual) {
+        setLiveInfo({ programa: atual.programa.nome, locutor: atual.locutor.nome, foto: atual.locutor.foto });
+      } else {
+        setLiveInfo(null);
+      }
+    };
+    check();
+    const interval = setInterval(check, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   const togglePlay = () => {
     if (audioRef.current) {
@@ -61,6 +77,19 @@ const RadioPlayer = () => {
               <Play className="w-5 h-5 text-primary-foreground ml-0.5" />
             )}
           </button>
+
+          {/* Live program info */}
+          {liveInfo && (
+            <div className="hidden sm:flex items-center gap-3">
+              {liveInfo.foto && (
+                <img src={liveInfo.foto} alt={liveInfo.locutor} className="w-9 h-9 rounded-full object-cover border-2 border-secondary" />
+              )}
+              <div className="text-left">
+                <p className="text-xs font-semibold text-secondary leading-tight">{liveInfo.programa}</p>
+                <p className="text-xs text-muted-foreground leading-tight">{liveInfo.locutor}</p>
+              </div>
+            </div>
+          )}
 
           {/* Equalizer animation */}
           <div className="hidden sm:flex items-end gap-0.5 h-5">
