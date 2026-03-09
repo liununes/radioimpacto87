@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { Save, Plus, Trash2, MessageCircle } from "lucide-react";
+import { Save, Plus, Trash2, MessageCircle, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { type RedeSocial, getRedesSociais, saveRedesSociais, getWhatsApp, saveWhatsApp } from "@/lib/radioStore";
-
-const STORAGE_KEY = "radio_streaming_config";
+import { getSiteConfig, saveSiteConfig } from "@/lib/themeStore";
 
 const ICONE_OPTIONS = [
   { value: "instagram", label: "Instagram" },
@@ -17,15 +16,21 @@ const ICONE_OPTIONS = [
   { value: "other", label: "Outro" },
 ];
 
-function getConfig() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch { return {}; }
+function fileToBase64(file: File): Promise<string> {
+  return new Promise((res, rej) => {
+    const reader = new FileReader();
+    reader.onload = () => res(reader.result as string);
+    reader.onerror = rej;
+    reader.readAsDataURL(file);
+  });
 }
 
 const AdminStreaming = () => {
-  const saved = getConfig();
-  const [streamUrl, setStreamUrl] = useState(saved.streamUrl || "https://stream.zeno.fm/yn65fsaurfhvv");
-  const [radioName, setRadioName] = useState(saved.radioName || "Impacto FM");
-  const [radioFreq, setRadioFreq] = useState(saved.radioFreq || "87.9 FM");
+  const siteConfig = getSiteConfig();
+  const [streamUrl, setStreamUrl] = useState(siteConfig.streamUrl);
+  const [radioName, setRadioName] = useState(siteConfig.radioName);
+  const [radioFreq, setRadioFreq] = useState(siteConfig.radioFreq);
+  const [logo, setLogo] = useState(siteConfig.logo);
 
   const [whatsapp, setWhatsapp] = useState(getWhatsApp());
   const [redes, setRedes] = useState<RedeSocial[]>(getRedesSociais());
@@ -34,7 +39,7 @@ const AdminStreaming = () => {
   const [novaRedeIcone, setNovaRedeIcone] = useState("instagram");
 
   const handleSave = () => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ streamUrl, radioName, radioFreq }));
+    saveSiteConfig({ streamUrl, radioName, radioFreq, logo });
     saveWhatsApp(whatsapp);
     alert("Configurações salvas!");
   };
@@ -55,7 +60,7 @@ const AdminStreaming = () => {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-foreground">Streaming / Player</h2>
+      <h2 className="text-2xl font-bold text-foreground">Player / Redes Sociais</h2>
 
       <Card>
         <CardHeader><CardTitle>Configurações do Player</CardTitle></CardHeader>
@@ -63,6 +68,7 @@ const AdminStreaming = () => {
           <div className="space-y-2">
             <Label>URL do Stream</Label>
             <Input value={streamUrl} onChange={e => setStreamUrl(e.target.value)} placeholder="https://..." />
+            <p className="text-xs text-muted-foreground">Cole a URL do seu stream (Zeno.fm, Shoutcast, Icecast, etc.)</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -74,6 +80,27 @@ const AdminStreaming = () => {
               <Input value={radioFreq} onChange={e => setRadioFreq(e.target.value)} />
             </div>
           </div>
+
+          {/* Logo */}
+          <div className="space-y-2">
+            <Label>Logo da Rádio</Label>
+            <div className="flex items-center gap-4">
+              {logo && (
+                <img src={logo} alt="Logo" className="w-16 h-16 rounded-lg object-contain border border-border bg-muted p-1" />
+              )}
+              <div className="flex gap-2">
+                <label className="flex items-center gap-2 px-4 py-2 bg-muted rounded-md cursor-pointer hover:bg-muted/80 transition-colors text-sm h-10">
+                  <Upload className="w-4 h-4" /> {logo ? "Trocar logo" : "Enviar logo"}
+                  <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) setLogo(await fileToBase64(f)); }} />
+                </label>
+                {logo && (
+                  <Button variant="ghost" size="sm" className="text-destructive" onClick={() => setLogo("")}>Remover</Button>
+                )}
+              </div>
+            </div>
+            <p className="text-xs text-muted-foreground">Formato recomendado: PNG com fundo transparente, 200×200px</p>
+          </div>
+
           <Button onClick={handleSave} className="gap-2"><Save className="w-4 h-4" /> Salvar</Button>
         </CardContent>
       </Card>
