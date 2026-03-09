@@ -3,11 +3,10 @@ import { Menu, X } from "lucide-react";
 
 const navItems = [
   { label: "Home", href: "#home" },
-  { label: "Sobre", href: "#sobre" },
   { label: "Programação", href: "#programacao" },
-  { label: "Notícias Locais", href: "#noticias-locais" },
-  { label: "Notícias Regionais", href: "#noticias-regionais" },
-  { label: "Redes Sociais", href: "#redes-sociais" },
+  { label: "Galeria", href: "#galeria" },
+  { label: "Notícias", href: "#noticias-locais" },
+  { label: "Sobre", href: "#sobre" },
 ];
 
 const Navigation = () => {
