@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Play, Pause, Volume2, VolumeX, MessageCircle, Instagram, Facebook, Youtube, Twitter, Globe } from "lucide-react";
 import { getProgramaAtual, getRedesSociais, getWhatsApp } from "@/lib/radioStore";
+import { getSiteConfig } from "@/lib/themeStore";
 
 const iconMap: Record<string, React.ElementType> = {
   instagram: Instagram,
@@ -20,6 +21,7 @@ const RadioPlayer = () => {
   const [liveInfo, setLiveInfo] = useState<{ programa: string; locutor: string; foto: string } | null>(null);
   const [redes, setRedes] = useState(getRedesSociais());
   const [whatsapp, setWhatsappNum] = useState(getWhatsApp());
+  const [siteConfig, setSiteConfig] = useState(getSiteConfig());
 
   useEffect(() => {
     const check = () => {
@@ -31,6 +33,7 @@ const RadioPlayer = () => {
       }
       setRedes(getRedesSociais());
       setWhatsappNum(getWhatsApp());
+      setSiteConfig(getSiteConfig());
     };
     check();
     const interval = setInterval(check, 30000);
@@ -71,12 +74,16 @@ const RadioPlayer = () => {
       <div className="container flex items-center justify-between h-16 px-4 gap-2">
         {/* Logo */}
         <div className="flex items-center gap-3 shrink-0">
-          <div className="w-10 h-10 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center animate-pulse-ring">
-            <div className="w-3 h-3 rounded-full bg-primary" />
-          </div>
+          {siteConfig.logo ? (
+            <img src={siteConfig.logo} alt={siteConfig.radioName} className="w-10 h-10 rounded-full object-contain" />
+          ) : (
+            <div className="w-10 h-10 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center animate-pulse-ring">
+              <div className="w-3 h-3 rounded-full bg-primary" />
+            </div>
+          )}
           <div className="hidden sm:block">
-            <h1 className="text-base font-bold font-display leading-tight text-foreground">Impacto FM</h1>
-            <span className="text-xs text-secondary font-semibold">87.9 FM</span>
+            <h1 className="text-base font-bold font-display leading-tight text-foreground">{siteConfig.radioName}</h1>
+            <span className="text-xs text-secondary font-semibold">{siteConfig.radioFreq}</span>
           </div>
         </div>
 
@@ -90,7 +97,6 @@ const RadioPlayer = () => {
             {isPlaying ? <Pause className="w-5 h-5 text-primary-foreground" /> : <Play className="w-5 h-5 text-primary-foreground ml-0.5" />}
           </button>
 
-          {/* Live program info */}
           {liveInfo && (
             <div className="hidden md:flex items-center gap-3">
               {liveInfo.foto && (
@@ -109,7 +115,6 @@ const RadioPlayer = () => {
             </div>
           )}
 
-          {/* Equalizer */}
           <div className="hidden sm:flex items-end gap-0.5 h-5">
             {[1, 2, 3, 4, 5].map((i) => (
               <div
@@ -120,7 +125,6 @@ const RadioPlayer = () => {
             ))}
           </div>
 
-          {/* Volume */}
           <div className="hidden sm:flex items-center gap-2">
             <button onClick={toggleMute} className="text-muted-foreground hover:text-foreground transition-colors">
               {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
@@ -160,15 +164,14 @@ const RadioPlayer = () => {
             );
           })}
 
-          {/* Status */}
           <div className="hidden md:flex items-center gap-1.5 ml-2">
             <span className="text-xs text-muted-foreground">{isPlaying ? "No Ar" : "Pausado"}</span>
-            {isPlaying && <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />}
+            {isPlaying && <div className="w-2 h-2 rounded-full bg-destructive animate-pulse" />}
           </div>
         </div>
       </div>
 
-      <audio ref={audioRef} src="https://stream.zeno.fm/yn65fsaurfhvv" preload="none" />
+      <audio ref={audioRef} src={siteConfig.streamUrl} preload="none" />
     </header>
   );
 };
