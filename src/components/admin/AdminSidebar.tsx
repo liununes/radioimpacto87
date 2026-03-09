@@ -18,7 +18,7 @@ import {
 
 const menuItems = [
   { title: "Painel Geral", url: "/admin", icon: LayoutDashboard },
-  { title: "Streaming / Player", url: "/admin/streaming", icon: Radio },
+  { title: "Player / Redes Sociais", url: "/admin/streaming", icon: Radio },
   { title: "Locutores", url: "/admin/locutores", icon: Users },
   { title: "Programação", url: "/admin/programacao", icon: Calendar },
   { title: "Slides / Banners", url: "/admin/slides", icon: Image },

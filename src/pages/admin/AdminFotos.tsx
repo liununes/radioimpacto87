@@ -1,21 +1,10 @@
 import { useState } from "react";
-import { Trash2, Upload, Plus } from "lucide-react";
+import { Trash2, Upload, Plus, ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-const STORAGE_KEY = "radio_fotos";
-
-interface Foto {
-  id: string;
-  descricao: string;
-  imagem: string;
-}
-
-function getFotos(): Foto[] {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); } catch { return []; }
-}
+import { getFotos, saveFotos, type Foto } from "@/lib/radioStore";
 
 function fileToBase64(file: File): Promise<string> {
   return new Promise((res, rej) => {
@@ -29,43 +18,98 @@ function fileToBase64(file: File): Promise<string> {
 const AdminFotos = () => {
   const [fotos, setFotos] = useState<Foto[]>(getFotos());
   const [descricao, setDescricao] = useState("");
-  const [imagem, setImagem] = useState("");
+  const [imagens, setImagens] = useState<string[]>([]);
+
+  const handleFilesChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+    const bases: string[] = [];
+    for (let i = 0; i < files.length; i++) {
+      bases.push(await fileToBase64(files[i]));
+    }
+    setImagens(prev => [...prev, ...bases]);
+  };
 
   const handleAdd = () => {
-    if (!imagem) return;
-    const updated = [...fotos, { id: crypto.randomUUID(), descricao, imagem }];
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    if (imagens.length === 0) return;
+    const novas: Foto[] = imagens.map(img => ({
+      id: crypto.randomUUID(),
+      descricao,
+      imagem: img,
+    }));
+    const updated = [...fotos, ...novas];
+    saveFotos(updated);
     setFotos(updated);
-    setDescricao(""); setImagem("");
+    setDescricao("");
+    setImagens([]);
   };
 
   const handleDelete = (id: string) => {
     const updated = fotos.filter(f => f.id !== id);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    saveFotos(updated);
     setFotos(updated);
+  };
+
+  const removePreview = (idx: number) => {
+    setImagens(prev => prev.filter((_, i) => i !== idx));
   };
 
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold text-foreground">Galeria de Fotos</h2>
+
       <Card>
-        <CardHeader><CardTitle>Nova Foto</CardTitle></CardHeader>
+        <CardHeader><CardTitle>Adicionar Fotos</CardTitle></CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label>Descrição</Label>
-              <Input value={descricao} onChange={e => setDescricao(e.target.value)} placeholder="Descrição da foto" />
+          {/* Guidelines */}
+          <div className="bg-muted/50 border border-border rounded-lg p-4 space-y-2">
+            <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
+              <ImageIcon className="w-4 h-4 text-primary" />
+              Requisitos das Fotos
             </div>
-            <div className="space-y-2">
-              <Label>Imagem</Label>
-              <label className="flex items-center gap-2 px-4 py-2 bg-muted rounded-md cursor-pointer hover:bg-muted/80 transition-colors text-sm h-10">
-                <Upload className="w-4 h-4" /> Escolher imagem
-                <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) setImagem(await fileToBase64(f)); }} />
-              </label>
-            </div>
+            <ul className="text-xs text-muted-foreground space-y-1 list-disc list-inside">
+              <li><strong>Formatos aceitos:</strong> JPG, PNG, WebP</li>
+              <li><strong>Tamanho recomendado:</strong> 1080×1080px (quadrada) ou 1920×1080px (paisagem)</li>
+              <li><strong>Tamanho máximo:</strong> 5MB por foto</li>
+              <li><strong>Dica:</strong> Use fotos com boa iluminação e resolução para melhor exibição na galeria</li>
+            </ul>
           </div>
-          {imagem && <img src={imagem} alt="Preview" className="h-32 rounded-lg object-cover border border-border" />}
-          <Button onClick={handleAdd} className="gap-2"><Plus className="w-4 h-4" /> Adicionar Foto</Button>
+
+          <div className="space-y-2">
+            <Label>Descrição (opcional, aplicada a todas as fotos)</Label>
+            <Input value={descricao} onChange={e => setDescricao(e.target.value)} placeholder="Descrição das fotos" />
+          </div>
+
+          <div className="space-y-2">
+            <Label>Selecionar Imagens (múltiplas)</Label>
+            <label className="flex items-center gap-2 px-4 py-3 bg-muted rounded-md cursor-pointer hover:bg-muted/80 transition-colors text-sm border-2 border-dashed border-border">
+              <Upload className="w-5 h-5 text-primary" /> Clique para escolher fotos ou arraste aqui
+              <input type="file" accept="image/jpeg,image/png,image/webp" multiple className="hidden" onChange={handleFilesChange} />
+            </label>
+          </div>
+
+          {imagens.length > 0 && (
+            <div className="space-y-2">
+              <p className="text-sm text-muted-foreground">{imagens.length} foto(s) selecionada(s)</p>
+              <div className="flex gap-2 flex-wrap">
+                {imagens.map((img, idx) => (
+                  <div key={idx} className="relative group">
+                    <img src={img} alt="Preview" className="h-20 w-20 rounded-lg object-cover border border-border" />
+                    <button
+                      onClick={() => removePreview(idx)}
+                      className="absolute -top-1 -right-1 w-5 h-5 bg-destructive rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <span className="text-destructive-foreground text-xs">✕</span>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <Button onClick={handleAdd} className="gap-2" disabled={imagens.length === 0}>
+            <Plus className="w-4 h-4" /> Adicionar {imagens.length > 1 ? `${imagens.length} Fotos` : "Foto"}
+          </Button>
         </CardContent>
       </Card>
 
