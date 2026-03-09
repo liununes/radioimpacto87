@@ -2,7 +2,6 @@ import RadioPlayer from "@/components/RadioPlayer";
 import Navigation from "@/components/Navigation";
 import HeroCarousel from "@/components/HeroCarousel";
 import TopSongs from "@/components/TopSongs";
-import ProgramacaoSection from "@/components/ProgramacaoSection";
 import GaleriaSection from "@/components/GaleriaSection";
 import NewsSection from "@/components/NewsSection";
 import Footer from "@/components/Footer";
@@ -13,7 +12,6 @@ const Index = () => {
       <RadioPlayer />
       <Navigation />
       <HeroCarousel />
-      <ProgramacaoSection />
       <TopSongs />
       <GaleriaSection />
       <NewsSection />

@@ -3,7 +3,7 @@ import { Menu, X } from "lucide-react";
 
 const navItems = [
   { label: "Home", href: "#home" },
-  { label: "Programação", href: "#programacao" },
+  { label: "Programação", href: "/programacao", isLink: true },
   { label: "Galeria", href: "#galeria" },
   { label: "Notícias", href: "#noticias-locais" },
   { label: "Sobre", href: "#sobre" },
@@ -12,6 +12,14 @@ const navItems = [
 const Navigation = () => {
   const [activeItem, setActiveItem] = useState("Home");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const handleClick = (item: typeof navItems[0]) => {
+    setActiveItem(item.label);
+    setIsMenuOpen(false);
+    if (item.isLink) {
+      window.location.href = item.href;
+    }
+  };
 
   return (
     <nav className="bg-nav border-b border-border/30">
@@ -22,7 +30,10 @@ const Navigation = () => {
             <a
               key={item.label}
               href={item.href}
-              onClick={() => setActiveItem(item.label)}
+              onClick={(e) => {
+                if (item.isLink) { /* let browser navigate */ }
+                setActiveItem(item.label);
+              }}
               className={`nav-link ${activeItem === item.label ? "nav-link-active" : ""}`}
             >
               {item.label}
@@ -33,10 +44,7 @@ const Navigation = () => {
         {/* Mobile */}
         <div className="md:hidden flex items-center justify-between py-3">
           <span className="text-sm font-semibold text-foreground">Menu</span>
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="text-foreground p-1"
-          >
+          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-foreground p-1">
             {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
@@ -47,10 +55,7 @@ const Navigation = () => {
               <a
                 key={item.label}
                 href={item.href}
-                onClick={() => {
-                  setActiveItem(item.label);
-                  setIsMenuOpen(false);
-                }}
+                onClick={() => handleClick(item)}
                 className={`nav-link ${activeItem === item.label ? "nav-link-active" : ""}`}
               >
                 {item.label}
