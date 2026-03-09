@@ -1,5 +1,5 @@
 import {
-  Radio, Users, Calendar, Image, Music, Settings, LayoutDashboard, FileText, Info, Palette,
+  Radio, Users, Calendar, Image, FileText, MessageSquare, Info, LayoutDashboard, Music, Settings,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -18,7 +18,6 @@ import {
 
 const menuItems = [
   { title: "Painel Geral", url: "/admin", icon: LayoutDashboard },
-  { title: "Personalização", url: "/admin/personalizacao", icon: Palette },
   { title: "Streaming / Player", url: "/admin/streaming", icon: Radio },
   { title: "Locutores", url: "/admin/locutores", icon: Users },
   { title: "Programação", url: "/admin/programacao", icon: Calendar },

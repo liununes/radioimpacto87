@@ -1,36 +1,30 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import { getSiteConfig } from "@/lib/siteConfig";
 
 const navItems = [
-  { label: "Início", href: "#home" },
-  { label: "Ao Vivo", href: "#ao-vivo" },
+  { label: "Home", href: "#home" },
+  { label: "Sobre", href: "#sobre" },
   { label: "Programação", href: "#programacao" },
-  { label: "Notícias", href: "#noticias" },
-  { label: "Promoções", href: "#promocoes" },
-  { label: "Contato", href: "#contato" },
+  { label: "Notícias Locais", href: "#noticias-locais" },
+  { label: "Notícias Regionais", href: "#noticias-regionais" },
+  { label: "Redes Sociais", href: "#redes-sociais" },
 ];
 
 const Navigation = () => {
-  const [activeItem, setActiveItem] = useState("Início");
+  const [activeItem, setActiveItem] = useState("Home");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const config = getSiteConfig();
 
   return (
-    <nav style={{ backgroundColor: config.colorNavBg }}>
+    <nav className="bg-nav border-b border-border/30">
       <div className="container px-4">
         {/* Desktop */}
-        <div className="hidden md:flex items-center justify-center gap-1 py-2">
+        <div className="hidden md:flex items-center justify-center gap-2 py-3">
           {navItems.map((item) => (
             <a
               key={item.label}
               href={item.href}
               onClick={() => setActiveItem(item.label)}
-              className={`px-5 py-2 rounded-sm text-sm font-medium transition-all ${
-                activeItem === item.label
-                  ? "text-secondary font-bold border-b-2 border-secondary"
-                  : "text-foreground/80 hover:text-foreground hover:bg-white/10"
-              }`}
+              className={`nav-link ${activeItem === item.label ? "nav-link-active" : ""}`}
             >
               {item.label}
             </a>
@@ -40,7 +34,10 @@ const Navigation = () => {
         {/* Mobile */}
         <div className="md:hidden flex items-center justify-between py-3">
           <span className="text-sm font-semibold text-foreground">Menu</span>
-          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-foreground p-1">
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="text-foreground p-1"
+          >
             {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
@@ -51,10 +48,11 @@ const Navigation = () => {
               <a
                 key={item.label}
                 href={item.href}
-                onClick={() => { setActiveItem(item.label); setIsMenuOpen(false); }}
-                className={`px-4 py-2 rounded text-sm font-medium transition-all ${
-                  activeItem === item.label ? "text-secondary bg-white/10" : "text-foreground/80 hover:text-foreground"
-                }`}
+                onClick={() => {
+                  setActiveItem(item.label);
+                  setIsMenuOpen(false);
+                }}
+                className={`nav-link ${activeItem === item.label ? "nav-link-active" : ""}`}
               >
                 {item.label}
               </a>

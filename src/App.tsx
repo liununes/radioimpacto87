@@ -17,7 +17,6 @@ import AdminFotos from "./pages/admin/AdminFotos";
 import AdminPedidos from "./pages/admin/AdminPedidos";
 import AdminNoticias from "./pages/admin/AdminNoticias";
 import AdminSobre from "./pages/admin/AdminSobre";
-import AdminPersonalizacao from "./pages/admin/AdminPersonalizacao";
 
 const queryClient = new QueryClient();
 
@@ -34,7 +33,6 @@ const App = () => (
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminHome />} />
               <Route path="streaming" element={<AdminStreaming />} />
-              <Route path="personalizacao" element={<AdminPersonalizacao />} />
               <Route path="locutores" element={<AdminLocutores />} />
               <Route path="programacao" element={<AdminProgramacao />} />
               <Route path="slides" element={<AdminSlides />} />
