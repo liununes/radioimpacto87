@@ -4,8 +4,17 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
-import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
+import AdminLayout from "./pages/AdminLayout";
+import AdminHome from "./pages/admin/AdminHome";
+import AdminStreaming from "./pages/admin/AdminStreaming";
+import AdminLocutores from "./pages/admin/AdminLocutores";
+import AdminProgramacao from "./pages/admin/AdminProgramacao";
+import AdminSlides from "./pages/admin/AdminSlides";
+import AdminFotos from "./pages/admin/AdminFotos";
+import AdminPedidos from "./pages/admin/AdminPedidos";
+import AdminNoticias from "./pages/admin/AdminNoticias";
+import AdminSobre from "./pages/admin/AdminSobre";
 
 const queryClient = new QueryClient();
 
@@ -17,8 +26,17 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminHome />} />
+            <Route path="streaming" element={<AdminStreaming />} />
+            <Route path="locutores" element={<AdminLocutores />} />
+            <Route path="programacao" element={<AdminProgramacao />} />
+            <Route path="slides" element={<AdminSlides />} />
+            <Route path="fotos" element={<AdminFotos />} />
+            <Route path="pedidos" element={<AdminPedidos />} />
+            <Route path="noticias" element={<AdminNoticias />} />
+            <Route path="sobre" element={<AdminSobre />} />
+          </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
