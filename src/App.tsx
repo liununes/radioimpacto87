@@ -17,6 +17,7 @@ import AdminFotos from "./pages/admin/AdminFotos";
 import AdminPedidos from "./pages/admin/AdminPedidos";
 import AdminNoticias from "./pages/admin/AdminNoticias";
 import AdminSobre from "./pages/admin/AdminSobre";
+import AdminPersonalizacao from "./pages/admin/AdminPersonalizacao";
 
 const queryClient = new QueryClient();
 
