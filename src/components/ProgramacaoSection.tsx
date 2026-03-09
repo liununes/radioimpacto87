@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Radio, Clock } from "lucide-react";
 import { getProgramas, getLocutores, getProgramaAtual } from "@/lib/radioStore";
 import PhotoLightbox from "./PhotoLightbox";
@@ -20,15 +21,23 @@ const ProgramacaoSection = () => {
 
   if (programas.length === 0) return null;
 
+  // Show only first 6 on homepage
+  const displayed = programas.slice(0, 6);
+
   return (
     <section id="programacao" className="py-12">
       <div className="container px-4">
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mb-8 text-center">
-          Programação
-        </h2>
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground">
+            Programação
+          </h2>
+          <Link to="/programacao" className="text-sm text-primary hover:underline font-medium">
+            Ver completa →
+          </Link>
+        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {programas.map((prog, idx) => {
+          {displayed.map((prog) => {
             const isAoVivo = atual?.programa.id === prog.id;
             const foto = prog.foto || getLocutorFoto(prog.locutorId);
             const imgIndex = images.findIndex(img => img.src === foto);
@@ -75,6 +84,14 @@ const ProgramacaoSection = () => {
             );
           })}
         </div>
+
+        {programas.length > 6 && (
+          <div className="text-center mt-6">
+            <Link to="/programacao" className="text-sm text-primary hover:underline font-medium">
+              Ver todos os {programas.length} programas →
+            </Link>
+          </div>
+        )}
       </div>
 
       {lightboxIndex !== null && (
