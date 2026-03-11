@@ -183,6 +183,26 @@ const AdminAparencia = () => {
         </CardContent>
       </Card>
 
+      {/* Custom Layout */}
+      <Card>
+        <CardHeader><CardTitle>Distribuição do Layout</CardTitle></CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label>Posição do Top 3 Músicas</Label>
+            <select
+              value={theme.topSongsPosition}
+              onChange={e => updateField("topSongsPosition", e.target.value)}
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <option value="hero">Abaixo do Banner (Hero)</option>
+              <option value="gallery">Abaixo da Galeria</option>
+              <option value="news">Abaixo das Notícias</option>
+              <option value="contact">Abaixo do Contato (Final da página)</option>
+            </select>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Preview */}
       <Card>
         <CardHeader><CardTitle>Pré-visualização</CardTitle></CardHeader>
