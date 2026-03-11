@@ -5,9 +5,12 @@ const Footer = () => {
     <footer id="redes-sociais" className="border-t border-border/30 bg-header py-10">
       <div className="container px-4">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="text-center md:text-left">
-            <h3 className="text-lg font-display font-bold text-foreground">Impacto FM</h3>
-            <p className="text-sm text-secondary font-semibold">87.9 FM</p>
+          <div className="flex items-center gap-3">
+            <img src="/logo.png" alt="Impacto FM" className="w-12 h-12 rounded-full object-contain bg-white/10 p-1" />
+            <div className="text-left">
+              <h3 className="text-lg font-display font-bold text-foreground">Impacto FM</h3>
+              <p className="text-sm text-secondary font-semibold">87.9 FM</p>
+            </div>
           </div>
 
           <div className="flex items-center gap-4">

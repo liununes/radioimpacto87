@@ -81,10 +81,10 @@ export function getSiteConfig(): SiteConfig {
       streamUrl: saved.streamUrl || "https://stream.zeno.fm/yn65fsaurfhvv",
       radioName: saved.radioName || "Impacto FM",
       radioFreq: saved.radioFreq || "87.9 FM",
-      logo: saved.logo || "",
+      logo: saved.logo || "/logo.png",
     };
   } catch {
-    return { streamUrl: "https://stream.zeno.fm/yn65fsaurfhvv", radioName: "Impacto FM", radioFreq: "87.9 FM", logo: "" };
+    return { streamUrl: "https://stream.zeno.fm/yn65fsaurfhvv", radioName: "Impacto FM", radioFreq: "87.9 FM", logo: "/logo.png" };
   }
 }
 
