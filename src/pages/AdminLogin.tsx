@@ -8,29 +8,35 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Radio, LogIn, UserPlus } from "lucide-react";
 
 const AdminLogin = () => {
-  const { signIn, signUp } = useAuth();
+  const { signIn } = useAuth();
+  const { supabase } = useAuth(); // Need to expose supabase if not already
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [isSignUp, setIsSignUp] = useState(false);
   const [loading, setLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
+  const [isRecovering, setIsRecovering] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setSuccessMsg("");
-    if (!email.trim() || !password.trim()) { setError("Preencha todos os campos."); return; }
-    if (password.length < 6) { setError("A senha deve ter pelo menos 6 caracteres."); return; }
+    if (!email.trim()) { setError("Preencha o e-mail."); return; }
 
     setLoading(true);
-    if (isSignUp) {
-      const { error } = await signUp(email, password);
-      if (error) { setError(error); } else {
-        setSuccessMsg("Conta criada! Verifique seu email para confirmar. O primeiro usuário registrado será automaticamente administrador.");
+    
+    if (isRecovering) {
+      const { error } = await (useAuth as any)().supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin + "/admin/reset-password",
+      });
+      if (error) {
+        setError(error.message);
+      } else {
+        setSuccessMsg("E-mail de recuperação enviado! Verifique sua caixa de entrada.");
       }
     } else {
+      if (!password.trim()) { setError("Preencha a senha."); setLoading(false); return; }
       const { error } = await signIn(email, password);
       if (error) { setError(error); } else {
         navigate("/admin");
@@ -47,27 +53,49 @@ const AdminLogin = () => {
             <Radio className="w-5 h-5 text-primary" />
           </div>
           <CardTitle className="text-xl">Impacto FM — Admin</CardTitle>
-          <CardDescription>{isSignUp ? "Criar conta de administrador" : "Faça login para acessar o painel"}</CardDescription>
+          <CardDescription>
+            {isRecovering ? "Recuperar senha de acesso" : "Faça login para acessar o painel"}
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label>Email</Label>
-              <Input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="admin@impactofm.com" />
+              <Input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="exemplo@radio.com" />
             </div>
-            <div className="space-y-2">
-              <Label>Senha</Label>
-              <Input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" />
-            </div>
+            
+            {!isRecovering && (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label>Senha</Label>
+                  <button 
+                    type="button" 
+                    onClick={() => { setIsRecovering(true); setError(""); setSuccessMsg(""); }}
+                    className="text-xs text-primary hover:underline"
+                  >
+                    Esqueceu a senha?
+                  </button>
+                </div>
+                <Input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" />
+              </div>
+            )}
+
             {error && <p className="text-sm text-destructive">{error}</p>}
             {successMsg && <p className="text-sm text-green-400">{successMsg}</p>}
+            
             <Button type="submit" className="w-full gap-2" disabled={loading}>
-              {isSignUp ? <><UserPlus className="w-4 h-4" /> Criar Conta</> : <><LogIn className="w-4 h-4" /> Entrar</>}
+              {isRecovering ? "Enviar E-mail de Recuperação" : <><LogIn className="w-4 h-4" /> Entrar</>}
             </Button>
-            <button type="button" onClick={() => { setIsSignUp(!isSignUp); setError(""); setSuccessMsg(""); }}
-              className="w-full text-sm text-muted-foreground hover:text-foreground transition-colors">
-              {isSignUp ? "Já tem conta? Faça login" : "Primeiro acesso? Criar conta"}
-            </button>
+
+            {isRecovering && (
+              <button 
+                type="button" 
+                onClick={() => { setIsRecovering(false); setError(""); setSuccessMsg(""); }}
+                className="w-full text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Voltar para o Login
+              </button>
+            )}
           </form>
         </CardContent>
       </Card>

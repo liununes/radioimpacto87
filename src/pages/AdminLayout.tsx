@@ -1,4 +1,4 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { Outlet } from "react-router-dom";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
@@ -7,7 +7,29 @@ import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 
 const AdminLayout = () => {
-  const { user, isAdmin, loading, signOut } = useAuth();
+  const { user, isAdmin, hasPermission, loading, signOut } = useAuth();
+  const location = useLocation();
+
+  // Map sub-paths to permission keys
+  const getRequiredPermission = (path: string) => {
+    if (path === "/admin") return "*";
+    const segment = path.split("/")[2];
+    if (!segment) return "*";
+    // Map specific paths if they differ from the segment name
+    const map: any = {
+      'streaming': 'streaming',
+      'aparencia': 'aparencia',
+      'locutores': 'locutores',
+      'programacao': 'programacao',
+      'slides': 'slides',
+      'fotos': 'fotos',
+      'pedidos': 'pedidos',
+      'noticias': 'noticias',
+      'sobre': 'sobre',
+      'usuarios': 'usuarios'
+    };
+    return map[segment] || "*";
+  };
 
   if (loading) {
     return (
@@ -18,12 +40,16 @@ const AdminLayout = () => {
   }
 
   if (!user) return <Navigate to="/admin/login" replace />;
-  if (!isAdmin) {
+  
+  const requiredPerm = getRequiredPermission(location.pathname);
+  if (!hasPermission(requiredPerm)) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4 text-center">
         <div>
           <p className="text-lg font-semibold text-foreground mb-2">Acesso Negado</p>
-          <p className="text-sm text-muted-foreground mb-4">Você não tem permissão de administrador.</p>
+          <p className="text-sm text-muted-foreground mb-4">
+            Você não tem permissão para acessar esta seção ({requiredPerm}).
+          </p>
           <Button variant="outline" onClick={signOut} className="gap-2"><LogOut className="w-4 h-4" /> Sair</Button>
         </div>
       </div>

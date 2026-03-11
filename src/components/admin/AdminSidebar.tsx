@@ -3,6 +3,7 @@ import {
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 import {
   Sidebar,
   SidebarContent,
@@ -17,22 +18,26 @@ import {
 } from "@/components/ui/sidebar";
 
 const menuItems = [
-  { title: "Painel Geral", url: "/admin", icon: LayoutDashboard },
-  { title: "Player / Redes Sociais", url: "/admin/streaming", icon: Radio },
-  { title: "Aparência / Cores", url: "/admin/aparencia", icon: Palette },
-  { title: "Locutores", url: "/admin/locutores", icon: Users },
-  { title: "Programação", url: "/admin/programacao", icon: Calendar },
-  { title: "Slides / Banners", url: "/admin/slides", icon: Image },
-  { title: "Galeria de Fotos", url: "/admin/fotos", icon: Image },
-  { title: "Pedidos Musicais", url: "/admin/pedidos", icon: Music },
-  { title: "Notícias", url: "/admin/noticias", icon: FileText },
-  { title: "Sobre a Rádio", url: "/admin/sobre", icon: Info },
+  { title: "Painel Geral", url: "/admin", icon: LayoutDashboard, permission: "*" },
+  { title: "Player / Redes Sociais", url: "/admin/streaming", icon: Radio, permission: "streaming" },
+  { title: "Aparência / Layout", url: "/admin/aparencia", icon: Palette, permission: "aparencia" },
+  { title: "Locutores", url: "/admin/locutores", icon: Users, permission: "locutores" },
+  { title: "Programação", url: "/admin/programacao", icon: Calendar, permission: "programacao" },
+  { title: "Slides / Banners", url: "/admin/slides", icon: Image, permission: "slides" },
+  { title: "Galeria de Fotos", url: "/admin/fotos", icon: Image, permission: "fotos" },
+  { title: "Pedidos Musicais", url: "/admin/pedidos", icon: Music, permission: "pedidos" },
+  { title: "Notícias", url: "/admin/noticias", icon: FileText, permission: "noticias" },
+  { title: "Sobre a Rádio", url: "/admin/sobre", icon: Info, permission: "sobre" },
+  { title: "Usuários / Permissões", url: "/admin/usuarios", icon: Settings, permission: "usuarios" },
 ];
 
 export function AdminSidebar() {
+  const { hasPermission } = useAuth();
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const location = useLocation();
+
+  const filteredItems = menuItems.filter(item => hasPermission(item.permission));
 
   return (
     <Sidebar collapsible="icon" className="border-r border-border">
@@ -43,7 +48,7 @@ export function AdminSidebar() {
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {menuItems.map((item) => {
+              {filteredItems.map((item) => {
                 const isActive = location.pathname === item.url ||
                   (item.url !== "/admin" && location.pathname.startsWith(item.url));
                 return (
