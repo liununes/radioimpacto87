@@ -19,12 +19,14 @@ const Navigation = () => {
   useEffect(() => {
     if (location.pathname === "/" && location.hash) {
       setTimeout(() => {
-        const targetId = location.hash.replace("#", "");
-        const element = document.getElementById(targetId);
-        if (element) {
-          element.scrollIntoView({ behavior: "smooth" });
-        }
-      }, 100);
+        requestAnimationFrame(() => {
+          const targetId = location.hash.replace("#", "");
+          const element = document.getElementById(targetId);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
+          }
+        });
+      }, 150);
     }
   }, [location]);
 
@@ -33,9 +35,11 @@ const Navigation = () => {
     setActiveItem(item.label);
     if (!item.isLink) {
       if (location.pathname !== "/") {
-        navigate(`/${item.href}`);
+        navigate({ pathname: "/", hash: item.href });
       } else {
         const targetId = item.href.replace("#", "");
+        // Update URL hash directly instead of navigate when on the same page
+        window.history.pushState(null, "", "/" + item.href); 
         const element = document.getElementById(targetId);
         if (element) {
           element.scrollIntoView({ behavior: "smooth" });
