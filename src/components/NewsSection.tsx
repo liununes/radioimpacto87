@@ -67,7 +67,7 @@ const NewsSection = () => {
                 </p>
                 <div className="flex items-center gap-1 text-sm text-primary font-medium">
                   Ler mais
-                  {news.url && <ExternalLink className="w-3 h-3" />}
+                  <ExternalLink className="w-3 h-3" />
                 </div>
               </article>
             ))}

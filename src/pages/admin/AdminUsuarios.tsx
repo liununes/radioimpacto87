@@ -95,10 +95,11 @@ const AdminUsuarios = () => {
               <p className="text-sm font-medium text-destructive">{error}</p>
               <pre className="text-[10px] bg-black/20 p-2 rounded overflow-auto max-w-full">
 {`CREATE TABLE public.user_permissions (
-  user_id UUID PRIMARY KEY,
+  user_id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   permissions TEXT[] DEFAULT '{}',
-  email TEXT -- Armazenar e-mail para exibição
-);`}
+  email TEXT
+);
+NOTIFY pgrst, 'reload schema';`}
               </pre>
             </div>
           </CardContent>
