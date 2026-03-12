@@ -38,7 +38,7 @@ const AdminUsuarios = () => {
     // and assume users must be registered there to be managed here.
     const { data, error } = await supabase
       .from("user_permissions")
-      .select("*, profile:user_id (email)"); // Requires a 'profiles' or similar if email is needed
+      .select("*");
 
     if (error) {
       if (error.code === "PGRST116" || error.message.includes("does not exist")) {
