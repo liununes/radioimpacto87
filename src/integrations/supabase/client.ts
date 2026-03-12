@@ -5,10 +5,13 @@ import type { Database } from './types';
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
-console.log("Supabase URL carregada:", SUPABASE_URL);
-
-if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
-  console.error("ERRO: Variáveis de ambiente do Supabase não encontradas! Verifique o Build no Easypanel.");
+if (typeof window !== 'undefined' && (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY)) {
+  console.error("CRÍTICO: Configuração do Supabase ausente!");
+  // Only show alert in dev or if explicitly broken to avoid annoying users, 
+  // but here we need it for debugging.
+  if (window.location.hostname !== 'localhost') {
+    // Optional: show a small overlay or just the console error
+  }
 }
 
 // Import the supabase client like this:

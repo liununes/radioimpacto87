@@ -5,7 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { type Programa, getLocutores, getProgramas, saveProgramas } from "@/lib/radioStore";
+import { type Programa, type Locutor, getLocutores, getProgramas, savePrograma, deletePrograma } from "@/lib/radioStore";
+import { toast } from "sonner";
 
 const DIAS = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 
@@ -20,7 +21,8 @@ function fileToBase64(file: File): Promise<string> {
 
 const AdminProgramacao = () => {
   const [programas, setProgramas] = useState<Programa[]>([]);
-  const locutores = getLocutores();
+  const [locutores, setLocutores] = useState<Locutor[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const [nome, setNome] = useState("");
   const [locutorId, setLocutorId] = useState("");
@@ -30,31 +32,55 @@ const AdminProgramacao = () => {
   const [dias, setDias] = useState<number[]>([]);
   const [editId, setEditId] = useState<string | null>(null);
 
-  useEffect(() => { setProgramas(getProgramas()); }, []);
+  const fetchData = async () => {
+    const [progData, locData] = await Promise.all([getProgramas(), getLocutores()]);
+    setProgramas(progData);
+    setLocutores(locData);
+  };
 
-  const handleSave = () => {
-    if (!nome.trim() || !locutorId || !inicio || !fim || dias.length === 0) return;
-    let updated: Programa[];
-    if (editId) {
-      updated = programas.map(p => p.id === editId
-        ? { ...p, nome, locutorId, foto: foto || p.foto, horaInicio: inicio, horaFim: fim, diasSemana: dias } : p);
-    } else {
-      updated = [...programas, { id: crypto.randomUUID(), nome, locutorId, foto, horaInicio: inicio, horaFim: fim, diasSemana: dias }];
+  useEffect(() => { fetchData(); }, []);
+
+  const handleSave = async () => {
+    if (!nome.trim() || !locutorId || !inicio || !fim || dias.length === 0) {
+      toast.error("Preencha todos os campos e selecione pelo menos um dia.");
+      return;
     }
-    saveProgramas(updated);
-    setProgramas(updated);
-    resetForm();
+
+    setLoading(true);
+    const { error } = await savePrograma({
+      id: editId || undefined,
+      nome,
+      locutorId,
+      foto,
+      horaInicio: inicio,
+      horaFim: fim,
+      diasSemana: dias
+    });
+
+    if (error) {
+      toast.error("Erro ao salvar: " + error.message);
+    } else {
+      toast.success(editId ? "Programa atualizado!" : "Programa criado!");
+      await fetchData();
+      resetForm();
+    }
+    setLoading(false);
   };
 
   const handleEdit = (prog: Programa) => {
     setEditId(prog.id); setNome(prog.nome); setLocutorId(prog.locutorId);
-    setFoto(prog.foto); setInicio(prog.horaInicio); setFim(prog.horaFim); setDias(prog.diasSemana);
+    setFoto(prog.foto || ""); setInicio(prog.horaInicio); setFim(prog.horaFim); setDias(prog.diasSemana);
   };
 
-  const handleDelete = (id: string) => {
-    const updated = programas.filter(p => p.id !== id);
-    saveProgramas(updated);
-    setProgramas(updated);
+  const handleDelete = async (id: string) => {
+    if (!confirm("Excluir este programa?")) return;
+    const { error } = await deletePrograma(id);
+    if (error) {
+      toast.error("Erro ao excluir: " + error.message);
+    } else {
+      toast.success("Programa removido!");
+      await fetchData();
+    }
   };
 
   const resetForm = () => { setEditId(null); setNome(""); setLocutorId(""); setFoto(""); setInicio(""); setFim(""); setDias([]); };

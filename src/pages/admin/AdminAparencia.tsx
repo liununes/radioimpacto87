@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Save, RotateCcw, Palette } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getThemeConfig, saveThemeConfig, DEFAULT_THEME, type ThemeConfig } from "@/lib/themeStore";
+import { getSiteConfig, saveSiteConfig } from "@/lib/radioStore";
+import { toast } from "sonner";
 
 function hslToHex(hsl: string): string {
   const parts = hsl.trim().split(/\s+/);
@@ -62,10 +64,7 @@ const ColorField = ({ label, value, onChange }: ColorFieldProps) => (
 );
 
 const PRESETS: { name: string; theme: Partial<ThemeConfig> }[] = [
-  {
-    name: "Azul Padrão",
-    theme: { ...DEFAULT_THEME },
-  },
+  { name: "Azul Padrão", theme: { ...DEFAULT_THEME } },
   {
     name: "Vermelho Energia",
     theme: {
@@ -110,12 +109,34 @@ const PRESETS: { name: string; theme: Partial<ThemeConfig> }[] = [
 
 const AdminAparencia = () => {
   const [theme, setTheme] = useState<ThemeConfig>(getThemeConfig());
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchTheme = async () => {
+      const saved = await getSiteConfig("theme");
+      if (saved) {
+        setTheme(saved);
+        saveThemeConfig(saved);
+      }
+    };
+    fetchTheme();
+  }, []);
 
   const updateField = (field: keyof ThemeConfig, value: string) => {
     const updated = { ...theme, [field]: value };
     setTheme(updated);
-    // Live preview
     saveThemeConfig(updated);
+  };
+
+  const handleSave = async () => {
+    setLoading(true);
+    const { error } = await saveSiteConfig("theme", theme);
+    if (error) {
+      toast.error("Erro ao salvar tema no servidor.");
+    } else {
+      toast.success("Tema salvo com sucesso!");
+    }
+    setLoading(false);
   };
 
   const handleReset = () => {
@@ -124,16 +145,20 @@ const AdminAparencia = () => {
   };
 
   const applyPreset = (preset: Partial<ThemeConfig>) => {
-    const updated = { ...DEFAULT_THEME, ...preset };
+    const updated = { ...DEFAULT_THEME, ...preset } as ThemeConfig;
     setTheme(updated);
     saveThemeConfig(updated);
   };
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-foreground">Aparência / Cores</h2>
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold text-foreground">Aparência / Cores</h2>
+        <Button onClick={handleSave} className="gap-2" disabled={loading}>
+          <Save className="w-4 h-4" /> {loading ? "Salvando..." : "Salvar Tema"}
+        </Button>
+      </div>
 
-      {/* Presets */}
       <Card>
         <CardHeader><CardTitle className="flex items-center gap-2"><Palette className="w-5 h-5 text-primary" /> Temas Prontos</CardTitle></CardHeader>
         <CardContent>
@@ -156,7 +181,6 @@ const AdminAparencia = () => {
         </CardContent>
       </Card>
 
-      {/* Custom Colors */}
       <Card>
         <CardHeader><CardTitle>Cores Personalizadas</CardTitle></CardHeader>
         <CardContent className="space-y-6">
@@ -166,10 +190,9 @@ const AdminAparencia = () => {
             <ColorField label="Fundo da Página" value={theme.background} onChange={v => updateField("background", v)} />
             <ColorField label="Texto Principal" value={theme.foreground} onChange={v => updateField("foreground", v)} />
             <ColorField label="Fundo dos Cards" value={theme.card} onChange={v => updateField("card", v)} />
-            <ColorField label="Texto Primário (sobre primary)" value={theme.primaryForeground} onChange={v => updateField("primaryForeground", v)} />
-            <ColorField label="Texto Secundário (sobre secondary)" value={theme.secondaryForeground} onChange={v => updateField("secondaryForeground", v)} />
+            <ColorField label="Texto Primário" value={theme.primaryForeground} onChange={v => updateField("primaryForeground", v)} />
+            <ColorField label="Texto Secundário" value={theme.secondaryForeground} onChange={v => updateField("secondaryForeground", v)} />
             <ColorField label="Fundo Muted" value={theme.muted} onChange={v => updateField("muted", v)} />
-            <ColorField label="Texto Muted" value={theme.mutedForeground} onChange={v => updateField("mutedForeground", v)} />
             <ColorField label="Bordas" value={theme.border} onChange={v => updateField("border", v)} />
             <ColorField label="Fundo do Header" value={theme.headerBg} onChange={v => updateField("headerBg", v)} />
             <ColorField label="Fundo da Navegação" value={theme.navBg} onChange={v => updateField("navBg", v)} />
@@ -183,7 +206,6 @@ const AdminAparencia = () => {
         </CardContent>
       </Card>
 
-      {/* Custom Layout */}
       <Card>
         <CardHeader><CardTitle>Distribuição do Layout</CardTitle></CardHeader>
         <CardContent className="space-y-4">
@@ -191,47 +213,14 @@ const AdminAparencia = () => {
             <Label>Posição do Top 3 Músicas</Label>
             <select
               value={theme.topSongsPosition}
-              onChange={e => updateField("topSongsPosition", e.target.value)}
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              onChange={e => updateField("topSongsPosition", e.target.value as any)}
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
             >
               <option value="hero">Abaixo do Banner (Hero)</option>
               <option value="gallery">Abaixo da Galeria</option>
               <option value="news">Abaixo das Notícias</option>
-              <option value="contact">Abaixo do Contato (Final da página)</option>
+              <option value="contact">Abaixo do Contato</option>
             </select>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Preview */}
-      <Card>
-        <CardHeader><CardTitle>Pré-visualização</CardTitle></CardHeader>
-        <CardContent>
-          <div className="rounded-lg overflow-hidden border border-border" style={{ background: `hsl(${theme.background})` }}>
-            <div className="p-3 flex items-center gap-3" style={{ background: `hsl(${theme.headerBg})` }}>
-              <div className="w-8 h-8 rounded-full" style={{ background: `hsl(${theme.primary})`, opacity: 0.3 }} />
-              <div>
-                <p className="text-xs font-bold" style={{ color: `hsl(${theme.foreground})` }}>Impacto FM</p>
-                <p className="text-[10px]" style={{ color: `hsl(${theme.secondary})` }}>87.9 FM</p>
-              </div>
-              <div className="ml-auto flex gap-1">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: `hsl(${theme.primary})` }}>
-                  <span style={{ color: `hsl(${theme.primaryForeground})` }}>▶</span>
-                </div>
-              </div>
-            </div>
-            <div className="p-3" style={{ background: `hsl(${theme.navBg})` }}>
-              <div className="flex gap-2">
-                <span className="px-3 py-1 rounded-full text-xs" style={{ background: `hsl(${theme.primary})`, color: `hsl(${theme.primaryForeground})` }}>Home</span>
-                <span className="px-3 py-1 rounded-full text-xs" style={{ color: `hsl(${theme.mutedForeground})` }}>Programação</span>
-              </div>
-            </div>
-            <div className="p-4 space-y-2">
-              <div className="p-3 rounded-lg" style={{ background: `hsl(${theme.card})`, border: `1px solid hsl(${theme.border})` }}>
-                <p className="text-xs font-semibold" style={{ color: `hsl(${theme.foreground})` }}>Card de exemplo</p>
-                <p className="text-[10px]" style={{ color: `hsl(${theme.mutedForeground})` }}>Texto secundário</p>
-              </div>
-            </div>
           </div>
         </CardContent>
       </Card>

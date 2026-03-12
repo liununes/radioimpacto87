@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Play, Pause, Volume2, VolumeX, MessageCircle, Instagram, Facebook, Youtube, Twitter, Globe } from "lucide-react";
-import { getProgramaAtual, getRedesSociais, getWhatsApp } from "@/lib/radioStore";
+import { getProgramaAtual, getRedesSociais, getWhatsApp, type RedeSocial, getSiteConfig as getRadioSiteConfig } from "@/lib/radioStore";
 import { getSiteConfig } from "@/lib/themeStore";
 
 const iconMap: Record<string, React.ElementType> = {
@@ -19,21 +19,28 @@ const RadioPlayer = () => {
   const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
   const [liveInfo, setLiveInfo] = useState<{ programa: string; locutor: string; foto: string } | null>(null);
-  const [redes, setRedes] = useState(getRedesSociais());
-  const [whatsapp, setWhatsappNum] = useState(getWhatsApp());
+  const [redes, setRedes] = useState<RedeSocial[]>([]);
+  const [whatsapp, setWhatsappNum] = useState("");
   const [siteConfig, setSiteConfig] = useState(getSiteConfig());
 
   useEffect(() => {
-    const check = () => {
-      const atual = getProgramaAtual();
+    const check = async () => {
+      const [atual, redesData, config, whatsappNum] = await Promise.all([
+        getProgramaAtual(),
+        getRedesSociais(),
+        getRadioSiteConfig("streaming"),
+        getWhatsApp()
+      ]);
       if (atual) {
         setLiveInfo({ programa: atual.programa.nome, locutor: atual.locutor.nome, foto: atual.locutor.foto });
       } else {
         setLiveInfo(null);
       }
-      setRedes(getRedesSociais());
-      setWhatsappNum(getWhatsApp());
-      setSiteConfig(getSiteConfig());
+      setRedes(redesData);
+      if (config) {
+        setSiteConfig(prev => ({ ...prev, ...config }));
+      }
+      setWhatsappNum(whatsappNum);
     };
     check();
     const interval = setInterval(check, 30000);

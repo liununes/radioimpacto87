@@ -7,13 +7,19 @@ import NewsSection from "@/components/NewsSection";
 import AboutSection from "@/components/AboutSection";
 import Footer from "@/components/Footer";
 import { getThemeConfig } from "@/lib/themeStore";
+import { getSiteConfig } from "@/lib/radioStore";
 import { useEffect, useState } from "react";
 
 const Index = () => {
   const [theme, setTheme] = useState(getThemeConfig());
 
   useEffect(() => {
-    // Listen for storage changes to update layout in real-time (optional but helpful)
+    const syncTheme = async () => {
+      const saved = await getSiteConfig("theme");
+      if (saved) setTheme(saved);
+    };
+    syncTheme();
+    
     const handleStorage = () => setTheme(getThemeConfig());
     window.addEventListener("storage", handleStorage);
     return () => window.removeEventListener("storage", handleStorage);

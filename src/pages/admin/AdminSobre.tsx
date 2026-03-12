@@ -1,28 +1,44 @@
-import { useState } from "react";
-import { Save } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Save, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-const STORAGE_KEY = "radio_sobre";
-
-function getSobre() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch { return {}; }
-}
+import { getSiteConfig, saveSiteConfig } from "@/lib/radioStore";
+import { toast } from "sonner";
 
 const AdminSobre = () => {
-  const saved = getSobre();
-  const [titulo, setTitulo] = useState(saved.titulo || "Impacto FM 87.9");
-  const [descricao, setDescricao] = useState(saved.descricao || "");
-  const [endereco, setEndereco] = useState(saved.endereco || "");
-  const [telefone, setTelefone] = useState(saved.telefone || "");
-  const [email, setEmail] = useState(saved.email || "");
+  const [titulo, setTitulo] = useState("Impacto FM 87.9");
+  const [descricao, setDescricao] = useState("");
+  const [endereco, setEndereco] = useState("");
+  const [telefone, setTelefone] = useState("");
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSave = () => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ titulo, descricao, endereco, telefone, email }));
-    alert("Informações salvas!");
+  useEffect(() => {
+    const fetchSobre = async () => {
+      const data = await getSiteConfig("sobre");
+      if (data) {
+        setTitulo(data.titulo || "Impacto FM 87.9");
+        setDescricao(data.descricao || "");
+        setEndereco(data.endereco || "");
+        setTelefone(data.telefone || "");
+        setEmail(data.email || "");
+      }
+    };
+    fetchSobre();
+  }, []);
+
+  const handleSave = async () => {
+    setLoading(true);
+    const { error } = await saveSiteConfig("sobre", { titulo, descricao, endereco, telefone, email });
+    if (error) {
+      toast.error("Erro ao salvar: " + error.message);
+    } else {
+      toast.success("Informações salvas com sucesso!");
+    }
+    setLoading(false);
   };
 
   return (
@@ -53,7 +69,10 @@ const AdminSobre = () => {
               <Input value={email} onChange={e => setEmail(e.target.value)} placeholder="contato@radio.com" />
             </div>
           </div>
-          <Button onClick={handleSave} className="gap-2"><Save className="w-4 h-4" /> Salvar</Button>
+          <Button onClick={handleSave} className="gap-2" disabled={loading}>
+            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+            Salvar
+          </Button>
         </CardContent>
       </Card>
     </div>

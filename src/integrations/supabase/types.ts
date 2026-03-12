@@ -7,8 +7,6 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instantiate createClient with right options
-  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "14.1"
   }
@@ -29,6 +27,238 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      user_permissions: {
+        Row: {
+          user_id: string
+          permissions: string[]
+          email: string | null
+        }
+        Insert: {
+          user_id: string
+          permissions?: string[]
+          email?: string | null
+        }
+        Update: {
+          user_id?: string
+          permissions?: string[]
+          email?: string | null
+        }
+        Relationships: []
+      }
+      redes_sociais: {
+        Row: {
+          id: string
+          nome: string
+          url: string
+          icone: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          nome: string
+          url: string
+          icone: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          nome?: string
+          url?: string
+          icone?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
+      site_config: {
+        Row: {
+          key: string
+          value: Json
+          updated_at: string
+        }
+        Insert: {
+          key: string
+          value: Json
+          updated_at?: string
+        }
+        Update: {
+          key?: string
+          value?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      locutores: {
+        Row: {
+          id: string
+          nome: string
+          bio: string | null
+          foto: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          nome: string
+          bio?: string | null
+          foto?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          nome?: string
+          bio?: string | null
+          foto?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      programas: {
+        Row: {
+          id: string
+          nome: string
+          locutor_id: string | null
+          foto: string | null
+          hora_inicio: string
+          hora_fim: string
+          dias_semana: number[]
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          nome: string
+          locutor_id?: string | null
+          foto?: string | null
+          hora_inicio: string
+          hora_fim: string
+          dias_semana?: number[]
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          nome?: string
+          locutor_id?: string | null
+          foto?: string | null
+          hora_inicio?: string
+          hora_fim?: string
+          dias_semana?: number[]
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "programas_locutor_id_fkey"
+            columns: ["locutor_id"]
+            referencedRelation: "locutores"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      slides: {
+        Row: {
+          id: string
+          titulo: string
+          imagem: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          titulo: string
+          imagem: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          titulo?: string
+          imagem?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
+      noticias: {
+        Row: {
+          id: string
+          titulo: string
+          resumo: string | null
+          conteudo: string | null
+          categoria: string | null
+          imagem: string | null
+          fonte: string | null
+          url: string | null
+          data_postagem: string
+          usuario_id: string | null
+        }
+        Insert: {
+          id?: string
+          titulo: string
+          resumo?: string | null
+          conteudo?: string | null
+          categoria?: string | null
+          imagem?: string | null
+          fonte?: string | null
+          url?: string | null
+          data_postagem?: string
+          usuario_id?: string | null
+        }
+        Update: {
+          id?: string
+          titulo?: string
+          resumo?: string | null
+          conteudo?: string | null
+          categoria?: string | null
+          imagem?: string | null
+          fonte?: string | null
+          url?: string | null
+          data_postagem?: string
+          usuario_id?: string | null
+        }
+        Relationships: []
+      }
+      fotos: {
+        Row: {
+          id: string
+          descricao: string | null
+          imagem: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          descricao?: string | null
+          imagem: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          descricao?: string | null
+          imagem?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
+      pedidos: {
+        Row: {
+          id: string
+          nome: string | null
+          musica: string
+          artista: string | null
+          status: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          nome?: string | null
+          musica: string
+          artista?: string | null
+          status?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          nome?: string | null
+          musica?: string
+          artista?: string | null
+          status?: string | null
+          created_at?: string
         }
         Relationships: []
       }

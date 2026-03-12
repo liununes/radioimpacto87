@@ -1,22 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Trash2, Edit2, Save, X, Plus, Link, Loader2, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { type Noticia, getNoticias, saveNoticias, getCategorias, saveCategorias } from "@/lib/noticiasStore";
+import { type Noticia, getNoticias, saveNoticia, deleteNoticia, getCategorias, saveCategorias } from "@/lib/noticiasStore";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const AdminNoticias = () => {
-  const [noticias, setNoticias] = useState<Noticia[]>(getNoticias());
-  const [categorias, setCategorias] = useState<string[]>(getCategorias());
-  const [tab, setTab] = useState(categorias[0] || "Local");
+  const [noticias, setNoticias] = useState<Noticia[]>([]);
+  const [categorias, setCategorias] = useState<string[]>([]);
+  const [tab, setTab] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [titulo, setTitulo] = useState("");
   const [resumo, setResumo] = useState("");
   const [conteudo, setConteudo] = useState("");
-  const [categoria, setCategoria] = useState(categorias[0] || "Local");
+  const [categoria, setCategoria] = useState("");
   const [imagem, setImagem] = useState("");
   const [fonte, setFonte] = useState("");
   const [urlOriginal, setUrlOriginal] = useState("");
@@ -28,6 +30,16 @@ const AdminNoticias = () => {
 
   // New category
   const [novaCategoria, setNovaCategoria] = useState("");
+
+  const fetchData = async () => {
+    const [newsData, cats] = await Promise.all([getNoticias(), getCategorias()]);
+    setNoticias(newsData);
+    setCategorias(cats);
+    if (tab === "" && cats.length > 0) setTab(cats[0]);
+    if (categoria === "" && cats.length > 0) setCategoria(cats[0]);
+  };
+
+  useEffect(() => { fetchData(); }, []);
 
   const filtered = noticias.filter(n => n.categoria === tab);
 
@@ -49,34 +61,42 @@ const AdminNoticias = () => {
         setImagem(d.imagem || "");
         setFonte(d.fonte || "");
         setUrlOriginal(d.url || scrapeUrl);
-        setCategoria(tab);
+        setCategoria(tab || (categorias[0] || ""));
+        toast.success("Dados extraídos com sucesso!");
       } else {
-        alert(data?.error || "Não foi possível extrair dados da URL");
+        toast.error(data?.error || "Não foi possível extrair dados da URL");
       }
     } catch (err) {
       console.error('Scrape error:', err);
-      alert("Erro ao acessar a URL. Verifique se o endereço está correto.");
+      toast.error("Erro ao acessar a URL. Verifique se o endereço está correto.");
     } finally {
       setIsScraping(false);
     }
   };
 
-  const handleSave = () => {
-    if (!titulo.trim() || !resumo.trim()) return;
-    const now = new Date();
-    const data = `${now.getDate().toString().padStart(2, "0")}/${(now.getMonth() + 1).toString().padStart(2, "0")}/${now.getFullYear()}`;
+  const handleSave = async () => {
+    if (!titulo.trim() || !resumo.trim()) { toast.error("Título e resumo são obrigatórios!"); return; }
+    
+    setLoading(true);
+    const { error } = await saveNoticia({
+      id: editId || undefined,
+      titulo,
+      resumo,
+      conteudo,
+      categoria: categoria || tab || categorias[0],
+      imagem,
+      fonte,
+      url: urlOriginal
+    });
 
-    let updated: Noticia[];
-    if (editId) {
-      updated = noticias.map(n => n.id === editId
-        ? { ...n, titulo, resumo, conteudo, categoria, imagem: imagem || n.imagem || "", fonte, url: urlOriginal, data }
-        : n);
+    if (error) {
+      toast.error("Erro ao salvar: " + error.message);
     } else {
-      updated = [...noticias, { id: crypto.randomUUID(), titulo, resumo, conteudo, categoria, imagem, fonte, url: urlOriginal, data }];
+      toast.success(editId ? "Notícia atualizada!" : "Notícia publicada!");
+      await fetchData();
+      resetForm();
     }
-    saveNoticias(updated);
-    setNoticias(updated);
-    resetForm();
+    setLoading(false);
   };
 
   const handleEdit = (n: Noticia) => {
@@ -90,35 +110,38 @@ const AdminNoticias = () => {
     setUrlOriginal(n.url || "");
   };
 
-  const handleDelete = (id: string) => {
-    const updated = noticias.filter(n => n.id !== id);
-    saveNoticias(updated);
-    setNoticias(updated);
+  const handleDelete = async (id: string) => {
+    if (!confirm("Deseja realmente excluir esta notícia?")) return;
+    const { error } = await deleteNoticia(id);
+    if (error) {
+      toast.error("Erro ao excluir: " + error.message);
+    } else {
+      toast.success("Notícia removida!");
+      await fetchData();
+    }
   };
 
   const resetForm = () => {
     setEditId(null); setTitulo(""); setResumo(""); setConteudo(""); setImagem(""); setFonte(""); setUrlOriginal(""); setScrapeUrl("");
   };
 
-  const handleAddCategoria = () => {
+  const handleAddCategoria = async () => {
     const nome = novaCategoria.trim();
     if (!nome || categorias.includes(nome)) return;
     const updated = [...categorias, nome];
-    saveCategorias(updated);
+    await saveCategorias(updated);
     setCategorias(updated);
     setNovaCategoria("");
+    toast.success("Categoria adicionada!");
   };
 
-  const handleDeleteCategoria = (cat: string) => {
+  const handleDeleteCategoria = async (cat: string) => {
     if (categorias.length <= 1) return;
     const updated = categorias.filter(c => c !== cat);
-    saveCategorias(updated);
+    await saveCategorias(updated);
     setCategorias(updated);
-    // Remove associated news
-    const updatedNews = noticias.filter(n => n.categoria !== cat);
-    saveNoticias(updatedNews);
-    setNoticias(updatedNews);
     if (tab === cat) setTab(updated[0]);
+    toast.success("Categoria removida!");
   };
 
   return (
@@ -214,7 +237,10 @@ const AdminNoticias = () => {
           </div>
           {imagem && <img src={imagem} alt="Preview" className="h-24 rounded-lg object-cover border border-border" />}
           <div className="flex gap-2">
-            <Button onClick={handleSave} className="gap-2"><Save className="w-4 h-4" /> {editId ? "Atualizar" : "Publicar"}</Button>
+            <Button onClick={handleSave} className="gap-2" disabled={loading}>
+              {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+              {editId ? "Atualizar" : "Publicar"}
+            </Button>
             {editId && <Button variant="ghost" onClick={resetForm} className="gap-2"><X className="w-4 h-4" /> Cancelar</Button>}
           </div>
         </CardContent>
@@ -230,7 +256,7 @@ const AdminNoticias = () => {
                 <h3 className="font-semibold text-foreground text-sm">{n.titulo}</h3>
                 <p className="text-xs text-muted-foreground line-clamp-1">{n.resumo}</p>
                 <div className="flex items-center gap-2 mt-1">
-                  <span className="text-xs text-muted-foreground">{n.data} · {n.categoria}</span>
+                  <span className="text-xs text-muted-foreground"> {n.categoria}</span>
                   {n.fonte && <span className="text-xs text-primary">Fonte: {n.fonte}</span>}
                   {n.url && (
                     <a href={n.url} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline flex items-center gap-0.5">

@@ -1,11 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Newspaper, ExternalLink } from "lucide-react";
-import { getNoticias, getCategorias } from "@/lib/noticiasStore";
+import { getNoticias, getCategorias, type Noticia } from "@/lib/noticiasStore";
 
 const NewsSection = () => {
-  const categorias = getCategorias();
-  const [tab, setTab] = useState(categorias[0] || "Local");
-  const allNoticias = getNoticias();
+  const [categorias, setCategorias] = useState<string[]>([]);
+  const [tab, setTab] = useState("");
+  const [allNoticias, setAllNoticias] = useState<Noticia[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      const [newsData, cats] = await Promise.all([getNoticias(), getCategorias()]);
+      setAllNoticias(newsData);
+      setCategorias(cats);
+      if (cats.length > 0) setTab(cats[0]);
+      setLoading(false);
+    };
+    fetchNews();
+  }, []);
+
   const noticias = allNoticias.filter(n => n.categoria === tab);
 
   return (

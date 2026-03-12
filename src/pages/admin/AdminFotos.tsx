@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Trash2, Upload, Plus, ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getFotos, saveFotos, type Foto } from "@/lib/radioStore";
+import { type Foto, getFotos, saveFoto, deleteFoto } from "@/lib/radioStore";
+import { toast } from "sonner";
 
 function fileToBase64(file: File): Promise<string> {
   return new Promise((res, rej) => {
@@ -16,9 +17,17 @@ function fileToBase64(file: File): Promise<string> {
 }
 
 const AdminFotos = () => {
-  const [fotos, setFotos] = useState<Foto[]>(getFotos());
+  const [fotos, setFotos] = useState<Foto[]>([]);
   const [descricao, setDescricao] = useState("");
   const [imagens, setImagens] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchFotos = async () => {
+    const data = await getFotos();
+    setFotos(data);
+  };
+
+  useEffect(() => { fetchFotos(); }, []);
 
   const handleFilesChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -30,24 +39,37 @@ const AdminFotos = () => {
     setImagens(prev => [...prev, ...bases]);
   };
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     if (imagens.length === 0) return;
-    const novas: Foto[] = imagens.map(img => ({
-      id: crypto.randomUUID(),
-      descricao,
-      imagem: img,
-    }));
-    const updated = [...fotos, ...novas];
-    saveFotos(updated);
-    setFotos(updated);
-    setDescricao("");
-    setImagens([]);
+    setLoading(true);
+    
+    try {
+      for (const img of imagens) {
+        await saveFoto({
+          descricao,
+          imagem: img,
+        });
+      }
+      toast.success(`${imagens.length} foto(s) adicionada(s)!`);
+      await fetchFotos();
+      setDescricao("");
+      setImagens([]);
+    } catch (error) {
+      toast.error("Erro ao salvar fotos.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleDelete = (id: string) => {
-    const updated = fotos.filter(f => f.id !== id);
-    saveFotos(updated);
-    setFotos(updated);
+  const handleDelete = async (id: string) => {
+    if (!confirm("Excluir esta foto?")) return;
+    const { error } = await deleteFoto(id);
+    if (error) {
+      toast.error("Erro ao excluir: " + error.message);
+    } else {
+      toast.success("Foto removida!");
+      await fetchFotos();
+    }
   };
 
   const removePreview = (idx: number) => {
@@ -61,17 +83,15 @@ const AdminFotos = () => {
       <Card>
         <CardHeader><CardTitle>Adicionar Fotos</CardTitle></CardHeader>
         <CardContent className="space-y-4">
-          {/* Guidelines */}
           <div className="bg-muted/50 border border-border rounded-lg p-4 space-y-2">
             <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
               <ImageIcon className="w-4 h-4 text-primary" />
               Requisitos das Fotos
             </div>
             <ul className="text-xs text-muted-foreground space-y-1 list-disc list-inside">
-              <li><strong>Formatos aceitos:</strong> JPG, PNG, WebP</li>
-              <li><strong>Tamanho recomendado:</strong> 1080×1080px (quadrada) ou 1920×1080px (paisagem)</li>
-              <li><strong>Tamanho máximo:</strong> 5MB por foto</li>
-              <li><strong>Dica:</strong> Use fotos com boa iluminação e resolução para melhor exibição na galeria</li>
+              <li>Formatos aceitos: JPG, PNG, WebP</li>
+              <li>Tamanho recomendado: 1080×1080px (quadrada) ou 1920×1080px (paisagem)</li>
+              <li>Tamanho máximo: 5MB por foto</li>
             </ul>
           </div>
 
@@ -107,8 +127,9 @@ const AdminFotos = () => {
             </div>
           )}
 
-          <Button onClick={handleAdd} className="gap-2" disabled={imagens.length === 0}>
-            <Plus className="w-4 h-4" /> Adicionar {imagens.length > 1 ? `${imagens.length} Fotos` : "Foto"}
+          <Button onClick={handleAdd} className="gap-2" disabled={imagens.length === 0 || loading}>
+            {loading ? <Plus className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+            {loading ? "Enviando..." : `Adicionar ${imagens.length > 1 ? `${imagens.length} Fotos` : "Foto"}`}
           </Button>
         </CardContent>
       </Card>

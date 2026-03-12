@@ -1,21 +1,11 @@
-import { useState } from "react";
-import { Trash2, Upload, Plus } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Trash2, Upload, Plus, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-const STORAGE_KEY = "radio_slides";
-
-interface Slide {
-  id: string;
-  titulo: string;
-  imagem: string;
-}
-
-function getSlides(): Slide[] {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); } catch { return []; }
-}
+import { type Slide, getSlides, saveSlide, deleteSlide } from "@/lib/radioStore";
+import { toast } from "sonner";
 
 function fileToBase64(file: File): Promise<string> {
   return new Promise((res, rej) => {
@@ -27,22 +17,44 @@ function fileToBase64(file: File): Promise<string> {
 }
 
 const AdminSlides = () => {
-  const [slides, setSlides] = useState<Slide[]>(getSlides());
+  const [slides, setSlides] = useState<Slide[]>([]);
   const [titulo, setTitulo] = useState("");
   const [imagem, setImagem] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleAdd = () => {
-    if (!titulo.trim() || !imagem) return;
-    const updated = [...slides, { id: crypto.randomUUID(), titulo, imagem }];
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-    setSlides(updated);
-    setTitulo(""); setImagem("");
+  const fetchSlides = async () => {
+    const data = await getSlides();
+    setSlides(data);
   };
 
-  const handleDelete = (id: string) => {
-    const updated = slides.filter(s => s.id !== id);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-    setSlides(updated);
+  useEffect(() => { fetchSlides(); }, []);
+
+  const handleAdd = async () => {
+    if (!titulo.trim() || !imagem) {
+      toast.error("Preencha o título e escolha uma imagem.");
+      return;
+    }
+    setLoading(true);
+    const { error } = await saveSlide({ titulo, imagem });
+    if (error) {
+      toast.error("Erro ao adicionar slide.");
+    } else {
+      toast.success("Slide adicionado!");
+      fetchSlides();
+      setTitulo(""); setImagem("");
+    }
+    setLoading(false);
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm("Excluir este slide?")) return;
+    const { error } = await deleteSlide(id);
+    if (error) {
+      toast.error("Erro ao remover.");
+    } else {
+      toast.success("Slide removido!");
+      fetchSlides();
+    }
   };
 
   return (
@@ -65,7 +77,10 @@ const AdminSlides = () => {
             </div>
           </div>
           {imagem && <img src={imagem} alt="Preview" className="h-32 rounded-lg object-cover border border-border" />}
-          <Button onClick={handleAdd} className="gap-2"><Plus className="w-4 h-4" /> Adicionar Slide</Button>
+          <Button onClick={handleAdd} className="gap-2" disabled={loading}>
+            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+            Adicionar Slide
+          </Button>
         </CardContent>
       </Card>
 

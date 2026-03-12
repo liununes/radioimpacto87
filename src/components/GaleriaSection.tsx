@@ -1,10 +1,18 @@
-import { useState } from "react";
-import { getFotos } from "@/lib/radioStore";
+import { useState, useEffect } from "react";
+import { getFotos, type Foto } from "@/lib/radioStore";
 import PhotoLightbox from "./PhotoLightbox";
 
 const GaleriaSection = () => {
-  const fotos = getFotos();
+  const [fotos, setFotos] = useState<Foto[]>([]);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchFotos = async () => {
+      const data = await getFotos();
+      setFotos(data);
+    };
+    fetchFotos();
+  }, []);
 
   if (fotos.length === 0) return null;
 

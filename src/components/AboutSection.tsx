@@ -1,7 +1,6 @@
 import { MapPin, Phone, Mail, Info } from "lucide-react";
 import { useEffect, useState } from "react";
-
-const STORAGE_KEY = "radio_sobre";
+import { getSiteConfig } from "@/lib/radioStore";
 
 const AboutSection = () => {
   const [data, setData] = useState<any>({
@@ -11,22 +10,20 @@ const AboutSection = () => {
     telefone: "",
     email: ""
   });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        if (Object.keys(parsed).length > 0) {
-          setData(parsed);
-        }
-      } catch (e) {
-        console.error("Error parsing about data", e);
+    const fetchSobre = async () => {
+      const saved = await getSiteConfig("sobre");
+      if (saved) {
+        setData(saved);
       }
-    }
+      setLoading(false);
+    };
+    fetchSobre();
   }, []);
 
-  if (!data) return null;
+  if (loading) return null;
 
   return (
     <section id="sobre" className="py-16 bg-card/30">

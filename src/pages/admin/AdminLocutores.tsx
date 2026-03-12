@@ -5,7 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { type Locutor, getLocutores, saveLocutores } from "@/lib/radioStore";
+import { type Locutor, getLocutores, saveLocutor, deleteLocutor } from "@/lib/radioStore";
+import { toast } from "sonner";
 
 function fileToBase64(file: File): Promise<string> {
   return new Promise((res, rej) => {
@@ -22,30 +23,50 @@ const AdminLocutores = () => {
   const [bio, setBio] = useState("");
   const [foto, setFoto] = useState("");
   const [editId, setEditId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => { setLocutores(getLocutores()); }, []);
+  const fetchLocutores = async () => {
+    const data = await getLocutores();
+    setLocutores(data);
+  };
 
-  const handleSave = () => {
-    if (!nome.trim()) return;
-    let updated: Locutor[];
-    if (editId) {
-      updated = locutores.map(l => l.id === editId ? { ...l, nome, bio, foto: foto || l.foto } : l);
+  useEffect(() => { fetchLocutores(); }, []);
+
+  const handleSave = async () => {
+    if (!nome.trim()) { toast.error("Nome é obrigatório"); return; }
+    
+    setLoading(true);
+    const { error } = await saveLocutor({
+      id: editId || undefined,
+      nome,
+      bio,
+      foto
+    });
+
+    if (error) {
+      toast.error("Erro ao salvar: " + error.message);
     } else {
-      updated = [...locutores, { id: crypto.randomUUID(), nome, bio, foto }];
+      toast.success(editId ? "Locutor atualizado!" : "Locutor criado!");
+      await fetchLocutores();
+      resetForm();
     }
-    saveLocutores(updated);
-    setLocutores(updated);
-    resetForm();
+    setLoading(false);
   };
 
   const handleEdit = (loc: Locutor) => {
-    setEditId(loc.id); setNome(loc.nome); setBio(loc.bio); setFoto(loc.foto);
+    setEditId(loc.id); setNome(loc.nome); setBio(loc.bio || ""); setFoto(loc.foto || "");
   };
 
-  const handleDelete = (id: string) => {
-    const updated = locutores.filter(l => l.id !== id);
-    saveLocutores(updated);
-    setLocutores(updated);
+  const handleDelete = async (id: string) => {
+    if (!confirm("Deseja realmente excluir este locutor?")) return;
+    
+    const { error } = await deleteLocutor(id);
+    if (error) {
+      toast.error("Erro ao excluir: " + error.message);
+    } else {
+      toast.success("Locutor removido!");
+      await fetchLocutores();
+    }
   };
 
   const resetForm = () => { setEditId(null); setNome(""); setBio(""); setFoto(""); };

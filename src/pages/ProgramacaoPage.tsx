@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Radio, Clock, ArrowLeft } from "lucide-react";
-import { getProgramas, getLocutores, getProgramaAtual } from "@/lib/radioStore";
+import { getProgramas, getLocutores, getProgramaAtual, type Programa, type Locutor } from "@/lib/radioStore";
 import PhotoLightbox from "@/components/PhotoLightbox";
 import RadioPlayer from "@/components/RadioPlayer";
 import Navigation from "@/components/Navigation";
@@ -11,10 +11,26 @@ const DIAS_COMPLETOS = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sex
 const DIAS = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 
 const ProgramacaoPage = () => {
-  const programas = getProgramas();
-  const locutores = getLocutores();
-  const atual = getProgramaAtual();
+  const [programas, setProgramas] = useState<Programa[]>([]);
+  const [locutores, setLocutores] = useState<Locutor[]>([]);
+  const [atual, setAtual] = useState<{ programa: Programa; locutor: Locutor } | null>(null);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const [progs, locs, current] = await Promise.all([
+        getProgramas(),
+        getLocutores(),
+        getProgramaAtual()
+      ]);
+      setProgramas(progs);
+      setLocutores(locs);
+      setAtual(current);
+      setLoading(false);
+    };
+    fetchData();
+  }, []);
 
   const getLocutorNome = (id: string) => locutores.find(l => l.id === id)?.nome || "—";
   const getLocutorFoto = (id: string) => locutores.find(l => l.id === id)?.foto || "";

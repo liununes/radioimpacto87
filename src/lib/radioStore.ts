@@ -1,3 +1,5 @@
+import { supabase } from "@/integrations/supabase/client";
+
 export interface Locutor {
   id: string;
   nome: string;
@@ -19,7 +21,7 @@ export interface RedeSocial {
   id: string;
   nome: string;
   url: string;
-  icone: string; // "instagram" | "facebook" | "youtube" | "whatsapp" | "twitter" | "tiktok" | "other"
+  icone: string;
 }
 
 export interface Foto {
@@ -28,59 +30,131 @@ export interface Foto {
   imagem: string;
 }
 
-const LOCUTORES_KEY = "radio_locutores";
-const PROGRAMAS_KEY = "radio_programas";
-const REDES_KEY = "radio_redes_sociais";
-const FOTOS_KEY = "radio_fotos";
-const WHATSAPP_KEY = "radio_whatsapp";
-
-export function getLocutores(): Locutor[] {
-  try { return JSON.parse(localStorage.getItem(LOCUTORES_KEY) || "[]"); } catch { return []; }
+export interface Slide {
+  id: string;
+  titulo: string;
+  imagem: string;
 }
 
-export function saveLocutores(data: Locutor[]) {
-  localStorage.setItem(LOCUTORES_KEY, JSON.stringify(data));
+
+
+export async function getLocutores(): Promise<Locutor[]> {
+  const { data, error } = await supabase.from("locutores").select("*").order("nome");
+  if (error) { console.error("Erro ao buscar locutores:", error); return []; }
+  return data || [];
 }
 
-export function getProgramas(): Programa[] {
-  try { return JSON.parse(localStorage.getItem(PROGRAMAS_KEY) || "[]"); } catch { return []; }
+export async function saveLocutor(locutor: Partial<Locutor>) {
+  if (locutor.id) {
+    const { error } = await supabase.from("locutores").update(locutor).eq("id", locutor.id);
+    return { error };
+  } else {
+    // Cast to any to handle required 'nome' field if missing (though the UI should prevent this)
+    const { error } = await supabase.from("locutores").insert(locutor as any);
+    return { error };
+  }
 }
 
-export function saveProgramas(data: Programa[]) {
-  localStorage.setItem(PROGRAMAS_KEY, JSON.stringify(data));
+export async function deleteLocutor(id: string) {
+  return await supabase.from("locutores").delete().eq("id", id);
 }
 
-export function getRedesSociais(): RedeSocial[] {
-  try { return JSON.parse(localStorage.getItem(REDES_KEY) || "[]"); } catch { return []; }
+export async function getProgramas(): Promise<Programa[]> {
+  const { data, error } = await supabase.from("programas").select("*");
+  if (error) { console.error("Erro ao buscar programas:", error); return []; }
+  
+  return (data || []).map(p => ({
+    id: p.id,
+    nome: p.nome,
+    locutorId: p.locutor_id || "",
+    foto: p.foto || "",
+    horaInicio: p.hora_inicio,
+    horaFim: p.hora_fim,
+    diasSemana: p.dias_semana
+  }));
 }
 
-export function saveRedesSociais(data: RedeSocial[]) {
-  localStorage.setItem(REDES_KEY, JSON.stringify(data));
+export async function savePrograma(p: any) {
+  const dbData = {
+    nome: p.nome,
+    locutor_id: p.locutorId,
+    foto: p.foto,
+    hora_inicio: p.horaInicio,
+    hora_fim: p.horaFim,
+    dias_semana: p.diasSemana
+  };
+  
+  if (p.id) {
+    return await supabase.from("programas").update(dbData as any).eq("id", p.id);
+  } else {
+    return await supabase.from("programas").insert(dbData as any);
+  }
 }
 
-export function getWhatsApp(): string {
-  return localStorage.getItem(WHATSAPP_KEY) || "";
+export async function deletePrograma(id: string) {
+  return await supabase.from("programas").delete().eq("id", id);
 }
 
-export function saveWhatsApp(numero: string) {
-  localStorage.setItem(WHATSAPP_KEY, numero);
+export async function getFotos(): Promise<Foto[]> {
+  const { data, error } = await supabase.from("fotos").select("*").order("created_at", { ascending: false });
+  if (error) return [];
+  return data || [];
 }
 
-export function getFotos(): Foto[] {
-  try { return JSON.parse(localStorage.getItem(FOTOS_KEY) || "[]"); } catch { return []; }
+export async function deleteFoto(id: string) {
+  return await supabase.from("fotos").delete().eq("id", id);
 }
 
-export function saveFotos(data: Foto[]) {
-  localStorage.setItem(FOTOS_KEY, JSON.stringify(data));
+export async function getSlides(): Promise<Slide[]> {
+  const { data, error } = await supabase.from("slides").select("*").order("created_at", { ascending: false });
+  if (error) return [];
+  return data || [];
 }
 
-export function getProgramaAtual(): { programa: Programa; locutor: Locutor } | null {
+export async function saveSlide(slide: Partial<Slide>) {
+  if (slide.id) {
+    return await supabase.from("slides").update(slide as any).eq("id", slide.id);
+  } else {
+    return await supabase.from("slides").insert(slide as any);
+  }
+}
+
+export async function deleteSlide(id: string) {
+  return await supabase.from("slides").delete().eq("id", id);
+}
+
+export async function saveFoto(foto: Partial<Foto>) {
+  if (foto.id) {
+    return await supabase.from("fotos").update(foto as any).eq("id", foto.id);
+  } else {
+    return await supabase.from("fotos").insert(foto as any);
+  }
+}
+
+export async function getRedesSociais(): Promise<RedeSocial[]> {
+  const { data, error } = await supabase.from("redes_sociais").select("*").order("nome");
+  if (error) return [];
+  return data || [];
+}
+
+export async function saveRedeSocial(rede: Partial<RedeSocial>) {
+  if (rede.id) {
+    return await supabase.from("redes_sociais").update(rede).eq("id", rede.id);
+  } else {
+    return await supabase.from("redes_sociais").insert(rede as any);
+  }
+}
+
+export async function deleteRedeSocial(id: string) {
+  return await supabase.from("redes_sociais").delete().eq("id", id);
+}
+
+export async function getProgramaAtual(): Promise<{ programa: Programa; locutor: Locutor } | null> {
   const now = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Sao_Paulo" }));
   const dia = now.getDay();
   const hora = now.getHours().toString().padStart(2, "0") + ":" + now.getMinutes().toString().padStart(2, "0");
 
-  const programas = getProgramas();
-  const locutores = getLocutores();
+  const [programas, locutores] = await Promise.all([getProgramas(), getLocutores()]);
 
   const atual = programas.find(p =>
     p.diasSemana.includes(dia) && hora >= p.horaInicio && hora < p.horaFim
@@ -92,4 +166,24 @@ export function getProgramaAtual(): { programa: Programa; locutor: Locutor } | n
   if (!locutor) return null;
 
   return { programa: atual, locutor };
+}
+
+export async function getSiteConfig(key: string): Promise<any> {
+  const { data, error } = await supabase.from("site_config").select("value").eq("key", key).single();
+  if (error) return null;
+  return data?.value;
+}
+
+export async function saveSiteConfig(key: string, value: any) {
+  return await supabase.from("site_config").upsert({ key, value });
+}
+
+export async function getWhatsApp(): Promise<string> {
+  const data = await getSiteConfig("streaming");
+  return data?.whatsapp || "";
+}
+
+export async function saveWhatsApp(numero: string) {
+  const current = await getSiteConfig("streaming") || {};
+  return await saveSiteConfig("streaming", { ...current, whatsapp: numero });
 }

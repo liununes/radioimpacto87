@@ -3,15 +3,27 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import heroSlide1 from "@/assets/hero-slide-1.jpg";
 import heroSlide2 from "@/assets/hero-slide-2.jpg";
 import heroSlide3 from "@/assets/hero-slide-3.jpg";
+import { getSlides, type Slide } from "@/lib/radioStore";
 
-const slides = [
+const DEFAULT_SLIDES = [
   { image: heroSlide1, title: "Bem-vindo à Impacto FM 87.9" },
   { image: heroSlide2, title: "As melhores músicas, 24 horas" },
   { image: heroSlide3, title: "Notícias da sua região em tempo real" },
 ];
 
 const HeroCarousel = () => {
+  const [slides, setSlides] = useState<{ image: string; title: string }[]>(DEFAULT_SLIDES);
   const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    const fetchSlides = async () => {
+      const data = await getSlides();
+      if (data && data.length > 0) {
+        setSlides(data.map(s => ({ image: s.imagem, title: s.titulo })));
+      }
+    };
+    fetchSlides();
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {

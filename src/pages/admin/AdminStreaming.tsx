@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { Save, Plus, Trash2, MessageCircle, Upload } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Save, Plus, Trash2, MessageCircle, Upload, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { type RedeSocial, getRedesSociais, saveRedesSociais, getWhatsApp, saveWhatsApp } from "@/lib/radioStore";
-import { getSiteConfig, saveSiteConfig } from "@/lib/themeStore";
+import { type RedeSocial, getRedesSociais, saveRedeSocial, deleteRedeSocial, getWhatsApp, saveWhatsApp, getSiteConfig as getRadioSiteConfig, saveSiteConfig as saveRadioSiteConfig } from "@/lib/radioStore";
+import { toast } from "sonner";
 
 const ICONE_OPTIONS = [
   { value: "instagram", label: "Instagram" },
@@ -26,36 +26,68 @@ function fileToBase64(file: File): Promise<string> {
 }
 
 const AdminStreaming = () => {
-  const siteConfig = getSiteConfig();
-  const [streamUrl, setStreamUrl] = useState(siteConfig.streamUrl);
-  const [radioName, setRadioName] = useState(siteConfig.radioName);
-  const [radioFreq, setRadioFreq] = useState(siteConfig.radioFreq);
-  const [logo, setLogo] = useState(siteConfig.logo);
+  const [streamUrl, setStreamUrl] = useState("");
+  const [radioName, setRadioName] = useState("");
+  const [radioFreq, setRadioFreq] = useState("");
+  const [logo, setLogo] = useState("");
+  const [whatsapp, setWhatsapp] = useState("");
 
-  const [whatsapp, setWhatsapp] = useState(getWhatsApp());
-  const [redes, setRedes] = useState<RedeSocial[]>(getRedesSociais());
+  const [redes, setRedes] = useState<RedeSocial[]>([]);
   const [novaRedeNome, setNovaRedeNome] = useState("");
   const [novaRedeUrl, setNovaRedeUrl] = useState("");
   const [novaRedeIcone, setNovaRedeIcone] = useState("instagram");
+  const [loading, setLoading] = useState(false);
 
-  const handleSave = () => {
-    saveSiteConfig({ streamUrl, radioName, radioFreq, logo });
-    saveWhatsApp(whatsapp);
-    alert("Configurações salvas!");
+  useEffect(() => {
+    const fetchData = async () => {
+      const [config, redesData, whatsappNum] = await Promise.all([
+        getRadioSiteConfig("streaming"),
+        getRedesSociais(),
+        getWhatsApp()
+      ]);
+      if (config) {
+        setStreamUrl(config.streamUrl || "");
+        setRadioName(config.radioName || "Impacto FM");
+        setRadioFreq(config.radioFreq || "87.9 FM");
+        setLogo(config.logo || "/logo.png");
+      }
+      setRedes(redesData);
+      setWhatsapp(whatsappNum);
+    };
+    fetchData();
+  }, []);
+
+  const handleSaveConfig = async () => {
+    setLoading(true);
+    const { error: configError } = await saveRadioSiteConfig("streaming", { streamUrl, radioName, radioFreq, logo, whatsapp });
+    if (configError) {
+      toast.error("Erro ao salvar: " + configError.message);
+    } else {
+      toast.success("Configurações salvas!");
+    }
+    setLoading(false);
   };
 
-  const handleAddRede = () => {
+  const handleAddRede = async () => {
     if (!novaRedeNome.trim() || !novaRedeUrl.trim()) return;
-    const updated = [...redes, { id: crypto.randomUUID(), nome: novaRedeNome, url: novaRedeUrl, icone: novaRedeIcone }];
-    saveRedesSociais(updated);
-    setRedes(updated);
-    setNovaRedeNome(""); setNovaRedeUrl(""); setNovaRedeIcone("instagram");
+    const { error } = await saveRedeSocial({ nome: novaRedeNome, url: novaRedeUrl, icone: novaRedeIcone });
+    if (error) {
+      toast.error("Erro ao adicionar rede social.");
+    } else {
+      toast.success("Rede social adicionada!");
+      setRedes(await getRedesSociais());
+      setNovaRedeNome(""); setNovaRedeUrl(""); setNovaRedeIcone("instagram");
+    }
   };
 
-  const handleDeleteRede = (id: string) => {
-    const updated = redes.filter(r => r.id !== id);
-    saveRedesSociais(updated);
-    setRedes(updated);
+  const handleDeleteRede = async (id: string) => {
+    const { error } = await deleteRedeSocial(id);
+    if (error) {
+      toast.error("Erro ao remover.");
+    } else {
+      toast.success("Rede social removida!");
+      setRedes(await getRedesSociais());
+    }
   };
 
   return (
@@ -68,7 +100,6 @@ const AdminStreaming = () => {
           <div className="space-y-2">
             <Label>URL do Stream</Label>
             <Input value={streamUrl} onChange={e => setStreamUrl(e.target.value)} placeholder="https://..." />
-            <p className="text-xs text-muted-foreground">Cole a URL do seu stream (Zeno.fm, Shoutcast, Icecast, etc.)</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -81,7 +112,6 @@ const AdminStreaming = () => {
             </div>
           </div>
 
-          {/* Logo */}
           <div className="space-y-2">
             <Label>Logo da Rádio</Label>
             <div className="flex items-center gap-4">
@@ -98,27 +128,26 @@ const AdminStreaming = () => {
                 )}
               </div>
             </div>
-            <p className="text-xs text-muted-foreground">Formato recomendado: PNG com fundo transparente, 200×200px</p>
           </div>
 
-          <Button onClick={handleSave} className="gap-2"><Save className="w-4 h-4" /> Salvar</Button>
+          <Button onClick={handleSaveConfig} className="gap-2" disabled={loading}>
+            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+            Salvar
+          </Button>
         </CardContent>
       </Card>
 
-      {/* WhatsApp */}
       <Card>
         <CardHeader><CardTitle className="flex items-center gap-2"><MessageCircle className="w-5 h-5 text-green-500" /> WhatsApp para Pedidos</CardTitle></CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label>Número do WhatsApp (com DDD e código do país)</Label>
             <Input value={whatsapp} onChange={e => setWhatsapp(e.target.value)} placeholder="5511999999999" />
-            <p className="text-xs text-muted-foreground">Formato: 55 + DDD + número. Ex: 5511999999999</p>
           </div>
-          <Button onClick={handleSave} className="gap-2"><Save className="w-4 h-4" /> Salvar</Button>
+          <Button onClick={handleSaveConfig} className="gap-2"><Save className="w-4 h-4" /> Salvar</Button>
         </CardContent>
       </Card>
 
-      {/* Redes Sociais */}
       <Card>
         <CardHeader><CardTitle>Redes Sociais</CardTitle></CardHeader>
         <CardContent className="space-y-4">
