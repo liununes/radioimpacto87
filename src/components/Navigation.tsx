@@ -13,12 +13,17 @@ const Navigation = () => {
   const [activeItem, setActiveItem] = useState("Home");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const handleClick = (item: typeof navItems[0]) => {
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, item: typeof navItems[0]) => {
     setActiveItem(item.label);
-    setIsMenuOpen(false);
-    if (item.isLink) {
-      window.location.href = item.href;
+    if (!item.isLink) {
+      e.preventDefault();
+      const targetId = item.href.replace("#", "");
+      const element = document.getElementById(targetId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
     }
+    setIsMenuOpen(false);
   };
 
   return (
@@ -30,10 +35,7 @@ const Navigation = () => {
             <a
               key={item.label}
               href={item.href}
-              onClick={(e) => {
-                if (item.isLink) { /* let browser navigate */ }
-                setActiveItem(item.label);
-              }}
+              onClick={(e) => handleClick(e, item)}
               className={`nav-link ${activeItem === item.label ? "nav-link-active" : ""}`}
             >
               {item.label}
@@ -55,7 +57,7 @@ const Navigation = () => {
               <a
                 key={item.label}
                 href={item.href}
-                onClick={() => handleClick(item)}
+                onClick={(e) => handleClick(e, item)}
                 className={`nav-link ${activeItem === item.label ? "nav-link-active" : ""}`}
               >
                 {item.label}
