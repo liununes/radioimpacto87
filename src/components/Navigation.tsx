@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const navItems = [
   { label: "Home", href: "#home" },
@@ -12,16 +13,38 @@ const navItems = [
 const Navigation = () => {
   const [activeItem, setActiveItem] = useState("Home");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (location.pathname === "/" && location.hash) {
+      setTimeout(() => {
+        const targetId = location.hash.replace("#", "");
+        const element = document.getElementById(targetId);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
+    }
+  }, [location]);
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, item: typeof navItems[0]) => {
+    e.preventDefault();
     setActiveItem(item.label);
     if (!item.isLink) {
-      e.preventDefault();
-      const targetId = item.href.replace("#", "");
-      const element = document.getElementById(targetId);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
+      if (location.pathname !== "/") {
+        navigate(`/${item.href}`);
+      } else {
+        const targetId = item.href.replace("#", "");
+        const element = document.getElementById(targetId);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        } else {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
       }
+    } else {
+      navigate(item.href);
     }
     setIsMenuOpen(false);
   };
