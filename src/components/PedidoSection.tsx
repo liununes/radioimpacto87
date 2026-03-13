@@ -1,11 +1,8 @@
-import { useState } from "react";
-import { Music, Send, X } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Music, MessageCircle, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { getWhatsApp } from "@/lib/radioStore";
 
 interface PedidoSectionProps {
   position?: 'left' | 'center' | 'right';
@@ -13,44 +10,19 @@ interface PedidoSectionProps {
 
 const PedidoSection = ({ position = 'center' }: PedidoSectionProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    nome: '',
-    musica: '',
-    artista: ''
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [whatsapp, setWhatsapp] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!formData.musica.trim()) {
-      toast.error("Por favor, informe o nome da música.");
-      return;
-    }
+  useEffect(() => {
+    const fetchWhatsApp = async () => {
+      const whatsappNum = await getWhatsApp();
+      setWhatsapp(whatsappNum);
+    };
+    fetchWhatsApp();
+  }, []);
 
-    setIsSubmitting(true);
-    
-    try {
-      const { error } = await supabase.from("pedidos").insert({
-        nome: formData.nome.trim() || null,
-        musica: formData.musica.trim(),
-        artista: formData.artista.trim() || null,
-        status: 'pendente'
-      });
-
-      if (error) {
-        toast.error("Erro ao enviar pedido: " + error.message);
-      } else {
-        toast.success("Pedido musical enviado com sucesso! 🎵");
-        setFormData({ nome: '', musica: '', artista: '' });
-        setIsOpen(false);
-      }
-    } catch (error) {
-      toast.error("Erro ao conectar com o servidor.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const whatsappUrl = whatsapp
+    ? `https://wa.me/${whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent("Olá! Quero fazer um pedido musical 🎵")}`
+    : "";
 
   const positionClasses = {
     left: 'justify-start',
@@ -85,48 +57,35 @@ const PedidoSection = ({ position = 'center' }: PedidoSectionProps) => {
               <X className="w-4 h-4" />
             </Button>
           </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <Label htmlFor="nome">Seu Nome (opcional)</Label>
-                <Input
-                  id="nome"
-                  value={formData.nome}
-                  onChange={(e) => setFormData(prev => ({ ...prev, nome: e.target.value }))}
-                  placeholder="Seu nome"
-                  disabled={isSubmitting}
-                />
-              </div>
-              <div>
-                <Label htmlFor="musica">Nome da Música *</Label>
-                <Input
-                  id="musica"
-                  value={formData.musica}
-                  onChange={(e) => setFormData(prev => ({ ...prev, musica: e.target.value }))}
-                  placeholder="Nome da música"
-                  required
-                  disabled={isSubmitting}
-                />
-              </div>
-              <div>
-                <Label htmlFor="artista">Artista (opcional)</Label>
-                <Input
-                  id="artista"
-                  value={formData.artista}
-                  onChange={(e) => setFormData(prev => ({ ...prev, artista: e.target.value }))}
-                  placeholder="Nome do artista/banda"
-                  disabled={isSubmitting}
-                />
-              </div>
-              <Button 
-                type="submit" 
-                className="w-full flex items-center gap-2"
-                disabled={isSubmitting}
+          <CardContent className="space-y-4">
+            <div className="text-center space-y-3">
+              <p className="text-muted-foreground">
+                Faça seu pedido musical diretamente pelo WhatsApp!
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Clique no botão abaixo para abrir o WhatsApp e enviar sua solicitação.
+              </p>
+            </div>
+            {whatsapp ? (
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full"
               >
-                <Send className="w-4 h-4" />
-                {isSubmitting ? 'Enviando...' : 'Enviar Pedido'}
-              </Button>
-            </form>
+                <Button className="w-full flex items-center gap-2 bg-green-600 hover:bg-green-700">
+                  <MessageCircle className="w-4 h-4" />
+                  Pedir no WhatsApp
+                </Button>
+              </a>
+            ) : (
+              <div className="text-center text-muted-foreground">
+                <MessageCircle className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                <p className="text-sm">
+                  WhatsApp não configurado. Entre em contato com a administração.
+                </p>
+              </div>
+            )}
           </CardContent>
         </Card>
       )}
