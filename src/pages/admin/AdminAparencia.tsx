@@ -222,6 +222,18 @@ const AdminAparencia = () => {
               <option value="contact">Abaixo do Contato</option>
             </select>
           </div>
+          <div className="space-y-2">
+            <Label>Posição do Pedido Musical</Label>
+            <select
+              value={theme.pedidoPosition}
+              onChange={e => updateField("pedidoPosition", e.target.value as any)}
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+            >
+              <option value="left">Esquerda</option>
+              <option value="center">Centro</option>
+              <option value="right">Direita</option>
+            </select>
+          </div>
         </CardContent>
       </Card>
     </div>

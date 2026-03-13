@@ -13,6 +13,7 @@ export interface ThemeConfig {
   headerBg: string;
   navBg: string;
   topSongsPosition: 'hero' | 'gallery' | 'news' | 'contact';
+  pedidoPosition: 'left' | 'center' | 'right';
 }
 
 export interface SiteConfig {
@@ -39,6 +40,7 @@ export const DEFAULT_THEME: ThemeConfig = {
   headerBg: "220 20% 10%",
   navBg: "220 15% 20%",
   topSongsPosition: 'hero',
+  pedidoPosition: 'center',
 };
 
 export function getThemeConfig(): ThemeConfig {
