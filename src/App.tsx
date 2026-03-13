@@ -17,7 +17,6 @@ import AdminLocutores from "./pages/admin/AdminLocutores";
 import AdminProgramacao from "./pages/admin/AdminProgramacao";
 import AdminSlides from "./pages/admin/AdminSlides";
 import AdminFotos from "./pages/admin/AdminFotos";
-import AdminPedidos from "./pages/admin/AdminPedidos";
 import AdminNoticias from "./pages/admin/AdminNoticias";
 import AdminSobre from "./pages/admin/AdminSobre";
 import AdminUsuarios from "./pages/admin/AdminUsuarios";
@@ -44,7 +43,6 @@ const App = () => (
               <Route path="programacao" element={<AdminProgramacao />} />
               <Route path="slides" element={<AdminSlides />} />
               <Route path="fotos" element={<AdminFotos />} />
-              <Route path="pedidos" element={<AdminPedidos />} />
               <Route path="noticias" element={<AdminNoticias />} />
               <Route path="sobre" element={<AdminSobre />} />
               <Route path="usuarios" element={<AdminUsuarios />} />

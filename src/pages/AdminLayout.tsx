@@ -23,7 +23,6 @@ const AdminLayout = () => {
       'programacao': 'programacao',
       'slides': 'slides',
       'fotos': 'fotos',
-      'pedidos': 'pedidos',
       'noticias': 'noticias',
       'sobre': 'sobre',
       'usuarios': 'usuarios'

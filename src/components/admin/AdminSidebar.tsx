@@ -25,7 +25,6 @@ const menuItems = [
   { title: "Programação", url: "/admin/programacao", icon: Calendar, permission: "programacao" },
   { title: "Slides / Banners", url: "/admin/slides", icon: Image, permission: "slides" },
   { title: "Galeria de Fotos", url: "/admin/fotos", icon: Image, permission: "fotos" },
-  { title: "Pedidos Musicais", url: "/admin/pedidos", icon: Music, permission: "pedidos" },
   { title: "Notícias", url: "/admin/noticias", icon: FileText, permission: "noticias" },
   { title: "Sobre a Rádio", url: "/admin/sobre", icon: Info, permission: "sobre" },
   { title: "Usuários / Permissões", url: "/admin/usuarios", icon: Settings, permission: "usuarios" },
