@@ -1,4 +1,4 @@
-import { Trophy, MessageCircle } from "lucide-react";
+import { Trophy } from "lucide-react";
 
 const songs = [
   { rank: 1, title: "Suave", artist: "Seu Jorge" },
@@ -41,19 +41,6 @@ const TopSongs = () => {
                 </div>
               </div>
             ))}
-          </div>
-
-          {/* Request Music Button */}
-          <div className="mt-10">
-            <a
-              href="https://wa.me/5500000000000?text=Olá! Gostaria de pedir uma música na Impacto FM 87.9"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-green-600 hover:bg-green-700 text-foreground font-bold transition-all hover:scale-110 shadow-xl active:scale-95"
-            >
-              <MessageCircle className="w-6 h-6" />
-              Pedir Música no WhatsApp
-            </a>
           </div>
         </div>
       </div>
