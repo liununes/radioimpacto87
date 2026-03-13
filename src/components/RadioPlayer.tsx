@@ -140,21 +140,8 @@ const RadioPlayer = () => {
           </div>
         </div>
 
-        {/* WhatsApp + Social Links */}
+        {/* Social Links */}
         <div className="flex items-center gap-1.5 shrink-0">
-          {whatsapp && (
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 bg-green-600 hover:bg-green-700 text-primary-foreground px-3 py-1.5 rounded-full text-xs font-semibold transition-colors"
-              title="Faça seu pedido"
-            >
-              <MessageCircle className="w-4 h-4" />
-              <span className="hidden sm:inline">Pedido</span>
-            </a>
-          )}
-
           {redes.slice(0, 5).map(rede => {
             const Icon = iconMap[rede.icone] || Globe;
             return (

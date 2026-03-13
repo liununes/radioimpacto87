@@ -1,6 +1,7 @@
 import RadioPlayer from "@/components/RadioPlayer";
 import Navigation from "@/components/Navigation";
 import HeroCarousel from "@/components/HeroCarousel";
+import WeatherWidget from "@/components/WeatherWidget";
 import TopSongs from "@/components/TopSongs";
 import EnhancedNewsSection from "@/components/EnhancedNewsSection";
 import GaleriaSection from "@/components/GaleriaSection";
@@ -31,7 +32,17 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <RadioPlayer />
       <Navigation />
-      <HeroCarousel />
+      
+      <div className="container mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <div className="lg:col-span-3">
+            <HeroCarousel />
+          </div>
+          <div className="lg:col-span-1">
+            <WeatherWidget showWeather={theme.showWeather} />
+          </div>
+        </div>
+      </div>
       
       {topSongsPos === 'hero' && <TopSongs />}
       
