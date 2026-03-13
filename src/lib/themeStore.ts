@@ -14,6 +14,19 @@ export interface ThemeConfig {
   navBg: string;
   topSongsPosition: 'hero' | 'gallery' | 'news' | 'contact';
   pedidoPosition: 'left' | 'center' | 'right';
+  playerPosition: 'left' | 'center' | 'right';
+  // Visibility toggles
+  showTopSongs: boolean;
+  showGallery: boolean;
+  showNews: boolean;
+  showAbout: boolean;
+  showWeather: boolean;
+  showSponsors: boolean;
+  showBackToTop: boolean;
+  // Weather settings
+  weatherCity: string;
+  // Sponsor settings
+  sponsorsPosition: 'left' | 'center' | 'right';
 }
 
 export interface SiteConfig {
@@ -41,6 +54,19 @@ export const DEFAULT_THEME: ThemeConfig = {
   navBg: "220 15% 20%",
   topSongsPosition: 'hero',
   pedidoPosition: 'center',
+  playerPosition: 'center',
+  // Visibility toggles
+  showTopSongs: true,
+  showGallery: true,
+  showNews: true,
+  showAbout: true,
+  showWeather: true,
+  showSponsors: true,
+  showBackToTop: true,
+  // Weather settings
+  weatherCity: 'São Paulo',
+  // Sponsor settings
+  sponsorsPosition: 'center',
 };
 
 export function getThemeConfig(): ThemeConfig {

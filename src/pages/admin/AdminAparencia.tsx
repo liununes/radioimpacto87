@@ -122,7 +122,7 @@ const AdminAparencia = () => {
     fetchTheme();
   }, []);
 
-  const updateField = (field: keyof ThemeConfig, value: string) => {
+  const updateField = (field: keyof ThemeConfig, value: string | boolean) => {
     const updated = { ...theme, [field]: value };
     setTheme(updated);
     saveThemeConfig(updated);
@@ -233,6 +233,113 @@ const AdminAparencia = () => {
               <option value="center">Centro</option>
               <option value="right">Direita</option>
             </select>
+          </div>
+          <div className="space-y-2">
+            <Label>Posição do Player</Label>
+            <select
+              value={theme.playerPosition}
+              onChange={e => updateField("playerPosition", e.target.value as any)}
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+            >
+              <option value="left">Esquerda</option>
+              <option value="center">Centro</option>
+              <option value="right">Direita</option>
+            </select>
+          </div>
+          <div className="space-y-2">
+            <Label>Posição dos Patrocinadores</Label>
+            <select
+              value={theme.sponsorsPosition}
+              onChange={e => updateField("sponsorsPosition", e.target.value as any)}
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+            >
+              <option value="left">Esquerda</option>
+              <option value="center">Centro</option>
+              <option value="right">Direita</option>
+            </select>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader><CardTitle>Visibilidade das Seções</CardTitle></CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center justify-between">
+            <Label>Top 3 Músicas</Label>
+            <input
+              type="checkbox"
+              checked={theme.showTopSongs}
+              onChange={e => updateField("showTopSongs", e.target.checked)}
+              className="w-4 h-4"
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <Label>Galeria de Fotos</Label>
+            <input
+              type="checkbox"
+              checked={theme.showGallery}
+              onChange={e => updateField("showGallery", e.target.checked)}
+              className="w-4 h-4"
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <Label>Notícias</Label>
+            <input
+              type="checkbox"
+              checked={theme.showNews}
+              onChange={e => updateField("showNews", e.target.checked)}
+              className="w-4 h-4"
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <Label>Sobre Nós</Label>
+            <input
+              type="checkbox"
+              checked={theme.showAbout}
+              onChange={e => updateField("showAbout", e.target.checked)}
+              className="w-4 h-4"
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <Label>Previsão do Tempo</Label>
+            <input
+              type="checkbox"
+              checked={theme.showWeather}
+              onChange={e => updateField("showWeather", e.target.checked)}
+              className="w-4 h-4"
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <Label>Patrocinadores</Label>
+            <input
+              type="checkbox"
+              checked={theme.showSponsors}
+              onChange={e => updateField("showSponsors", e.target.checked)}
+              className="w-4 h-4"
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <Label>Voltar ao Topo</Label>
+            <input
+              type="checkbox"
+              checked={theme.showBackToTop}
+              onChange={e => updateField("showBackToTop", e.target.checked)}
+              className="w-4 h-4"
+            />
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader><CardTitle>Configurações Adicionais</CardTitle></CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label>Cidade para Previsão do Tempo</Label>
+            <Input
+              value={theme.weatherCity}
+              onChange={e => updateField("weatherCity", e.target.value)}
+              placeholder="Nome da cidade"
+            />
           </div>
         </CardContent>
       </Card>

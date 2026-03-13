@@ -2,9 +2,8 @@ import RadioPlayer from "@/components/RadioPlayer";
 import Navigation from "@/components/Navigation";
 import HeroCarousel from "@/components/HeroCarousel";
 import TopSongs from "@/components/TopSongs";
-import PedidoSection from "@/components/PedidoSection";
+import EnhancedNewsSection from "@/components/EnhancedNewsSection";
 import GaleriaSection from "@/components/GaleriaSection";
-import NewsSection from "@/components/NewsSection";
 import AboutSection from "@/components/AboutSection";
 import Footer from "@/components/Footer";
 import { getThemeConfig } from "@/lib/themeStore";
@@ -27,24 +26,22 @@ const Index = () => {
   }, []);
 
   const topSongsPos = theme.topSongsPosition || 'hero';
-  const pedidoPos = theme.pedidoPosition || 'center';
 
   return (
     <div className="min-h-screen bg-background">
       <RadioPlayer />
-      <PedidoSection position={pedidoPos} />
       <Navigation />
       <HeroCarousel />
       
       {topSongsPos === 'hero' && <TopSongs />}
       
-      <GaleriaSection />
+      {theme.showGallery && <GaleriaSection />}
       {topSongsPos === 'gallery' && <TopSongs />}
       
-      <NewsSection />
+      {theme.showNews && <EnhancedNewsSection />}
       {topSongsPos === 'news' && <TopSongs />}
       
-      <AboutSection />
+      {theme.showAbout && <AboutSection />}
       {topSongsPos === 'contact' && <TopSongs />}
       
       <Footer />
