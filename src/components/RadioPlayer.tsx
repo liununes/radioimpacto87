@@ -105,21 +105,41 @@ const RadioPlayer = () => {
           </button>
 
           {liveInfo && (
-            <div className="hidden md:flex items-center gap-3">
-              {liveInfo.foto && (
-                <img src={liveInfo.foto} alt={liveInfo.locutor} className="w-9 h-9 rounded-full object-cover border-2 border-secondary" />
-              )}
-              <div className="text-left">
-                <div className="flex items-center gap-1.5">
-                  <p className="text-xs font-semibold text-secondary leading-tight">{liveInfo.programa}</p>
-                  <span className="flex items-center gap-1 bg-destructive/90 text-destructive-foreground text-[10px] font-bold px-1.5 py-0.5 rounded-full">
-                    <span className="w-1.5 h-1.5 rounded-full bg-destructive-foreground animate-pulse" />
-                    AO VIVO
-                  </span>
+            <>
+              {/* Mobile version */}
+              <div className="flex md:hidden items-center gap-2">
+                {liveInfo.foto && (
+                  <img src={liveInfo.foto} alt={liveInfo.locutor} className="w-10 h-10 rounded-full object-cover border-2 border-secondary" />
+                )}
+                <div className="text-left flex-1">
+                  <div className="flex items-center gap-1 mb-0.5">
+                    <p className="text-xs font-bold text-secondary leading-tight">{liveInfo.programa}</p>
+                    <span className="flex items-center gap-0.5 bg-destructive/90 text-destructive-foreground text-[8px] font-bold px-1 py-0.5 rounded-full">
+                      <span className="w-1 h-1 rounded-full bg-destructive-foreground animate-pulse" />
+                      AO VIVO
+                    </span>
+                  </div>
+                  <p className="text-xs font-semibold text-foreground leading-tight">{liveInfo.locutor}</p>
                 </div>
-                <p className="text-xs text-muted-foreground leading-tight">{liveInfo.locutor}</p>
               </div>
-            </div>
+
+              {/* Desktop version */}
+              <div className="hidden md:flex items-center gap-3">
+                {liveInfo.foto && (
+                  <img src={liveInfo.foto} alt={liveInfo.locutor} className="w-12 h-12 rounded-full object-cover border-2 border-secondary shadow-lg" />
+                )}
+                <div className="text-left">
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <p className="text-sm font-bold text-secondary leading-tight">{liveInfo.programa}</p>
+                    <span className="flex items-center gap-1 bg-destructive/90 text-destructive-foreground text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+                      <span className="w-1.5 h-1.5 rounded-full bg-destructive-foreground animate-pulse" />
+                      AO VIVO
+                    </span>
+                  </div>
+                  <p className="text-sm font-semibold text-foreground leading-tight">{liveInfo.locutor}</p>
+                </div>
+              </div>
+            </>
           )}
 
           <div className="hidden sm:flex items-end gap-0.5 h-5">
