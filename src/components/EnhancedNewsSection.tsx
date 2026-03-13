@@ -62,25 +62,112 @@ const EnhancedNewsSection = ({ showNews = true }: EnhancedNewsSectionProps) => {
     try {
       toast.info("Extraindo conteúdo da URL...");
       
-      const response = await fetch(url);
-      const html = await response.text();
+      let html = '';
+      let title = "Título não encontrado";
+      let content = "Conteúdo não encontrado";
+      let imageUrl = "";
       
-      const titleMatch = html.match(/<title>(.*?)<\/title>/i);
-      const title = titleMatch ? titleMatch[1] : "Título não encontrado";
+      try {
+        // Tentar requisição direta primeiro
+        const response = await fetch(url, {
+          method: 'GET',
+          mode: 'cors',
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        html = await response.text();
+      } catch (corsError) {
+        // Se falhar por CORS, tentar com uma API pública
+        try {
+          const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+          const proxyResponse = await fetch(proxyUrl);
+          const proxyData = await proxyResponse.json();
+          
+          if (proxyData.contents) {
+            html = proxyData.contents;
+          } else {
+            throw new Error('Proxy API failed');
+          }
+        } catch (proxyError) {
+          // Última tentativa: extrair informações básicas do domínio
+          const domain = new URL(url).hostname;
+          title = `Notícia de ${domain}`;
+          content = `Conteúdo extraído automaticamente de ${url}`;
+          toast.warning("Extração limitada devido a restrições da página. Preencha os dados manualmente.");
+        }
+      }
       
-      const descMatch = html.match(/<meta[^>]*name=["']description["'][^>]*content=["'](.*?)["'][^>]*>/i);
-      const content = descMatch ? descMatch[1] : "Conteúdo não encontrado";
-      
-      setFormData(prev => ({
-        ...prev,
-        titulo: title.substring(0, 100),
-        resumo: content.substring(0, 300),
-        url: url
-      }));
-      
-      toast.success("Conteúdo extraído com sucesso!");
+      if (html) {
+        // Melhor extração de título - tentar múltiplos padrões
+        const titlePatterns = [
+          /<title[^>]*>(.*?)<\/title>/i,
+          /<meta[^>]*property=["']og:title["'][^>]*content=["'](.*?)["'][^>]*>/i,
+          /<meta[^>]*name=["']title["'][^>]*content=["'](.*?)["'][^>]*>/i,
+          /<h1[^>]*class=["']content-head__title["'][^>]*>(.*?)<\/h1>/i,
+          /<h1[^>]*>(.*?)<\/h1>/i
+        ];
+        
+        for (const pattern of titlePatterns) {
+          const match = html.match(pattern);
+          if (match && match[1]) {
+            title = match[1].trim();
+            break;
+          }
+        }
+        
+        // Melhor extração de descrição/conteúdo
+        const contentPatterns = [
+          /<meta[^>]*name=["']description["'][^>]*content=["'](.*?)["'][^>]*>/i,
+          /<meta[^>]*property=["']og:description["'][^>]*content=["'](.*?)["'][^>]*>/i,
+          /<meta[^>]*name=["']twitter:description["'][^>]*content=["'](.*?)["'][^>]*>/i,
+          /<p[^>]*class=["']content-text__container["'][^>]*>(.*?)<\/p>/i
+        ];
+        
+        for (const pattern of contentPatterns) {
+          const match = html.match(pattern);
+          if (match && match[1]) {
+            content = match[1].trim();
+            break;
+          }
+        }
+        
+        // Extrair imagem se existir
+        const imagePatterns = [
+          /<meta[^>]*property=["']og:image["'][^>]*content=["'](.*?)["'][^>]*>/i,
+          /<meta[^>]*name=["']twitter:image["'][^>]*content=["'](.*?)["'][^>]*>/i
+        ];
+        
+        for (const pattern of imagePatterns) {
+          const match = html.match(pattern);
+          if (match && match[1]) {
+            imageUrl = match[1].trim();
+            break;
+          }
+        }
+        
+        // Limpar o conteúdo
+        const cleanTitle = title.replace(/&[^;]+;/g, ' ').replace(/\s+/g, ' ').trim();
+        const cleanContent = content.replace(/&[^;]+;/g, ' ').replace(/\s+/g, ' ').trim();
+        
+        setFormData(prev => ({
+          ...prev,
+          titulo: cleanTitle.substring(0, 100),
+          resumo: cleanContent.substring(0, 300),
+          imagem: imageUrl,
+          url: url
+        }));
+        
+        toast.success("Conteúdo extraído com sucesso!");
+      }
     } catch (error) {
-      toast.error("Erro ao extrair conteúdo da URL");
+      console.error('Erro na extração:', error);
+      toast.error("Não foi possível extrair conteúdo desta URL. Tente copiar e colar manualmente.");
     }
   };
 
