@@ -34,13 +34,15 @@ const Index = () => {
       <Navigation />
       
       <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          <div className="lg:col-span-3">
-            <HeroCarousel />
-          </div>
-          <div className="lg:col-span-1">
-            <WeatherWidget showWeather={theme.showWeather} />
-          </div>
+        <div className="space-y-6">
+          {theme.showWeather && (
+            <div className="flex justify-center">
+              <div className="w-full max-w-md">
+                <WeatherWidget showWeather={theme.showWeather} />
+              </div>
+            </div>
+          )}
+          <HeroCarousel />
         </div>
       </div>
       

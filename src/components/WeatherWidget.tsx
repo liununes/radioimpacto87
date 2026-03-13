@@ -83,60 +83,49 @@ const WeatherWidget = ({ showWeather = true }: WeatherWidgetProps) => {
   }, [showWeather, theme.weatherCity]);
 
   const getWeatherIcon = (icon: string) => {
-    if (icon.includes('01')) return <Sun className="w-8 h-8 text-yellow-400" />;
-    if (icon.includes('02') || icon.includes('03') || icon.includes('04')) return <Cloud className="w-8 h-8 text-gray-400" />;
-    if (icon.includes('09') || icon.includes('10') || icon.includes('11')) return <CloudRain className="w-8 h-8 text-blue-400" />;
-    return <Cloud className="w-8 h-8 text-gray-400" />;
+    if (icon.includes('01')) return <Sun className="w-6 h-6 text-yellow-400" />;
+    if (icon.includes('02') || icon.includes('03') || icon.includes('04')) return <Cloud className="w-6 h-6 text-gray-400" />;
+    if (icon.includes('09') || icon.includes('10') || icon.includes('11')) return <CloudRain className="w-6 h-6 text-blue-400" />;
+    return <Cloud className="w-6 h-6 text-gray-400" />;
   };
 
   if (!showWeather) return null;
 
   return (
-    <Card className="bg-gradient-to-br from-blue-400/20 to-blue-600/20 border-blue-300/30">
-      <CardContent className="p-4">
+    <Card className="bg-gradient-to-r from-blue-400/20 to-blue-600/20 border-blue-300/30">
+      <CardContent className="p-3">
         {loading ? (
-          <div className="flex items-center justify-center h-32">
-            <div className="animate-spin w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full"></div>
+          <div className="flex items-center justify-center h-16">
+            <div className="animate-spin w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full"></div>
           </div>
         ) : weather ? (
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-semibold text-foreground">{weather.city}</h3>
-                <p className="text-sm text-muted-foreground capitalize">{weather.description}</p>
-              </div>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
               {getWeatherIcon(weather.icon)}
+              <div>
+                <h3 className="text-sm font-semibold text-foreground">{weather.city}</h3>
+                <div className="flex items-center gap-2">
+                  <span className="text-xl font-bold text-foreground">{weather.temp}°C</span>
+                  <span className="text-xs text-muted-foreground capitalize">{weather.description}</span>
+                </div>
+              </div>
             </div>
             
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <Thermometer className="w-4 h-4 text-orange-500" />
-                <span className="text-2xl font-bold text-foreground">{weather.temp}°C</span>
+            <div className="flex items-center gap-4 text-xs text-muted-foreground">
+              <div className="flex items-center gap-1">
+                <Droplets className="w-3 h-3 text-blue-500" />
+                <span>{weather.humidity}%</span>
               </div>
-              <div className="text-sm text-muted-foreground">
-                Sensação: {weather.feels_like}°C
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3 text-sm">
-              <div className="flex items-center gap-2">
-                <Droplets className="w-4 h-4 text-blue-500" />
-                <span className="text-muted-foreground">Umidade: {weather.humidity}%</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Wind className="w-4 h-4 text-gray-500" />
-                <span className="text-muted-foreground">Vento: {weather.wind_speed} km/h</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Eye className="w-4 h-4 text-purple-500" />
-                <span className="text-muted-foreground">Visibilidade: {weather.visibility} km</span>
+              <div className="flex items-center gap-1">
+                <Wind className="w-3 h-3 text-gray-500" />
+                <span>{weather.wind_speed}km/h</span>
               </div>
             </div>
           </div>
         ) : (
-          <div className="text-center text-muted-foreground h-32 flex items-center justify-center">
-            <Cloud className="w-8 h-8 mx-auto mb-2 opacity-50" />
-            <p>Clima não disponível</p>
+          <div className="text-center text-muted-foreground h-16 flex items-center justify-center">
+            <Cloud className="w-6 h-6 mx-auto mr-2 opacity-50" />
+            <p className="text-xs">Clima indisponível</p>
           </div>
         )}
       </CardContent>
