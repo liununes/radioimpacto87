@@ -47,28 +47,54 @@ const AdminNoticias = () => {
     if (!scrapeUrl.trim()) return;
     setIsScraping(true);
     try {
-      const { data, error } = await supabase.functions.invoke('scrape-news', {
-        body: { url: scrapeUrl },
-      });
+      const targetUrl = scrapeUrl.trim().startsWith('http') ? scrapeUrl.trim() : `https://${scrapeUrl.trim()}`;
+      
+      // Usando AllOrigins como proxy de CORS para VPS self-hosted
+      const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`);
+      
+      if (!response.ok) throw new Error("Não foi possível acessar o proxy");
+      
+      const responseData = await response.json();
+      const html = responseData.contents;
 
-      if (error) throw error;
+      if (!html) throw new Error("Não foi possível ler o conteúdo da página.");
 
-      if (data?.success && data.data) {
-        const d = data.data;
-        setTitulo(d.titulo || "");
-        setResumo(d.resumo || "");
-        setConteudo(d.conteudo || "");
-        setImagem(d.imagem || "");
-        setFonte(d.fonte || "");
-        setUrlOriginal(d.url || scrapeUrl);
-        setCategoria(tab || (categorias[0] || ""));
-        toast.success("Dados extraídos com sucesso!");
-      } else {
-        toast.error(data?.error || "Não foi possível extrair dados da URL");
-      }
+      // Helper para extrair meta tags
+      const getMeta = (prop: string) => {
+        const reg = new RegExp(`<meta[^>]+(?:property|name)=["']${prop}["'][^>]+content=["']([^"']+)["']`, 'i');
+        const match = html.match(reg);
+        if (match) return match[1];
+        const regAlt = new RegExp(`<meta[^>]+content=["']([^"']+)["'][^>]+(?:property|name)=["']${prop}["']`, 'i');
+        const matchAlt = html.match(regAlt);
+        return matchAlt ? matchAlt[1] : '';
+      };
+
+      // Extração
+      const title = getMeta('og:title') || html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1]?.trim() || "";
+      const description = getMeta('og:description') || getMeta('description') || "";
+      const image = getMeta('og:image') || getMeta('twitter:image') || "";
+      const source = getMeta('og:site_name') || new URL(targetUrl).hostname.replace('www.', '');
+
+      // Extração de conteúdo simples (parágrafos)
+      const pMatches = html.match(/<p[^>]*>([\s\S]*?)<\/p>/gi) || [];
+      const content = pMatches
+        .map((p: string) => p.replace(/<[^>]+>/g, '').trim())
+        .filter((text: string) => text.length > 50)
+        .slice(0, 8)
+        .join('\n\n');
+
+      setTitulo(title);
+      setResumo(description);
+      setConteudo(content);
+      setImagem(image);
+      setFonte(source);
+      setUrlOriginal(targetUrl);
+      setCategoria(tab || (categorias[0] || ""));
+      
+      toast.success("Dados extraídos com sucesso!");
     } catch (err: any) {
       console.error('Scrape error:', err);
-      toast.error(err.message || "Erro ao acessar a URL. Verifique se o endereço está correto.");
+      toast.error("Erro ao extrair dados. O site pode estar protegido ou o link está incorreto.");
     } finally {
       setIsScraping(false);
     }
