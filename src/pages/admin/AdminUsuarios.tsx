@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
 import { Checkbox } from "@/components/ui/checkbox";
+import { toast } from "sonner";
 
 const ALL_PERMISSIONS = [
   { id: "streaming", label: "Player / Redes Sociais" },
@@ -60,14 +61,52 @@ const AdminUsuarios = () => {
     if (!newEmail || !newPassword) return;
     setLoading(true);
     
-    // Note: Creating users for OTHERS usually needs Service Role or an Edge Function.
-    // If we use signUp, it might logout the current user or requires email confirmation.
-    // A better way is using a custom Edge Function. 
-    // For now, we inform that this requires setup.
-    
-    alert("Para criar novos usuários, é necessário configurar uma Edge Function no Supabase para evitar o logout do administrador atual. Contate o suporte técnico.");
-    
-    setLoading(false);
+    try {
+      // Criar um cliente temporário sem persistência de sessão para evitar o logout do admin atual
+      const { createClient } = await import('@supabase/supabase-js');
+      const tempSupabase = createClient(
+        import.meta.env.VITE_SUPABASE_URL,
+        import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+        { auth: { persistSession: false } }
+      );
+
+      // 1. Criar o usuário no Auth
+      const { data: authData, error: authError } = await tempSupabase.auth.signUp({
+        email: newEmail,
+        password: newPassword,
+      });
+
+      if (authError) throw authError;
+      if (!authData.user) throw new Error("Erro ao criar usuário no Auth.");
+
+      // 2. Adicionar permissões na tabela pública
+      const { error: permError } = await supabase
+        .from("user_permissions")
+        .insert({
+          user_id: authData.user.id,
+          email: newEmail,
+          permissions: newPermissions
+        });
+
+      if (permError) throw permError;
+
+      toast.success("Usuário criado com sucesso!");
+      setIsAdding(false);
+      setNewEmail("");
+      setNewPassword("");
+      setNewPermissions([]);
+      fetchUsers();
+    } catch (err: any) {
+      console.error('Error adding user:', err);
+      // Se houver erro de tabela inexistente, mostramos o erro original do componente
+      if (err.code === "PGRST116" || err.message.includes("does not exist")) {
+        setError("Tabela 'user_permissions' não encontrada. Verifique o SQL de setup.");
+      } else {
+        toast.error("Erro: " + (err.message || "Tente novamente mais tarde."));
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const togglePermission = (id: string) => {
