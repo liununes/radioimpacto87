@@ -49,39 +49,54 @@ const AdminNoticias = () => {
     try {
       const targetUrl = scrapeUrl.trim().startsWith('http') ? scrapeUrl.trim() : `https://${scrapeUrl.trim()}`;
       
-      // Usando AllOrigins como proxy de CORS para VPS self-hosted
-      const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`);
+      // Usando corsproxy.io que é mais rápido e confiável
+      const response = await fetch(`https://corsproxy.io/?${encodeURIComponent(targetUrl)}`);
       
-      if (!response.ok) throw new Error("Não foi possível acessar o proxy");
+      if (!response.ok) throw new Error("Erro na resposta do servidor");
       
-      const responseData = await response.json();
-      const html = responseData.contents;
+      const html = await response.text();
 
-      if (!html) throw new Error("Não foi possível ler o conteúdo da página.");
+      if (!html || html.length < 200) throw new Error("Conteúdo insuficiente ou bloqueado.");
 
       // Helper para extrair meta tags
       const getMeta = (prop: string) => {
-        const reg = new RegExp(`<meta[^>]+(?:property|name)=["']${prop}["'][^>]+content=["']([^"']+)["']`, 'i');
-        const match = html.match(reg);
-        if (match) return match[1];
-        const regAlt = new RegExp(`<meta[^>]+content=["']([^"']+)["'][^>]+(?:property|name)=["']${prop}["']`, 'i');
-        const matchAlt = html.match(regAlt);
-        return matchAlt ? matchAlt[1] : '';
+        const patterns = [
+          new RegExp(`<meta[^>]+(?:property|name)=["']${prop}["'][^>]+content=["']([^"']+)["']`, 'i'),
+          new RegExp(`<meta[^>]+content=["']([^"']+)["'][^>]+(?:property|name)=["']${prop}["']`, 'i')
+        ];
+        for (const reg of patterns) {
+          const match = html.match(reg);
+          if (match && match[1]) return match[1].replace(/&amp;/g, '&').replace(/&quot;/g, '"');
+        }
+        return '';
       };
 
-      // Extração
+      // Extração de Título
       const title = getMeta('og:title') || html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1]?.trim() || "";
+      
+      // Extração de Descrição/Resumo
       const description = getMeta('og:description') || getMeta('description') || "";
+      
+      // Extração de Imagem
       const image = getMeta('og:image') || getMeta('twitter:image') || "";
-      const source = getMeta('og:site_name') || new URL(targetUrl).hostname.replace('www.', '');
+      
+      // Extração de Fonte
+      let source = getMeta('og:site_name');
+      if (!source) {
+        try {
+          source = new URL(targetUrl).hostname.replace('www.', '');
+        } catch { source = ""; }
+      }
 
-      // Extração de conteúdo simples (parágrafos)
+      // Extração de conteúdo simples (parágrafos significativos)
       const pMatches = html.match(/<p[^>]*>([\s\S]*?)<\/p>/gi) || [];
       const content = pMatches
         .map((p: string) => p.replace(/<[^>]+>/g, '').trim())
-        .filter((text: string) => text.length > 50)
-        .slice(0, 8)
+        .filter((text: string) => text.length > 60)
+        .slice(0, 10)
         .join('\n\n');
+
+      if (!title && !content) throw new Error("Não foi possível extrair dados automáticos deste site.");
 
       setTitulo(title);
       setResumo(description);
@@ -91,10 +106,10 @@ const AdminNoticias = () => {
       setUrlOriginal(targetUrl);
       setCategoria(tab || (categorias[0] || ""));
       
-      toast.success("Dados extraídos com sucesso!");
+      toast.success("Notícia extraída!");
     } catch (err: any) {
       console.error('Scrape error:', err);
-      toast.error("Erro ao extrair dados. O site pode estar protegido ou o link está incorreto.");
+      toast.error(err.message || "Erro ao extrair dados. Link inválido ou protegido.");
     } finally {
       setIsScraping(false);
     }
