@@ -39,16 +39,16 @@ const Index = () => {
         </div>
       </div>
       
-      {topSongsPos === 'hero' && <TopSongs />}
+      {theme.showTopSongs && topSongsPos === 'hero' && <TopSongs />}
       
       {theme.showGallery && <GaleriaSection />}
-      {topSongsPos === 'gallery' && <TopSongs />}
+      {theme.showTopSongs && topSongsPos === 'gallery' && <TopSongs />}
       
       {theme.showNews && <EnhancedNewsSection />}
-      {topSongsPos === 'news' && <TopSongs />}
+      {theme.showTopSongs && topSongsPos === 'news' && <TopSongs />}
       
       {theme.showAbout && <AboutSection />}
-      {topSongsPos === 'contact' && <TopSongs />}
+      {theme.showTopSongs && topSongsPos === 'contact' && <TopSongs />}
       
       <Footer />
     </div>
