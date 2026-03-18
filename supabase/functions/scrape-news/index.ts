@@ -1,6 +1,6 @@
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
 };
 
@@ -78,8 +78,9 @@ function extractContent(html: string): string {
 }
 
 Deno.serve(async (req) => {
+  // CORS Preflight
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
+    return new Response('ok', { headers: corsHeaders });
   }
 
   try {
@@ -97,68 +98,81 @@ Deno.serve(async (req) => {
       formattedUrl = `https://${formattedUrl}`;
     }
 
-    console.log('Scraping URL:', formattedUrl);
+    console.log('Fetching:', formattedUrl);
 
-    // Adicionando timeout de 15 segundos
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 15000);
 
-    try {
-      const response = await fetch(formattedUrl, {
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
-          'Accept-Language': 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7',
-          'Referer': 'https://www.google.com/',
-        },
-        signal: controller.signal,
-        redirect: 'follow',
-      });
+    const response = await fetch(formattedUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml',
+      },
+      signal: controller.signal,
+    });
 
+    if (!response.ok) {
       clearTimeout(timeoutId);
-
-      if (!response.ok) {
-        return new Response(
-          JSON.stringify({ success: false, error: `O site recusou a conexão (Erro ${response.status}).` }),
-          { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
-      }
-
-      const arrayBuffer = await response.arrayBuffer();
-      let decoder = new TextDecoder('utf-8');
-      let html = decoder.decode(arrayBuffer);
-      
-      if (html.includes('charset=iso-8859-1') || html.includes('charset=ISO-8859-1')) {
-        decoder = new TextDecoder('iso-8859-1');
-        html = decoder.decode(arrayBuffer);
-      }
-
-      const titulo = extractTitle(html);
-      const resumo = extractDescription(html);
-      const imagem = extractImage(html);
-      const fonte = extractSiteName(html, formattedUrl);
-      const conteudo = extractContent(html);
-
       return new Response(
-        JSON.stringify({
-          success: true,
-          data: { titulo, resumo, imagem, fonte, conteudo, url: formattedUrl },
-        }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        JSON.stringify({ success: false, error: `Erro no site original (${response.status})` }),
+        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
-    } catch (fetchError) {
-      if (fetchError instanceof DOMException && fetchError.name === 'AbortError') {
-        return new Response(
-          JSON.stringify({ success: false, error: 'O site demorou muito para responder (Timeout).' }),
-          { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
-      }
-      throw fetchError;
     }
-  } catch (error) {
-    console.error('Error scraping:', error);
+
+    // Leitura limitada a 500kb para economizar memória
+    const reader = response.body?.getReader();
+    if (!reader) throw new Error('Falha ao ler corpo da resposta');
+
+    let html = '';
+    const decoder = new TextDecoder('utf-8');
+    let bytesRead = 0;
+
+    while (bytesRead < 500000) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      html += decoder.decode(value, { stream: true });
+      bytesRead += value.length;
+    }
+    html += decoder.decode();
+    reader.releaseLock();
+    clearTimeout(timeoutId);
+
+    // Extração básica via regex
+    const getMeta = (prop: string) => {
+      const reg = new RegExp(`<meta[^>]+(?:property|name)=["']${prop}["'][^>]+content=["']([^"']+)["']`, 'i');
+      const match = html.match(reg);
+      if (match) return match[1];
+      const regAlt = new RegExp(`<meta[^>]+content=["']([^"']+)["'][^>]+(?:property|name)=["']${prop}["']`, 'i');
+      const matchAlt = html.match(regAlt);
+      return matchAlt ? matchAlt[1] : '';
+    };
+
+    const titulo = getMeta('og:title') || html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1]?.trim() || '';
+    const resumo = getMeta('og:description') || getMeta('description') || '';
+    const imagem = getMeta('og:image') || getMeta('twitter:image') || '';
+    const fonte = getMeta('og:site_name') || new URL(formattedUrl).hostname.replace('www.', '');
+
+    // Extração de conteúdo simplificada
+    const pMatches = html.match(/<p[^>]*>([\s\S]*?)<\/p>/gi) || [];
+    const conteudo = pMatches
+      .map(p => p.replace(/<[^>]+>/g, '').trim())
+      .filter(text => text.length > 50)
+      .slice(0, 8)
+      .join('\n\n');
+
     return new Response(
-      JSON.stringify({ success: false, error: 'Ocorreu um erro ao processar esta URL. Verifique o link.' }),
+      JSON.stringify({
+        success: true,
+        data: { titulo, resumo, imagem, fonte, conteudo, url: formattedUrl }
+      }),
+      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+
+  } catch (error: any) {
+    console.error('Function error:', error);
+    const message = error.name === 'AbortError' ? 'O site demorou demais para responder' : 'Erro ao processar URL';
+    return new Response(
+      JSON.stringify({ success: false, error: message }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
