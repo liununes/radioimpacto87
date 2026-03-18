@@ -49,67 +49,31 @@ const AdminNoticias = () => {
     try {
       const targetUrl = scrapeUrl.trim().startsWith('http') ? scrapeUrl.trim() : `https://${scrapeUrl.trim()}`;
       
-      // Usando corsproxy.io que é mais rápido e confiável
-      const response = await fetch(`https://corsproxy.io/?${encodeURIComponent(targetUrl)}`);
+      // Usando Microlink API - Altamente confiável para extração de notícias e fotos
+      // Gratuito para uso moderado, perfeito para VPS self-hosted
+      const response = await fetch(`https://api.microlink.io?url=${encodeURIComponent(targetUrl)}&palette=true&audio=true&video=true&iframe=true`);
       
-      if (!response.ok) throw new Error("Erro na resposta do servidor");
+      const res = await response.json();
       
-      const html = await response.text();
-
-      if (!html || html.length < 200) throw new Error("Conteúdo insuficiente ou bloqueado.");
-
-      // Helper para extrair meta tags
-      const getMeta = (prop: string) => {
-        const patterns = [
-          new RegExp(`<meta[^>]+(?:property|name)=["']${prop}["'][^>]+content=["']([^"']+)["']`, 'i'),
-          new RegExp(`<meta[^>]+content=["']([^"']+)["'][^>]+(?:property|name)=["']${prop}["']`, 'i')
-        ];
-        for (const reg of patterns) {
-          const match = html.match(reg);
-          if (match && match[1]) return match[1].replace(/&amp;/g, '&').replace(/&quot;/g, '"');
-        }
-        return '';
-      };
-
-      // Extração de Título
-      const title = getMeta('og:title') || html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1]?.trim() || "";
-      
-      // Extração de Descrição/Resumo
-      const description = getMeta('og:description') || getMeta('description') || "";
-      
-      // Extração de Imagem
-      const image = getMeta('og:image') || getMeta('twitter:image') || "";
-      
-      // Extração de Fonte
-      let source = getMeta('og:site_name');
-      if (!source) {
-        try {
-          source = new URL(targetUrl).hostname.replace('www.', '');
-        } catch { source = ""; }
+      if (res.status !== 'success') {
+        throw new Error(res.message || "Não foi possível extrair dados desta URL.");
       }
+      
+      const data = res.data;
 
-      // Extração de conteúdo simples (parágrafos significativos)
-      const pMatches = html.match(/<p[^>]*>([\s\S]*?)<\/p>/gi) || [];
-      const content = pMatches
-        .map((p: string) => p.replace(/<[^>]+>/g, '').trim())
-        .filter((text: string) => text.length > 60)
-        .slice(0, 10)
-        .join('\n\n');
-
-      if (!title && !content) throw new Error("Não foi possível extrair dados automáticos deste site.");
-
-      setTitulo(title);
-      setResumo(description);
-      setConteudo(content);
-      setImagem(image);
-      setFonte(source);
-      setUrlOriginal(targetUrl);
+      // Mapeamento dos dados extraídos pela Microlink
+      setTitulo(data.title || "");
+      setResumo(data.description || "");
+      setConteudo(data.description || ""); // Microlink foca em metadados, usamos a descrição como base para o conteúdo inicial
+      setImagem(data.image?.url || data.logo?.url || "");
+      setFonte(data.publisher || new URL(targetUrl).hostname.replace('www.', ''));
+      setUrlOriginal(data.url || targetUrl);
       setCategoria(tab || (categorias[0] || ""));
       
-      toast.success("Notícia extraída!");
+      toast.success("Dados importados com sucesso!");
     } catch (err: any) {
-      console.error('Scrape error:', err);
-      toast.error(err.message || "Erro ao extrair dados. Link inválido ou protegido.");
+      console.error('Microlink error:', err);
+      toast.error(err.message || "Erro ao importar notícia. Verifique o link e tente novamente.");
     } finally {
       setIsScraping(false);
     }
