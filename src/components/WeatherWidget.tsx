@@ -41,30 +41,48 @@ const WeatherWidget = ({ showWeather = true }: WeatherWidgetProps) => {
     const fetchWeather = async () => {
       setLoading(true);
       try {
-        // Usando uma API que não requer chave se possível ou lidando com o erro
-        // Para demonstração, usaremos um serviço mais flexível ou manteremos OpenWeatherMap
-        const API_KEY = "87247e6f1f4b8f541ee2bba3f00f074d"; // Chave de exemplo funcional (pode expirar)
         const city = encodeURIComponent(theme.weatherCity);
-        const response = await fetch(
-          `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric&lang=pt_br`
+        
+        // Step 1: Geocoding
+        const geoRes = await fetch(
+          `https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=1&language=pt&format=json`
         );
+        const geoData = await geoRes.json();
         
-        if (!response.ok) throw new Error('Cidade não encontrada');
+        if (!geoData.results || geoData.results.length === 0) throw new Error('Cidade não encontrada');
         
-        const data = await response.json();
+        const { latitude, longitude, name } = geoData.results[0];
+
+        // Step 2: Forecast
+        const weatherRes = await fetch(
+          `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m&timezone=auto`
+        );
+        const data = await weatherRes.json();
+        const current = data.current;
+
+        // WMO Weather interpretation
+        const getDesc = (code: number) => {
+          if (code === 0) return "Céu limpo";
+          if (code >= 1 && code <= 3) return "Parcialmente nublado";
+          if (code >= 45 && code <= 48) return "Nevoeiro";
+          if (code >= 51 && code <= 67) return "Chuva leve";
+          if (code >= 71 && code <= 82) return "Chuva forte";
+          if (code >= 95) return "Tempestade";
+          return "Limpo";
+        };
+
         setWeather({
-          temp: Math.round(data.main.temp),
-          feels_like: Math.round(data.main.feels_like),
-          humidity: data.main.humidity,
-          wind_speed: data.wind.speed,
-          visibility: data.visibility / 1000,
-          description: data.weather[0].description,
-          icon: data.weather[0].icon,
-          city: data.name
+          temp: Math.round(current.temperature_2m),
+          feels_like: Math.round(current.apparent_temperature),
+          humidity: current.relative_humidity_2m,
+          wind_speed: current.wind_speed_10m,
+          visibility: 10,
+          description: getDesc(current.weather_code),
+          icon: current.weather_code.toString(),
+          city: name
         });
       } catch (error) {
         console.error('Erro ao buscar clima:', error);
-        // Fallback para dados mockados se falhar
         setWeather({
           temp: 24,
           feels_like: 26,
@@ -72,7 +90,7 @@ const WeatherWidget = ({ showWeather = true }: WeatherWidgetProps) => {
           wind_speed: 10,
           visibility: 10,
           description: "Parcialmente nublado",
-          icon: "02d",
+          icon: "0",
           city: theme.weatherCity
         });
       } finally {
@@ -81,15 +99,16 @@ const WeatherWidget = ({ showWeather = true }: WeatherWidgetProps) => {
     };
 
     fetchWeather();
-    const interval = setInterval(fetchWeather, 30 * 60 * 1000);
+    const interval = setInterval(fetchWeather, 15 * 60 * 1000);
     return () => clearInterval(interval);
   }, [showWeather, theme.weatherCity]);
 
-  const getWeatherIcon = (icon: string) => {
-    if (icon.includes('01')) return <Sun className="w-4 h-4 text-yellow-400" />;
-    if (icon.includes('02') || icon.includes('03') || icon.includes('04')) return <Cloud className="w-4 h-4 text-gray-400" />;
-    if (icon.includes('09') || icon.includes('10') || icon.includes('11')) return <CloudRain className="w-4 h-4 text-blue-400" />;
-    return <Cloud className="w-4 h-4 text-gray-400" />;
+  const getWeatherIcon = (codeStr: string) => {
+    const code = parseInt(codeStr);
+    if (code === 0) return <Sun className="w-4 h-4 text-yellow-400" />;
+    if (code >= 1 && code <= 3) return <Cloud className="w-4 h-4 text-gray-400" />;
+    if (code >= 51 && code <= 99) return <CloudRain className="w-4 h-4 text-blue-400" />;
+    return <Sun className="w-4 h-4 text-yellow-400" />;
   };
 
   if (!showWeather || !weather) return null;
