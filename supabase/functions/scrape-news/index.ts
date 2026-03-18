@@ -4,14 +4,19 @@ const corsHeaders = {
 };
 
 function extractMeta(html: string, property: string): string {
-  // Try og: and twitter: and name= patterns
+  // Try og: and twitter: and name= patterns with more flexibility for whitespace and variations
   const patterns = [
     new RegExp(`<meta[^>]+(?:property|name)=["']${property}["'][^>]+content=["']([^"']+)["']`, 'i'),
     new RegExp(`<meta[^>]+content=["']([^"']+)["'][^>]+(?:property|name)=["']${property}["']`, 'i'),
+    new RegExp(`<meta[^>]+(?:property|name)=["']${property}["'][^>]*\\/?>`, 'i'), // For cases where it might be empty
   ];
+  
   for (const p of patterns) {
     const m = html.match(p);
-    if (m) return m[1];
+    if (m && m[1]) {
+      // Decode HTML entities
+      return m[1].replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(dec));
+    }
   }
   return '';
 }
@@ -19,39 +24,52 @@ function extractMeta(html: string, property: string): string {
 function extractTitle(html: string): string {
   const og = extractMeta(html, 'og:title');
   if (og) return og;
-  const m = html.match(/<title[^>]*>([^<]+)<\/title>/i);
-  return m ? m[1].trim() : '';
+  const m = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
+  return m ? m[1].replace(/<[^>]+>/g, '').trim() : '';
 }
 
 function extractDescription(html: string): string {
-  return extractMeta(html, 'og:description') || extractMeta(html, 'description') || '';
+  return extractMeta(html, 'og:description') || extractMeta(html, 'description') || extractMeta(html, 'twitter:description') || '';
 }
 
 function extractImage(html: string): string {
-  return extractMeta(html, 'og:image') || extractMeta(html, 'twitter:image') || '';
+  return extractMeta(html, 'og:image') || extractMeta(html, 'twitter:image') || extractMeta(html, 'image') || '';
 }
 
 function extractSiteName(html: string, url: string): string {
   const name = extractMeta(html, 'og:site_name');
   if (name) return name;
   try {
-    return new URL(url).hostname.replace('www.', '');
+    return new URL(url).hostname.replace(/^www\./, '');
   } catch { return ''; }
 }
 
 function extractContent(html: string): string {
-  // Remove scripts, styles, nav, header, footer
+  // Remove scripts, styles, nav, header, footer, etc
   let text = html
     .replace(/<script[\s\S]*?<\/script>/gi, '')
     .replace(/<style[\s\S]*?<\/style>/gi, '')
     .replace(/<nav[\s\S]*?<\/nav>/gi, '')
     .replace(/<header[\s\S]*?<\/header>/gi, '')
     .replace(/<footer[\s\S]*?<\/footer>/gi, '')
-    .replace(/<aside[\s\S]*?<\/aside>/gi, '');
+    .replace(/<aside[\s\S]*?<\/aside>/gi, '')
+    .replace(/<form[\s\S]*?<\/form>/gi, '');
 
   // Try to find article content
-  const articleMatch = text.match(/<article[\s\S]*?<\/article>/i);
-  if (articleMatch) text = articleMatch[0];
+  const articleSelectors = [
+    /<article[\s\S]*?<\/article>/i,
+    /<main[\s\S]*?<\/main>/i,
+    /<div[^>]+id=["']content["'][\s\S]*?<\/div>/i,
+    /<div[^>]+class=["'](?:post-content|entry-content|article-content)["'][\s\S]*?<\/div>/i
+  ];
+
+  for (const selector of articleSelectors) {
+    const match = text.match(selector);
+    if (match) {
+      text = match[0];
+      break;
+    }
+  }
 
   // Extract paragraphs
   const paragraphs: string[] = [];
@@ -59,10 +77,15 @@ function extractContent(html: string): string {
   let match;
   while ((match = pRegex.exec(text)) !== null) {
     const clean = match[1].replace(/<[^>]+>/g, '').trim();
-    if (clean.length > 30) paragraphs.push(clean);
+    // Decode basic entities and clean up
+    const final = clean
+      .replace(/&nbsp;/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    if (final.length > 40) paragraphs.push(final);
   }
 
-  return paragraphs.slice(0, 15).join('\n\n') || '';
+  return paragraphs.slice(0, 10).join('\n\n') || '';
 }
 
 Deno.serve(async (req) => {
@@ -89,26 +112,43 @@ Deno.serve(async (req) => {
 
     const response = await fetch(formattedUrl, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; LovableBot/1.0)',
-        'Accept': 'text/html,application/xhtml+xml',
-        'Accept-Language': 'pt-BR,pt;q=0.9,en;q=0.8',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+        'Accept-Language': 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7',
       },
     });
 
     if (!response.ok) {
       return new Response(
-        JSON.stringify({ success: false, error: `Não foi possível acessar a URL (${response.status})` }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        JSON.stringify({ success: false, error: `Não foi possível acessar a URL. O site retornou erro ${response.status}.` }),
+        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    const html = await response.text();
+    const arrayBuffer = await response.arrayBuffer();
+    
+    // Check for encoding
+    let decoder = new TextDecoder('utf-8');
+    let html = decoder.decode(arrayBuffer);
+    
+    if (html.includes('charset=iso-8859-1') || html.includes('charset=ISO-8859-1') || html.includes('charset="iso-8859-1"')) {
+      console.log('Detected ISO-8859-1 encoding');
+      decoder = new TextDecoder('iso-8859-1');
+      html = decoder.decode(arrayBuffer);
+    }
 
     const titulo = extractTitle(html);
     const resumo = extractDescription(html);
     const imagem = extractImage(html);
     const fonte = extractSiteName(html, formattedUrl);
     const conteudo = extractContent(html);
+
+    if (!titulo && !resumo && !conteudo) {
+      return new Response(
+        JSON.stringify({ success: false, error: 'Não foi possível detectar conteúdo nesta página. Pode ser um site que requer JavaScript.' }),
+        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
     console.log('Scraped successfully:', { titulo, fonte, hasImage: !!imagem });
 
@@ -122,8 +162,8 @@ Deno.serve(async (req) => {
   } catch (error) {
     console.error('Error scraping:', error);
     return new Response(
-      JSON.stringify({ success: false, error: error instanceof Error ? error.message : 'Erro ao processar URL' }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      JSON.stringify({ success: false, error: 'Ocorreu um erro ao processar esta URL. Verifique o link e tente novamente.' }),
+      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
 });
