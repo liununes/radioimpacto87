@@ -1,5 +1,14 @@
 import { useState, useEffect } from "react";
-import { Save, RotateCcw, Palette } from "lucide-react";
+import { Save, RotateCcw, Palette, Upload, Image as ImageIcon } from "lucide-react";
+
+function fileToBase64(file: File): Promise<string> {
+  return new Promise((res, rej) => {
+    const reader = new FileReader();
+    reader.onload = () => res(reader.result as string);
+    reader.onerror = rej;
+    reader.readAsDataURL(file);
+  });
+}
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -110,17 +119,28 @@ const PRESETS: { name: string; theme: Partial<ThemeConfig> }[] = [
 
 const AdminAparencia = () => {
   const [theme, setTheme] = useState<ThemeConfig>(getThemeConfig());
+  const [logo, setLogo] = useState("");
+  const [favicon, setFavicon] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const fetchTheme = async () => {
-      const saved = await getSiteConfig("theme");
-      if (saved) {
-        setTheme(saved);
-        saveThemeConfig(saved);
+    const fetchData = async () => {
+      const [savedTheme, radioConfig] = await Promise.all([
+        getSiteConfig("theme"),
+        getSiteConfig("streaming")
+      ]);
+
+      if (savedTheme) {
+        setTheme(savedTheme);
+        saveThemeConfig(savedTheme);
+      }
+
+      if (radioConfig) {
+        setLogo(radioConfig.logo || "");
+        setFavicon(radioConfig.favicon || "");
       }
     };
-    fetchTheme();
+    fetchData();
   }, []);
 
   const updateField = (field: keyof ThemeConfig, value: string | boolean) => {
@@ -132,11 +152,19 @@ const AdminAparencia = () => {
   const handleSave = async () => {
     setLoading(true);
     const latestTheme = getThemeConfig();
-    const { error } = await saveSiteConfig("theme", latestTheme);
-    if (error) {
-      toast.error("Erro ao salvar tema no servidor.");
+    
+    // Save theme and identity in parallel
+    const [themeRes, streamingRes] = await Promise.all([
+      saveSiteConfig("theme", latestTheme),
+      getSiteConfig("streaming").then(config => 
+        saveSiteConfig("streaming", { ...(config || {}), logo, favicon })
+      )
+    ]);
+
+    if (themeRes.error || (streamingRes as any).error) {
+      toast.error("Erro ao salvar configurações.");
     } else {
-      toast.success("Tema salvo com sucesso!");
+      toast.success("Configurações salvas com sucesso!");
     }
     setLoading(false);
   };
@@ -155,11 +183,54 @@ const AdminAparencia = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-foreground">Aparência / Cores</h2>
+        <h2 className="text-2xl font-bold text-foreground">Aparência / Design</h2>
         <Button onClick={handleSave} className="gap-2" disabled={loading}>
-          <Save className="w-4 h-4" /> {loading ? "Salvando..." : "Salvar Tema"}
+          <Save className="w-4 h-4" /> {loading ? "Salvando..." : "Salvar Configurações"}
         </Button>
       </div>
+
+      <Card>
+        <CardHeader><CardTitle className="flex items-center gap-2"><ImageIcon className="w-5 h-5 text-primary" /> Identidade Visual</CardTitle></CardHeader>
+        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="space-y-3">
+            <Label>Logo Principal</Label>
+            <div className="flex items-center gap-4">
+              {logo && (
+                <img src={logo} alt="Logo" className="w-20 h-20 rounded-lg object-contain border border-border bg-muted p-1" />
+              )}
+              <div className="flex gap-2">
+                <label className="flex items-center gap-2 px-4 py-2 bg-muted rounded-md cursor-pointer hover:bg-muted/80 transition-colors text-sm h-10">
+                  <Upload className="w-4 h-4" /> {logo ? "Trocar Logo" : "Escolher Logo"}
+                  <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) setLogo(await fileToBase64(f)); }} />
+                </label>
+                {logo && (
+                  <Button variant="ghost" size="sm" className="text-destructive h-10" onClick={() => setLogo("")}>Remover</Button>
+                )}
+              </div>
+            </div>
+            <p className="text-[10px] text-muted-foreground">Recomendado: PNG fundo transparente, 512x512 ou superior.</p>
+          </div>
+
+          <div className="space-y-3">
+            <Label>Ícone do Site (Favicon)</Label>
+            <div className="flex items-center gap-4">
+              {favicon && (
+                <img src={favicon} alt="Favicon" className="w-12 h-12 rounded-lg object-contain border border-border bg-muted p-1" />
+              )}
+              <div className="flex gap-2">
+                <label className="flex items-center gap-2 px-4 py-2 bg-muted rounded-md cursor-pointer hover:bg-muted/80 transition-colors text-sm h-10">
+                  <Upload className="w-4 h-4" /> {favicon ? "Trocar Ícone" : "Escolher Ícone"}
+                  <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) setFavicon(await fileToBase64(f)); }} />
+                </label>
+                {favicon && (
+                  <Button variant="ghost" size="sm" className="text-destructive h-10" onClick={() => setFavicon("")}>Remover</Button>
+                )}
+              </div>
+            </div>
+            <p className="text-[10px] text-muted-foreground">Ícone que aparece na aba do seu navegador.</p>
+          </div>
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader><CardTitle className="flex items-center gap-2"><Palette className="w-5 h-5 text-primary" /> Temas Prontos</CardTitle></CardHeader>
