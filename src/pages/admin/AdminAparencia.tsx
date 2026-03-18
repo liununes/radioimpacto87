@@ -212,7 +212,7 @@ const AdminAparencia = () => {
         <CardHeader><CardTitle>Distribuição do Layout</CardTitle></CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label>Posição do Top 3 Músicas</Label>
+            <Label>Posição do Top 3 Músicas (Vertical)</Label>
             <select
               value={theme.topSongsPosition}
               onChange={e => updateField("topSongsPosition", e.target.value as any)}
@@ -222,6 +222,18 @@ const AdminAparencia = () => {
               <option value="gallery">Abaixo da Galeria</option>
               <option value="news">Abaixo das Notícias</option>
               <option value="contact">Abaixo do Contato</option>
+            </select>
+          </div>
+          <div className="space-y-2">
+            <Label>Alinhamento do Top 3 Músicas (Horizontal)</Label>
+            <select
+              value={theme.topSongsAlignment || 'center'}
+              onChange={e => updateField("topSongsAlignment", e.target.value as any)}
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+            >
+              <option value="left">Esquerda</option>
+              <option value="center">Centro</option>
+              <option value="right">Direita</option>
             </select>
           </div>
           <div className="space-y-2">
@@ -340,13 +352,33 @@ const AdminAparencia = () => {
       <Card>
         <CardHeader><CardTitle>Configurações Adicionais</CardTitle></CardHeader>
         <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label>Cidade para Previsão do Tempo</Label>
-            <Input
-              value={theme.weatherCity}
-              onChange={e => updateField("weatherCity", e.target.value)}
-              placeholder="Nome da cidade"
-            />
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label>Cidades Sugeridas</Label>
+              <div className="flex flex-wrap gap-2">
+                {["São Paulo", "Rio de Janeiro", "Belo Horizonte", "Curitiba", "Fortaleza", "Salvador", "Brasília", "Porto Alegre"].map(city => (
+                  <Button
+                    key={city}
+                    variant="outline"
+                    size="sm"
+                    className="text-[10px] h-7"
+                    onClick={() => updateField("weatherCity", city)}
+                  >
+                    {city}
+                  </Button>
+                ))}
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="weatherCity">Cidade Personalizada</Label>
+              <Input
+                id="weatherCity"
+                value={theme.weatherCity}
+                onChange={e => updateField("weatherCity", e.target.value)}
+                placeholder="Digite o nome da cidade"
+              />
+              <p className="text-[10px] text-muted-foreground italic">Dica: Digite o nome da cidade corretamente para evitar erros na previsão.</p>
+            </div>
           </div>
         </CardContent>
       </Card>

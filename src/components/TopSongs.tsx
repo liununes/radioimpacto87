@@ -1,4 +1,7 @@
 import { Trophy } from "lucide-react";
+import { getThemeConfig } from "@/lib/themeStore";
+import { useEffect, useState } from "react";
+import { getSiteConfig } from "@/lib/radioStore";
 
 const songs = [
   { rank: 1, title: "Suave", artist: "Seu Jorge" },
@@ -13,11 +16,25 @@ const rankColors = [
 ];
 
 const TopSongs = () => {
+  const [theme, setTheme] = useState(getThemeConfig());
+
+  useEffect(() => {
+    const syncTheme = async () => {
+      const saved = await getSiteConfig("theme");
+      if (saved) setTheme(saved);
+    };
+    syncTheme();
+  }, []);
+
+  const alignment = theme.topSongsAlignment || 'center';
+  const alignClass = alignment === 'left' ? 'mr-auto items-start' : alignment === 'right' ? 'ml-auto items-end' : 'mx-auto items-center';
+  const textClass = alignment === 'left' ? 'text-left' : alignment === 'right' ? 'text-right' : 'text-center';
+
   return (
     <section className="py-12 border-t border-border/10">
       <div className="container px-4">
-        <div className="max-w-2xl mx-auto flex flex-col items-center">
-          <div className="flex items-center gap-3 mb-8 text-center">
+        <div className={`max-w-2xl flex flex-col ${alignClass}`}>
+          <div className={`flex items-center gap-3 mb-8 ${textClass}`}>
             <Trophy className="w-8 h-8 text-secondary" />
             <h2 className="text-3xl font-display font-bold">
               Top 3 <span className="text-secondary">Mais Tocadas</span>
@@ -34,7 +51,7 @@ const TopSongs = () => {
                   {song.rank}°
                 </div>
                 <div className="flex-1">
-                  <p className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">
+                  <p className="text-lg font-bold text-foreground group-hover:text-primary transition-colors line-clamp-1">
                     {song.title}
                   </p>
                   <p className="text-muted-foreground">{song.artist}</p>

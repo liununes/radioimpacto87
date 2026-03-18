@@ -27,6 +27,7 @@ export interface ThemeConfig {
   weatherCity: string;
   // Sponsor settings
   sponsorsPosition: 'left' | 'center' | 'right';
+  topSongsAlignment: 'left' | 'center' | 'right';
   weatherPosition: 'left' | 'center' | 'right';
 }
 
@@ -68,6 +69,7 @@ export const DEFAULT_THEME: ThemeConfig = {
   weatherCity: 'São Paulo',
   // Sponsor settings
   sponsorsPosition: 'center',
+  topSongsAlignment: 'center',
   weatherPosition: 'left',
 };
 
