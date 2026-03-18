@@ -32,6 +32,8 @@ const AdminStreaming = () => {
   const [logo, setLogo] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
 
+  const [favicon, setFavicon] = useState("");
+
   const [redes, setRedes] = useState<RedeSocial[]>([]);
   const [novaRedeNome, setNovaRedeNome] = useState("");
   const [novaRedeUrl, setNovaRedeUrl] = useState("");
@@ -50,6 +52,7 @@ const AdminStreaming = () => {
         setRadioName(config.radioName || "Impacto FM");
         setRadioFreq(config.radioFreq || "87.9 FM");
         setLogo(config.logo || "/logo.png");
+        setFavicon(config.favicon || "/favicon.ico");
       }
       setRedes(redesData);
       setWhatsapp(whatsappNum);
@@ -59,7 +62,14 @@ const AdminStreaming = () => {
 
   const handleSaveConfig = async () => {
     setLoading(true);
-    const { error: configError } = await saveRadioSiteConfig("streaming", { streamUrl, radioName, radioFreq, logo, whatsapp });
+    const { error: configError } = await saveRadioSiteConfig("streaming", { 
+      streamUrl, 
+      radioName, 
+      radioFreq, 
+      logo, 
+      favicon,
+      whatsapp 
+    });
     if (configError) {
       toast.error("Erro ao salvar: " + configError.message);
     } else {
@@ -112,21 +122,42 @@ const AdminStreaming = () => {
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label>Logo da Rádio</Label>
-            <div className="flex items-center gap-4">
-              {logo && (
-                <img src={logo} alt="Logo" className="w-16 h-16 rounded-lg object-contain border border-border bg-muted p-1" />
-              )}
-              <div className="flex gap-2">
-                <label className="flex items-center gap-2 px-4 py-2 bg-muted rounded-md cursor-pointer hover:bg-muted/80 transition-colors text-sm h-10">
-                  <Upload className="w-4 h-4" /> {logo ? "Trocar logo" : "Enviar logo"}
-                  <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) setLogo(await fileToBase64(f)); }} />
-                </label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <Label>Logo da Rádio</Label>
+              <div className="flex items-center gap-4">
                 {logo && (
-                  <Button variant="ghost" size="sm" className="text-destructive" onClick={() => setLogo("")}>Remover</Button>
+                  <img src={logo} alt="Logo" className="w-16 h-16 rounded-lg object-contain border border-border bg-muted p-1" />
                 )}
+                <div className="flex gap-2">
+                  <label className="flex items-center gap-2 px-4 py-2 bg-muted rounded-md cursor-pointer hover:bg-muted/80 transition-colors text-sm h-10">
+                    <Upload className="w-4 h-4" /> {logo ? "Trocar" : "Escolher"}
+                    <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) setLogo(await fileToBase64(f)); }} />
+                  </label>
+                  {logo && (
+                    <Button variant="ghost" size="sm" className="text-destructive h-10" onClick={() => setLogo("")}>Remover</Button>
+                  )}
+                </div>
               </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Ícone do Site (Favicon)</Label>
+              <div className="flex items-center gap-4">
+                {favicon && (
+                  <img src={favicon} alt="Favicon" className="w-10 h-10 rounded-lg object-contain border border-border bg-muted p-1" />
+                )}
+                <div className="flex gap-2">
+                  <label className="flex items-center gap-2 px-4 py-2 bg-muted rounded-md cursor-pointer hover:bg-muted/80 transition-colors text-sm h-10">
+                    <Upload className="w-4 h-4" /> {favicon ? "Trocar" : "Escolher"}
+                    <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) setFavicon(await fileToBase64(f)); }} />
+                  </label>
+                  {favicon && (
+                    <Button variant="ghost" size="sm" className="text-destructive h-10" onClick={() => setFavicon("")}>Remover</Button>
+                  )}
+                </div>
+              </div>
+              <p className="text-[10px] text-muted-foreground">Este é o ícone que aparece na aba do navegador.</p>
             </div>
           </div>
 
