@@ -66,9 +66,9 @@ const AdminNoticias = () => {
       } else {
         toast.error(data?.error || "Não foi possível extrair dados da URL");
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Scrape error:', err);
-      toast.error("Erro ao acessar a URL. Verifique se o endereço está correto.");
+      toast.error(err.message || "Erro ao acessar a URL. Verifique se o endereço está correto.");
     } finally {
       setIsScraping(false);
     }
