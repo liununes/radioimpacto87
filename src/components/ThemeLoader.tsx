@@ -10,10 +10,24 @@ const ThemeLoader = () => {
 
     // Then sync with Supabase
     const syncTheme = async () => {
-      const saved = await getSiteConfig("theme");
+      const [saved, radioConfig] = await Promise.all([
+        getSiteConfig("theme"),
+        getSiteConfig("streaming")
+      ]);
+
       if (saved) {
         applyTheme(saved);
-        saveThemeConfig(saved); // Sync back to localStorage
+        saveThemeConfig(saved);
+      }
+
+      if (radioConfig?.favicon) {
+        let link: HTMLLinkElement | null = document.querySelector("link[rel*='icon']");
+        if (!link) {
+          link = document.createElement('link');
+          link.rel = 'icon';
+          document.getElementsByTagName('head')[0].appendChild(link);
+        }
+        link.href = radioConfig.favicon;
       }
     };
     syncTheme();
