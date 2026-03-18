@@ -9,8 +9,10 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 
 const ALL_PERMISSIONS = [
+  { id: "*", label: "Acesso Total (Master)" },
   { id: "streaming", label: "Player / Redes Sociais" },
   { id: "aparencia", label: "Aparência / Layout" },
+  { id: "top3", label: "Top 3 Músicas" },
   { id: "locutores", label: "Locutores" },
   { id: "programacao", label: "Programação" },
   { id: "slides", label: "Slides / Banners" },
@@ -35,15 +37,14 @@ const AdminUsuarios = () => {
 
   const fetchUsers = async () => {
     setLoading(true);
-    // Since we can't list auth.users, we list from public.user_permissions
-    // and assume users must be registered there to be managed here.
     const { data, error } = await supabase
       .from("user_permissions")
-      .select("*");
+      .select("*")
+      .order('email');
 
     if (error) {
       if (error.code === "PGRST116" || error.message.includes("does not exist")) {
-        setError("Tabela 'user_permissions' não encontrada. Peça ao desenvolvedor para executar o SQL de setup.");
+        setError("Tabela 'user_permissions' não encontrada.");
       } else {
         setError(error.message);
       }
@@ -58,11 +59,13 @@ const AdminUsuarios = () => {
   }, []);
 
   const handleAddUser = async () => {
-    if (!newEmail || !newPassword) return;
-    setLoading(true);
+    if (!newEmail || !newPassword) {
+      toast.error("Preencha e-mail e senha!");
+      return;
+    }
     
+    setLoading(true);
     try {
-      // Criar um cliente temporário sem persistência de sessão para evitar o logout do admin atual
       const { createClient } = await import('@supabase/supabase-js');
       const tempSupabase = createClient(
         import.meta.env.VITE_SUPABASE_URL,
@@ -70,16 +73,28 @@ const AdminUsuarios = () => {
         { auth: { persistSession: false } }
       );
 
-      // 1. Criar o usuário no Auth
+      // Usar metadados para persistir as permissões no próprio usuário do Auth
+      // Isso permite que o useAuth as reconheça instantaneamente
       const { data: authData, error: authError } = await tempSupabase.auth.signUp({
         email: newEmail,
         password: newPassword,
+        options: {
+          data: {
+            permissions: newPermissions.length > 0 ? newPermissions : ["base"]
+          }
+        }
       });
 
-      if (authError) throw authError;
-      if (!authData.user) throw new Error("Erro ao criar usuário no Auth.");
+      if (authError) {
+        if (authError.message.includes("already registered")) {
+          throw new Error("Este e-mail já está cadastrado.");
+        }
+        throw authError;
+      }
 
-      // 2. Adicionar permissões na tabela pública
+      if (!authData.user) throw new Error("Erro ao criar usuário.");
+
+      // Registrar também na tabela de permissões para listagem e auditoria
       const { error: permError } = await supabase
         .from("user_permissions")
         .insert({
@@ -88,7 +103,7 @@ const AdminUsuarios = () => {
           permissions: newPermissions
         });
 
-      if (permError) throw permError;
+      if (permError) console.warn("Atenção: Usuário criado, mas erro ao salvar na tabela user_permissions:", permError);
 
       toast.success("Usuário criado com sucesso!");
       setIsAdding(false);
@@ -98,15 +113,18 @@ const AdminUsuarios = () => {
       fetchUsers();
     } catch (err: any) {
       console.error('Error adding user:', err);
-      // Se houver erro de tabela inexistente, mostramos o erro original do componente
-      if (err.code === "PGRST116" || err.message.includes("does not exist")) {
-        setError("Tabela 'user_permissions' não encontrada. Verifique o SQL de setup.");
-      } else {
-        toast.error("Erro: " + (err.message || "Tente novamente mais tarde."));
-      }
+      toast.error(err.message || "Erro ao criar usuário. Verifique as configurações de cada servidor.");
     } finally {
       setLoading(false);
     }
+  };
+
+  const selectAll = () => {
+    setNewPermissions(ALL_PERMISSIONS.map(p => p.id));
+  };
+
+  const deselectAll = () => {
+    setNewPermissions([]);
   };
 
   const togglePermission = (id: string) => {
@@ -164,7 +182,13 @@ NOTIFY pgrst, 'reload schema';`}
             </div>
 
             <div className="space-y-3">
-              <Label>Permissões de Acesso</Label>
+              <div className="flex items-center justify-between">
+                <Label>Permissões de Acesso</Label>
+                <div className="flex gap-2">
+                  <Button variant="outline" size="sm" className="text-[10px] h-7" onClick={selectAll}>Marcar Todos</Button>
+                  <Button variant="outline" size="sm" className="text-[10px] h-7" onClick={deselectAll}>Limpar</Button>
+                </div>
+              </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-2">
                 {ALL_PERMISSIONS.map((perm) => (
                   <div key={perm.id} className="flex items-center space-x-2 border border-border/50 p-3 rounded-lg hover:bg-muted/30 transition-colors">
