@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
 import { getThemeConfig, saveThemeConfig, DEFAULT_THEME, type ThemeConfig } from "@/lib/themeStore";
 import { getSiteConfig, saveSiteConfig } from "@/lib/radioStore";
 import { toast } from "sonner";
@@ -130,7 +131,8 @@ const AdminAparencia = () => {
 
   const handleSave = async () => {
     setLoading(true);
-    const { error } = await saveSiteConfig("theme", theme);
+    const latestTheme = getThemeConfig();
+    const { error } = await saveSiteConfig("theme", latestTheme);
     if (error) {
       toast.error("Erro ao salvar tema no servidor.");
     } else {
@@ -258,6 +260,18 @@ const AdminAparencia = () => {
               <option value="right">Direita</option>
             </select>
           </div>
+          <div className="space-y-2">
+            <Label>Posição da Previsão do Tempo</Label>
+            <select
+              value={theme.weatherPosition || 'left'}
+              onChange={e => updateField("weatherPosition", e.target.value as any)}
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+            >
+              <option value="left">Esquerda</option>
+              <option value="center">Centro</option>
+              <option value="right">Direita</option>
+            </select>
+          </div>
         </CardContent>
       </Card>
 
@@ -265,66 +279,59 @@ const AdminAparencia = () => {
         <CardHeader><CardTitle>Visibilidade das Seções</CardTitle></CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
-            <Label>Top 3 Músicas</Label>
-            <input
-              type="checkbox"
+            <Label htmlFor="showTopSongs">Top 3 Músicas</Label>
+            <Switch
+              id="showTopSongs"
               checked={theme.showTopSongs}
-              onChange={e => updateField("showTopSongs", e.target.checked)}
-              className="w-4 h-4"
+              onCheckedChange={v => updateField("showTopSongs", v)}
             />
           </div>
           <div className="flex items-center justify-between">
-            <Label>Galeria de Fotos</Label>
-            <input
-              type="checkbox"
+            <Label htmlFor="showGallery">Galeria de Fotos</Label>
+            <Switch
+              id="showGallery"
               checked={theme.showGallery}
-              onChange={e => updateField("showGallery", e.target.checked)}
-              className="w-4 h-4"
+              onCheckedChange={v => updateField("showGallery", v)}
             />
           </div>
           <div className="flex items-center justify-between">
-            <Label>Notícias</Label>
-            <input
-              type="checkbox"
+            <Label htmlFor="showNews">Notícias</Label>
+            <Switch
+              id="showNews"
               checked={theme.showNews}
-              onChange={e => updateField("showNews", e.target.checked)}
-              className="w-4 h-4"
+              onCheckedChange={v => updateField("showNews", v)}
             />
           </div>
           <div className="flex items-center justify-between">
-            <Label>Sobre Nós</Label>
-            <input
-              type="checkbox"
+            <Label htmlFor="showAbout">Sobre Nós</Label>
+            <Switch
+              id="showAbout"
               checked={theme.showAbout}
-              onChange={e => updateField("showAbout", e.target.checked)}
-              className="w-4 h-4"
+              onCheckedChange={v => updateField("showAbout", v)}
             />
           </div>
           <div className="flex items-center justify-between">
-            <Label>Previsão do Tempo</Label>
-            <input
-              type="checkbox"
+            <Label htmlFor="showWeather">Previsão do Tempo</Label>
+            <Switch
+              id="showWeather"
               checked={theme.showWeather}
-              onChange={e => updateField("showWeather", e.target.checked)}
-              className="w-4 h-4"
+              onCheckedChange={v => updateField("showWeather", v)}
             />
           </div>
           <div className="flex items-center justify-between">
-            <Label>Patrocinadores</Label>
-            <input
-              type="checkbox"
+            <Label htmlFor="showSponsors">Patrocinadores</Label>
+            <Switch
+              id="showSponsors"
               checked={theme.showSponsors}
-              onChange={e => updateField("showSponsors", e.target.checked)}
-              className="w-4 h-4"
+              onCheckedChange={v => updateField("showSponsors", v)}
             />
           </div>
           <div className="flex items-center justify-between">
-            <Label>Voltar ao Topo</Label>
-            <input
-              type="checkbox"
+            <Label htmlFor="showBackToTop">Voltar ao Topo</Label>
+            <Switch
+              id="showBackToTop"
               checked={theme.showBackToTop}
-              onChange={e => updateField("showBackToTop", e.target.checked)}
-              className="w-4 h-4"
+              onCheckedChange={v => updateField("showBackToTop", v)}
             />
           </div>
         </CardContent>

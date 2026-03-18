@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { Play, Pause, Volume2, VolumeX, MessageCircle, Instagram, Facebook, Youtube, Twitter, Globe } from "lucide-react";
 import { getProgramaAtual, getRedesSociais, getWhatsApp, type RedeSocial, getSiteConfig as getRadioSiteConfig } from "@/lib/radioStore";
-import { getSiteConfig } from "@/lib/themeStore";
+import { getSiteConfig, getThemeConfig, type ThemeConfig } from "@/lib/themeStore";
+import WeatherWidget from "./WeatherWidget";
 
 const iconMap: Record<string, React.ElementType> = {
   instagram: Instagram,
@@ -22,6 +23,7 @@ const RadioPlayer = () => {
   const [redes, setRedes] = useState<RedeSocial[]>([]);
   const [whatsapp, setWhatsappNum] = useState("");
   const [siteConfig, setSiteConfig] = useState(getSiteConfig());
+  const [theme, setTheme] = useState<ThemeConfig>(getThemeConfig());
 
   useEffect(() => {
     const check = async () => {
@@ -40,6 +42,12 @@ const RadioPlayer = () => {
       if (config) {
         setSiteConfig(prev => ({ ...prev, ...config }));
       }
+      
+      const themeData = await getRadioSiteConfig("theme");
+      if (themeData) {
+        setTheme(themeData);
+      }
+      
       setWhatsappNum(whatsappNum);
     };
     check();
@@ -92,10 +100,23 @@ const RadioPlayer = () => {
             <h1 className="text-base font-bold font-display leading-tight text-foreground">{siteConfig.radioName}</h1>
             <span className="text-xs text-secondary font-semibold">{siteConfig.radioFreq}</span>
           </div>
+          
+          {/* Weather for Mobile/Tablet */}
+          {theme.showWeather && (
+            <div className="lg:hidden ml-1">
+              <WeatherWidget showWeather={theme.showWeather} />
+            </div>
+          )}
         </div>
 
         {/* Player Controls */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 flex-1 justify-center relative">
+          {theme.showWeather && theme.weatherPosition === 'left' && (
+            <div className="hidden lg:block absolute left-0">
+               <WeatherWidget showWeather={theme.showWeather} />
+            </div>
+          )}
+
           <button
             onClick={togglePlay}
             className="w-11 h-11 rounded-full bg-primary flex items-center justify-center hover:bg-primary/80 transition-all glow-effect shrink-0"
@@ -103,6 +124,15 @@ const RadioPlayer = () => {
           >
             {isPlaying ? <Pause className="w-5 h-5 text-primary-foreground" /> : <Play className="w-5 h-5 text-primary-foreground ml-0.5" />}
           </button>
+          
+          <div className="flex flex-col items-start -space-y-1">
+            <div className="flex items-center gap-1 bg-destructive/10 px-1.5 py-0.5 rounded-full border border-destructive/20 scale-75 origin-left">
+              <span className="text-[8px] font-bold text-destructive uppercase tracking-widest animate-pulse">
+                {isPlaying ? "No Ar" : "Pausado"}
+              </span>
+              {isPlaying && <div className="w-1 h-1 rounded-full bg-destructive animate-ping" />}
+            </div>
+          </div>
 
           {liveInfo && (
             <>
@@ -142,6 +172,12 @@ const RadioPlayer = () => {
             </>
           )}
 
+          {theme.showWeather && theme.weatherPosition === 'center' && (
+            <div className="hidden lg:block ml-4">
+               <WeatherWidget showWeather={theme.showWeather} />
+            </div>
+          )}
+
           <div className="hidden sm:flex items-end gap-0.5 h-5">
             {[1, 2, 3, 4, 5].map((i) => (
               <div
@@ -152,12 +188,18 @@ const RadioPlayer = () => {
             ))}
           </div>
 
-          <div className="hidden sm:flex items-center gap-2">
+          <div className="hidden sm:flex items-center gap-2 ml-4">
             <button onClick={toggleMute} className="text-muted-foreground hover:text-foreground transition-colors">
               {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
             </button>
             <input type="range" min="0" max="1" step="0.01" value={isMuted ? 0 : volume} onChange={handleVolumeChange} className="w-16 h-1 accent-primary cursor-pointer" />
           </div>
+          
+          {theme.showWeather && theme.weatherPosition === 'right' && (
+            <div className="hidden lg:block absolute right-0">
+               <WeatherWidget showWeather={theme.showWeather} />
+            </div>
+          )}
         </div>
 
         {/* WhatsApp Pedido + Social Links */}
@@ -190,11 +232,6 @@ const RadioPlayer = () => {
               </a>
             );
           })}
-
-          <div className="hidden md:flex items-center gap-1.5 ml-2">
-            <span className="text-xs text-muted-foreground">{isPlaying ? "No Ar" : "Pausado"}</span>
-            {isPlaying && <div className="w-2 h-2 rounded-full bg-destructive animate-pulse" />}
-          </div>
         </div>
       </div>
 

@@ -35,13 +35,6 @@ const Index = () => {
       
       <div className="container mx-auto px-4 py-8">
         <div className="space-y-6">
-          {theme.showWeather && (
-            <div className="flex justify-center">
-              <div className="w-full max-w-md">
-                <WeatherWidget showWeather={theme.showWeather} />
-              </div>
-            </div>
-          )}
           <HeroCarousel />
         </div>
       </div>

@@ -65,59 +65,74 @@ const ProgramacaoPage = () => {
         {programas.length === 0 ? (
           <p className="text-center text-muted-foreground py-16">Nenhum programa cadastrado.</p>
         ) : (
-          <div className="space-y-8">
-            {Object.entries(programasPorDia).map(([dia, progs]) => (
-              <div key={dia}>
-                <h2 className="text-lg font-display font-bold text-secondary mb-4 border-b border-border/30 pb-2">
-                  {DIAS_COMPLETOS[Number(dia)]}
-                </h2>
-                <div className="space-y-3">
-                  {progs.map(prog => {
-                    const isAoVivo = atual?.programa.id === prog.id;
-                    const foto = prog.foto || getLocutorFoto(prog.locutorId);
-                    const imgIndex = images.findIndex(img => img.src === foto);
-                    const bio = getLocutorBio(prog.locutorId);
+          <div className="space-y-12">
+            <div className="flex overflow-x-auto pb-6 gap-6 snap-x no-scrollbar">
+              {Object.entries(programasPorDia).map(([dia, progs]) => (
+                <div key={dia} className="min-w-[300px] md:min-w-[400px] snap-start">
+                  <h2 className="text-xl font-display font-bold text-primary mb-6 flex items-center gap-2">
+                    <div className="w-1.5 h-6 bg-secondary rounded-full" />
+                    {DIAS_COMPLETOS[Number(dia)]}
+                  </h2>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {progs.map(prog => {
+                      const isAoVivo = atual?.programa.id === prog.id;
+                      const foto = prog.foto || getLocutorFoto(prog.locutorId);
+                      const imgIndex = images.findIndex(img => img.src === foto);
 
-                    return (
-                      <div
-                        key={`${dia}-${prog.id}`}
-                        className={`card-glass p-5 flex items-start gap-5 relative overflow-hidden ${isAoVivo ? "ring-2 ring-primary" : ""}`}
-                      >
-                        {isAoVivo && (
-                          <div className="absolute top-3 right-3 flex items-center gap-1 bg-destructive/90 text-destructive-foreground text-xs font-bold px-2.5 py-1 rounded-full animate-pulse">
-                            <div className="w-1.5 h-1.5 rounded-full bg-destructive-foreground" />
-                            AO VIVO
-                          </div>
-                        )}
+                      return (
+                        <div
+                          key={`${dia}-${prog.id}`}
+                          className={`group relative aspect-square rounded-2xl overflow-hidden border border-border/50 hover:border-primary/50 transition-all duration-300 shadow-lg ${isAoVivo ? "ring-2 ring-primary ring-offset-2 ring-offset-background" : ""}`}
+                        >
+                          {foto ? (
+                            <img
+                              src={foto}
+                              alt={prog.nome}
+                              className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                              onClick={() => imgIndex >= 0 && setLightboxIndex(imgIndex)}
+                            />
+                          ) : (
+                            <div className="absolute inset-0 bg-muted flex items-center justify-center">
+                              <Radio className="w-12 h-12 text-muted-foreground opacity-20" />
+                            </div>
+                          )}
 
-                        {foto ? (
-                          <img
-                            src={foto}
-                            alt={prog.nome}
-                            className="w-24 h-24 rounded-xl object-cover border border-border cursor-pointer hover:opacity-80 transition-opacity shrink-0"
-                            onClick={() => imgIndex >= 0 && setLightboxIndex(imgIndex)}
-                          />
-                        ) : (
-                          <div className="w-24 h-24 rounded-xl bg-muted flex items-center justify-center shrink-0">
-                            <Radio className="w-8 h-8 text-muted-foreground" />
-                          </div>
-                        )}
+                          {/* Gradient Overlay */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80" />
 
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-bold text-foreground text-lg">{prog.nome}</h3>
-                          <p className="text-sm text-muted-foreground">{getLocutorNome(prog.locutorId)}</p>
-                          <div className="flex items-center gap-1.5 mt-2 text-sm text-secondary font-medium">
-                            <Clock className="w-4 h-4" />
-                            {prog.horaInicio} - {prog.horaFim}
+                          {/* Content */}
+                          <div className="absolute inset-0 p-4 flex flex-col justify-end">
+                            {isAoVivo && (
+                              <div className="absolute top-3 left-3 flex items-center gap-1 bg-destructive text-white text-[10px] font-bold px-2 py-0.5 rounded-full animate-pulse shadow-lg">
+                                <div className="w-1 h-1 rounded-full bg-white" />
+                                AO VIVO
+                              </div>
+                            )}
+
+                            <div className="space-y-1">
+                              <h3 className="font-bold text-white text-base leading-tight group-hover:text-primary transition-colors line-clamp-1">{prog.nome}</h3>
+                              <p className="text-[10px] text-white/70 font-medium uppercase tracking-wider">{getLocutorNome(prog.locutorId)}</p>
+                              
+                              <div className="flex items-center gap-1.5 pt-1 text-xs text-secondary font-bold">
+                                <Clock className="w-3 h-3" />
+                                {prog.horaInicio} - {prog.horaFim}
+                              </div>
+                            </div>
                           </div>
-                          {bio && <p className="text-xs text-muted-foreground mt-2 line-clamp-2">{bio}</p>}
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+            
+            <div className="flex justify-center gap-2">
+               {Object.keys(programasPorDia).map((_, i) => (
+                 <div key={i} className="w-1.5 h-1.5 rounded-full bg-border" />
+               ))}
+            </div>
           </div>
         )}
       </div>

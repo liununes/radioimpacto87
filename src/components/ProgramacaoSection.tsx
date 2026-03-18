@@ -52,7 +52,7 @@ const ProgramacaoSection = () => {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {displayed.map((prog) => {
             const isAoVivo = atual?.programa.id === prog.id;
             const foto = prog.foto || getLocutorFoto(prog.locutorId);
@@ -61,39 +61,37 @@ const ProgramacaoSection = () => {
             return (
               <div
                 key={prog.id}
-                className={`card-glass p-4 flex items-center gap-4 relative overflow-hidden ${isAoVivo ? "ring-2 ring-primary" : ""}`}
+                className={`group relative aspect-square rounded-2xl overflow-hidden border border-border/50 hover:border-primary/50 transition-all duration-300 shadow-md ${isAoVivo ? "ring-2 ring-primary ring-offset-2 ring-offset-background" : ""}`}
               >
-                {isAoVivo && (
-                  <div className="absolute top-2 right-2 flex items-center gap-1 bg-destructive/90 text-destructive-foreground text-xs font-bold px-2 py-0.5 rounded-full animate-pulse">
-                    <div className="w-1.5 h-1.5 rounded-full bg-destructive-foreground" />
-                    AO VIVO
-                  </div>
-                )}
-
                 {foto ? (
                   <img
                     src={foto}
                     alt={prog.nome}
-                    className="w-16 h-16 rounded-lg object-cover border border-border cursor-pointer hover:opacity-80 transition-opacity"
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     onClick={() => imgIndex >= 0 && setLightboxIndex(imgIndex)}
                   />
                 ) : (
-                  <div className="w-16 h-16 rounded-lg bg-muted flex items-center justify-center">
-                    <Radio className="w-6 h-6 text-muted-foreground" />
+                  <div className="absolute inset-0 bg-muted flex items-center justify-center">
+                    <Radio className="w-10 h-10 text-muted-foreground opacity-20" />
                   </div>
                 )}
 
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-foreground text-sm">{prog.nome}</h3>
-                  <p className="text-xs text-muted-foreground">{getLocutorNome(prog.locutorId)}</p>
-                  <div className="flex items-center gap-1 mt-1 text-xs text-secondary">
-                    <Clock className="w-3 h-3" />
-                    {prog.horaInicio} - {prog.horaFim}
-                  </div>
-                  <div className="flex gap-1 mt-1 flex-wrap">
-                    {prog.diasSemana.sort().map(d => (
-                      <span key={d} className="text-[10px] bg-primary/20 text-primary px-1.5 py-0.5 rounded-full">{DIAS[d]}</span>
-                    ))}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent opacity-90" />
+
+                <div className="absolute inset-0 p-3 flex flex-col justify-end">
+                  {isAoVivo && (
+                    <div className="absolute top-2 left-2 flex items-center gap-1 bg-destructive text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full animate-pulse">
+                      AO VIVO
+                    </div>
+                  )}
+
+                  <div className="space-y-0.5">
+                    <h3 className="font-bold text-white text-xs leading-tight group-hover:text-primary transition-colors line-clamp-1">{prog.nome}</h3>
+                    <p className="text-[10px] text-white/60 line-clamp-1">{getLocutorNome(prog.locutorId)}</p>
+                    <div className="flex items-center gap-1 text-[10px] text-secondary font-bold">
+                      <Clock className="w-3 h-3" />
+                      {prog.horaInicio}
+                    </div>
                   </div>
                 </div>
               </div>
