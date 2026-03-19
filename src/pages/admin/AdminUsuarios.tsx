@@ -34,6 +34,7 @@ const AdminUsuarios = () => {
   const [newPassword, setNewPassword] = useState("");
   const [newPermissions, setNewPermissions] = useState<string[]>([]);
   const [isAdding, setIsAdding] = useState(false);
+  const [editingUser, setEditingUser] = useState<any | null>(null);
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -82,10 +83,7 @@ const AdminUsuarios = () => {
         }
       });
 
-      if (authError) {
-        console.error('RPC Auth Error:', authError);
-        throw new Error(authError.message || "Erro ao criar usuário.");
-      }
+      if (authError) throw new Error(authError.message || "Erro ao criar usuário.");
       
       if (!userId) {
         throw new Error("O banco não retornou um ID. Tente outro nome de usuário.");
@@ -101,10 +99,7 @@ const AdminUsuarios = () => {
           permissions: newPermissions
         });
 
-      if (permError) {
-        console.error('Permission Table Error:', permError);
-        throw new Error("Erro ao salvar permissões: " + permError.message);
-      }
+      if (permError) throw new Error("Erro ao salvar permissões: " + permError.message);
 
       toast.success("Colaborador cadastrado com sucesso!");
       setIsAdding(false);
@@ -121,8 +116,43 @@ const AdminUsuarios = () => {
     }
   };
 
+  const handleUpdateUser = async () => {
+    if (!editingUser) return;
+    setLoading(true);
+    try {
+      // 1. Atualiza via RPC (Metadata e Senha opcional)
+      const { error: authError } = await (supabase as any).rpc('atualizar_usuario', {
+        p_user_id: editingUser.user_id,
+        p_display_name: editingUser.display_name,
+        p_password: editingUser.new_password || null,
+        p_metadata: { permissions: editingUser.permissions }
+      });
+
+      if (authError) throw authError;
+
+      // 2. Atualiza tabela de listagem
+      const { error: permError } = await supabase
+        .from("user_permissions")
+        .update({
+          display_name: editingUser.display_name,
+          permissions: editingUser.permissions
+        })
+        .eq('user_id', editingUser.user_id);
+
+      if (permError) throw permError;
+
+      toast.success("Usuário atualizado!");
+      setEditingUser(null);
+      fetchUsers();
+    } catch (err: any) {
+      toast.error("Erro ao atualizar: " + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleDeleteUser = async (id: string, email: string) => {
-    if (!window.confirm(`Remover acesso de ${email}?`)) return;
+    if (!window.confirm(`Remover acesso?`)) return;
     setLoading(true);
     try {
       const { error } = await (supabase as any).rpc('deletar_usuario', { target_uid: id });
@@ -130,7 +160,7 @@ const AdminUsuarios = () => {
       toast.success("Usuário removido.");
       fetchUsers();
     } catch (err: any) {
-      toast.error("Erro ao remover usuário via RPC: " + err.message);
+      toast.error("Erro ao remover: " + err.message);
     } finally {
       setLoading(false);
     }
@@ -140,6 +170,14 @@ const AdminUsuarios = () => {
     setNewPermissions(prev => 
       prev.includes(id) ? prev.filter(p => p !== id) : [...prev, id]
     );
+  };
+
+  const toggleEditPermission = (id: string) => {
+    if (!editingUser) return;
+    const newPerms = editingUser.permissions.includes(id)
+      ? editingUser.permissions.filter((p: string) => p !== id)
+      : [...editingUser.permissions, id];
+    setEditingUser({ ...editingUser, permissions: newPerms });
   };
 
   const copyRepairSQL = () => {
@@ -278,24 +316,93 @@ GRANT EXECUTE ON FUNCTION public.registrar_usuario_por_nome TO authenticated, an
         </Card>
       )}
 
+      {editingUser && (
+        <Card className="border-primary bg-primary/5 shadow-xl animate-in zoom-in duration-300">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Plus className="w-5 h-5 rotate-45" /> Editando: {editingUser.username}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Nome Completo (Exibição)</Label>
+                <Input 
+                  value={editingUser.display_name || ""} 
+                  onChange={e => setEditingUser({...editingUser, display_name: e.target.value})} 
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Nova Senha (Deixe em branco p/ manter)</Label>
+                <Input 
+                  type="password" 
+                  value={editingUser.new_password || ""} 
+                  onChange={e => setEditingUser({...editingUser, new_password: e.target.value})} 
+                  placeholder="********"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {ALL_PERMISSIONS.map((perm) => (
+                <div key={perm.id} className="flex items-center space-x-2 border p-2 rounded bg-background/50 hover:bg-muted">
+                  <Checkbox 
+                    id={`edit-p-${perm.id}`} 
+                    checked={editingUser.permissions.includes(perm.id)}
+                    onCheckedChange={() => toggleEditPermission(perm.id)}
+                  />
+                  <label htmlFor={`edit-p-${perm.id}`} className="text-xs cursor-pointer">{perm.label}</label>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex gap-2">
+              <Button onClick={handleUpdateUser} disabled={loading} className="flex-1">
+                {loading ? "Salvando..." : "Salvar Alterações"}
+              </Button>
+              <Button variant="outline" onClick={() => setEditingUser(null)}>Cancelar</Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       <div className="space-y-4">
         {users.map((u) => (
-          <Card key={u.user_id} className="hover:border-primary/30 transition-all">
+          <Card key={u.user_id} className="hover:border-primary/30 transition-all overflow-hidden group">
             <div className="flex items-center justify-between p-4 bg-muted/20">
               <div className="flex items-center gap-3">
-                <ShieldCheck className="w-5 h-5 text-primary" />
+                <div className="bg-primary/10 p-2 rounded-full">
+                  <ShieldCheck className="w-5 h-5 text-primary" />
+                </div>
                 <div>
-                  <p className="font-medium">{u.display_name || u.username || u.email}</p>
-                  <p className="text-[10px] text-muted-foreground uppercase">{u.username ? `USUÁRIO: ${u.username}` : u.user_id.substring(0,8)}</p>
+                  <p className="font-bold text-lg">{u.display_name || u.username}</p>
+                  <p className="text-[10px] text-muted-foreground uppercase tracking-widest">
+                    USUÁRIO: <span className="text-primary font-mono">{u.username}</span>
+                  </p>
                 </div>
               </div>
-              <Button variant="ghost" size="icon" className="text-destructive" onClick={() => handleDeleteUser(u.user_id, u.email)}>
-                <Trash2 className="w-4 h-4" />
-              </Button>
+              <div className="flex gap-1">
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="hover:bg-primary/10 hover:text-primary transition-colors"
+                  onClick={() => setEditingUser({ ...u })}
+                >
+                  <Plus className="w-4 h-4" />
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="hover:bg-destructive/10 hover:text-destructive transition-colors" 
+                  onClick={() => handleDeleteUser(u.user_id, u.email)}
+                >
+                  <Trash2 className="w-4 h-4" />
+                </Button>
+              </div>
             </div>
-            <div className="p-4 flex flex-wrap gap-2">
+            <div className="p-4 flex flex-wrap gap-2 bg-background/40">
               {u.permissions?.map((p: string) => (
-                <span key={p} className="text-[10px] bg-primary/10 text-primary px-2 py-1 rounded border border-primary/20 uppercase font-bold">
+                <span key={p} className="text-[9px] bg-primary/5 text-primary/80 px-2 py-1 rounded-sm border border-primary/10 uppercase font-bold tracking-tight">
                   {ALL_PERMISSIONS.find(a => a.id === p)?.label || p}
                 </span>
               ))}
