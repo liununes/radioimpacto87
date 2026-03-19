@@ -12,9 +12,9 @@ const AdminLayout = () => {
 
   // Map sub-paths to permission keys
   const getRequiredPermission = (path: string) => {
-    if (path === "/admin") return "*";
+    if (path === "/admin") return null; // Todos os colaboradores autenticados podem ver a tela inicial (Dashboard)
     const segment = path.split("/")[2];
-    if (!segment) return "*";
+    if (!segment) return null;
     // Map specific paths if they differ from the segment name
     const map: any = {
       'streaming': 'streaming',
@@ -41,7 +41,7 @@ const AdminLayout = () => {
   if (!user) return <Navigate to="/admin/login" replace />;
   
   const requiredPerm = getRequiredPermission(location.pathname);
-  if (!hasPermission(requiredPerm)) {
+  if (requiredPerm && !hasPermission(requiredPerm)) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4 text-center">
         <div>

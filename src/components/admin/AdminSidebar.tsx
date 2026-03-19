@@ -18,7 +18,8 @@ import {
 } from "@/components/ui/sidebar";
 
 const menuItems = [
-  { title: "Painel Geral", url: "/admin", icon: LayoutDashboard, permission: "*" },
+  { title: "Painel Geral", url: "/admin", icon: LayoutDashboard, permission: "base" }, // base = accessible by all
+
   { title: "Player / Redes Sociais", url: "/admin/streaming", icon: Radio, permission: "streaming" },
   { title: "Aparência / Layout", url: "/admin/aparencia", icon: Palette, permission: "aparencia" },
   { title: "Locutores", url: "/admin/locutores", icon: Users, permission: "locutores" },
@@ -35,8 +36,8 @@ export function AdminSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const location = useLocation();
-
-  const filteredItems = menuItems.filter(item => hasPermission(item.permission));
+  // Filter items: allow if user has specific permission, OR if the required permission is "base", OR if they are Master ("*")
+  const filteredItems = menuItems.filter(item => item.permission === "base" || hasPermission(item.permission));
 
   return (
     <Sidebar collapsible="icon" className="border-r border-border">
