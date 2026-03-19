@@ -1,27 +1,13 @@
--- SCRIPT: SISTEMA DE LOGIN POR NOME (v5)
--- Habilita login por 'username' além de e-mail.
+-- SCRIPT: FIX PARA EXTENSÃO PG_CRYPTO E LOGIN POR NOME (v6)
 
--- 1. Extensões
-CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+-- 1. Habilita extensões
+CREATE EXTENSION IF NOT EXISTS "pgcrypto" SCHEMA extensions;
 
--- 2. Tabela de Permissões Atualizada
+-- 2. Atualiza tabelas
 ALTER TABLE public.user_permissions ADD COLUMN IF NOT EXISTS username TEXT UNIQUE;
 ALTER TABLE public.user_permissions ADD COLUMN IF NOT EXISTS display_name TEXT;
 
-CREATE TABLE IF NOT EXISTS public.user_permissions (
-    user_id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-    username TEXT UNIQUE,
-    display_name TEXT,
-    email TEXT,
-    permissions TEXT[] DEFAULT '{}',
-    created_at TIMESTAMPTZ DEFAULT now()
-);
-
-ALTER TABLE public.user_permissions ENABLE ROW LEVEL SECURITY;
-DROP POLICY IF EXISTS "Admins manage perms" ON public.user_permissions;
-CREATE POLICY "Admins manage perms" ON public.user_permissions FOR ALL TO authenticated USING (true);
-
--- 3. Função RPC de Registro por Nome (Bypass E-mail)
+-- 3. Função de Registro por Nome (Ajustada com search_path correto)
 DROP FUNCTION IF EXISTS public.registrar_usuario_por_nome;
 CREATE OR REPLACE FUNCTION public.registrar_usuario_por_nome(
   p_username TEXT,
@@ -32,18 +18,16 @@ CREATE OR REPLACE FUNCTION public.registrar_usuario_por_nome(
 RETURNS UUID
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = auth, public
+SET search_path = auth, public, extensions
 AS $$
 DECLARE
   new_uid UUID := gen_random_uuid();
   internal_email TEXT;
 BEGIN
-  -- Gera um e-mail interno invisível (ex: lucio@radio.internal)
   internal_email := LOWER(TRIM(p_username)) || '@radio.internal';
 
-  -- Evita nomes repetidos em auth.users
   IF EXISTS (SELECT 1 FROM auth.users WHERE email = internal_email) THEN
-    RAISE EXCEPTION 'Este nome de usuário já está em uso.';
+    RAISE EXCEPTION 'USUARIO_EXISTENTE';
   END IF;
 
   -- 1. Cria em auth.users
@@ -54,7 +38,8 @@ BEGIN
   )
   VALUES (
     new_uid, '00000000-0000-0000-0000-000000000000',
-    internal_email, crypt(p_password, gen_salt('bf')), 
+    internal_email, 
+    extensions.crypt(p_password, extensions.gen_salt('bf')), 
     now(), '{"provider":"email","providers":["email"]}'::jsonb, 
     p_metadata || jsonb_build_object('username', p_username, 'display_name', p_display_name), 
     now(), now(), 'authenticated', 'authenticated'
@@ -74,18 +59,4 @@ BEGIN
 END;
 $$;
 
--- 4. Função de Deleção
-DROP FUNCTION IF EXISTS public.deletar_usuario(uuid);
-CREATE OR REPLACE FUNCTION public.deletar_usuario(target_uid UUID)
-RETURNS VOID
-LANGUAGE plpgsql
-SECURITY DEFINER
-SET search_path = auth, public
-AS $$
-BEGIN
-  DELETE FROM auth.users WHERE id = target_uid;
-END;
-$$;
-
 GRANT EXECUTE ON FUNCTION public.registrar_usuario_por_nome TO authenticated, anon;
-GRANT EXECUTE ON FUNCTION public.deletar_usuario TO authenticated;
