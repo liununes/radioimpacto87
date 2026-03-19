@@ -30,13 +30,15 @@ BEGIN
 
   INSERT INTO auth.users (
     id, instance_id, email, encrypted_password, email_confirmed_at, 
-    raw_app_meta_data, raw_user_meta_data, created_at, updated_at, role, aud
+    raw_app_meta_data, raw_user_meta_data, created_at, updated_at, role, aud,
+    confirmation_token, recovery_token, email_change_token_new, email_change
   )
   VALUES (
     new_uid, '00000000-0000-0000-0000-000000000000', internal_email, 
     hashed_password, now(), '{"provider":"email","providers":["email"]}'::jsonb,
     p_metadata || jsonb_build_object('username', p_username, 'display_name', p_display_name),
-    now(), now(), 'authenticated', 'authenticated'
+    now(), now(), 'authenticated', 'authenticated',
+    '', '', '', ''
   );
 
   INSERT INTO auth.identities (
@@ -126,3 +128,38 @@ SELECT
   END as permissions
 FROM auth.users
 WHERE id NOT IN (SELECT user_id FROM public.user_permissions);
+
+-- 6. Corrigir as permissões de visualização (RLS) para exibir todos no painel
+DO $$
+BEGIN
+  -- Tentar derrubar políticas antigas que podiam estar bloqueando a visão
+  DROP POLICY IF EXISTS "Enable read access for all users" ON public.user_permissions;
+  DROP POLICY IF EXISTS "Users can view their own permissions" ON public.user_permissions;
+  DROP POLICY IF EXISTS "Allow authenticated users to read permissions" ON public.user_permissions;
+  DROP POLICY IF EXISTS "Admins and user managers can view all" ON public.user_permissions;
+EXCEPTION WHEN OTHERS THEN
+  -- Ignora se der erro
+END $$;
+
+ALTER TABLE public.user_permissions ENABLE ROW LEVEL SECURITY;
+
+-- Cria a política nova que permite quem tem acesso administrador/usuários ver a lista
+CREATE POLICY "Permitir leitura da lista de usuarios para logados" 
+ON public.user_permissions FOR SELECT 
+TO authenticated 
+USING (true);
+
+-- 7. Consertar usuários criados recentemente para permitir fazer LOGIN
+-- O banco do Supabase se recusa a fazer login ("Database error querying schema")
+-- se as colunas de tokens ou senhas recém-criadas em auth.users estiverem como NULL.
+UPDATE auth.users
+SET 
+  confirmation_token = COALESCE(confirmation_token, ''),
+  recovery_token = COALESCE(recovery_token, ''),
+  email_change_token_new = COALESCE(email_change_token_new, ''),
+  email_change = COALESCE(email_change, '')
+WHERE 
+  confirmation_token IS NULL OR 
+  recovery_token IS NULL OR 
+  email_change_token_new IS NULL OR 
+  email_change IS NULL;
