@@ -63,8 +63,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+  const signIn = async (loginIdentifier: string, password: string) => {
+    // Se não tiver @, trata como Nome de Usuário interno
+    const loginEmail = loginIdentifier.includes("@") 
+      ? loginIdentifier.trim().toLowerCase() 
+      : `${loginIdentifier.trim().toLowerCase()}@radio.internal`;
+
+    const { error } = await supabase.auth.signInWithPassword({ 
+      email: loginEmail, 
+      password 
+    });
     return { error: error?.message ?? null };
   };
 

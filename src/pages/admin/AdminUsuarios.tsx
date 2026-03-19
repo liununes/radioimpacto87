@@ -29,7 +29,8 @@ const AdminUsuarios = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const [newEmail, setNewEmail] = useState("");
+  const [newUsername, setNewUsername] = useState("");
+  const [newDisplayName, setNewDisplayName] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [newPermissions, setNewPermissions] = useState<string[]>([]);
   const [isAdding, setIsAdding] = useState(false);
@@ -39,11 +40,11 @@ const AdminUsuarios = () => {
     const { data, error } = await supabase
       .from("user_permissions")
       .select("*")
-      .order('email');
+      .order('username');
 
     if (error) {
       if (error.code === "PGRST116" || error.message.includes("does not exist")) {
-        setError("A tabela 'user_permissions' não existe. Execute o script de reparo no SQL Editor do Supabase.");
+        setError("A tabela 'user_permissions' precisa ser atualizada para suportar nomes. Execute o script repair_users.sql.");
       } else {
         setError(error.message);
       }
@@ -59,8 +60,8 @@ const AdminUsuarios = () => {
   }, []);
 
   const handleAddUser = async () => {
-    if (!newEmail || !newPassword) {
-      toast.error("Preencha e-mail e senha!");
+    if (!newUsername || !newPassword) {
+      toast.error("Preencha o nome de usuário e senha!");
       return;
     }
 
@@ -71,11 +72,11 @@ const AdminUsuarios = () => {
     
     setLoading(true);
     try {
-      console.log('User System Sync: v4 - ' + new Date().toISOString());
-      // 1. Criar via RPC (Pula confirmação de e-mail)
-      const { data: userId, error: authError } = await (supabase as any).rpc('registrar_usuario_sem_confirmar', {
-        p_email: newEmail.trim().toLowerCase(),
+      // 1. Criar via RPC por Nome
+      const { data: userId, error: authError } = await (supabase as any).rpc('registrar_usuario_por_nome', {
+        p_username: newUsername.trim().toLowerCase(),
         p_password: newPassword,
+        p_display_name: newDisplayName,
         p_metadata: { 
           permissions: newPermissions.length > 0 ? newPermissions : ["base"] 
         }
@@ -83,11 +84,11 @@ const AdminUsuarios = () => {
 
       if (authError) {
         console.error('RPC Auth Error:', authError);
-        throw new Error(authError.message || "Erro no banco de dados.");
+        throw new Error(authError.message || "Erro ao criar usuário.");
       }
       
       if (!userId) {
-        throw new Error("O banco não retornou um ID. Verifique se o e-mail já existe.");
+        throw new Error("O banco não retornou um ID. Tente outro nome de usuário.");
       }
 
       // 2. Salvar na tabela de listagem
@@ -95,18 +96,20 @@ const AdminUsuarios = () => {
         .from("user_permissions")
         .upsert({
           user_id: userId as string,
-          email: newEmail.trim().toLowerCase(),
+          username: newUsername.trim().toLowerCase(),
+          display_name: newDisplayName,
           permissions: newPermissions
         });
 
       if (permError) {
         console.error('Permission Table Error:', permError);
-        throw new Error("Usuário criado, mas erro ao salvar permissões: " + permError.message);
+        throw new Error("Erro ao salvar permissões: " + permError.message);
       }
 
-      toast.success("Usuário criado com sucesso!");
+      toast.success("Colaborador cadastrado com sucesso!");
       setIsAdding(false);
-      setNewEmail("");
+      setNewUsername("");
+      setNewDisplayName("");
       setNewPassword("");
       setNewPermissions([]);
       fetchUsers();
@@ -140,21 +143,16 @@ const AdminUsuarios = () => {
   };
 
   const copyRepairSQL = () => {
-    const sql = `-- COPIE E COLE NO SQL EDITOR DO SUPABASE
+    const sql = `-- COPIE E COLE NO SQL EDITOR DO SUPABASE (SISTEMA DE NOMES)
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
-CREATE TABLE IF NOT EXISTS public.user_permissions (
-    user_id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-    email TEXT,
-    permissions TEXT[] DEFAULT '{}',
-    created_at TIMESTAMPTZ DEFAULT now()
-);
+ALTER TABLE public.user_permissions ADD COLUMN IF NOT EXISTS username TEXT UNIQUE;
+ALTER TABLE public.user_permissions ADD COLUMN IF NOT EXISTS display_name TEXT;
 
-ALTER TABLE public.user_permissions ENABLE ROW LEVEL SECURITY;
-
-CREATE OR REPLACE FUNCTION public.registrar_usuario_sem_confirmar(
-  p_email TEXT,
+CREATE OR REPLACE FUNCTION public.registrar_usuario_por_nome(
+  p_username TEXT,
   p_password TEXT,
+  p_display_name TEXT,
   p_metadata JSONB DEFAULT '{}'::jsonb
 )
 RETURNS UUID
@@ -163,53 +161,39 @@ SECURITY DEFINER
 SET search_path = auth, public
 AS $$
 DECLARE
-  new_user_id UUID;
+  new_uid UUID := gen_random_uuid();
+  internal_email TEXT;
 BEGIN
+  internal_email := LOWER(TRIM(p_username)) || '@radio.internal';
   INSERT INTO auth.users (
-    instance_id, id, aud, role, email, encrypted_password,
-    email_confirmed_at, raw_app_meta_data, raw_user_meta_data,
-    created_at, updated_at, confirmation_token, email_change,
-    email_change_sent_at, last_sign_in_at
+    id, instance_id, email, encrypted_password, email_confirmed_at, 
+    raw_app_meta_data, raw_user_meta_data, created_at, updated_at, 
+    role, aud
   )
   VALUES (
-    '00000000-0000-0000-0000-000000000000', gen_random_uuid(),
-    'authenticated', 'authenticated', p_email,
-    crypt(p_password, gen_salt('bf')), now(),
-    '{"provider":"email","providers":["email"]}', p_metadata,
-    now(), now(), '', '', now(), now()
-  )
-  RETURNING id INTO new_user_id;
+    new_uid, '00000000-0000-0000-0000-000000000000',
+    internal_email, crypt(p_password, gen_salt('bf')), 
+    now(), '{"provider":"email","providers":["email"]}'::jsonb, 
+    p_metadata || jsonb_build_object('username', p_username, 'display_name', p_display_name), 
+    now(), now(), 'authenticated', 'authenticated'
+  );
 
   INSERT INTO auth.identities (
     id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at
   )
   VALUES (
-    gen_random_uuid(), new_user_id,
-    format('{"sub":"%s","email":"%s"}', new_user_id::text, p_email)::jsonb,
+    gen_random_uuid(), new_uid, 
+    jsonb_build_object('sub', new_uid::text, 'email', internal_email), 
     'email', now(), now(), now()
   );
-
-  RETURN new_user_id;
+  RETURN new_uid;
 END;
 $$;
 
-CREATE OR REPLACE FUNCTION public.deletar_usuario(p_user_id UUID)
-RETURNS VOID
-LANGUAGE plpgsql
-SECURITY DEFINER
-SET search_path = auth, public
-AS $$
-BEGIN
-  DELETE FROM auth.users WHERE id = p_user_id;
-  DELETE FROM public.user_permissions WHERE user_id = p_user_id;
-END;
-$$;
-
-GRANT EXECUTE ON FUNCTION public.registrar_usuario_sem_confirmar TO authenticated;
-GRANT EXECUTE ON FUNCTION public.deletar_usuario TO authenticated;
+GRANT EXECUTE ON FUNCTION public.registrar_usuario_por_nome TO authenticated, anon;
 `;
     navigator.clipboard.writeText(sql);
-    toast.success("SQL copiado! Cole no Editor SQL do seu Supabase.");
+    toast.success("SQL de Nomes copiado!");
   };
 
   if (!isAdmin && !hasPermission('usuarios')) return <div className="p-8 text-center bg-destructive/10 text-destructive rounded-lg border border-destructive/20 m-8">Acesso restrito. Sua conta não tem permissão para gerenciar usuários.</div>;
@@ -253,10 +237,22 @@ GRANT EXECUTE ON FUNCTION public.deletar_usuario TO authenticated;
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>E-mail</Label>
-                <Input type="email" value={newEmail} onChange={e => setNewEmail(e.target.value)} placeholder="email@radio.com" />
+                <Label>Login / Usuário (Para entrar no sistema)</Label>
+                <Input 
+                  value={newUsername} 
+                  onChange={e => setNewUsername(e.target.value)} 
+                  placeholder="Ex: joao_silva" 
+                />
               </div>
               <div className="space-y-2">
+                <Label>Nome Completo (Exibição)</Label>
+                <Input 
+                  value={newDisplayName} 
+                  onChange={e => setNewDisplayName(e.target.value)} 
+                  placeholder="Ex: João da Silva" 
+                />
+              </div>
+              <div className="space-y-2 md:col-span-2">
                 <Label>Senha</Label>
                 <Input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} />
               </div>
@@ -289,8 +285,8 @@ GRANT EXECUTE ON FUNCTION public.deletar_usuario TO authenticated;
               <div className="flex items-center gap-3">
                 <ShieldCheck className="w-5 h-5 text-primary" />
                 <div>
-                  <p className="font-medium">{u.email}</p>
-                  <p className="text-[10px] text-muted-foreground uppercase">{u.user_id.substring(0,8)}</p>
+                  <p className="font-medium">{u.display_name || u.username || u.email}</p>
+                  <p className="text-[10px] text-muted-foreground uppercase">{u.username ? `USUÁRIO: ${u.username}` : u.user_id.substring(0,8)}</p>
                 </div>
               </div>
               <Button variant="ghost" size="icon" className="text-destructive" onClick={() => handleDeleteUser(u.user_id, u.email)}>

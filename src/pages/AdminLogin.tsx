@@ -60,8 +60,13 @@ const AdminLogin = () => {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label>Email</Label>
-              <Input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="exemplo@radio.com" />
+              <Label>Usuário ou E-mail</Label>
+              <Input 
+                type="text" 
+                value={email} 
+                onChange={e => setEmail(e.target.value)} 
+                placeholder="Ex: locutor_jose ou seu@email.com" 
+              />
             </div>
             
             {!isRecovering && (
