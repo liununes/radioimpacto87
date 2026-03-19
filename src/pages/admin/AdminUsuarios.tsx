@@ -71,11 +71,12 @@ const AdminUsuarios = () => {
     
     setLoading(true);
     try {
+      console.log('User System Sync: v4 - ' + new Date().toISOString());
       // 1. Criar via RPC (Pula confirmação de e-mail)
       const { data: userId, error: authError } = await (supabase as any).rpc('registrar_usuario_sem_confirmar', {
-        email_input: newEmail.trim().toLowerCase(),
-        password_input: newPassword,
-        metadata_input: { 
+        p_email: newEmail.trim().toLowerCase(),
+        p_password: newPassword,
+        p_metadata: { 
           permissions: newPermissions.length > 0 ? newPermissions : ["base"] 
         }
       });
