@@ -23,17 +23,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [permissions, setPermissions] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const checkAdmin = async (userId: string, userMetadata: any) => {
-    // 1. Check DB role (Master)
-    const { data: roleData } = await supabase.rpc("has_role", { _user_id: userId, _role: "admin" });
-    const isMaster = !!roleData;
-    setIsAdmin(isMaster);
-
-    if (isMaster) {
-      setPermissions(["*"]); // Master has all permissions
+  const checkAdmin = async (user: User) => {
+    const isOwner = user.email === 'liununes06@gmail.com';
+    const userPerms = user.user_metadata?.permissions || [];
+    
+    // O dono master ou qualquer um que tenha recebido a permissão '*' na lista de colaboradores
+    if (isOwner || userPerms.includes("*")) {
+      setIsAdmin(true);
+      setPermissions(["*"]);
     } else {
-      // 2. Check metadata permissions (for secondary admins)
-      const userPerms = userMetadata?.permissions || [];
+      setIsAdmin(false);
       setPermissions(userPerms);
     }
   };
@@ -43,7 +42,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
-        checkAdmin(session.user.id, session.user.user_metadata);
+        checkAdmin(session.user);
       } else {
         setIsAdmin(false);
         setPermissions([]);
@@ -55,7 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
-        checkAdmin(session.user.id, session.user.user_metadata);
+        checkAdmin(session.user);
       }
       setLoading(false);
     });
