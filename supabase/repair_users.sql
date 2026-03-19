@@ -112,3 +112,17 @@ $$;
 GRANT EXECUTE ON FUNCTION public.registrar_usuario_por_nome TO authenticated, anon;
 GRANT EXECUTE ON FUNCTION public.atualizar_usuario TO authenticated, anon;
 GRANT EXECUTE ON FUNCTION public.deletar_usuario TO authenticated, anon;
+
+-- 5. Sincronizar usuários órfãos (que já existem no sistema mas não aparecem no painel)
+-- Rode esta parte caso algum usuário tenha sido criado antes da correção de segurança.
+INSERT INTO public.user_permissions (user_id, username, display_name, permissions)
+SELECT 
+  id as user_id,
+  COALESCE(raw_user_meta_data->>'username', split_part(email, '@', 1)) as username,
+  COALESCE(raw_user_meta_data->>'display_name', split_part(email, '@', 1)) as display_name,
+  CASE 
+    WHEN raw_user_meta_data ? 'permissions' THEN ARRAY(SELECT jsonb_array_elements_text(raw_user_meta_data->'permissions'))
+    ELSE ARRAY['base']::text[]
+  END as permissions
+FROM auth.users
+WHERE id NOT IN (SELECT user_id FROM public.user_permissions);
