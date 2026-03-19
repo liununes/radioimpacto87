@@ -1,31 +1,57 @@
--- SCRIPT: FIX PARA RECURSÃO INFINITA (v7)
+-- SCRIPT: SEGURANÇA TOTAL E FIM DE RECURSÃO (v8)
 
--- 1. Remove políticas que geram loop infinito
-DROP POLICY IF EXISTS "Admins can view roles" ON public.user_roles;
-DROP POLICY IF EXISTS "Admins view roles" ON public.user_roles;
-DROP POLICY IF EXISTS "Admins manage perms" ON public.user_permissions;
-DROP POLICY IF EXISTS "Admins total" ON public.user_permissions;
+-- 1. Remoção de políticas antigas e inseguras
+DROP POLICY IF EXISTS "Acesso total as permissoes" ON public.user_permissions;
+DROP POLICY IF EXISTS "Gestão total de permissões" ON public.user_permissions;
+DROP POLICY IF EXISTS "Admins can manage user_permissions" ON public.user_permissions;
+DROP POLICY IF EXISTS "Leitura pública para autenticados" ON public.user_roles;
 
--- 2. Garante tabelas limpas
-ALTER TABLE public.user_roles DISABLE ROW LEVEL SECURITY;
-ALTER TABLE public.user_permissions DISABLE ROW LEVEL SECURITY;
+-- 2. Função de Verificação Protegida (SECURITY DEFINER)
+-- Bypass de RLS para evitar recursão infinita e garantir segurança real
+CREATE OR REPLACE FUNCTION public.is_admin()
+RETURNS BOOLEAN 
+LANGUAGE plpgsql 
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM public.user_roles 
+    WHERE user_id = auth.uid() 
+    AND role = 'admin'
+  );
+END;
+$$;
 
--- 3. Re-habilita com políticas simples (Sem recursão)
-ALTER TABLE public.user_roles ENABLE ROW LEVEL SECURITY;
+-- 3. Regras para Permissões (Público p/ Ler, Admin p/ Editar)
 ALTER TABLE public.user_permissions ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Leitura pública para autenticados" 
-ON public.user_roles FOR SELECT 
+CREATE POLICY "Leitura segura" 
+ON public.user_permissions FOR SELECT 
 TO authenticated 
 USING (true);
 
-CREATE POLICY "Gestão total de permissões" 
+CREATE POLICY "Gestão segura por admin" 
 ON public.user_permissions FOR ALL 
 TO authenticated 
-USING (true)
-WITH CHECK (true);
+USING (public.is_admin())
+WITH CHECK (public.is_admin());
 
--- 4. Função RPC revisada (v7 - Login por Nome)
+-- 4. Regras para Cargos (Livre p/ Ler Próprio, Admin p/ Tudo)
+ALTER TABLE public.user_roles ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Ver próprio cargo" 
+ON public.user_roles FOR SELECT 
+TO authenticated 
+USING (user_id = auth.uid() OR public.is_admin());
+
+CREATE POLICY "Admin gerencia cargos" 
+ON public.user_roles FOR ALL 
+TO authenticated 
+USING (public.is_admin())
+WITH CHECK (public.is_admin());
+
+-- 5. Função de Registro atualizada (Usa raw_app_meta_data para segurança extra)
 DROP FUNCTION IF EXISTS public.registrar_usuario_por_nome;
 CREATE OR REPLACE FUNCTION public.registrar_usuario_por_nome(
   p_username TEXT,
@@ -57,8 +83,9 @@ BEGIN
     new_uid, '00000000-0000-0000-0000-000000000000',
     internal_email, 
     extensions.crypt(p_password, extensions.gen_salt('bf')), 
-    now(), '{"provider":"email","providers":["email"]}'::jsonb, 
-    p_metadata || jsonb_build_object('username', p_username, 'display_name', p_display_name), 
+    now(), 
+    '{"provider":"email","providers":["email"]}'::jsonb, -- app_metadata (seguro)
+    p_metadata || jsonb_build_object('username', p_username, 'display_name', p_display_name), -- user_metadata (exibição)
     now(), now(), 'authenticated', 'authenticated'
   );
 
