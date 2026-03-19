@@ -1,9 +1,9 @@
--- SCRIPT: FIX PARA PROVIDER_ID E SEGURANÇA (v9)
+-- SCRIPT FINAL (v11) - Fix Login e Verificação Interna
 
--- 1. Garante que pgcrypto esteja noExtensions
+-- 1. Garante pgcrypto
 CREATE EXTENSION IF NOT EXISTS "pgcrypto" SCHEMA extensions;
 
--- 2. Função de Registro por Nome (Ajuste para provider_id e segurança)
+-- 2. Função de Registro por Nome (v11)
 DROP FUNCTION IF EXISTS public.registrar_usuario_por_nome;
 CREATE OR REPLACE FUNCTION public.registrar_usuario_por_nome(
   p_username TEXT,
@@ -26,46 +26,52 @@ BEGIN
     RAISE EXCEPTION 'USUARIO_EXISTENTE';
   END IF;
 
-  -- 1. Cria em auth.users
+  -- 1. Cria o usuário com todos os campos de confirmação ativos
   INSERT INTO auth.users (
-    id, instance_id, email, encrypted_password, email_confirmed_at, 
-    raw_app_meta_data, raw_user_meta_data, created_at, updated_at, 
-    role, aud
+    id, instance_id, email, encrypted_password, 
+    email_confirmed_at, 
+    confirmed_at,
+    last_sign_in_at, 
+    raw_app_meta_data, raw_user_meta_data, 
+    created_at, updated_at, role, aud, is_sso_user
   )
   VALUES (
-    new_uid, '00000000-0000-0000-0000-000000000000',
-    internal_email, 
+    new_uid, '00000000-0000-0000-0000-000000000000', internal_email, 
     extensions.crypt(p_password, extensions.gen_salt('bf')), 
     now(), 
+    now(), 
+    now(),
     '{"provider":"email","providers":["email"]}'::jsonb,
     p_metadata || jsonb_build_object('username', p_username, 'display_name', p_display_name),
-    now(), now(), 'authenticated', 'authenticated'
+    now(), now(), 'authenticated', 'authenticated', false
   );
 
-  -- 2. Cria identidade ( provider_id é obrigatório em versões recentes)
+  -- 2. Cria identidade com "email_verified: true" no JSON
   INSERT INTO auth.identities (
-    id,
-    user_id,
-    identity_data,
-    provider,
-    provider_id,
-    last_sign_in_at,
-    created_at,
-    updated_at
+    id, user_id, identity_data, provider, provider_id, last_sign_in_at, created_at, updated_at
   )
   VALUES (
-    gen_random_uuid(),
-    new_uid, 
-    jsonb_build_object('sub', new_uid::text, 'email', internal_email), 
-    'email',
-    new_uid::text, 
-    now(),
-    now(),
-    now()
+    gen_random_uuid(), new_uid, 
+    jsonb_build_object('sub', new_uid::text, 'email', internal_email, 'email_verified', true), 
+    'email', new_uid::text, now(), now(), now()
   );
 
   RETURN new_uid;
 END;
 $$;
 
+-- 3. Função de Deleção
+DROP FUNCTION IF EXISTS public.deletar_usuario(uuid);
+CREATE OR REPLACE FUNCTION public.deletar_usuario(target_uid UUID)
+RETURNS VOID
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = auth, public
+AS $$
+BEGIN
+  DELETE FROM auth.users WHERE id = target_uid;
+END;
+$$;
+
 GRANT EXECUTE ON FUNCTION public.registrar_usuario_por_nome TO authenticated, anon;
+GRANT EXECUTE ON FUNCTION public.deletar_usuario TO authenticated, anon;
