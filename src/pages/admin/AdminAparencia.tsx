@@ -146,7 +146,7 @@ const AdminAparencia = () => {
   const updateField = (field: keyof ThemeConfig, value: string | boolean) => {
     const updated = { ...theme, [field]: value };
     setTheme(updated);
-    saveThemeConfig(updated);
+    saveThemeConfig(updated); // Isso atualiza o localStorage e as variáveis CSS
   };
 
   const handleSave = async () => {
@@ -155,7 +155,7 @@ const AdminAparencia = () => {
     
     // Save theme and identity in parallel
     const [themeRes, streamingRes] = await Promise.all([
-      saveSiteConfig("theme", latestTheme),
+      saveSiteConfig("theme", theme),
       getSiteConfig("streaming").then(config => 
         saveSiteConfig("streaming", { ...(config || {}), logo, favicon })
       )
