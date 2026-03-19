@@ -63,12 +63,17 @@ const AdminUsuarios = () => {
       toast.error("Preencha e-mail e senha!");
       return;
     }
+
+    if (newPassword.length < 6) {
+      toast.error("A senha deve ter pelo menos 6 caracteres.");
+      return;
+    }
     
     setLoading(true);
     try {
       // 1. Criar via RPC (Pula confirmação de e-mail)
       const { data: userId, error: authError } = await (supabase as any).rpc('registrar_usuario_sem_confirmar', {
-        p_email: newEmail,
+        p_email: newEmail.trim().toLowerCase(),
         p_password: newPassword,
         p_metadata: { 
           permissions: newPermissions.length > 0 ? newPermissions : ["base"] 
@@ -76,24 +81,30 @@ const AdminUsuarios = () => {
       });
 
       if (authError) {
+        console.error('RPC Auth Error:', authError);
         if (authError.message.includes("function") && authError.message.includes("does not exist")) {
-          throw new Error("Função RPC 'registrar_usuario_sem_confirmar' não encontrada. Verifique o script SQL.");
+          throw new Error("Função RPC não encontrada. Execute o script repair_users.sql no SQL Editor do Supabase.");
         }
-        throw authError;
+        throw new Error(authError.message || "Erro ao criar usuário no banco.");
       }
       
-      if (!userId) throw new Error("Erro ao gerar ID do usuário.");
+      if (!userId) {
+        throw new Error("O banco não retornou um ID válido. Verifique se o e-mail já existe.");
+      }
 
       // 2. Salvar na tabela de listagem
       const { error: permError } = await supabase
         .from("user_permissions")
         .upsert({
           user_id: userId as string,
-          email: newEmail,
+          email: newEmail.trim().toLowerCase(),
           permissions: newPermissions
         });
 
-      if (permError) throw permError;
+      if (permError) {
+        console.error('Permission Table Error:', permError);
+        throw new Error("Usuário criado, mas erro ao salvar permissões: " + permError.message);
+      }
 
       toast.success("Usuário criado com sucesso!");
       setIsAdding(false);
@@ -102,8 +113,8 @@ const AdminUsuarios = () => {
       setNewPermissions([]);
       fetchUsers();
     } catch (err: any) {
-      console.error('Error adding user:', err);
-      toast.error(err.message || "Erro inesperado. Verifique os logs.");
+      console.error('Final Catch Error:', err);
+      toast.error(err.message || "Erro inesperado. Tente novamente.");
     } finally {
       setLoading(false);
     }
