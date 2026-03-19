@@ -144,22 +144,23 @@ const AdminAparencia = () => {
   }, []);
 
   const updateField = (field: keyof ThemeConfig, value: string | boolean) => {
-    const updated = { ...theme, [field]: value };
-    setTheme(updated);
-    saveThemeConfig(updated); // Isso atualiza o localStorage e as variáveis CSS
+    setTheme(prev => ({ ...prev, [field]: value }));
   };
 
   const handleSave = async () => {
     setLoading(true);
     const latestTheme = getThemeConfig();
     
-    // Save theme and identity in parallel
     const [themeRes, streamingRes] = await Promise.all([
       saveSiteConfig("theme", theme),
       getSiteConfig("streaming").then(config => 
         saveSiteConfig("streaming", { ...(config || {}), logo, favicon })
       )
     ]);
+    
+    if (!themeRes.error) {
+      saveThemeConfig(theme); // Atualiza local após sucesso no servidor
+    }
 
     if (themeRes.error || (streamingRes as any).error) {
       toast.error("Erro ao salvar configurações.");
