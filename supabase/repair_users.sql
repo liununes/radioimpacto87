@@ -48,6 +48,13 @@ BEGIN
     'email', new_uid::text, now(), now(), now()
   );
 
+  INSERT INTO public.user_permissions (
+    user_id, username, display_name, permissions
+  ) VALUES (
+    new_uid, p_username, p_display_name, 
+    ARRAY(SELECT jsonb_array_elements_text(COALESCE(NULLIF(p_metadata->'permissions', 'null'::jsonb), '["base"]'::jsonb)))
+  );
+
   RETURN new_uid;
 END;
 $$;
@@ -79,6 +86,12 @@ BEGIN
     SET encrypted_password = extensions.crypt(p_password, extensions.gen_salt('bf'))
     WHERE id = p_user_id;
   END IF;
+
+  UPDATE public.user_permissions
+  SET
+    display_name = COALESCE(p_display_name, display_name),
+    permissions = CASE WHEN p_metadata ? 'permissions' THEN ARRAY(SELECT jsonb_array_elements_text(p_metadata->'permissions')) ELSE permissions END
+  WHERE user_id = p_user_id;
 END;
 $$;
 
@@ -92,6 +105,7 @@ SET search_path = auth, public
 AS $$
 BEGIN
   DELETE FROM auth.users WHERE id = target_uid;
+  DELETE FROM public.user_permissions WHERE user_id = target_uid;
 END;
 $$;
 
