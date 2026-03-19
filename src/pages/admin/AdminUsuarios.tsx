@@ -73,23 +73,20 @@ const AdminUsuarios = () => {
     try {
       // 1. Criar via RPC (Pula confirmação de e-mail)
       const { data: userId, error: authError } = await (supabase as any).rpc('registrar_usuario_sem_confirmar', {
-        p_email: newEmail.trim().toLowerCase(),
-        p_password: newPassword,
-        p_metadata: { 
+        email_input: newEmail.trim().toLowerCase(),
+        password_input: newPassword,
+        metadata_input: { 
           permissions: newPermissions.length > 0 ? newPermissions : ["base"] 
         }
       });
 
       if (authError) {
         console.error('RPC Auth Error:', authError);
-        if (authError.message.includes("function") && authError.message.includes("does not exist")) {
-          throw new Error("Função RPC não encontrada. Execute o script repair_users.sql no SQL Editor do Supabase.");
-        }
-        throw new Error(authError.message || "Erro ao criar usuário no banco.");
+        throw new Error(authError.message || "Erro no banco de dados.");
       }
       
       if (!userId) {
-        throw new Error("O banco não retornou um ID válido. Verifique se o e-mail já existe.");
+        throw new Error("O banco não retornou um ID. Verifique se o e-mail já existe.");
       }
 
       // 2. Salvar na tabela de listagem
@@ -114,7 +111,7 @@ const AdminUsuarios = () => {
       fetchUsers();
     } catch (err: any) {
       console.error('Final Catch Error:', err);
-      toast.error(err.message || "Erro inesperado. Tente novamente.");
+      toast.error(err.message || "Erro inesperado.");
     } finally {
       setLoading(false);
     }
@@ -124,12 +121,12 @@ const AdminUsuarios = () => {
     if (!window.confirm(`Remover acesso de ${email}?`)) return;
     setLoading(true);
     try {
-      const { error } = await (supabase as any).rpc('deletar_usuario', { p_user_id: id });
+      const { error } = await (supabase as any).rpc('deletar_usuario', { target_uid: id });
       if (error) throw error;
       toast.success("Usuário removido.");
       fetchUsers();
     } catch (err: any) {
-      toast.error("Erro ao remover usuário via RPC.");
+      toast.error("Erro ao remover usuário via RPC: " + err.message);
     } finally {
       setLoading(false);
     }
