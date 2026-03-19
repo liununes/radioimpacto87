@@ -67,7 +67,7 @@ const Index = () => {
       {theme.showGallery && <GaleriaSection />}
       {theme.showTopSongs && topSongsPos === 'gallery' && <TopSongs />}
       
-      {theme.showNews && <EnhancedNewsSection />}
+      {theme.showNews && <EnhancedNewsSection showNews={theme.showNews} />}
       {theme.showTopSongs && topSongsPos === 'news' && <TopSongs />}
       
       {theme.showAbout && <AboutSection />}
