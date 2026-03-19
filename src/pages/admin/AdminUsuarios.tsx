@@ -20,6 +20,7 @@ const ALL_PERMISSIONS = [
   { id: "pedidos", label: "Pedidos Musicais" },
   { id: "noticias", label: "Notícias" },
   { id: "sobre", label: "Sobre a Rádio" },
+  { id: "estatisticas", label: "Relatórios de Acesso" },
   { id: "usuarios", label: "Gerenciar Usuários" },
 ];
 

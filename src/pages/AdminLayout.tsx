@@ -25,6 +25,7 @@ const AdminLayout = () => {
       'fotos': 'fotos',
       'noticias': 'noticias',
       'sobre': 'sobre',
+      'estatisticas': 'estatisticas',
       'usuarios': 'usuarios'
     };
     return map[segment] || "*";

@@ -1,5 +1,5 @@
 import {
-  Radio, Users, Calendar, Image, FileText, Info, LayoutDashboard, Music, Settings, Palette,
+  Radio, Users, Calendar, Image, FileText, Info, LayoutDashboard, Music, Settings, Palette, BarChart3
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -28,6 +28,7 @@ const menuItems = [
   { title: "Galeria de Fotos", url: "/admin/fotos", icon: Image, permission: "fotos" },
   { title: "Notícias", url: "/admin/noticias", icon: FileText, permission: "noticias" },
   { title: "Sobre a Rádio", url: "/admin/sobre", icon: Info, permission: "sobre" },
+  { title: "Relatórios de Acesso", url: "/admin/estatisticas", icon: BarChart3, permission: "estatisticas" },
   { title: "Usuários / Permissões", url: "/admin/usuarios", icon: Settings, permission: "usuarios" },
 ];
 
