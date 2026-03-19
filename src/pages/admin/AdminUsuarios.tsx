@@ -24,7 +24,7 @@ const ALL_PERMISSIONS = [
 ];
 
 const AdminUsuarios = () => {
-  const { supabase, isAdmin } = useAuth();
+  const { supabase, isAdmin, hasPermission } = useAuth();
   const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -43,7 +43,7 @@ const AdminUsuarios = () => {
 
     if (error) {
       if (error.code === "PGRST116" || error.message.includes("does not exist")) {
-        setError("Configuração pendente: Execute o script SQL de reparo.");
+        setError("A tabela 'user_permissions' não existe. Execute o script de reparo no SQL Editor do Supabase.");
       } else {
         setError(error.message);
       }
@@ -75,13 +75,19 @@ const AdminUsuarios = () => {
         }
       });
 
-      if (authError) throw authError;
+      if (authError) {
+        if (authError.message.includes("function") && authError.message.includes("does not exist")) {
+          throw new Error("Função RPC 'registrar_usuario_sem_confirmar' não encontrada. Verifique o script SQL.");
+        }
+        throw authError;
+      }
+      
       if (!userId) throw new Error("Erro ao gerar ID do usuário.");
 
       // 2. Salvar na tabela de listagem
       const { error: permError } = await supabase
         .from("user_permissions")
-        .insert({
+        .upsert({
           user_id: userId,
           email: newEmail,
           permissions: newPermissions
@@ -97,7 +103,7 @@ const AdminUsuarios = () => {
       fetchUsers();
     } catch (err: any) {
       console.error('Error adding user:', err);
-      toast.error(err.message || "Erro ao criar usuário. Verifique o SQL.");
+      toast.error(err.message || "Erro inesperado. Verifique os logs.");
     } finally {
       setLoading(false);
     }
@@ -112,7 +118,7 @@ const AdminUsuarios = () => {
       toast.success("Usuário removido.");
       fetchUsers();
     } catch (err: any) {
-      toast.error("Erro ao remover usuário.");
+      toast.error("Erro ao remover usuário via RPC.");
     } finally {
       setLoading(false);
     }
@@ -124,26 +130,107 @@ const AdminUsuarios = () => {
     );
   };
 
-  if (!isAdmin) return <div className="p-8 text-center">Acesso restrito ao Administrador.</div>;
+  const copyRepairSQL = () => {
+    const sql = `-- COPIE E COLE NO SQL EDITOR DO SUPABASE
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
+CREATE TABLE IF NOT EXISTS public.user_permissions (
+    user_id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+    email TEXT,
+    permissions TEXT[] DEFAULT '{}',
+    created_at TIMESTAMPTZ DEFAULT now()
+);
+
+ALTER TABLE public.user_permissions ENABLE ROW LEVEL SECURITY;
+
+CREATE OR REPLACE FUNCTION public.registrar_usuario_sem_confirmar(
+  p_email TEXT,
+  p_password TEXT,
+  p_metadata JSONB DEFAULT '{}'::jsonb
+)
+RETURNS UUID
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = auth, public
+AS $$
+DECLARE
+  new_user_id UUID;
+BEGIN
+  INSERT INTO auth.users (
+    instance_id, id, aud, role, email, encrypted_password,
+    email_confirmed_at, raw_app_meta_data, raw_user_meta_data,
+    created_at, updated_at, confirmation_token, email_change,
+    email_change_sent_at, last_sign_in_at
+  )
+  VALUES (
+    '00000000-0000-0000-0000-000000000000', gen_random_uuid(),
+    'authenticated', 'authenticated', p_email,
+    crypt(p_password, gen_salt('bf')), now(),
+    '{"provider":"email","providers":["email"]}', p_metadata,
+    now(), now(), '', '', now(), now()
+  )
+  RETURNING id INTO new_user_id;
+
+  INSERT INTO auth.identities (
+    id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at
+  )
+  VALUES (
+    gen_random_uuid(), new_user_id,
+    format('{"sub":"%s","email":"%s"}', new_user_id::text, p_email)::jsonb,
+    'email', now(), now(), now()
+  );
+
+  RETURN new_user_id;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION public.deletar_usuario(p_user_id UUID)
+RETURNS VOID
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = auth, public
+AS $$
+BEGIN
+  DELETE FROM auth.users WHERE id = p_user_id;
+  DELETE FROM public.user_permissions WHERE user_id = p_user_id;
+END;
+$$;
+
+GRANT EXECUTE ON FUNCTION public.registrar_usuario_sem_confirmar TO authenticated;
+GRANT EXECUTE ON FUNCTION public.deletar_usuario TO authenticated;
+`;
+    navigator.clipboard.writeText(sql);
+    toast.success("SQL copiado! Cole no Editor SQL do seu Supabase.");
+  };
+
+  if (!isAdmin && !hasPermission('usuarios')) return <div className="p-8 text-center bg-destructive/10 text-destructive rounded-lg border border-destructive/20 m-8">Acesso restrito. Sua conta não tem permissão para gerenciar usuários.</div>;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-in fade-in duration-500">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold">Usuários e Permissões</h2>
-        <Button onClick={() => setIsAdding(!isAdding)} variant={isAdding ? "outline" : "default"}>
-          {isAdding ? "Cancelar" : <><Plus className="w-4 h-4 mr-2" /> Novo Usuário</>}
+        <div className="space-y-1">
+          <h2 className="text-3xl font-bold tracking-tight">Equipe e Acessos</h2>
+          <p className="text-muted-foreground">Gerencie quem pode editar cada seção da rádio.</p>
+        </div>
+        <Button onClick={() => setIsAdding(!isAdding)} variant={isAdding ? "outline" : "default"} className="shadow-md">
+          {isAdding ? "Cancelar" : <><Plus className="w-4 h-4 mr-2" /> Novo Colaborador</>}
         </Button>
       </div>
 
       {error && (
-        <Card className="border-destructive/50 bg-destructive/10">
+        <Card className="border-destructive/50 bg-destructive/5 shadow-inner">
           <CardContent className="pt-6">
-            <div className="flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-destructive" />
-              <div className="text-sm">
-                <p className="font-bold text-destructive">{error}</p>
-                <p className="mt-2 opacity-70">Certifique-se de ter executado as funções RPC no SQL Editor para habilitar o cadastro sem e-mail.</p>
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="flex items-start gap-3">
+                <AlertCircle className="w-6 h-6 text-destructive flex-shrink-0" />
+                <div className="text-sm">
+                  <p className="font-bold text-destructive">Erro de Configuração</p>
+                  <p className="mt-1 opacity-90">{error}</p>
+                </div>
               </div>
+              <Button variant="outline" size="sm" onClick={copyRepairSQL} className="border-destructive/30 hover:bg-destructive/10">
+                <Save className="w-4 h-4 mr-2" /> Copiar SQL Admin
+              </Button>
             </div>
           </CardContent>
         </Card>
