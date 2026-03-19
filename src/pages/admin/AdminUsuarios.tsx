@@ -67,7 +67,7 @@ const AdminUsuarios = () => {
     setLoading(true);
     try {
       // 1. Criar via RPC (Pula confirmação de e-mail)
-      const { data: userId, error: authError } = await supabase.rpc('registrar_usuario_sem_confirmar', {
+      const { data: userId, error: authError } = await (supabase as any).rpc('registrar_usuario_sem_confirmar', {
         p_email: newEmail,
         p_password: newPassword,
         p_metadata: { 
@@ -88,7 +88,7 @@ const AdminUsuarios = () => {
       const { error: permError } = await supabase
         .from("user_permissions")
         .upsert({
-          user_id: userId,
+          user_id: userId as string,
           email: newEmail,
           permissions: newPermissions
         });
@@ -113,7 +113,7 @@ const AdminUsuarios = () => {
     if (!window.confirm(`Remover acesso de ${email}?`)) return;
     setLoading(true);
     try {
-      const { error } = await supabase.rpc('deletar_usuario', { p_user_id: id });
+      const { error } = await (supabase as any).rpc('deletar_usuario', { p_user_id: id });
       if (error) throw error;
       toast.success("Usuário removido.");
       fetchUsers();

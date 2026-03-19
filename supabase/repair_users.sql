@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS public.user_permissions (
 ALTER TABLE public.user_permissions ENABLE ROW LEVEL SECURITY;
 
 -- 3. Função para Registrar Usuário sem Confirmação (Security Definer para bypass)
+DROP FUNCTION IF EXISTS public.registrar_usuario_sem_confirmar;
 CREATE OR REPLACE FUNCTION public.registrar_usuario_sem_confirmar(
   p_email TEXT,
   p_password TEXT,
@@ -46,8 +47,7 @@ BEGIN
     confirmation_token,
     email_change,
     email_change_sent_at,
-    last_sign_in_at,
-    is_super_admin
+    last_sign_in_at
   )
   VALUES (
     '00000000-0000-0000-0000-000000000000',
@@ -64,8 +64,7 @@ BEGIN
     '',
     '',
     now(),
-    now(),
-    false
+    now()
   )
   RETURNING id INTO new_user_id;
 
