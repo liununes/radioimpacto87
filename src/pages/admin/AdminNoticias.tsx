@@ -156,138 +156,169 @@ const AdminNoticias = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-foreground">Notícias</h2>
-
-      {/* Category management */}
-      <Card>
-        <CardHeader><CardTitle className="text-lg">Categorias</CardTitle></CardHeader>
-        <CardContent className="space-y-3">
-          <div className="flex flex-wrap gap-2">
-            {categorias.map(cat => (
-              <div key={cat} className="flex items-center gap-1 bg-muted px-3 py-1.5 rounded-full">
-                <span className="text-sm text-foreground">{cat}</span>
-                {categorias.length > 1 && (
-                  <button onClick={() => handleDeleteCategoria(cat)} className="text-destructive hover:text-destructive/80 ml-1">
-                    <X className="w-3 h-3" />
-                  </button>
-                )}
-              </div>
-            ))}
-          </div>
-          <div className="flex gap-2">
-            <Input value={novaCategoria} onChange={e => setNovaCategoria(e.target.value)} placeholder="Nova categoria..." className="max-w-xs" />
-            <Button size="sm" onClick={handleAddCategoria} className="gap-1"><Plus className="w-3 h-3" /> Adicionar</Button>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Tabs */}
-      <div className="flex gap-2 flex-wrap">
-        <button onClick={() => setTab("Todas")}
-          className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${tab === "Todas" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:text-foreground"}`}>
-          Todas
-        </button>
-        {categorias.map(cat => (
-          <button key={cat} onClick={() => setTab(cat)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${tab === cat ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:text-foreground"}`}>
-            {cat}
-          </button>
-        ))}
+    <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="flex justify-between items-center bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+        <div>
+          <h2 className="text-3xl font-black text-primary tracking-tighter uppercase italic leading-none">Portal de <span className="text-secondary italic">Notícias</span></h2>
+          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Gerencie o conteúdo informativo do seu site</p>
+        </div>
+        <div className="flex gap-4">
+           <Button onClick={() => setTab("Todas")} variant={tab === "Todas" ? "default" : "outline"} className="rounded-xl font-black uppercase tracking-widest text-[10px] h-12 px-6">Todas</Button>
+           {categorias.slice(0, 3).map(cat => (
+             <Button key={cat} onClick={() => setTab(cat)} variant={tab === cat ? "default" : "outline"} className="rounded-xl font-black uppercase tracking-widest text-[10px] h-12 px-6">{cat}</Button>
+           ))}
+        </div>
       </div>
 
-      {/* URL Scraper */}
-      <Card>
-        <CardHeader><CardTitle className="text-lg flex items-center gap-2"><Link className="w-5 h-5 text-primary" /> Importar da URL</CardTitle></CardHeader>
-        <CardContent className="space-y-3">
-          <p className="text-xs text-muted-foreground">Cole a URL de uma notícia e o sistema extrairá automaticamente o título, resumo, foto e fonte.</p>
-          <div className="flex gap-2">
-            <Input value={scrapeUrl} onChange={e => setScrapeUrl(e.target.value)} placeholder="https://exemplo.com/noticia..." className="flex-1" />
-            <Button onClick={handleScrape} disabled={isScraping || !scrapeUrl.trim()} className="gap-2 shrink-0">
-              {isScraping ? <Loader2 className="w-4 h-4 animate-spin" /> : <Link className="w-4 h-4" />}
-              {isScraping ? "Extraindo..." : "Extrair"}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+        <div className="lg:col-span-8 space-y-10">
+           {/* URL Scraper */}
+           <Card className="rounded-[2.5rem] border-none shadow-xl bg-white overflow-hidden">
+             <CardHeader className="bg-primary/5 p-8 border-b border-gray-100/50">
+               <CardTitle className="text-lg font-black uppercase tracking-tight text-primary flex items-center gap-3">
+                 <Link className="w-5 h-5 text-secondary" /> Importação Inteligente
+               </CardTitle>
+             </CardHeader>
+             <CardContent className="p-8 space-y-6">
+               <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest leading-relaxed">
+                 Cole o link de qualquer portal de notícias para que nossa IA extraia o conteúdo automaticamente.
+               </p>
+               <div className="flex gap-4">
+                 <Input 
+                   value={scrapeUrl} 
+                   onChange={e => setScrapeUrl(e.target.value)} 
+                   placeholder="https://exemplo.com/noticia..." 
+                   className="flex-1 h-14 rounded-2xl border-gray-100 bg-gray-50 focus-visible:ring-primary font-medium" 
+                 />
+                 <Button onClick={handleScrape} disabled={isScraping || !scrapeUrl.trim()} className="h-14 px-10 rounded-2xl bg-secondary hover:bg-secondary/90 text-primary font-black uppercase tracking-widest text-[10px] shadow-lg shadow-yellow-400/10">
+                   {isScraping ? <Loader2 className="w-5 h-5 animate-spin" /> : "Extrair Dados"}
+                 </Button>
+               </div>
+             </CardContent>
+           </Card>
 
-      {/* Form */}
-      <Card>
-        <CardHeader><CardTitle className="text-lg">{editId ? "Editar Notícia" : "Nova Notícia"}</CardTitle></CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label>Título</Label>
-              <Input value={titulo} onChange={e => setTitulo(e.target.value)} placeholder="Título da notícia" />
-            </div>
-            <div className="space-y-2">
-              <Label>Categoria</Label>
-              <select value={categoria} onChange={e => setCategoria(e.target.value)}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-                {categorias.map(cat => <option key={cat} value={cat}>{cat}</option>)}
-              </select>
-            </div>
-          </div>
-          <div className="space-y-2">
-            <Label>Resumo</Label>
-            <Textarea value={resumo} onChange={e => setResumo(e.target.value)} rows={2} placeholder="Resumo curto da notícia..." />
-          </div>
-          <div className="space-y-2">
-            <Label>Conteúdo Completo</Label>
-            <Textarea value={conteudo} onChange={e => setConteudo(e.target.value)} rows={5} placeholder="Texto completo..." />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label>Fonte</Label>
-              <Input value={fonte} onChange={e => setFonte(e.target.value)} placeholder="Nome do site/jornal" />
-            </div>
-            <div className="space-y-2">
-              <Label>URL Original</Label>
-              <Input value={urlOriginal} onChange={e => setUrlOriginal(e.target.value)} placeholder="https://..." />
-            </div>
-          </div>
-          <div className="space-y-2">
-            <Label>URL da Imagem</Label>
-            <Input value={imagem} onChange={e => setImagem(e.target.value)} placeholder="https://... (preenchido automaticamente ao importar)" />
-          </div>
-          {imagem && <img src={imagem} alt="Preview" className="h-24 rounded-lg object-cover border border-border" />}
-          <div className="flex gap-2">
-            <Button onClick={handleSave} className="gap-2" disabled={loading}>
-              {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-              {editId ? "Atualizar" : "Publicar"}
-            </Button>
-            {editId && <Button variant="ghost" onClick={resetForm} className="gap-2"><X className="w-4 h-4" /> Cancelar</Button>}
-          </div>
-        </CardContent>
-      </Card>
+           {/* Form Card */}
+           <Card className="rounded-[2.5rem] border-none shadow-xl bg-white overflow-hidden">
+             <CardHeader className="p-8 border-b border-gray-50">
+               <CardTitle className="text-xl font-black uppercase tracking-tight text-primary italic">
+                 {editId ? "Editando Publicação" : "Nova Publicação"}
+               </CardTitle>
+             </CardHeader>
+             <CardContent className="p-8 space-y-8">
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                 <div className="space-y-3">
+                   <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Título da Notícia</Label>
+                   <Input value={titulo} onChange={e => setTitulo(e.target.value)} placeholder="O que está acontecendo?" className="h-12 rounded-xl border-gray-100 shadow-sm" />
+                 </div>
+                 <div className="space-y-3">
+                   <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Categoria do Post</Label>
+                   <select value={categoria} onChange={e => setCategoria(e.target.value)}
+                     className="flex h-12 w-full rounded-xl border border-gray-100 bg-background px-4 text-sm font-bold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+                     {categorias.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                   </select>
+                 </div>
+               </div>
+               
+               <div className="space-y-3">
+                 <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Resumo de Chamada</Label>
+                 <Textarea value={resumo} onChange={e => setResumo(e.target.value)} rows={2} className="rounded-xl border-gray-100 shadow-sm p-4 font-medium" />
+               </div>
 
-      {/* List */}
-      <div className="space-y-3">
-        {filtered.map(n => (
-          <Card key={n.id}>
-            <CardContent className="p-4 flex items-center gap-4">
-              {n.imagem && <img src={n.imagem} alt={n.titulo} className="w-16 h-16 rounded-lg object-cover border border-border" />}
-              <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-foreground text-sm">{n.titulo}</h3>
-                <p className="text-xs text-muted-foreground line-clamp-1">{n.resumo}</p>
-                <div className="flex items-center gap-2 mt-1">
-                  <span className="text-xs text-muted-foreground"> {n.categoria}</span>
-                  {n.fonte && <span className="text-xs text-primary">Fonte: {n.fonte}</span>}
-                  {n.url && (
-                    <a href={n.url} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline flex items-center gap-0.5">
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
-                  )}
-                </div>
-              </div>
-              <div className="flex gap-1">
-                <Button size="icon" variant="ghost" onClick={() => handleEdit(n)}><Edit2 className="w-4 h-4" /></Button>
-                <Button size="icon" variant="ghost" className="text-destructive" onClick={() => handleDelete(n.id)}><Trash2 className="w-4 h-4" /></Button>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-        {filtered.length === 0 && <p className="text-center text-muted-foreground py-8">Nenhuma notícia na categoria "{tab}".</p>}
+               <div className="space-y-3">
+                 <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Conteúdo Detalhado</Label>
+                 <Textarea value={conteudo} onChange={e => setConteudo(e.target.value)} rows={8} className="rounded-xl border-gray-100 shadow-sm p-6 font-medium leading-relaxed" />
+               </div>
+
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                 <div className="space-y-3">
+                   <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Fonte / Veículo</Label>
+                   <Input value={fonte} onChange={e => setFonte(e.target.value)} className="h-12 rounded-xl border-gray-100" />
+                 </div>
+                 <div className="space-y-3">
+                   <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Link da Imagem Principal</Label>
+                   <Input value={imagem} onChange={e => setImagem(e.target.value)} className="h-12 rounded-xl border-gray-100" />
+                 </div>
+               </div>
+
+               {imagem && (
+                 <div className="relative group rounded-[2rem] overflow-hidden border-4 border-gray-50 h-64 shadow-inner bg-gray-50 flex items-center justify-center">
+                    <img src={imagem} alt="Preview" className="max-h-full object-contain" />
+                 </div>
+               )}
+
+               <div className="flex gap-4 pt-4">
+                 <Button onClick={handleSave} className="h-14 px-12 rounded-2xl bg-primary hover:bg-primary/95 text-white font-black uppercase text-[10px] tracking-widest flex items-center gap-3 transition-all active:scale-95 shadow-lg shadow-blue-900/10" disabled={loading}>
+                   {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
+                   {editId ? "Atualizar Notícia" : "Publicar Notícia"}
+                 </Button>
+                 {editId && (
+                   <Button variant="ghost" onClick={resetForm} className="h-14 px-8 rounded-2xl font-black uppercase text-[10px] tracking-widest text-gray-400 hover:text-red-500 hover:bg-red-50">
+                     Cancelar
+                   </Button>
+                 )}
+               </div>
+             </CardContent>
+           </Card>
+        </div>
+
+        <div className="lg:col-span-4 space-y-10">
+           {/* Category Management */}
+           <Card className="rounded-[2.5rem] border-none shadow-xl bg-white overflow-hidden">
+             <CardHeader className="p-8 pb-4">
+               <CardTitle className="text-xl font-black uppercase tracking-tight text-primary italic">Categorias</CardTitle>
+             </CardHeader>
+             <CardContent className="p-8 pt-4 space-y-8">
+               <div className="flex flex-wrap gap-2">
+                 {categorias.map(cat => (
+                   <div key={cat} className="group relative flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-xl border border-gray-100/50 hover:bg-white hover:shadow-md transition-all">
+                     <span className="text-[11px] font-bold text-primary uppercase">{cat}</span>
+                     {categorias.length > 1 && (
+                       <button 
+                         onClick={() => handleDeleteCategoria(cat)} 
+                         className="text-gray-300 hover:text-red-500 transition-colors"
+                        >
+                         <X className="w-3.5 h-3.5" />
+                       </button>
+                     )}
+                   </div>
+                 ))}
+               </div>
+               <div className="pt-6 border-t border-gray-50 flex flex-col gap-3">
+                 <Input value={novaCategoria} onChange={e => setNovaCategoria(e.target.value)} placeholder="NOME DA CATEGORIA..." className="h-12 rounded-xl border-gray-100 bg-gray-50 font-black text-[10px] uppercase tracking-widest text-center" />
+                 <Button onClick={handleAddCategoria} className="h-12 rounded-xl bg-gray-100 text-primary border-none hover:bg-primary hover:text-white font-black uppercase text-[10px] tracking-widest">
+                   Adicionar Nova
+                 </Button>
+               </div>
+             </CardContent>
+           </Card>
+
+           {/* Feed */}
+           <div className="space-y-6">
+             <div className="flex items-center justify-between px-4">
+               <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Feed de Publicações</h4>
+               <span className="text-[10px] font-black text-primary bg-secondary/20 px-2 py-0.5 rounded uppercase leading-none">{filtered.length} Ativas</span>
+             </div>
+             <div className="space-y-4">
+               {filtered.map(n => (
+                 <Card key={n.id} className="group rounded-[1.8rem] border-none shadow-md overflow-hidden bg-white hover:shadow-xl transition-all duration-300 cursor-default">
+                   <CardContent className="p-4 flex gap-4">
+                     <div className="w-20 h-20 rounded-2xl overflow-hidden bg-gray-100 shrink-0 shadow-inner">
+                        <img src={n.imagem || ""} alt={n.titulo} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
+                     </div>
+                     <div className="flex-1 flex flex-col justify-center min-w-0">
+                        <h5 className="font-black text-xs text-primary uppercase tracking-tight line-clamp-1 group-hover:text-secondary transition-colors italic">{n.titulo}</h5>
+                        <p className="text-[10px] text-gray-400 font-medium line-clamp-2 mt-1 leading-tight">{n.resumo}</p>
+                        <div className="flex items-center gap-3 mt-3">
+                           <button onClick={() => handleEdit(n)} className="p-1 px-3 bg-gray-50 text-[9px] font-black uppercase text-primary rounded-lg border border-gray-100 hover:bg-primary hover:text-white transition-all">Editar</button>
+                           <button onClick={() => handleDelete(n.id)} className="p-1 px-3 bg-red-50 text-[9px] font-black uppercase text-red-500 rounded-lg border border-red-100 hover:bg-red-500 hover:text-white transition-all">Excluir</button>
+                        </div>
+                     </div>
+                   </CardContent>
+                 </Card>
+               ))}
+             </div>
+           </div>
+        </div>
       </div>
     </div>
   );

@@ -57,58 +57,73 @@ const AdminPedidos = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+      <div className="flex justify-between items-center bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
         <div>
-          <h2 className="text-2xl font-bold text-foreground">Pedidos Musicais</h2>
-          <p className="text-sm text-muted-foreground">Pedidos enviados pelos ouvintes através do site.</p>
+          <h2 className="text-3xl font-black text-primary tracking-tighter uppercase italic leading-none">Central de <span className="text-secondary italic">Pedidos</span></h2>
+          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Músicas e recados enviados pelos ouvintes em tempo real</p>
         </div>
-        <Button variant="outline" size="sm" onClick={fetchPedidos}>Atualizar Lista</Button>
+        <Button onClick={fetchPedidos} className="rounded-xl font-black uppercase tracking-widest text-[10px] h-12 px-8 bg-primary text-white hover:bg-primary/90 transition-all shadow-lg shadow-blue-900/10">Atualizar Agora</Button>
       </div>
 
-      <div className="space-y-3">
+      <div className="grid grid-cols-1 gap-6">
         {pedidos.map(pedido => (
-          <Card key={pedido.id} className={pedido.status === 'tocada' ? 'opacity-60 grayscale' : ''}>
-            <CardContent className="p-4 flex items-center gap-4">
-              <Music className={`w-8 h-8 shrink-0 ${pedido.status === 'tocada' ? 'text-muted-foreground' : 'text-primary'}`} />
-              <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-foreground">{pedido.musica} {pedido.artista && <span className="text-muted-foreground font-normal"> - {pedido.artista}</span>}</h3>
-                <p className="text-sm text-muted-foreground">Ouvinte: {pedido.nome || "Anônimo"}</p>
-                <div className="flex gap-2 mt-1 items-center">
-                  <p className="text-xs text-muted-foreground">{new Date(pedido.created_at).toLocaleString('pt-BR')}</p>
-                  <span className={`text-[10px] px-2 py-0.5 rounded-full uppercase font-bold ${
-                    pedido.status === 'tocada' ? 'bg-green-500/20 text-green-500' : 
-                    pedido.status === 'recusada' ? 'bg-red-500/20 text-red-500' : 'bg-yellow-500/20 text-yellow-500'
-                  }`}>
-                    {pedido.status || 'pendente'}
-                  </span>
-                </div>
+          <Card key={pedido.id} className={`group rounded-[2rem] border-none shadow-md hover:shadow-xl transition-all duration-300 bg-white overflow-hidden p-8 ${pedido.status === 'tocada' ? 'opacity-60 saturate-50' : ''}`}>
+            <CardContent className="p-0 flex flex-col md:flex-row items-center gap-8">
+              <div className={`w-20 h-20 rounded-[1.5rem] flex items-center justify-center shrink-0 shadow-inner ${pedido.status === 'tocada' ? 'bg-gray-100' : 'bg-primary/5'}`}>
+                 <Music className={`w-8 h-8 ${pedido.status === 'tocada' ? 'text-gray-300' : 'text-primary'}`} />
               </div>
-              <div className="flex gap-1">
-                {pedido.status !== 'tocada' && (
-                  <Button size="icon" variant="ghost" className="text-green-500" onClick={() => handleUpdateStatus(pedido.id, 'tocada')} title="Marcar como Tocada">
-                    <CheckCircle2 className="w-4 h-4" />
-                  </Button>
-                )}
-                {pedido.status === 'pendente' && (
-                  <Button size="icon" variant="ghost" className="text-red-500" onClick={() => handleUpdateStatus(pedido.id, 'recusada')} title="Recusar">
-                    <XCircle className="w-4 h-4" />
-                  </Button>
-                )}
-                <Button size="icon" variant="ghost" className="text-destructive" onClick={() => handleDelete(pedido.id)}>
-                  <Trash2 className="w-4 h-4" />
-                </Button>
+              
+              <div className="flex-1 text-center md:text-left space-y-2">
+                 <h3 className="text-xl font-black text-primary uppercase tracking-tight italic">
+                    {pedido.musica} 
+                    {pedido.artista && <span className="text-secondary font-bold ml-2">— {pedido.artista}</span>}
+                 </h3>
+                 <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
+                    <span className="text-[11px] font-black text-gray-400 uppercase tracking-widest">Ouvinte: <span className="text-primary">{pedido.nome || "ANÔNIMO"}</span></span>
+                    <span className="text-[11px] font-black text-gray-300 uppercase tracking-widest">•</span>
+                    <span className="text-[11px] font-black text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                       <div className="w-2 h-2 rounded-full bg-accent animate-pulse" /> {new Date(pedido.created_at).toLocaleTimeString('pt-BR')}
+                    </span>
+                 </div>
+              </div>
+
+              <div className="flex items-center gap-3 bg-gray-50/50 p-3 rounded-3xl border border-gray-100">
+                 <span className={`text-[9px] px-4 py-2 rounded-xl font-black uppercase tracking-widest ${
+                    pedido.status === 'tocada' ? 'bg-green-100 text-green-600' : 
+                    pedido.status === 'recusada' ? 'bg-red-100 text-red-600' : 'bg-secondary text-primary shadow-lg shadow-yellow-400/20'
+                 }`}>
+                    {pedido.status || 'pendente'}
+                 </span>
+                 
+                 <div className="h-6 w-px bg-gray-200 mx-2" />
+                 
+                 <div className="flex gap-1">
+                    {pedido.status !== 'tocada' && (
+                      <Button size="icon" variant="ghost" className="h-10 w-10 rounded-xl text-green-500 hover:bg-green-50" onClick={() => handleUpdateStatus(pedido.id, 'tocada')} title="Atender Pedido">
+                        <CheckCircle2 className="w-5 h-5" />
+                      </Button>
+                    )}
+                    {pedido.status === 'pendente' && (
+                      <Button size="icon" variant="ghost" className="h-10 w-10 rounded-xl text-red-400 hover:bg-red-50" onClick={() => handleUpdateStatus(pedido.id, 'recusada')} title="Ignorar">
+                        <XCircle className="w-5 h-5" />
+                      </Button>
+                    )}
+                    <Button size="icon" variant="ghost" className="h-10 w-10 rounded-xl text-gray-300 hover:text-red-500 hover:bg-red-50" onClick={() => handleDelete(pedido.id)}>
+                      <Trash2 className="w-5 h-5" />
+                    </Button>
+                 </div>
               </div>
             </CardContent>
           </Card>
         ))}
+        
         {!loading && pedidos.length === 0 && (
-          <div className="text-center text-muted-foreground py-12">
-            <Music className="w-12 h-12 mx-auto mb-3 opacity-30" />
-            <p>Nenhum pedido musical recebido.</p>
+          <div className="py-32 bg-gray-50 rounded-[4rem] border-4 border-dashed border-white flex flex-col items-center justify-center text-gray-200 space-y-4">
+            <Music className="w-20 h-20 opacity-10" />
+            <p className="text-[11px] font-black uppercase tracking-[0.5em]">Nenhum pedido recente</p>
           </div>
         )}
-        {loading && <p className="text-center text-muted-foreground py-12">Carregando pedidos...</p>}
       </div>
     </div>
   );
