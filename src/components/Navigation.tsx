@@ -61,17 +61,32 @@ const Navigation = () => {
 
         {/* Desktop Menu - Improved Layout to avoid 'embolado' */}
         <div className="hidden lg:flex items-center justify-center flex-1 gap-4 xl:gap-8">
-          {navItems.map((item) => (
-            <Link
-              key={item.label}
-              to={item.href.startsWith("#") ? `/${item.href}` : item.href}
-              onClick={(e) => handleNavClick(e, item.href)}
-              className="text-[10px] xl:text-[11px] font-black tracking-[0.15em] text-white/90 hover:text-[var(--clube-yellow)] transition-all relative group py-2 whitespace-nowrap"
-            >
-              {item.label}
-              <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[var(--clube-yellow)] scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
-            </Link>
-          ))}
+          {navItems.map((item, idx) => {
+            const isFirst = idx === 0;
+            if (isFirst) {
+              return (
+                <Link
+                  key={item.label}
+                  to={item.href.startsWith("#") ? `/${item.href}` : item.href}
+                  onClick={(e) => handleNavClick(e, item.href)}
+                  className="bg-[var(--clube-yellow)] text-[var(--clube-blue)] px-6 py-2.5 rounded-full text-[10px] xl:text-[11px] font-black tracking-[0.15em] hover:scale-105 transition-all uppercase shadow-lg shadow-yellow-400/20 whitespace-nowrap"
+                >
+                  {item.label}
+                </Link>
+              );
+            }
+            return (
+              <Link
+                key={item.label}
+                to={item.href.startsWith("#") ? `/${item.href}` : item.href}
+                onClick={(e) => handleNavClick(e, item.href)}
+                className="text-[10px] xl:text-[11px] font-black tracking-[0.15em] text-white/90 hover:text-[var(--clube-yellow)] transition-all relative group py-2 whitespace-nowrap"
+              >
+                {item.label}
+                <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[var(--clube-yellow)] scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+              </Link>
+            );
+          })}
         </div>
 
         {/* Right Actions */}
