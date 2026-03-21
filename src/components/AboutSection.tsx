@@ -26,60 +26,73 @@ const AboutSection = () => {
   if (loading) return null;
 
   return (
-    <section id="sobre" className="py-16 bg-card/30">
-      <div className="container px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-          <div className="space-y-6">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-                <Info className="w-6 h-6 text-primary" />
-              </div>
-              <h2 className="text-3xl font-display font-bold text-foreground">
-                Sobre a <span className="text-primary">{data.titulo || "Rádio"}</span>
+    <section id="sobre" className="py-32 bg-transparent relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] -z-10" />
+      <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-primary/10 rounded-full blur-[100px] -z-10" />
+      
+      <div className="container mx-auto px-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+          <div className="space-y-10">
+            <div className="space-y-4">
+              <span className="text-[10px] font-black text-primary uppercase tracking-[0.5em] mb-4 block animate-pulse">Nossa História</span>
+              <h2 className="text-5xl md:text-7xl font-black italic tracking-tighter uppercase leading-none">
+                Sobre a <span className="text-primary italic">Rádio</span>
               </h2>
+              <div className="w-20 h-2 bg-primary rounded-full" />
             </div>
             
-            <p className="text-lg text-muted-foreground leading-relaxed whitespace-pre-wrap">
-              {data.descricao || "Bem-vindo à nossa rádio online. Levando a melhor programação até você!"}
+            <p className="text-xl text-foreground/70 leading-relaxed font-medium whitespace-pre-wrap max-w-xl">
+              {data.descricao || "A rádio que toca você com a melhor programação, música de qualidade e informação em tempo real para toda a nossa região."}
             </p>
+
+            <div className="flex gap-4">
+               <button className="btn-premium">Saiba Mais</button>
+               <button className="px-8 py-4 rounded-2xl border border-white/10 font-black uppercase tracking-widest text-xs hover:bg-white/5 transition-all">Programação</button>
+            </div>
           </div>
 
-          <div id="contato" className="space-y-8 bg-card p-8 rounded-2xl border border-border/50 shadow-xl">
-            <h3 className="text-xl font-bold text-foreground mb-4">Informações de Contato</h3>
+          <div id="contato" className="card-premium p-12 space-y-10 bg-black/40 border-primary/10 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-110 transition-transform duration-700">
+              <Info className="w-32 h-32 text-primary" />
+            </div>
             
-            <div className="space-y-6">
+            <h3 className="text-2xl font-black italic uppercase tracking-tight text-white flex items-center gap-4 relative z-10">
+              <div className="w-8 h-px bg-primary" /> Contato Direto
+            </h3>
+            
+            <div className="grid grid-cols-1 gap-8 relative z-10">
               {data.endereco && (
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-full bg-secondary/20 flex items-center justify-center shrink-0">
-                    <MapPin className="w-5 h-5 text-secondary" />
+                <div className="flex items-start gap-6 group/item">
+                  <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 group-hover/item:border-primary/50 transition-colors">
+                    <MapPin className="w-6 h-6 text-primary" />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-foreground">Endereço</p>
-                    <p className="text-muted-foreground">{data.endereco}</p>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-1">Localização</p>
+                    <p className="text-lg font-bold text-foreground/80 leading-tight">{data.endereco}</p>
                   </div>
                 </div>
               )}
 
               {data.telefone && (
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-full bg-secondary/20 flex items-center justify-center shrink-0">
-                    <Phone className="w-5 h-5 text-secondary" />
+                <div className="flex items-start gap-6 group/item">
+                  <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 group-hover/item:border-primary/50 transition-colors">
+                    <Phone className="w-6 h-6 text-primary" />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-foreground">Telefone</p>
-                    <p className="text-muted-foreground">{data.telefone}</p>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-1">Central de Ouvintes</p>
+                    <p className="text-2xl font-black text-white">{data.telefone}</p>
                   </div>
                 </div>
               )}
 
               {data.email && (
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-full bg-secondary/20 flex items-center justify-center shrink-0">
-                    <Mail className="w-5 h-5 text-secondary" />
+                <div className="flex items-start gap-6 group/item">
+                  <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 group-hover/item:border-primary/50 transition-colors">
+                    <Mail className="w-6 h-6 text-primary" />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-foreground">E-mail</p>
-                    <p className="text-muted-foreground">{data.email}</p>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-1">Publicidade e SAC</p>
+                    <p className="text-lg font-bold text-white lowercase">{data.email}</p>
                   </div>
                 </div>
               )}

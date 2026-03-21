@@ -19,29 +19,34 @@ const GaleriaSection = () => {
   const images = fotos.map(f => ({ src: f.imagem, alt: f.descricao || "Foto" }));
 
   return (
-    <section id="galeria" className="py-12">
-      <div className="container px-4">
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mb-8 text-center">
-          Galeria de Fotos
-        </h2>
+    <section id="galeria" className="py-24 bg-black/40">
+      <div className="container mx-auto px-6">
+        <div className="flex flex-col items-center mb-16">
+          <h2 className="text-4xl md:text-6xl font-black italic tracking-tighter uppercase text-center leading-none">
+            Momentos <span className="text-primary italic">Impacto</span>
+          </h2>
+          <div className="w-24 h-1.5 bg-primary mt-6 rounded-full shadow-[0_0_15px_#ff1e1e]" />
+        </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {fotos.map((foto, idx) => (
             <div
               key={foto.id}
-              className="relative group rounded-lg overflow-hidden border border-border cursor-pointer"
+              className="card-premium aspect-square relative group cursor-pointer border-white/5"
               onClick={() => setLightboxIndex(idx)}
             >
               <img
                 src={foto.imagem}
                 alt={foto.descricao}
-                className="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-300"
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
               />
-              {foto.descricao && (
-                <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-background/80 to-transparent p-2">
-                  <p className="text-xs text-foreground truncate">{foto.descricao}</p>
-                </div>
-              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-6">
+                {foto.descricao && (
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white animate-in slide-in-from-bottom-2">
+                    {foto.descricao}
+                  </p>
+                )}
+              </div>
             </div>
           ))}
         </div>

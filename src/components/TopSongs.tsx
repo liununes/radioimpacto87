@@ -1,4 +1,4 @@
-import { Trophy } from "lucide-react";
+import { Trophy, Music } from "lucide-react";
 import { getThemeConfig } from "@/lib/themeStore";
 import { useEffect, useState } from "react";
 import { getSiteConfig } from "@/lib/radioStore";
@@ -31,30 +31,38 @@ const TopSongs = () => {
   const textClass = alignment === 'left' ? 'text-left' : alignment === 'right' ? 'text-right' : 'text-center';
 
   return (
-    <section className="py-12 border-t border-border/10">
-      <div className="container px-4">
-        <div className={`max-w-2xl flex flex-col ${alignClass}`}>
-          <div className={`flex items-center gap-3 mb-8 ${textClass}`}>
-            <Trophy className="w-8 h-8 text-secondary" />
-            <h2 className="text-3xl font-display font-bold">
-              Top 3 <span className="text-secondary">Mais Tocadas</span>
-            </h2>
+    <section className="py-24 border-t border-white/5 bg-black/20">
+      <div className="container mx-auto px-6">
+        <div className={`max-w-4xl flex flex-col ${alignClass}`}>
+          <div className={`flex flex-col gap-2 mb-16 ${textClass}`}>
+             <span className="text-primary font-black uppercase tracking-[0.5em] text-[10px]">As Favoritas</span>
+            <div className={`flex items-center gap-4 ${alignment === 'center' ? 'justify-center' : alignment === 'right' ? 'justify-end' : ''}`}>
+               <Trophy className="w-10 h-10 text-primary drop-shadow-[0_0_10px_#ff1e1e]" />
+               <h2 className="text-4xl md:text-6xl font-black italic tracking-tighter uppercase leading-none">
+                Top 3 <span className="text-primary italic">Explosão</span>
+              </h2>
+            </div>
           </div>
 
-          <div className="space-y-4 w-full">
+          <div className="grid grid-cols-1 gap-6 w-full">
             {songs.map((song, i) => (
               <div
                 key={song.rank}
-                className="card-glass flex items-center gap-6 p-5 hover:border-primary/30 transition-all group scale-100 hover:scale-[1.02] transform duration-200"
+                className="card-premium flex items-center gap-8 p-8 group hover:-translate-y-1 transition-all duration-500 bg-white/5 border-white/5 hover:border-primary/20"
               >
-                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${rankColors[i]} flex items-center justify-center text-xl font-bold text-foreground shadow-lg shrink-0`}>
+                <div className={`w-16 h-16 md:w-20 md:h-20 rounded-3xl bg-gradient-to-br ${rankColors[i]} flex items-center justify-center text-3xl font-black italic text-white shadow-[0_10px_30px_rgba(0,0,0,0.5)] shrink-0 group-hover:scale-110 transition-transform duration-500`}>
                   {song.rank}°
                 </div>
-                <div className="flex-1">
-                  <p className="text-lg font-bold text-foreground group-hover:text-primary transition-colors line-clamp-1">
+                <div className="flex-1 min-w-0">
+                  <p className="text-xl md:text-3xl font-black italic text-white group-hover:text-primary transition-colors line-clamp-1 uppercase tracking-tighter">
                     {song.title}
                   </p>
-                  <p className="text-muted-foreground">{song.artist}</p>
+                  <p className="text-sm md:text-lg font-black uppercase tracking-[0.2em] text-foreground/40 mt-1">{song.artist}</p>
+                </div>
+                <div className="hidden md:block">
+                   <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:border-primary transition-colors">
+                      <Music className="w-5 h-5 text-white/20 group-hover:text-primary transition-colors" />
+                   </div>
                 </div>
               </div>
             ))}

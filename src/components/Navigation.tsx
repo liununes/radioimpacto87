@@ -54,10 +54,10 @@ const Navigation = () => {
   };
 
   return (
-    <nav className="bg-nav border-b border-border/30">
-      <div className="container px-4">
+    <nav className="bg-black/20 border-b border-white/5 backdrop-blur-md sticky top-[100px] z-[40]">
+      <div className="container mx-auto px-6">
         {/* Desktop */}
-        <div className="hidden md:flex items-center justify-center gap-2 py-3">
+        <div className="hidden md:flex items-center justify-center gap-1 py-1">
           {navItems.map((item) => (
             <a
               key={item.label}
@@ -71,21 +71,24 @@ const Navigation = () => {
         </div>
 
         {/* Mobile */}
-        <div className="md:hidden flex items-center justify-between py-3">
-          <span className="text-sm font-semibold text-foreground">Menu</span>
-          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-foreground p-1">
-            {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        <div className="md:hidden flex items-center justify-between py-2">
+          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/80 flex items-center gap-2">
+            <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" />
+            Navegação
+          </span>
+          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-foreground p-1.5 bg-white/5 rounded-lg border border-white/10">
+            {isMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
           </button>
         </div>
 
         {isMenuOpen && (
-          <div className="md:hidden pb-4 flex flex-col gap-1">
+          <div className="md:hidden py-4 flex flex-col gap-2 border-t border-white/5 animate-in slide-in-from-top duration-300">
             {navItems.map((item) => (
               <a
                 key={item.label}
                 href={item.href}
                 onClick={(e) => handleClick(e, item)}
-                className={`nav-link ${activeItem === item.label ? "nav-link-active" : ""}`}
+                className={`nav-link text-center ${activeItem === item.label ? "nav-link-active" : ""}`}
               >
                 {item.label}
               </a>
