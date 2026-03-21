@@ -3,7 +3,7 @@ import Navigation from "@/components/Navigation";
 import HeroCarousel from "@/components/HeroCarousel";
 import WeatherWidget from "@/components/WeatherWidget";
 import TopSongs from "@/components/TopSongs";
-import EnhancedNewsSection from "@/components/EnhancedNewsSection";
+import { FeaturedNews, RemainingNews, useNews } from "@/components/EnhancedNewsSection";
 import GaleriaSection from "@/components/GaleriaSection";
 import AboutSection from "@/components/AboutSection";
 import Footer from "@/components/Footer";
@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 
 const Index = () => {
   const [theme, setTheme] = useState(getThemeConfig());
+  const { news, loading } = useNews();
 
   useEffect(() => {
     const syncTheme = async () => {
@@ -56,11 +57,13 @@ const Index = () => {
       <RadioPlayer />
       <Navigation />
       
-      {theme.showNews && <EnhancedNewsSection showNews={theme.showNews} />}
+      {theme.showNews && <FeaturedNews news={news} loading={loading} />}
       
       <div className="w-full">
         <HeroCarousel />
       </div>
+
+      {theme.showNews && <RemainingNews news={news} loading={loading} />}
       
       {theme.showTopSongs && topSongsPos === 'hero' && <TopSongs />}
       
