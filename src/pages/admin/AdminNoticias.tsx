@@ -35,13 +35,13 @@ const AdminNoticias = () => {
     const [newsData, cats] = await Promise.all([getNoticias(), getCategorias()]);
     setNoticias(newsData);
     setCategorias(cats);
-    if (tab === "" && cats.length > 0) setTab(cats[0]);
-    if (categoria === "" && cats.length > 0) setCategoria(cats[0]);
+    if (!tab) setTab("Todas");
+    if (!categoria && cats.length > 0) setCategoria(cats[0]);
   };
 
   useEffect(() => { fetchData(); }, []);
 
-  const filtered = noticias.filter(n => n.categoria === tab);
+  const filtered = tab === "Todas" ? noticias : noticias.filter(n => n.categoria === tab);
 
   const handleScrape = async () => {
     if (!scrapeUrl.trim()) return;
@@ -49,10 +49,7 @@ const AdminNoticias = () => {
     try {
       const targetUrl = scrapeUrl.trim().startsWith('http') ? scrapeUrl.trim() : `https://${scrapeUrl.trim()}`;
       
-      // Usando Microlink API - Altamente confiável para extração de notícias e fotos
-      // Gratuito para uso moderado, perfeito para VPS self-hosted
       const response = await fetch(`https://api.microlink.io?url=${encodeURIComponent(targetUrl)}&palette=true&audio=true&video=true&iframe=true`);
-      
       const res = await response.json();
       
       if (res.status !== 'success') {
@@ -61,14 +58,13 @@ const AdminNoticias = () => {
       
       const data = res.data;
 
-      // Mapeamento dos dados extraídos pela Microlink
       setTitulo(data.title || "");
       setResumo(data.description || "");
-      setConteudo(data.description || ""); // Microlink foca em metadados, usamos a descrição como base para o conteúdo inicial
+      setConteudo(data.description || ""); 
       setImagem(data.image?.url || data.logo?.url || "");
       setFonte(data.publisher || new URL(targetUrl).hostname.replace('www.', ''));
       setUrlOriginal(data.url || targetUrl);
-      setCategoria(tab || (categorias[0] || ""));
+      setCategoria(tab !== "Todas" ? tab : (categorias[0] || ""));
       
       toast.success("Dados importados com sucesso!");
     } catch (err: any) {
@@ -88,7 +84,7 @@ const AdminNoticias = () => {
       titulo,
       resumo,
       conteudo,
-      categoria: categoria || tab || categorias[0],
+      categoria: categoria || (tab !== "Todas" ? tab : categorias[0]),
       imagem,
       fonte,
       url: urlOriginal
@@ -178,6 +174,10 @@ const AdminNoticias = () => {
 
       {/* Tabs */}
       <div className="flex gap-2 flex-wrap">
+        <button onClick={() => setTab("Todas")}
+          className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${tab === "Todas" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:text-foreground"}`}>
+          Todas
+        </button>
         {categorias.map(cat => (
           <button key={cat} onClick={() => setTab(cat)}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${tab === cat ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:text-foreground"}`}>

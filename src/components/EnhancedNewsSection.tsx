@@ -70,14 +70,15 @@ const EnhancedNewsSection = ({ showNews = true }: EnhancedNewsSectionProps) => {
               )}
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <span className={`text-xs px-2 py-1 rounded-full font-semibold ${
-                    item.categoria === 'local' ? 'bg-blue-100 text-blue-800' :
-                    item.categoria === 'regional' ? 'bg-green-100 text-green-800' :
-                    'bg-purple-100 text-purple-800'
-                  }`}>
-                    {item.categoria === 'local' ? 'Local' :
-                     item.categoria === 'regional' ? 'Regional' : 'Nacional'}
-                  </span>
+                  {item.categoria && (
+                    <span className={`text-xs px-2 py-1 rounded-full font-semibold ${
+                      item.categoria.toLowerCase() === 'local' ? 'bg-blue-100 text-blue-800' :
+                      item.categoria.toLowerCase() === 'regional' ? 'bg-green-100 text-green-800' :
+                      'bg-purple-100 text-purple-800'
+                    }`}>
+                      {item.categoria}
+                    </span>
+                  )}
                 </div>
                 <CardTitle className="text-lg line-clamp-2">{item.titulo}</CardTitle>
               </CardHeader>
