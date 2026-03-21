@@ -48,21 +48,29 @@ const Index = () => {
       <Navigation />
       
       <main className="relative z-10">
-        {/* Notícias no topo, como solicitado - Estilo Universal */}
-        <section id="noticias" className="pt-8 md:pt-12 bg-white">
+        {/* Slide de fotos no topo, como solicitado - Padrão do site */}
+        <section id="home" className="pt-0">
+          <HeroCarousel />
+        </section>
+
+        {/* Notícias abaixo do slide */}
+        <section id="noticias" className="pt-12 md:pt-20 bg-white">
           {theme.showNews && (
             <>
+              <div className="container mx-auto px-6 mb-12 text-center md:text-left">
+                 <span className="text-[10px] font-black text-accent uppercase tracking-[0.5em] block mb-2">{theme.labels.newsTitle || "PLANTÃO"}</span>
+                 <h2 className="text-4xl md:text-6xl font-black text-primary tracking-tighter uppercase italic leading-none">{theme.labels.newsSubtitle || "DE NOTÍCIAS"}</h2>
+              </div>
               <FeaturedNews news={news} loading={loading} />
-              <div id="entretenimento" className="mt-8">
+              <div id="entretenimento" className="mt-12">
                 <RemainingNews news={news} loading={loading} />
               </div>
             </>
           )}
         </section>
 
-        {/* Slide de fotos abaixo das notícias */}
         <section id="promocoes" className="mt-12">
-          <HeroCarousel />
+          {/* Espaço para promoções se houver outro componente, por enquanto mantendo IDs para navegação */}
         </section>
         
         {theme.showTopSongs && topSongsPos === 'hero' && (
