@@ -143,11 +143,12 @@ END $$;
 
 ALTER TABLE public.user_permissions ENABLE ROW LEVEL SECURITY;
 
--- Cria a política nova que permite quem tem acesso administrador/usuários ver a lista
+DROP POLICY IF EXISTS "Permitir leitura da lista de usuarios para logados" ON public.user_permissions;
 CREATE POLICY "Permitir leitura da lista de usuarios para logados" 
 ON public.user_permissions FOR SELECT 
 TO authenticated 
 USING (true);
+
 
 -- 7. Consertar usuários criados recentemente para permitir fazer LOGIN
 -- O banco do Supabase se recusa a fazer login ("Database error querying schema")
@@ -163,3 +164,22 @@ WHERE
   recovery_token IS NULL OR 
   email_change_token_new IS NULL OR 
   email_change IS NULL;
+
+-- 8. Corrigir permissão de gravação da tabela site_config (Aparência/Streaming)
+-- Sem isso, o painel de Aparência não consegue salvar as alterações no banco.
+ALTER TABLE public.site_config ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Todos podem ler configurações do site" ON public.site_config;
+CREATE POLICY "Todos podem ler configurações do site" 
+ON public.site_config FOR SELECT 
+TO anon, authenticated
+USING (true);
+
+DROP POLICY IF EXISTS "Colaboradores podem salvar configurações" ON public.site_config;
+CREATE POLICY "Colaboradores podem salvar configurações" 
+ON public.site_config FOR ALL 
+TO authenticated 
+USING (true)
+WITH CHECK (true);
+
+

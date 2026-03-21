@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Save, Plus, Trash2, MessageCircle, Upload, Loader2 } from "lucide-react";
+import { Save, Plus, Trash2, MessageCircle, Upload, Loader2, Edit2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -38,6 +38,7 @@ const AdminStreaming = () => {
   const [novaRedeNome, setNovaRedeNome] = useState("");
   const [novaRedeUrl, setNovaRedeUrl] = useState("");
   const [novaRedeIcone, setNovaRedeIcone] = useState("instagram");
+  const [editIdRede, setEditIdRede] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -78,16 +79,29 @@ const AdminStreaming = () => {
     setLoading(false);
   };
 
-  const handleAddRede = async () => {
+  const handleSaveRede = async () => {
     if (!novaRedeNome.trim() || !novaRedeUrl.trim()) return;
-    const { error } = await saveRedeSocial({ nome: novaRedeNome, url: novaRedeUrl, icone: novaRedeIcone });
+    const { error } = await saveRedeSocial({ 
+      id: editIdRede || undefined,
+      nome: novaRedeNome, 
+      url: novaRedeUrl, 
+      icone: novaRedeIcone 
+    });
+    
     if (error) {
-      toast.error("Erro ao adicionar rede social.");
+      toast.error("Erro ao salvar rede social.");
     } else {
-      toast.success("Rede social adicionada!");
+      toast.success(editIdRede ? "Rede social atualizada!" : "Rede social adicionada!");
       setRedes(await getRedesSociais());
-      setNovaRedeNome(""); setNovaRedeUrl(""); setNovaRedeIcone("instagram");
+      resetRedeForm();
     }
+  };
+
+  const handleEditRede = (rede: RedeSocial) => {
+    setEditIdRede(rede.id);
+    setNovaRedeNome(rede.nome);
+    setNovaRedeUrl(rede.url);
+    setNovaRedeIcone(rede.icone);
   };
 
   const handleDeleteRede = async (id: string) => {
@@ -99,6 +113,14 @@ const AdminStreaming = () => {
       setRedes(await getRedesSociais());
     }
   };
+
+  const resetRedeForm = () => {
+    setEditIdRede(null);
+    setNovaRedeNome("");
+    setNovaRedeUrl("");
+    setNovaRedeIcone("instagram");
+  };
+;
 
   return (
     <div className="space-y-6">
@@ -199,20 +221,35 @@ const AdminStreaming = () => {
               </select>
             </div>
           </div>
-          <Button onClick={handleAddRede} className="gap-2"><Plus className="w-4 h-4" /> Adicionar Rede Social</Button>
+          <div className="flex gap-2">
+            <Button onClick={handleSaveRede} className="gap-2">
+              {editIdRede ? <Save className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+              {editIdRede ? "Atualizar Rede Social" : "Adicionar Rede Social"}
+            </Button>
+            {editIdRede && (
+              <Button variant="ghost" onClick={resetRedeForm} className="gap-2">
+                <X className="w-4 h-4" /> Cancelar
+              </Button>
+            )}
+          </div>
 
           {redes.length > 0 && (
             <div className="space-y-2 mt-4">
               {redes.map(rede => (
-                <div key={rede.id} className="flex items-center justify-between p-3 bg-muted rounded-md">
+                <div key={rede.id} className="flex items-center justify-between p-3 bg-muted rounded-md group">
                   <div>
                     <span className="text-sm font-medium text-foreground">{rede.nome}</span>
                     <span className="text-xs text-muted-foreground ml-2">({rede.icone})</span>
                     <p className="text-xs text-muted-foreground truncate max-w-xs">{rede.url}</p>
                   </div>
-                  <Button size="icon" variant="ghost" className="text-destructive" onClick={() => handleDeleteRede(rede.id)}>
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
+                  <div className="flex gap-1">
+                    <Button size="icon" variant="ghost" onClick={() => handleEditRede(rede)}>
+                      <Edit2 className="w-4 h-4" />
+                    </Button>
+                    <Button size="icon" variant="ghost" className="text-destructive" onClick={() => handleDeleteRede(rede.id)}>
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
                 </div>
               ))}
             </div>
