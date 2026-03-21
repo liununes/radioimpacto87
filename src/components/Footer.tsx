@@ -1,9 +1,11 @@
 import { Instagram, Facebook, Youtube, MessageCircle } from "lucide-react";
 import { getSiteConfig } from "@/lib/radioStore";
 import { useState, useEffect } from "react";
+import { useTheme } from "@/hooks/useTheme";
 
 const Footer = () => {
   const [siteConfig, setSiteConfig] = useState<any>({});
+  const theme = useTheme();
 
   useEffect(() => {
     const fetchConfig = async () => {
@@ -26,7 +28,7 @@ const Footer = () => {
             <div className="h-10 w-px bg-gray-200" />
             <div className="text-left font-black uppercase tracking-tighter">
               <h3 className="text-lg text-primary leading-none">{siteConfig.radioName || "Impacto FM"}</h3>
-              <p className="text-accent text-sm mt-1">{siteConfig.radioFreq || "105.5 FM"}</p>
+              <p className="text-accent text-sm mt-1">{theme.radioFreq || "105.5"} FM</p>
             </div>
           </div>
 

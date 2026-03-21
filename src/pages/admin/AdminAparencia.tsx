@@ -1,128 +1,30 @@
 import { useState, useEffect } from "react";
-import { Save, RotateCcw, Palette, Upload, Image as ImageIcon } from "lucide-react";
-
-function fileToBase64(file: File): Promise<string> {
-  return new Promise((res, rej) => {
-    const reader = new FileReader();
-    reader.onload = () => res(reader.result as string);
-    reader.onerror = rej;
-    reader.readAsDataURL(file);
-  });
-}
+import { Save, Upload, Palette, Image as ImageIcon, Layout, Type, Smartphone, Globe, Radio, ExternalLink, MapPin, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getThemeConfig, applyTheme, DEFAULT_THEME, type ThemeConfig } from "@/lib/themeStore";
 import { getSiteConfig, saveSiteConfig } from "@/lib/radioStore";
 import { toast } from "sonner";
 
-function hslToHex(hsl: string): string {
-  const parts = hsl.trim().split(/\s+/);
-  if (parts.length < 3) return "#3b82f6";
-  const h = parseFloat(parts[0]);
-  const s = parseFloat(parts[1]) / 100;
-  const l = parseFloat(parts[2]) / 100;
-  const a = s * Math.min(l, 1 - l);
-  const f = (n: number) => {
-    const k = (n + h / 30) % 12;
-    const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-    return Math.round(255 * color).toString(16).padStart(2, "0");
-  };
-  return `#${f(0)}${f(8)}${f(4)}`;
-}
-
-function hexToHsl(hex: string): string {
-  const r = parseInt(hex.slice(1, 3), 16) / 255;
-  const g = parseInt(hex.slice(3, 5), 16) / 255;
-  const b = parseInt(hex.slice(5, 7), 16) / 255;
-  const max = Math.max(r, g, b), min = Math.min(r, g, b);
-  let h = 0, s = 0;
-  const l = (max + min) / 2;
-  if (max !== min) {
-    const d = max - min;
-    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-    switch (max) {
-      case r: h = ((g - b) / d + (g < b ? 6 : 0)) * 60; break;
-      case g: h = ((b - r) / d + 2) * 60; break;
-      case b: h = ((r - g) / d + 4) * 60; break;
-    }
-  }
-  return `${Math.round(h)} ${Math.round(s * 100)}% ${Math.round(l * 100)}%`;
-}
-
-interface ColorFieldProps {
-  label: string;
-  description: string;
-  value: string;
-  onChange: (val: string) => void;
-  gradientValue?: string;
-  onGradientChange?: (val: string) => void;
-}
-
-const ColorField = ({ label, description, value, onChange, gradientValue, onGradientChange }: ColorFieldProps) => (
-  <div className="space-y-3 p-4 bg-muted/30 rounded-xl border border-border/50">
-    <div className="flex items-center justify-between">
-      <Label className="text-sm font-bold">{label}</Label>
-      <div className="flex items-center gap-2">
-        <input
-          type="color"
-          value={hslToHex(value)}
-          onChange={e => onChange(hexToHsl(e.target.value))}
-          className="w-8 h-8 rounded-lg border border-border cursor-pointer bg-transparent overflow-hidden"
-        />
-      </div>
-    </div>
-    <p className="text-[10px] text-muted-foreground leading-tight">{description}</p>
-    
-    {onGradientChange && (
-      <div className="mt-4 pt-4 border-t border-border/50 space-y-2">
-        <Label className="text-[10px] uppercase tracking-wider font-bold opacity-70">Efeito Degradê (Opcional)</Label>
-        <Input 
-          placeholder="Ex: linear-gradient(135deg, #000 0%, #fff 100%)"
-          value={gradientValue || ""}
-          onChange={e => onGradientChange(e.target.value)}
-          className="text-[10px] h-8 font-mono bg-background"
-        />
-      </div>
-    )}
-  </div>
-);
-
-const PRESETS: { name: string; theme: Partial<ThemeConfig> }[] = [
-  { name: "Azul Impacto", theme: { ...DEFAULT_THEME } },
-  {
-    name: "Clube FM Style",
-    theme: {
-      background: "220 20% 10%", foreground: "0 0% 100%", card: "220 20% 15%",
-      primary: "217 91% 60%", primaryForeground: "0 0% 100%",
-      secondary: "45 93% 58%", secondaryForeground: "220 20% 10%",
-      muted: "220 15% 20%", mutedForeground: "220 10% 60%",
-      border: "220 15% 20%", headerBg: "220 20% 8%", navBg: "220 15% 15%",
-      headerGradient: "linear-gradient(180deg, #1a1f2c 0%, #0d0f14 100%)",
-      primaryGradient: "linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)",
-      secondaryGradient: "linear-gradient(135deg, #fbbf24 0%, #d97706 100%)",
-    },
-  },
-  {
-    name: "Vermelho Energia",
-    theme: {
-      background: "0 10% 12%", foreground: "0 0% 98%", card: "0 10% 16%",
-      primary: "0 80% 55%", primaryForeground: "0 0% 100%",
-      secondary: "35 90% 55%", secondaryForeground: "0 10% 10%",
-      muted: "0 8% 22%", mutedForeground: "0 5% 55%",
-      border: "0 8% 22%", headerBg: "0 10% 8%", navBg: "0 8% 18%",
-      primaryGradient: "linear-gradient(135deg, #ef4444 0%, #991b1b 100%)",
-    },
-  },
-];
+const fileToBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = error => reject(error);
+  });
+};
 
 const AdminAparencia = () => {
   const [theme, setTheme] = useState<ThemeConfig>(getThemeConfig());
   const [logo, setLogo] = useState("");
   const [favicon, setFavicon] = useState("");
   const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState("visual");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -160,19 +62,16 @@ const AdminAparencia = () => {
     setLoading(true);
     const themeToSave = { ...theme };
     
-    // Convert current primary/secondary (HSL) to also match hex if they were changed via hex picker
-    // But for now let's just save the theme as is
-    
     const [themeRes] = await Promise.all([
       saveSiteConfig("theme", themeToSave),
       getSiteConfig("streaming").then(config => 
-        saveSiteConfig("streaming", { ...(config || {}), logo, favicon })
+        saveSiteConfig("streaming", { ...(config || {}), logo, favicon, radioFreq: theme.radioFreq })
       )
     ]);
     
     if (!themeRes.error) {
       applyTheme(themeToSave);
-      toast.success("Configurações salvas com sucesso!");
+      toast.success("Design e Configurações atualizados com sucesso!");
     } else {
       toast.error("Erro ao salvar configurações.");
     }
@@ -180,174 +79,223 @@ const AdminAparencia = () => {
   };
 
   return (
-    <div className="space-y-6 pb-40">
-      <div className="flex justify-between items-center bg-card p-6 rounded-2xl border border-border bg-white shadow-sm">
-        <div>
-          <h2 className="text-2xl font-black text-primary tracking-tight uppercase italic">Gestão Total Front-End</h2>
-          <p className="text-sm text-gray-400 font-bold uppercase tracking-wider">Configure cores, textos e a identidade visual completa</p>
+    <div className="max-w-[1200px] mx-auto space-y-10 pb-40 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      {/* Premium Header */}
+      <div className="relative overflow-hidden rounded-[2.5rem] bg-[#002e5d] p-12 text-white shadow-2xl">
+        <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-8">
+          <div className="text-center md:text-left space-y-2">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 rounded-full text-[10px] font-black tracking-widest uppercase mb-4">
+              <CheckCircle2 className="w-3 h-3 text-[#ffed32]" /> Sistema de Design Ativo
+            </div>
+            <h2 className="text-4xl md:text-5xl font-black tracking-tighter uppercase italic leading-none">
+              Controle <span className="text-[#ffed32]">Geral do Site</span>
+            </h2>
+            <p className="text-white/60 font-bold uppercase tracking-widest text-[11px]">Personalize os dados da rádio, cores e textos</p>
+          </div>
+          <Button onClick={handleSave} className="bg-[#ffed32] hover:bg-[#ffe500] text-[#002e5d] gap-3 px-10 h-16 rounded-2xl font-black uppercase tracking-widest text-xs shadow-xl transition-all hover:scale-105 active:scale-95" disabled={loading}>
+            <Save className="w-5 h-5" /> {loading ? "Processando..." : "Publicar Mudanças"}
+          </Button>
         </div>
-        <Button onClick={handleSave} className="bg-accent hover:bg-accent/90 text-white gap-2 px-8 h-12 rounded-xl font-black uppercase tracking-widest text-xs" disabled={loading}>
-          <Save className="w-5 h-5" /> {loading ? "Salvando..." : "Publicar no Site"}
-        </Button>
+        
+        {/* Abstract Background Shapes */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-red-500/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl" />
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
-        {/* Sidebar: Logos and Presets */}
-        <div className="xl:col-span-4 space-y-8">
-          <Card className="rounded-[2rem] overflow-hidden border-none shadow-xl bg-white">
-            <CardHeader className="bg-primary p-8">
-              <CardTitle className="text-white flex items-center gap-3 font-black uppercase tracking-tighter italic">
-                <ImageIcon className="w-6 h-6 text-yellow-400" /> Identidade
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-8 space-y-8">
-              <div className="space-y-4">
-                <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Logo da Rádio</Label>
-                <div className="flex flex-col gap-4">
-                  {logo && (
-                    <div className="relative w-full aspect-video rounded-3xl overflow-hidden border-4 border-gray-50 bg-gray-50 p-6 flex items-center justify-center">
-                      <img src={logo} alt="Logo" className="max-w-full max-h-full object-contain" />
-                    </div>
-                  )}
-                  <label className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-gray-100 text-primary rounded-2xl cursor-pointer hover:bg-gray-200 transition-all font-black text-[10px] uppercase tracking-widest">
-                    <Upload className="w-4 h-4" /> {logo ? "Alterar Logotipo" : "Enviar Logotipo"}
-                    <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) setLogo(await fileToBase64(f)); }} />
-                  </label>
-                </div>
-              </div>
-
-              <div className="space-y-4 pt-8 border-t border-gray-100">
-                <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Favicon (Tab do Navegador)</Label>
-                <div className="flex items-center gap-4">
-                  {favicon && (
-                    <div className="w-20 h-20 rounded-2xl overflow-hidden border-4 border-gray-50 bg-gray-50 p-3 flex items-center justify-center shrink-0">
-                      <img src={favicon} alt="Favicon" className="w-full h-full object-contain" />
-                    </div>
-                  )}
-                  <label className="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-gray-100 text-primary rounded-2xl cursor-pointer hover:bg-gray-200 transition-all font-black text-[10px] uppercase tracking-widest h-20 text-center">
-                    <Upload className="w-4 h-4" /> Enviar
-                    <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) setFavicon(await fileToBase64(f)); }} />
-                  </label>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="rounded-[2rem] overflow-hidden border-none shadow-xl bg-white">
-            <CardHeader className="bg-gray-100 p-8"><CardTitle className="text-primary flex items-center gap-3 font-black uppercase tracking-tighter italic"><Palette className="w-6 h-6 text-accent" /> Estilo das Seções</CardTitle></CardHeader>
-            <CardContent className="p-8 space-y-6">
-               <div className="space-y-2">
-                  <Label className="text-[10px] font-black uppercase opacity-50">Cidade do Clima</Label>
-                  <Input value={theme.weatherCity} onChange={e => updateField("weatherCity", e.target.value)} className="rounded-xl border-gray-100 bg-gray-50 font-bold" />
-               </div>
-               <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl">
-                 <Label className="text-[11px] font-black uppercase">Exibir Notícias</Label>
-                 <Switch checked={theme.showNews} onCheckedChange={v => updateField("showNews", v)} />
-               </div>
-               <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl">
-                 <Label className="text-[11px] font-black uppercase">Exibir Galeria</Label>
-                 <Switch checked={theme.showGallery} onCheckedChange={v => updateField("showGallery", v)} />
-               </div>
-            </CardContent>
-          </Card>
+      <Tabs defaultValue="visual" className="space-y-8" onValueChange={setActiveTab}>
+        <div className="flex justify-center">
+          <TabsList className="bg-white p-1.5 h-auto rounded-3xl border border-gray-100 shadow-xl gap-2">
+            <TabsTrigger value="visual" className="rounded-2xl px-8 py-4 data-[state=active]:bg-[#002e5d] data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
+              <Palette className="w-4 h-4 mr-2" /> Identidade Visual
+            </TabsTrigger>
+            <TabsTrigger value="textos" className="rounded-2xl px-8 py-4 data-[state=active]:bg-[#002e5d] data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
+              <Type className="w-4 h-4 mr-2" /> Textos e Rótulos
+            </TabsTrigger>
+            <TabsTrigger value="layout" className="rounded-2xl px-8 py-4 data-[state=active]:bg-[#002e5d] data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
+              <Layout className="w-4 h-4 mr-2" /> Estrutura
+            </TabsTrigger>
+            <TabsTrigger value="radio" className="rounded-2xl px-8 py-4 data-[state=active]:bg-[#002e5d] data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
+              <Radio className="w-4 h-4 mr-2" /> Rádio & Frequência
+            </TabsTrigger>
+          </TabsList>
         </div>
 
-        {/* Main Content: Colors and Texts */}
-        <div className="xl:col-span-8 space-y-8">
-          <Card className="rounded-[2rem] overflow-hidden border-none shadow-xl bg-white">
-            <CardHeader className="bg-primary p-8">
-              <CardTitle className="text-white font-black uppercase tracking-tighter italic">Cores do Sistema</CardTitle>
-            </CardHeader>
-            <CardContent className="p-8">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="space-y-4 p-6 bg-gray-50 rounded-3xl border border-gray-100 flex flex-col items-center">
-                   <Label className="text-[10px] font-black uppercase tracking-widest text-primary">Cor Principal (Azul)</Label>
-                   <input type="color" value={theme.clubeBlue} onChange={e => updateField("clubeBlue", e.target.value)} className="w-20 h-20 rounded-full cursor-pointer border-8 border-white shadow-xl" />
-                   <div className="text-[10px] font-mono text-gray-400 mt-2">{theme.clubeBlue}</div>
+        {/* --- VISUAL TAB --- */}
+        <TabsContent value="visual" className="space-y-8 animate-in fade-in zoom-in-95 duration-500">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-white">
+              <CardHeader className="p-8 pb-4">
+                <CardTitle className="text-xl font-black uppercase text-primary tracking-tight">Cores da Marca</CardTitle>
+                <CardDescription className="text-xs font-medium text-gray-400">Defina os tons que darão vida ao site Clube FM</CardDescription>
+              </CardHeader>
+              <CardContent className="p-8 pt-4 space-y-8">
+                <div className="grid grid-cols-3 gap-6">
+                  <div className="flex flex-col items-center gap-3">
+                    <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Principal</Label>
+                    <input type="color" value={theme.clubeBlue} onChange={e => updateField("clubeBlue", e.target.value)} className="w-20 h-20 rounded-3xl cursor-pointer border-8 border-gray-50 shadow-inner" />
+                    <span className="text-[9px] font-mono text-gray-400">{theme.clubeBlue}</span>
+                  </div>
+                  <div className="flex flex-col items-center gap-3">
+                    <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Destaque</Label>
+                    <input type="color" value={theme.clubeYellow} onChange={e => updateField("clubeYellow", e.target.value)} className="w-20 h-20 rounded-3xl cursor-pointer border-8 border-gray-50 shadow-inner" />
+                    <span className="text-[9px] font-mono text-gray-400">{theme.clubeYellow}</span>
+                  </div>
+                  <div className="flex flex-col items-center gap-3">
+                    <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Alerta</Label>
+                    <input type="color" value={theme.clubeRed} onChange={e => updateField("clubeRed", e.target.value)} className="w-20 h-20 rounded-3xl cursor-pointer border-8 border-gray-50 shadow-inner" />
+                    <span className="text-[9px] font-mono text-gray-400">{theme.clubeRed}</span>
+                  </div>
                 </div>
-                <div className="space-y-4 p-6 bg-gray-50 rounded-3xl border border-gray-100 flex flex-col items-center">
-                   <Label className="text-[10px] font-black uppercase tracking-widest text-primary">Cor Alerta (Vermelho)</Label>
-                   <input type="color" value={theme.clubeRed} onChange={e => updateField("clubeRed", e.target.value)} className="w-20 h-20 rounded-full cursor-pointer border-8 border-white shadow-xl" />
-                   <div className="text-[10px] font-mono text-gray-400 mt-2">{theme.clubeRed}</div>
-                </div>
-                <div className="space-y-4 p-6 bg-gray-50 rounded-3xl border border-gray-100 flex flex-col items-center">
-                   <Label className="text-[10px] font-black uppercase tracking-widest text-primary">Cor Detalhe (Amarelo)</Label>
-                   <input type="color" value={theme.clubeYellow} onChange={e => updateField("clubeYellow", e.target.value)} className="w-20 h-20 rounded-full cursor-pointer border-8 border-white shadow-xl" />
-                   <div className="text-[10px] font-mono text-gray-400 mt-2">{theme.clubeYellow}</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
 
-          <Card className="rounded-[2rem] overflow-hidden border-none shadow-xl bg-white">
-            <CardHeader className="bg-accent p-8">
-              <CardTitle className="text-white font-black uppercase tracking-tighter italic">Textos e Rótulos do Site</CardTitle>
-            </CardHeader>
-            <CardContent className="p-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* Hero Labels */}
-                <div className="space-y-6">
-                  <h4 className="text-xs font-black text-primary uppercase border-b-2 border-accent w-fit pb-1">Banner Principal</h4>
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                       <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Botão "Ler Notícia"</Label>
-                       <Input value={theme.labels.heroReadMore} onChange={e => updateLabel("heroReadMore", e.target.value)} className="rounded-xl border-gray-100" />
+            <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-white">
+              <CardHeader className="p-8 pb-4">
+                <CardTitle className="text-xl font-black uppercase text-primary tracking-tight">Logotipos</CardTitle>
+                <CardDescription className="text-xs font-medium text-gray-400">Identidade visual em todos os dispositivos</CardDescription>
+              </CardHeader>
+              <CardContent className="p-8 pt-4 space-y-6">
+                <div className="flex gap-6">
+                  <div className="flex-1 space-y-3">
+                    <Label className="text-[10px] font-black uppercase tracking-widest opacity-50 block">Logotipo do Site</Label>
+                    <div className="relative group">
+                      <div className="h-28 bg-gray-50 rounded-2xl flex items-center justify-center p-6 border-2 border-dashed border-gray-100 group-hover:border-primary/20 transition-all overflow-hidden">
+                        {logo ? <img src={logo} alt="Logo" className="max-h-full object-contain" /> : <ImageIcon className="w-8 h-8 text-gray-200" />}
+                      </div>
+                      <label className="absolute inset-0 cursor-pointer flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl">
+                         <Upload className="text-white w-6 h-6" />
+                         <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) setLogo(await fileToBase64(f)); }} />
+                      </label>
                     </div>
-                    <div className="space-y-2">
-                       <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Botão "Mais Notícias"</Label>
-                       <Input value={theme.labels.heroMoreNews} onChange={e => updateLabel("heroMoreNews", e.target.value)} className="rounded-xl border-gray-100" />
+                  </div>
+                  <div className="w-40 space-y-3">
+                    <Label className="text-[10px] font-black uppercase tracking-widest opacity-50 block">Favicon</Label>
+                    <div className="relative group">
+                      <div className="h-28 bg-gray-50 rounded-2xl flex items-center justify-center p-6 border-2 border-dashed border-gray-100 group-hover:border-primary/20 transition-all">
+                        {favicon ? <img src={favicon} alt="Fav" className="w-10 h-10 object-contain" /> : <Globe className="w-8 h-8 text-gray-200" />}
+                      </div>
+                      <label className="absolute inset-0 cursor-pointer flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl">
+                         <Upload className="text-white w-5 h-5" />
+                         <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) setFavicon(await fileToBase64(f)); }} />
+                      </label>
                     </div>
                   </div>
                 </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
 
-                {/* Player Labels */}
-                <div className="space-y-6">
-                  <h4 className="text-xs font-black text-primary uppercase border-b-2 border-accent w-fit pb-1">Player de Rádio</h4>
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                       <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Rótulo Localização</Label>
-                       <Input value={theme.labels.playerLocation} onChange={e => updateLabel("playerLocation", e.target.value)} className="rounded-xl border-gray-100" />
+        {/* --- TEXTOS TAB --- */}
+        <TabsContent value="textos" className="space-y-8 animate-in fade-in zoom-in-95 duration-500">
+           <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-white">
+              <CardContent className="p-12">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                  <div className="space-y-8">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-yellow-50 text-yellow-600 rounded-lg text-[9px] font-black uppercase tracking-widest">Menu Superior</div>
+                    <div className="space-y-4">
+                      <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Home</Label> <Input value={theme.labels.navHome} onChange={e => updateLabel("navHome", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                      <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Promoções</Label> <Input value={theme.labels.navPromos} onChange={e => updateLabel("navPromos", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                      <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Entretenimento</Label> <Input value={theme.labels.navEntertainment} onChange={e => updateLabel("navEntertainment", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                      <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Música</Label> <Input value={theme.labels.navMusic} onChange={e => updateLabel("navMusic", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                      <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Programação</Label> <Input value={theme.labels.navSchedule} onChange={e => updateLabel("navSchedule", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                      <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Sobre</Label> <Input value={theme.labels.navAbout} onChange={e => updateLabel("navAbout", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                      <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Contato</Label> <Input value={theme.labels.navContact} onChange={e => updateLabel("navContact", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
                     </div>
-                    <div className="space-y-2">
-                       <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Etiqueta Ao Vivo</Label>
-                       <Input value={theme.labels.playerLive} onChange={e => updateLabel("playerLive", e.target.value)} className="rounded-xl border-gray-100" />
+                  </div>
+
+                  <div className="space-y-8">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 text-blue-600 rounded-lg text-[9px] font-black uppercase tracking-widest">Player e Hero</div>
+                    <div className="space-y-4">
+                      <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Botão Hero (Ler)</Label> <Input value={theme.labels.heroReadMore} onChange={e => updateLabel("heroReadMore", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                      <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Botão Hero (Mais)</Label> <Input value={theme.labels.heroMoreNews} onChange={e => updateLabel("heroMoreNews", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                      <div className="space-y-1.5 pt-4"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Localização Player</Label> <Input value={theme.labels.playerLocation} onChange={e => updateLabel("playerLocation", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                      <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Ao Vivo Label</Label> <Input value={theme.labels.playerLive} onChange={e => updateLabel("playerLive", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                      <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Ver Programação</Label> <Input value={theme.labels.playerSchedule} onChange={e => updateLabel("playerSchedule", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                      <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Abrir Player</Label> <Input value={theme.labels.playerOpen} onChange={e => updateLabel("playerOpen", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-8">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-red-50 text-red-600 rounded-lg text-[9px] font-black uppercase tracking-widest">Títulos de Seções</div>
+                    <div className="space-y-8">
+                       <div className="grid grid-cols-2 gap-4">
+                         <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Notícias 1</Label> <Input value={theme.labels.newsTitle} onChange={e => updateLabel("newsTitle", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                         <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Notícias 2</Label> <Input value={theme.labels.newsSubtitle} onChange={e => updateLabel("newsSubtitle", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                       </div>
+                       <div className="grid grid-cols-2 gap-4">
+                         <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Top 1</Label> <Input value={theme.labels.topSongsTitle} onChange={e => updateLabel("topSongsTitle", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                         <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Top 2</Label> <Input value={theme.labels.topSongsSubtitle} onChange={e => updateLabel("topSongsSubtitle", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                       </div>
                     </div>
                   </div>
                 </div>
+              </CardContent>
+           </Card>
+        </TabsContent>
 
-                {/* Section Titles */}
-                <div className="space-y-6">
-                  <h4 className="text-xs font-black text-primary uppercase border-b-2 border-accent w-fit pb-1">Títulos de Notícias</h4>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                       <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Principal</Label>
-                       <Input value={theme.labels.newsTitle} onChange={e => updateLabel("newsTitle", e.target.value)} className="rounded-xl border-gray-100" />
+        {/* --- ESTRUTURA TAB --- */}
+        <TabsContent value="layout" className="space-y-8 animate-in fade-in zoom-in-95 duration-500">
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <Card className="rounded-[2.5rem] border-none shadow-xl bg-white">
+                 <CardHeader className="p-8">
+                    <CardTitle className="text-xl font-black uppercase tracking-tight">Cidade Padrão</CardTitle>
+                    <CardDescription className="text-xs">Define a cidade exibida na barra do player ("Você está em:")</CardDescription>
+                 </CardHeader>
+                 <CardContent className="p-8 pt-0">
+                    <div className="flex items-center gap-4 bg-gray-50 p-6 rounded-3xl border border-gray-100 text-[#002e5d]">
+                       <MapPin className="w-6 h-6 text-red-500" />
+                       <Input value={theme.weatherCity} onChange={e => updateField("weatherCity", e.target.value)} className="rounded-xl border-none bg-transparent font-black uppercase text-lg h-auto p-0 focus-visible:ring-0" placeholder="Ex: São Paulo" />
                     </div>
-                    <div className="space-y-2">
-                       <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Complemento</Label>
-                       <Input value={theme.labels.newsSubtitle} onChange={e => updateLabel("newsSubtitle", e.target.value)} className="rounded-xl border-gray-100" />
-                    </div>
-                  </div>
-                </div>
+                 </CardContent>
+              </Card>
 
-                <div className="space-y-6">
-                  <h4 className="text-xs font-black text-primary uppercase border-b-2 border-accent w-fit pb-1">Títulos de Sucessos</h4>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                       <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Principal</Label>
-                       <Input value={theme.labels.topSongsTitle} onChange={e => updateLabel("topSongsTitle", e.target.value)} className="rounded-xl border-gray-100" />
+              <Card className="rounded-[2.5rem] border-none shadow-xl bg-white">
+                 <CardHeader className="p-8">
+                    <CardTitle className="text-xl font-black uppercase tracking-tight">Visibilidade</CardTitle>
+                 </CardHeader>
+                 <CardContent className="p-8 pt-0 grid grid-cols-2 gap-4">
+                    {[
+                      { l: "Notícias", f: "showNews" },
+                      { l: "Galeria", f: "showGallery" },
+                      { l: "Top Songs", f: "showTopSongs" },
+                      { l: "Sobre", f: "showAbout" }
+                    ].map(item => (
+                      <div key={item.f} className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                         <span className="text-[10px] font-black uppercase">{item.l}</span>
+                         <Switch checked={(theme as any)[item.f]} onCheckedChange={v => updateField(item.f as any, v)} />
+                      </div>
+                    ))}
+                 </CardContent>
+              </Card>
+           </div>
+        </TabsContent>
+
+        {/* --- RADIO TAB --- */}
+        <TabsContent value="radio" className="space-y-8 animate-in fade-in zoom-in-95 duration-500">
+           <Card className="rounded-[2.5rem] border-none shadow-xl bg-white">
+              <CardHeader className="p-10 pb-4">
+                 <CardTitle className="text-2xl font-black uppercase tracking-tight text-[#002e5d]">Sintonização e Link</CardTitle>
+              </CardHeader>
+              <CardContent className="p-10 pt-4 space-y-12">
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div className="space-y-4">
+                       <Label className="text-xs font-black uppercase tracking-widest text-gray-400">Frequência da Rádio (Ex: 87.9)</Label>
+                       <div className="relative">
+                          <Input value={theme.radioFreq} onChange={e => updateField("radioFreq", e.target.value)} className="rounded-2xl border-gray-100 h-20 pl-8 pr-20 text-3xl font-black text-[#002e5d]" />
+                          <div className="absolute right-8 top-1/2 -translate-y-1/2 text-sm font-black text-gray-300 tracking-widest">FM</div>
+                       </div>
                     </div>
-                    <div className="space-y-2">
-                       <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Complemento</Label>
-                       <Input value={theme.labels.topSongsSubtitle} onChange={e => updateLabel("topSongsSubtitle", e.target.value)} className="rounded-xl border-gray-100" />
+
+                    <div className="space-y-4">
+                       <Label className="text-xs font-black uppercase tracking-widest text-gray-400">Link Externo (Abrir Player)</Label>
+                       <Input value={theme.playerOpenUrl} onChange={e => updateField("playerOpenUrl", e.target.value)} className="rounded-2xl border-gray-100 h-20 px-8 text-sm font-bold text-[#002e5d]" />
                     </div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
+                 </div>
+              </CardContent>
+           </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

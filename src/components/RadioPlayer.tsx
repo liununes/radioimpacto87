@@ -61,7 +61,7 @@ const RadioPlayer = () => {
             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-accent">{theme.labels.playerLive}</span>
           </div>
           <span className="text-xl font-black text-primary leading-none uppercase tracking-tighter">
-            {siteConfig.radioFreq || "105.5"} FM
+            {theme.radioFreq || "105.5"} FM
           </span>
         </div>
       </div>
@@ -71,10 +71,15 @@ const RadioPlayer = () => {
         <button className="clube-btn-white-outline px-8 h-12">
           {theme.labels.playerSchedule}
         </button>
-        <button className="clube-btn-yellow flex items-center gap-3 px-10 h-12">
+        <a 
+          href={theme.playerOpenUrl || "https://player.clube.fm"} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="clube-btn-yellow flex items-center gap-3 px-10 h-12"
+        >
           <ExternalLink className="w-4 h-4" />
           {theme.labels.playerOpen}
-        </button>
+        </a>
       </div>
     </div>
   );

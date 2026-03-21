@@ -12,6 +12,9 @@ export interface ThemeConfig {
   border: string;
   headerBg: string; // Nav Blue
   navBg: string;
+  // Radio Config
+  radioFreq: string;
+  playerOpenUrl: string;
   // Clube Specific Colors (Hex)
   clubeBlue: string;
   clubeYellow: string;
@@ -55,6 +58,13 @@ export interface ThemeConfig {
     playerLive: string;
     playerSchedule: string;
     playerOpen: string;
+    navHome: string;
+    navPromos: string;
+    navEntertainment: string;
+    navMusic: string;
+    navSchedule: string;
+    navAbout: string;
+    navContact: string;
   };
 }
 
@@ -71,6 +81,8 @@ export const DEFAULT_THEME: ThemeConfig = {
   border: "214.3 31.8% 91.4%",
   headerBg: "211 100% 18%",
   navBg: "211 100% 18%",
+  radioFreq: "87.9",
+  playerOpenUrl: "https://player.clube.fm",
   clubeBlue: "#002e5d",
   clubeYellow: "#ffed32",
   clubeRed: "#ec2027",
@@ -103,6 +115,13 @@ export const DEFAULT_THEME: ThemeConfig = {
     playerLive: "AO VIVO",
     playerSchedule: "Ver Programação",
     playerOpen: "Abrir Player",
+    navHome: "AO VIVO",
+    navPromos: "PROMOÇÕES",
+    navEntertainment: "ENTRETENIMENTO",
+    navMusic: "MÚSICA",
+    navSchedule: "PROGRAMAÇÃO",
+    navAbout: "A CLUBE",
+    navContact: "CONTATO",
   }
 };
 

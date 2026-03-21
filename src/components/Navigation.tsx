@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { Menu, X, Search, Moon } from "lucide-react";
 import { getSiteConfig } from "@/lib/radioStore";
+import { useTheme } from "@/hooks/useTheme";
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [siteConfig, setSiteConfig] = useState<any>({});
+  const theme = useTheme();
 
   useEffect(() => {
     const loadSiteConfig = async () => {
@@ -15,13 +17,13 @@ const Navigation = () => {
   }, []);
 
   const navItems = [
-    { label: "AO VIVO", href: "#home" },
-    { label: "PROMOÇÕES", href: "#promocoes" },
-    { label: "ENTRETENIMENTO", href: "#entretenimento" },
-    { label: "MÚSICA", href: "#musica" },
-    { label: "PROGRAMAÇÃO", href: "#programacao" },
-    { label: "A CLUBE", href: "#sobre" },
-    { label: "CONTATO", href: "#contato" },
+    { label: theme.labels.navHome, href: "#home" },
+    { label: theme.labels.navPromos, href: "#promocoes" },
+    { label: theme.labels.navEntertainment, href: "#entretenimento" },
+    { label: theme.labels.navMusic, href: "#musica" },
+    { label: theme.labels.navSchedule, href: "#programacao" },
+    { label: theme.labels.navAbout, href: "#sobre" },
+    { label: theme.labels.navContact, href: "#contato" },
   ];
 
   return (

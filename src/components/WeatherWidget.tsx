@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { Cloud, CloudRain, Sun, Wind, Droplets, Eye, Thermometer } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { getThemeConfig } from "@/lib/themeStore";
-import { getSiteConfig } from "@/lib/radioStore";
+import { useTheme } from "@/hooks/useTheme";
 
 interface WeatherData {
   temp: number;
@@ -22,18 +21,7 @@ interface WeatherWidgetProps {
 const WeatherWidget = ({ showWeather = true }: WeatherWidgetProps) => {
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [theme, setTheme] = useState(getThemeConfig());
-
-  useEffect(() => {
-    const updateTheme = async () => {
-      const saved = await getSiteConfig("theme");
-      if (saved) setTheme(saved);
-      else setTheme(getThemeConfig());
-    };
-    updateTheme();
-    window.addEventListener("storage", updateTheme);
-    return () => window.removeEventListener("storage", updateTheme);
-  }, []);
+  const theme = useTheme();
 
   useEffect(() => {
     if (!showWeather || !theme.weatherCity) return;
