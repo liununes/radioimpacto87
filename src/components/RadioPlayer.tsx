@@ -1,11 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import { Play, Pause, ChevronDown, MapPin, ExternalLink } from "lucide-react";
 import { getSiteConfig, getProgramaAtual } from "@/lib/radioStore";
+import { useTheme } from "@/hooks/useTheme";
 
 const RadioPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [siteConfig, setSiteConfig] = useState<any>({});
   const audioRef = useRef<HTMLAudioElement>(null);
+  const theme = useTheme();
 
   useEffect(() => {
     const loadConfigs = async () => {
@@ -33,10 +35,10 @@ const RadioPlayer = () => {
       <div className="flex items-center gap-4 shrink-0">
         <div className="flex items-center gap-2">
            <MapPin className="w-4 h-4 text-accent fill-accent/20" />
-           <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">VOCÊ ESTÁ EM:</span>
+           <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{theme.labels.playerLocation}</span>
         </div>
         <div className="flex items-center gap-4 px-6 py-2.5 border border-primary/20 rounded-full text-primary hover:border-primary/40 transition-all cursor-pointer bg-white group shadow-sm">
-          <span className="text-[11px] font-black uppercase tracking-wider">Brasília</span>
+          <span className="text-[11px] font-black uppercase tracking-wider">{theme.weatherCity || "Brasília"}</span>
           <ChevronDown className="w-4 h-4 text-accent group-hover:translate-y-0.5 transition-transform" />
         </div>
       </div>
@@ -56,7 +58,7 @@ const RadioPlayer = () => {
         <div className="flex flex-col pt-12 md:pt-14">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 bg-accent rounded-full animate-pulse shadow-[0_0_8px_#ec2027]" />
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-accent">AO VIVO</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-accent">{theme.labels.playerLive}</span>
           </div>
           <span className="text-xl font-black text-primary leading-none uppercase tracking-tighter">
             {siteConfig.radioFreq || "105.5"} FM
@@ -67,11 +69,11 @@ const RadioPlayer = () => {
       {/* Action Buttons */}
       <div className="flex items-center gap-4 shrink-0">
         <button className="clube-btn-white-outline px-8 h-12">
-          Ver Programação
+          {theme.labels.playerSchedule}
         </button>
         <button className="clube-btn-yellow flex items-center gap-3 px-10 h-12">
           <ExternalLink className="w-4 h-4" />
-          Abrir Player
+          {theme.labels.playerOpen}
         </button>
       </div>
     </div>

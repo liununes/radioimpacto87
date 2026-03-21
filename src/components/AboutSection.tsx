@@ -1,16 +1,18 @@
 import { MapPin, Phone, Mail, Info, Send } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getSiteConfig } from "@/lib/radioStore";
+import { useTheme } from "@/hooks/useTheme";
 
 const AboutSection = () => {
   const [data, setData] = useState<any>({
-    titulo: "Impacto FM 87.9",
+    titulo: "Rede Clube",
     descricao: "A sua rádio favorita, levando música e informação de qualidade para toda a região.",
     endereco: "",
     telefone: "",
     email: ""
   });
   const [loading, setLoading] = useState(true);
+  const theme = useTheme();
 
   useEffect(() => {
     const fetchSobre = async () => {
@@ -33,7 +35,7 @@ const AboutSection = () => {
             <div className="space-y-4">
               <span className="text-[10px] font-black text-accent uppercase tracking-[0.5em] mb-4 block underline decoration-[var(--clube-yellow)]">NOSSA RÁDIO</span>
               <h2 className="text-4xl md:text-7xl font-black text-primary tracking-tighter uppercase leading-[0.9]">
-                Sobre a <span className="text-accent underline decoration-[var(--clube-yellow)]">Impacto</span>
+                {theme.labels.aboutTitle} <span className="text-accent underline decoration-[var(--clube-yellow)]">{theme.labels.aboutSubtitle}</span>
               </h2>
             </div>
             

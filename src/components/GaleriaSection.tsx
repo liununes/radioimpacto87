@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { getFotos, type Foto } from "@/lib/radioStore";
 import PhotoLightbox from "./PhotoLightbox";
+import { useTheme } from "@/hooks/useTheme";
 
 const GaleriaSection = () => {
   const [fotos, setFotos] = useState<Foto[]>([]);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const theme = useTheme();
 
   useEffect(() => {
     const fetchFotos = async () => {
@@ -23,7 +25,7 @@ const GaleriaSection = () => {
       <div className="container mx-auto px-6">
         <div className="flex flex-col items-center mb-16">
           <h2 className="text-4xl md:text-5xl font-black text-primary tracking-tighter uppercase text-center leading-none">
-            Momentos <span className="text-accent underline decoration-[var(--clube-yellow)]">Vips</span>
+            {theme.labels.galleryTitle} <span className="text-accent underline decoration-[var(--clube-yellow)]">{theme.labels.gallerySubtitle}</span>
           </h2>
           <p className="text-gray-400 font-bold uppercase tracking-[0.3em] text-[10px] mt-4">Fotos e eventos exclusivos</p>
         </div>

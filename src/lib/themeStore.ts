@@ -10,8 +10,12 @@ export interface ThemeConfig {
   muted: string;
   mutedForeground: string;
   border: string;
-  headerBg: string;
+  headerBg: string; // Nav Blue
   navBg: string;
+  // Clube Specific Colors (Hex)
+  clubeBlue: string;
+  clubeYellow: string;
+  clubeRed: string;
   // Gradients
   primaryGradient?: string;
   secondaryGradient?: string;
@@ -35,37 +39,44 @@ export interface ThemeConfig {
   sponsorsPosition: 'left' | 'center' | 'right';
   topSongsAlignment: 'left' | 'center' | 'right';
   weatherPosition: 'left' | 'center' | 'right';
+  // Dynamic Labels
+  labels: {
+    heroReadMore: string;
+    heroMoreNews: string;
+    newsTitle: string;
+    newsSubtitle: string;
+    topSongsTitle: string;
+    topSongsSubtitle: string;
+    galleryTitle: string;
+    gallerySubtitle: string;
+    aboutTitle: string;
+    aboutSubtitle: string;
+    playerLocation: string;
+    playerLive: string;
+    playerSchedule: string;
+    playerOpen: string;
+  };
 }
-
-export interface SiteConfig {
-  streamUrl: string;
-  radioName: string;
-  radioFreq: string;
-  logo: string; // base64 or URL
-}
-
-const THEME_KEY = "radio_theme";
-const SITE_KEY = "radio_streaming_config";
 
 export const DEFAULT_THEME: ThemeConfig = {
-  background: "220 20% 14%",
-  foreground: "0 0% 98%",
-  card: "220 20% 18%",
-  primary: "217 91% 60%",
-  primaryForeground: "0 0% 100%",
-  secondary: "45 93% 58%",
-  secondaryForeground: "220 20% 10%",
-  muted: "220 15% 25%",
-  mutedForeground: "220 10% 60%",
-  border: "220 15% 25%",
-  headerBg: "220 20% 10%",
-  navBg: "220 15% 20%",
-  primaryGradient: "linear-gradient(135deg, hsl(217, 91%, 60%) 0%, hsl(217, 91%, 40%) 100%)",
-  secondaryGradient: "linear-gradient(135deg, hsl(45, 93%, 58%) 0%, hsl(45, 93%, 38%) 100%)",
+  background: "0 0% 100%",
+  foreground: "222.2 84% 4.9%",
+  card: "0 0% 100%",
+  primary: "211 100% 18%",
+  primaryForeground: "210 40% 98%",
+  secondary: "48 100% 50%",
+  secondaryForeground: "222.2 47.4% 11.2%",
+  muted: "210 40% 96.1%",
+  mutedForeground: "215.4 16.3% 46.9%",
+  border: "214.3 31.8% 91.4%",
+  headerBg: "211 100% 18%",
+  navBg: "211 100% 18%",
+  clubeBlue: "#002e5d",
+  clubeYellow: "#ffed32",
+  clubeRed: "#ec2027",
   topSongsPosition: 'hero',
   pedidoPosition: 'center',
   playerPosition: 'center',
-  // Visibility toggles
   showTopSongs: true,
   showGallery: true,
   showNews: true,
@@ -73,76 +84,48 @@ export const DEFAULT_THEME: ThemeConfig = {
   showWeather: true,
   showSponsors: true,
   showBackToTop: true,
-  // Weather settings
-  weatherCity: 'São Paulo',
-  // Sponsor settings
+  weatherCity: 'Brasília',
   sponsorsPosition: 'center',
   topSongsAlignment: 'center',
   weatherPosition: 'left',
+  labels: {
+    heroReadMore: "LEIA A NOTÍCIA",
+    heroMoreNews: "MAIS NOTÍCIAS!",
+    newsTitle: "Plantão",
+    newsSubtitle: "Impacto",
+    topSongsTitle: "Top 3",
+    topSongsSubtitle: "Impacto",
+    galleryTitle: "Momentos",
+    gallerySubtitle: "Vips",
+    aboutTitle: "Sobre a",
+    aboutSubtitle: "Impacto",
+    playerLocation: "Você está em:",
+    playerLive: "AO VIVO",
+    playerSchedule: "Ver Programação",
+    playerOpen: "Abrir Player",
+  }
 };
 
 export function getThemeConfig(): ThemeConfig {
-  try {
-    const saved = JSON.parse(localStorage.getItem(THEME_KEY) || "{}");
-    return { ...DEFAULT_THEME, ...saved };
-  } catch { return { ...DEFAULT_THEME }; }
+  return { ...DEFAULT_THEME };
 }
 
 export function saveThemeConfig(config: ThemeConfig) {
-  localStorage.setItem(THEME_KEY, JSON.stringify(config));
   applyTheme(config);
 }
 
 export function applyTheme(config: ThemeConfig) {
   const root = document.documentElement;
+  // HSL Variables
   root.style.setProperty("--background", config.background);
   root.style.setProperty("--foreground", config.foreground);
-  root.style.setProperty("--card", config.card);
-  root.style.setProperty("--card-foreground", config.foreground);
-  root.style.setProperty("--popover", config.card);
-  root.style.setProperty("--popover-foreground", config.foreground);
   root.style.setProperty("--primary", config.primary);
-  root.style.setProperty("--primary-foreground", config.primaryForeground);
   root.style.setProperty("--secondary", config.secondary);
-  root.style.setProperty("--secondary-foreground", config.secondaryForeground);
-  root.style.setProperty("--muted", config.muted);
-  root.style.setProperty("--muted-foreground", config.mutedForeground);
   root.style.setProperty("--accent", config.primary);
-  root.style.setProperty("--accent-foreground", config.primaryForeground);
   root.style.setProperty("--border", config.border);
-  root.style.setProperty("--input", config.border);
-  root.style.setProperty("--ring", config.primary);
-  root.style.setProperty("--header-bg", config.headerBg);
-  root.style.setProperty("--nav-bg", config.navBg);
-
-  // Apply Gradients
-  if (config.primaryGradient) root.style.setProperty("--primary-gradient", config.primaryGradient);
-  else root.style.setProperty("--primary-gradient", `hsl(${config.primary})`);
-
-  if (config.secondaryGradient) root.style.setProperty("--secondary-gradient", config.secondaryGradient);
-  else root.style.setProperty("--secondary-gradient", `hsl(${config.secondary})`);
-
-  if (config.backgroundGradient) root.style.setProperty("--background-gradient", config.backgroundGradient);
-  else root.style.setProperty("--background-gradient", `hsl(${config.background})`);
-
-  if (config.headerGradient) root.style.setProperty("--header-gradient", config.headerGradient);
-  else root.style.setProperty("--header-gradient", `hsl(${config.headerBg})`);
-}
-
-export function getSiteConfig(): SiteConfig {
-  try {
-    const saved = JSON.parse(localStorage.getItem(SITE_KEY) || "{}");
-    return {
-      streamUrl: saved.streamUrl || "https://stream.zeno.fm/yn65fsaurfhvv",
-      radioName: saved.radioName || "Impacto FM",
-      radioFreq: saved.radioFreq || "87.9 FM",
-      logo: saved.logo || "/logo.png",
-    };
-  } catch {
-    return { streamUrl: "https://stream.zeno.fm/yn65fsaurfhvv", radioName: "Impacto FM", radioFreq: "87.9 FM", logo: "/logo.png" };
-  }
-}
-
-export function saveSiteConfig(config: SiteConfig) {
-  localStorage.setItem(SITE_KEY, JSON.stringify(config));
+  
+  // Clube Specific Hex
+  root.style.setProperty("--clube-blue", config.clubeBlue);
+  root.style.setProperty("--clube-yellow", config.clubeYellow);
+  root.style.setProperty("--clube-red", config.clubeRed);
 }

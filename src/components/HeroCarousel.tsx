@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { getSlides } from "@/lib/radioStore";
+import { useTheme } from "@/hooks/useTheme";
 
 const HeroCarousel = () => {
   const [slides, setSlides] = useState<{ image: string; title: string; category?: string }[]>([]);
   const [current, setCurrent] = useState(0);
+  const theme = useTheme();
 
   useEffect(() => {
     const fetchSlides = async () => {
@@ -11,8 +13,8 @@ const HeroCarousel = () => {
       if (data && data.length > 0) {
         setSlides(data.map(s => ({ 
           image: s.imagem, 
-          title: s.titulo || "Novidades na Rede Clube de Rádios",
-          category: "PRORROGAÇÃO"
+          title: s.titulo || "Sintonize a melhor programação",
+          category: "DESTAQUE"
         })));
       }
     };
@@ -60,10 +62,10 @@ const HeroCarousel = () => {
               </h2>
               <div className="pt-12 flex flex-wrap gap-6 animate-in fade-in slide-in-from-bottom duration-1000">
                  <button className="clube-btn-yellow h-14 px-12 text-sm tracking-widest">
-                   LEIA A NOTÍCIA
+                   {theme.labels.heroReadMore}
                  </button>
                  <button className="clube-btn-outline h-14 px-12 text-sm tracking-widest border-2">
-                   MAIS NOTÍCIAS!
+                   {theme.labels.heroMoreNews}
                  </button>
               </div>
             </div>

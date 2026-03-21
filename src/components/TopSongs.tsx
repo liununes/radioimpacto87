@@ -1,7 +1,6 @@
 import { Trophy, Music } from "lucide-react";
-import { getThemeConfig } from "@/lib/themeStore";
 import { useEffect, useState } from "react";
-import { getSiteConfig } from "@/lib/radioStore";
+import { useTheme } from "@/hooks/useTheme";
 
 const songs = [
   { rank: 1, title: "Suave", artist: "Seu Jorge" },
@@ -16,19 +15,12 @@ const rankColors = [
 ];
 
 const TopSongs = () => {
-  const [theme, setTheme] = useState(getThemeConfig());
-
-  useEffect(() => {
-    const syncTheme = async () => {
-      const saved = await getSiteConfig("theme");
-      if (saved) setTheme(saved);
-    };
-    syncTheme();
-  }, []);
+  const theme = useTheme();
 
   const alignment = theme.topSongsAlignment || 'center';
   const alignClass = alignment === 'left' ? 'mr-auto items-start' : alignment === 'right' ? 'ml-auto items-end' : 'mx-auto items-center';
   const textClass = alignment === 'left' ? 'text-left' : alignment === 'right' ? 'text-right' : 'text-center';
+
 
   return (
     <section className="py-24 bg-white border-y border-gray-100">
@@ -37,7 +29,7 @@ const TopSongs = () => {
           <div className={`flex flex-col gap-2 mb-12 ${textClass}`}>
              <span className="text-accent font-black uppercase tracking-[0.5em] text-[10px]">AS MAIS PEDIDAS</span>
              <h2 className="text-4xl md:text-5xl font-black text-primary tracking-tighter uppercase leading-none">
-                Top 3 <span className="text-accent underline decoration-[var(--clube-yellow)]">Impacto</span>
+                {theme.labels.topSongsTitle} <span className="text-accent underline decoration-[var(--clube-yellow)]">{theme.labels.topSongsSubtitle}</span>
               </h2>
           </div>
 

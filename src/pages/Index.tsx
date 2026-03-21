@@ -7,21 +7,18 @@ import { FeaturedNews, RemainingNews, useNews } from "@/components/EnhancedNewsS
 import GaleriaSection from "@/components/GaleriaSection";
 import AboutSection from "@/components/AboutSection";
 import Footer from "@/components/Footer";
-import { getThemeConfig } from "@/lib/themeStore";
+import { useTheme } from "@/hooks/useTheme";
 import { getSiteConfig } from "@/lib/radioStore";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
 
 const Index = () => {
-  const [theme, setTheme] = useState(getThemeConfig());
+  const theme = useTheme();
   const { news, loading } = useNews();
 
   useEffect(() => {
-    const syncTheme = async () => {
-      const saved = await getSiteConfig("theme");
-      if (saved) setTheme(saved);
-    };
-    syncTheme();
+    // Rastreador de Acessos
+    const logAccess = async () => {
     
     // Rastreador de Acessos
     const logAccess = async () => {
@@ -44,10 +41,6 @@ const Index = () => {
       }
     };
     logAccess();
-    
-    const handleStorage = () => setTheme(getThemeConfig());
-    window.addEventListener("storage", handleStorage);
-    return () => window.removeEventListener("storage", handleStorage);
   }, []);
 
   const topSongsPos = theme.topSongsPosition || 'hero';

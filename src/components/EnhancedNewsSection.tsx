@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import { Calendar, ExternalLink, ImageIcon } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
+import { useTheme } from "@/hooks/useTheme";
 
+// ... previous interfaces
 export interface NewsItem {
   id: string;
   titulo: string;
@@ -21,6 +23,7 @@ interface EnhancedNewsSectionProps {
 }
 
 export const FeaturedNews = ({ news, loading }: { news: NewsItem[], loading: boolean }) => {
+  const theme = useTheme();
   const featured = news[0];
   const sidebar = news.slice(1, 4);
 
@@ -30,7 +33,9 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[], loading: boo
     <div className="container mx-auto px-4 py-20">
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-l-[12px] border-primary pl-6">
         <div>
-          <h2 className="text-4xl md:text-5xl font-black text-primary tracking-tighter uppercase leading-none">Plantão <span className="text-accent underline decoration-yellow-400">Impacto</span></h2>
+          <h2 className="text-4xl md:text-5xl font-black text-primary tracking-tighter uppercase leading-none">
+            {theme.labels.newsTitle} <span className="text-accent underline decoration-[var(--clube-yellow)]">{theme.labels.newsSubtitle}</span>
+          </h2>
           <p className="text-gray-400 font-bold uppercase tracking-[0.2em] text-[10px] mt-2">Destaques e últimas notícias</p>
         </div>
         <div className="hidden md:block h-0.5 flex-1 bg-gray-100 mx-12 mb-2" />
