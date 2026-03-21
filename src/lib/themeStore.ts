@@ -66,6 +66,7 @@ export interface ThemeConfig {
     navAbout: string;
     navContact: string;
   };
+  navMenus?: { label: string; href: string }[];
 }
 
 export const DEFAULT_THEME: ThemeConfig = {
@@ -82,7 +83,7 @@ export const DEFAULT_THEME: ThemeConfig = {
   headerBg: "211 100% 18%",
   navBg: "211 100% 18%",
   radioFreq: "87.9",
-  playerOpenUrl: "https://player.clube.fm",
+  playerOpenUrl: "/player",
   clubeBlue: "#002e5d",
   clubeYellow: "#ffed32",
   clubeRed: "#ec2027",
@@ -100,6 +101,15 @@ export const DEFAULT_THEME: ThemeConfig = {
   sponsorsPosition: 'center',
   topSongsAlignment: 'center',
   weatherPosition: 'left',
+  navMenus: [
+    { label: "AO VIVO", href: "#home" },
+    { label: "PROMOÇÕES", href: "#promocoes" },
+    { label: "ENTRETENIMENTO", href: "#entretenimento" },
+    { label: "MÚSICA", href: "#musica" },
+    { label: "PROGRAMAÇÃO", href: "#programacao" },
+    { label: "A RÁDIO", href: "#sobre" },
+    { label: "CONTATO", href: "#contato" },
+  ],
   labels: {
     heroReadMore: "LEIA A NOTÍCIA",
     heroMoreNews: "MAIS NOTÍCIAS!",

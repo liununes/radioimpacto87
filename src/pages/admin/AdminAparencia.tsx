@@ -117,8 +117,72 @@ const AdminAparencia = () => {
             <TabsTrigger value="radio" className="rounded-2xl px-8 py-4 data-[state=active]:bg-[#002e5d] data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
               <Radio className="w-4 h-4 mr-2" /> Rádio & Frequência
             </TabsTrigger>
+            <TabsTrigger value="menus" className="rounded-2xl px-8 py-4 data-[state=active]:bg-[#002e5d] data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
+              <ExternalLink className="w-4 h-4 mr-2" /> Menus do Site
+            </TabsTrigger>
           </TabsList>
         </div>
+
+        {/* --- MENUS TAB --- */}
+        <TabsContent value="menus" className="space-y-8 animate-in fade-in zoom-in-95 duration-500">
+          <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-white">
+            <CardHeader className="p-10 pb-4">
+              <CardTitle className="text-2xl font-black uppercase tracking-tight text-[#002e5d]">Gerenciar Links de Navegação</CardTitle>
+              <CardDescription>Crie e organize os itens do menu superior do seu site.</CardDescription>
+            </CardHeader>
+            <CardContent className="p-10 pt-4 space-y-6">
+              <div className="space-y-4">
+                {(theme.navMenus || []).map((menu, idx) => (
+                  <div key={idx} className="flex items-center gap-4 bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                    <div className="flex-1 space-y-1">
+                      <Label className="text-[10px] font-bold uppercase text-gray-400">Texto do Link</Label>
+                      <Input 
+                        value={menu.label} 
+                        onChange={e => {
+                          const newMenus = [...(theme.navMenus || [])];
+                          newMenus[idx].label = e.target.value;
+                          setTheme(prev => ({ ...prev, navMenus: newMenus }));
+                        }}
+                        className="h-12 rounded-xl"
+                      />
+                    </div>
+                    <div className="flex-1 space-y-1">
+                      <Label className="text-[10px] font-bold uppercase text-gray-400">URL / Destino (Ex: #sobre)</Label>
+                      <Input 
+                        value={menu.href}
+                        onChange={e => {
+                          const newMenus = [...(theme.navMenus || [])];
+                          newMenus[idx].href = e.target.value;
+                          setTheme(prev => ({ ...prev, navMenus: newMenus }));
+                        }}
+                        className="h-12 rounded-xl"
+                      />
+                    </div>
+                    <Button 
+                      variant="destructive" 
+                      className="mt-6 h-12 w-12 rounded-xl p-0"
+                      onClick={() => {
+                        const newMenus = (theme.navMenus || []).filter((_, i) => i !== idx);
+                        setTheme(prev => ({ ...prev, navMenus: newMenus }));
+                      }}
+                    >
+                      X
+                    </Button>
+                  </div>
+                ))}
+              </div>
+              <Button 
+                onClick={() => {
+                  const newMenus = [...(theme.navMenus || []), { label: "Novo Link", href: "#" }];
+                  setTheme(prev => ({ ...prev, navMenus: newMenus }));
+                }}
+                className="w-full h-14 rounded-2xl border-2 border-dashed border-gray-200 text-gray-400 hover:text-primary hover:border-primary/50 bg-transparent gap-2"
+              >
+                + Adicionar Novo Item ao Menu
+              </Button>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
         {/* --- VISUAL TAB --- */}
         <TabsContent value="visual" className="space-y-8 animate-in fade-in zoom-in-95 duration-500">
@@ -126,7 +190,7 @@ const AdminAparencia = () => {
             <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-white">
               <CardHeader className="p-8 pb-4">
                 <CardTitle className="text-xl font-black uppercase text-primary tracking-tight">Cores da Marca</CardTitle>
-                <CardDescription className="text-xs font-medium text-gray-400">Defina os tons que darão vida ao site Clube FM</CardDescription>
+                <CardDescription className="text-xs font-medium text-gray-400">Defina os tons que darão vida ao site da sua rádio</CardDescription>
               </CardHeader>
               <CardContent className="p-8 pt-4 space-y-8">
                 <div className="grid grid-cols-3 gap-6">

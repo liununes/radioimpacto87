@@ -56,10 +56,10 @@ const RadioPlayer = () => {
   };
 
   return (
-    <div className="bottom-player-universal flex items-center justify-between px-12 gap-8">
+    <div className="bottom-player-clube flex items-center justify-between px-12 gap-8">
       <audio ref={audioRef} src={siteConfig.streamUrl} style={{ display: 'none' }} />
       
-      {/* Informações da Cidade/Localização */}
+      {/* Esquerda: Localização */}
       <div className="flex items-center gap-4 shrink-0">
         <div className="flex items-center gap-2">
            <MapPin className="w-4 h-4 text-accent fill-accent/20" />
@@ -71,64 +71,64 @@ const RadioPlayer = () => {
         </div>
       </div>
 
-      {/* Main Controls & Programa Atual */}
-      <div className="absolute left-1/2 -translate-x-1/2 -top-12 md:-top-16 flex items-center gap-6">
-        <div className="flex flex-col items-end pr-4 text-right hidden md:flex">
-          <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">No Ar Agora:</span>
-          <span className="text-sm font-black text-primary uppercase leading-tight truncate max-w-[150px]">
-            {programaAtual?.programa?.nome || "Música de Qualidade"}
-          </span>
-          <span className="text-[10px] font-bold text-accent uppercase">{programaAtual?.locutor?.nome || "Impacto 24h"}</span>
-        </div>
-
+      {/* Centro: Play Button e Info do Ar */}
+      <div className="absolute left-1/2 -translate-x-1/2 -top-10 md:-top-12 flex items-center gap-6">
         <div className="relative">
            {/* Ring de foto do programa se houver */}
            {programaAtual?.programa?.foto && (
-              <div className="absolute inset-0 rounded-full border-4 border-accent animate-pulse opacity-20 -m-2" />
+              <div className="absolute inset-0 rounded-full border-4 border-accent animate-pulse opacity-20 -m-1" />
            )}
            <button
              onClick={togglePlay}
-             className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-accent flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-xl bg-cover bg-center overflow-hidden border-8 border-white group relative"
-             style={{ backgroundImage: isPlaying && programaAtual?.programa?.foto ? `url(${programaAtual.programa.foto})` : 'none' }}
+             className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-accent flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-[0_15px_35px_rgba(236,32,39,0.3)] border-8 border-white group relative overflow-hidden"
+             style={{ backgroundImage: isPlaying && programaAtual?.programa?.foto ? `url(${programaAtual.programa.foto})` : 'none', backgroundSize: 'cover' }}
            >
              <div className={`absolute inset-0 bg-accent/60 flex items-center justify-center transition-opacity ${isPlaying && programaAtual?.programa?.foto ? 'opacity-0 hover:opacity-100' : 'opacity-100'}`}>
                 {isPlaying ? 
-                  <Pause className="w-10 h-10 md:w-14 md:h-14 fill-white text-white" /> : 
-                  <Play className="w-10 h-10 md:w-14 md:h-14 fill-white text-white ml-2" />
+                  <Pause className="w-8 h-8 md:w-10 md:h-10 fill-white text-white" /> : 
+                  <Play className="w-8 h-8 md:w-10 md:h-10 fill-white text-white ml-2" />
                 }
              </div>
            </button>
         </div>
-
-        <div className="flex flex-col">
+        
+        <div className="flex flex-col pt-10 md:pt-14 whitespace-nowrap">
           <div className="flex items-center gap-2">
-            <div className={`w-2 h-2 rounded-full ${isPlaying ? 'bg-accent animate-pulse' : 'bg-gray-300'}`} />
-            <span className="text-[10px] font-black uppercase tracking-widest text-accent">{theme.labels.playerLive}</span>
+            <div className={`w-2 h-2 rounded-full ${isPlaying ? 'bg-accent animate-pulse shadow-[0_0_8px_#ec2027]' : 'bg-gray-300'}`} />
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-accent">{theme.labels.playerLive}</span>
           </div>
-          <span className="text-2xl font-black text-primary leading-none uppercase tracking-tighter">
-            {siteConfig.radioFreq || "87.9"} <span className="text-xs">FM</span>
+          <span className="text-xl md:text-2xl font-black text-primary leading-none uppercase tracking-tighter">
+            {siteConfig.radioFreq || theme.radioFreq || "87.9"} FM
+          </span>
+          {/* Programa Atual Subtitle */}
+          <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider mt-1">
+             {programaAtual?.programa?.nome || "Impacto FM"}
           </span>
         </div>
       </div>
 
-      {/* Action Buttons */}
+      {/* Direita: Botões de Ação */}
       <div className="flex items-center gap-4 shrink-0">
         <div className="flex items-center gap-3 px-4 py-2 bg-gray-50 rounded-full border border-gray-100 hidden lg:flex">
            <Volume2 className="w-4 h-4 text-gray-400" />
            <input 
              type="range" 
-             className="w-20 accent-accent cursor-pointer h-1.5" 
+             className="w-16 accent-accent cursor-pointer h-1" 
              onChange={(e) => { if(audioRef.current) audioRef.current.volume = parseInt(e.target.value) / 100 }}
              defaultValue={100}
            />
         </div>
+
+        <button className="clube-btn-white-outline px-8 h-12 hidden sm:block">
+          {theme.labels.playerSchedule}
+        </button>
         
         <button 
            onClick={openPlayerPopup}
-           className="clube-btn-yellow flex items-center gap-3 px-10 h-12 shadow-[0_10px_20px_rgba(255,237,50,0.2)] rounded-full"
+           className="clube-btn-yellow flex items-center gap-3 px-10 h-12"
         >
           <ExternalLink className="w-4 h-4" />
-          <span className="font-black uppercase text-[11px] tracking-widest">{theme.labels.playerOpen}</span>
+          <span className="font-black">{theme.labels.playerOpen}</span>
         </button>
       </div>
     </div>

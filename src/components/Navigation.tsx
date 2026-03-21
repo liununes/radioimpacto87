@@ -16,7 +16,7 @@ const Navigation = () => {
     loadSiteConfig();
   }, []);
 
-  const navItems = [
+  const navItems = theme.navMenus || [
     { label: theme.labels.navHome, href: "#home" },
     { label: theme.labels.navPromos, href: "#promocoes" },
     { label: theme.labels.navEntertainment, href: "#entretenimento" },
