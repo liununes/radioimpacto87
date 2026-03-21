@@ -34,14 +34,24 @@ const AdminNoticias = () => {
   const fetchData = async () => {
     const [newsData, cats] = await Promise.all([getNoticias(), getCategorias()]);
     setNoticias(newsData);
-    setCategorias(cats);
+    
+    // Coletar todas as categorias presentes nas notícias para garantir que nada fique oculto
+    const newsCats = newsData
+      .map(n => n.categoria)
+      .filter((c): c is string => !!c && !cats.includes(c));
+    
+    const allCats = [...cats, ...newsCats];
+    setCategorias(allCats);
+    
+    // Garantir que a aba inicial seja "Todas" caso nenhuma esteja selecionada
     if (!tab) setTab("Todas");
-    if (!categoria && cats.length > 0) setCategoria(cats[0]);
+    if (!categoria && allCats.length > 0) setCategoria(allCats[0]);
   };
 
   useEffect(() => { fetchData(); }, []);
 
-  const filtered = tab === "Todas" ? noticias : noticias.filter(n => n.categoria === tab);
+  // O filtro agora garante que se a aba for "Todas", mostramos TUDO
+  const filtered = !tab || tab === "Todas" ? noticias : noticias.filter(n => n.categoria === tab);
 
   const handleScrape = async () => {
     if (!scrapeUrl.trim()) return;
