@@ -50,31 +50,38 @@ const ProgramacaoPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <RadioPlayer />
+    <div className="min-h-screen bg-[#f8f9fa] pb-32">
       <Navigation />
 
-      <div className="container px-4 py-8">
-        <div className="flex items-center gap-3 mb-8">
-          <Link to="/" className="w-9 h-9 rounded-full bg-muted flex items-center justify-center hover:bg-muted/80 transition-colors">
-            <ArrowLeft className="w-4 h-4 text-foreground" />
+      <div className="container mx-auto px-6 py-12">
+        <div className="flex items-center gap-6 mb-16">
+          <Link to="/" className="w-12 h-12 rounded-full bg-white border border-gray-100 shadow-md flex items-center justify-center hover:bg-gray-50 transition-all group">
+            <ArrowLeft className="w-6 h-6 text-primary group-hover:-translate-x-1 transition-transform" />
           </Link>
-          <h1 className="text-3xl md:text-4xl font-display font-bold text-foreground">Programação</h1>
+          <div>
+            <span className="text-accent font-black uppercase tracking-[0.5em] text-[10px] mb-2 block">HORÁRIOS</span>
+            <h1 className="text-4xl md:text-5xl font-black text-primary tracking-tighter uppercase leading-none">Nossa <span className="text-accent underline decoration-yellow-400">Programação</span></h1>
+          </div>
         </div>
 
         {programas.length === 0 ? (
-          <p className="text-center text-muted-foreground py-16">Nenhum programa cadastrado.</p>
+          <div className="bg-white p-20 rounded-[3rem] border border-gray-100 text-center shadow-xl">
+            <Radio className="w-16 h-16 text-gray-200 mx-auto mb-6" />
+            <p className="text-xl font-bold text-gray-400 uppercase tracking-widest">Sintonizando a grade...</p>
+          </div>
         ) : (
-          <div className="space-y-12">
-            <div className="flex overflow-x-auto pb-6 gap-6 snap-x no-scrollbar">
+          <div className="space-y-20">
+            <div className="grid grid-cols-1 gap-16">
               {Object.entries(programasPorDia).map(([dia, progs]) => (
-                <div key={dia} className="min-w-[300px] md:min-w-[400px] snap-start">
-                  <h2 className="text-xl font-display font-bold text-primary mb-6 flex items-center gap-2">
-                    <div className="w-1.5 h-6 bg-secondary rounded-full" />
-                    {DIAS_COMPLETOS[Number(dia)]}
-                  </h2>
+                <div key={dia} className="animate-in fade-in slide-in-from-bottom duration-700">
+                  <div className="flex items-center gap-4 mb-10">
+                    <h2 className="text-2xl font-black text-primary uppercase tracking-tighter shrink-0">
+                      {DIAS_COMPLETOS[Number(dia)]}
+                    </h2>
+                    <div className="h-0.5 w-full bg-gray-100" />
+                  </div>
                   
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     {progs.map(prog => {
                       const isAoVivo = atual?.programa.id === prog.id;
                       const foto = prog.foto || getLocutorFoto(prog.locutorId);
@@ -83,39 +90,37 @@ const ProgramacaoPage = () => {
                       return (
                         <div
                           key={`${dia}-${prog.id}`}
-                          className={`group relative aspect-square rounded-2xl overflow-hidden border border-border/50 hover:border-primary/50 transition-all duration-300 shadow-lg ${isAoVivo ? "ring-2 ring-primary ring-offset-2 ring-offset-background" : ""}`}
+                          className={`group relative aspect-square rounded-[2.5rem] overflow-hidden border-4 ${isAoVivo ? "border-accent shadow-2xl shadow-accent/20" : "border-white shadow-xl"} transition-all duration-500 hover:-translate-y-2`}
                         >
                           {foto ? (
                             <img
                               src={foto}
                               alt={prog.nome}
-                              className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                              className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
                               onClick={() => imgIndex >= 0 && setLightboxIndex(imgIndex)}
                             />
                           ) : (
-                            <div className="absolute inset-0 bg-muted flex items-center justify-center">
-                              <Radio className="w-12 h-12 text-muted-foreground opacity-20" />
+                            <div className="absolute inset-0 bg-gray-100 flex items-center justify-center">
+                              <Radio className="w-16 h-16 text-gray-200" />
                             </div>
                           )}
 
-                          {/* Gradient Overlay */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/20 to-transparent opacity-90" />
 
-                          {/* Content */}
-                          <div className="absolute inset-0 p-4 flex flex-col justify-end">
+                          <div className="absolute inset-0 p-8 flex flex-col justify-end">
                             {isAoVivo && (
-                              <div className="absolute top-3 left-3 flex items-center gap-1 bg-destructive text-white text-[10px] font-bold px-2 py-0.5 rounded-full animate-pulse shadow-lg">
-                                <div className="w-1 h-1 rounded-full bg-white" />
-                                AO VIVO
+                              <div className="absolute top-6 left-6 flex items-center gap-2 bg-accent text-white text-[10px] font-black px-3 py-1 rounded-full animate-pulse shadow-lg">
+                                <div className="w-2 h-2 rounded-full bg-white shadow-[0_0_8px_white]" />
+                                NO AR AGORA
                               </div>
                             )}
 
-                            <div className="space-y-1">
-                              <h3 className="font-bold text-white text-base leading-tight group-hover:text-primary transition-colors line-clamp-1">{prog.nome}</h3>
-                              <p className="text-[10px] text-white/70 font-medium uppercase tracking-wider">{getLocutorNome(prog.locutorId)}</p>
+                            <div className="space-y-2">
+                              <span className="text-[9px] font-black text-accent uppercase tracking-widest block">{getLocutorNome(prog.locutorId)}</span>
+                              <h3 className="font-black text-white text-xl md:text-2xl leading-tight group-hover:text-accent transition-colors uppercase tracking-tight">{prog.nome}</h3>
                               
-                              <div className="flex items-center gap-1.5 pt-1 text-xs text-secondary font-bold">
-                                <Clock className="w-3 h-3" />
+                              <div className="flex items-center gap-2 pt-2 text-sm text-[var(--clube-yellow)] font-bold">
+                                <Clock className="w-4 h-4" />
                                 {prog.horaInicio} - {prog.horaFim}
                               </div>
                             </div>
@@ -127,17 +132,12 @@ const ProgramacaoPage = () => {
                 </div>
               ))}
             </div>
-            
-            <div className="flex justify-center gap-2">
-               {Object.keys(programasPorDia).map((_, i) => (
-                 <div key={i} className="w-1.5 h-1.5 rounded-full bg-border" />
-               ))}
-            </div>
           </div>
         )}
       </div>
 
       <Footer />
+      <RadioPlayer />
 
       {lightboxIndex !== null && (
         <PhotoLightbox

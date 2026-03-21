@@ -53,8 +53,7 @@ const Index = () => {
   const topSongsPos = theme.topSongsPosition || 'hero';
 
   return (
-    <div className="min-h-screen bg-[var(--background-gradient)]">
-      <RadioPlayer />
+    <div className="min-h-screen bg-[#f8f9fa] pb-24 md:pb-32">
       <Navigation />
       
       {theme.showNews && <FeaturedNews news={news} loading={loading} />}
@@ -76,6 +75,7 @@ const Index = () => {
       {theme.showTopSongs && topSongsPos === 'contact' && <TopSongs />}
       
       <Footer />
+      <RadioPlayer />
     </div>
   );
 };

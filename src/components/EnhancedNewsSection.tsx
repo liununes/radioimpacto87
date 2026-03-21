@@ -27,42 +27,38 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[], loading: boo
   if (!featured && !loading) return null;
 
   return (
-    <div className="container mx-auto px-4 py-16">
-      <div className="flex items-end justify-between mb-12 border-l-8 border-primary pl-6">
+    <div className="container mx-auto px-4 py-20">
+      <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-l-[12px] border-primary pl-6">
         <div>
-          <h2 className="text-4xl md:text-6xl font-black italic text-foreground tracking-tighter uppercase leading-none">Plantão <span className="text-primary italic">Clube</span></h2>
-          <p className="text-muted-foreground font-black uppercase tracking-[0.3em] text-[10px] mt-2">As principais manchetes da nossa região</p>
+          <h2 className="text-4xl md:text-5xl font-black text-primary tracking-tighter uppercase leading-none">Plantão <span className="text-accent underline decoration-yellow-400">Impacto</span></h2>
+          <p className="text-gray-400 font-bold uppercase tracking-[0.2em] text-[10px] mt-2">Destaques e últimas notícias</p>
         </div>
-        <div className="hidden md:block h-px flex-1 bg-white/5 mx-12 mb-4" />
+        <div className="hidden md:block h-0.5 flex-1 bg-gray-100 mx-12 mb-2" />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
         {featured && (
           <div className="lg:col-span-8 group">
-            <Card className="card-premium h-full relative">
+            <Card className="h-full relative overflow-hidden rounded-3xl border-none shadow-2xl hover:shadow-primary/10 transition-all duration-500">
               <div className="flex flex-col h-full">
                 <div className="aspect-[16/9] overflow-hidden relative">
                   <img 
                     src={featured.imagem || ""} 
                     alt={featured.titulo}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80" />
                   <div className="absolute top-8 left-8">
                     {featured.categoria && (
-                      <span className="px-6 py-2 bg-primary text-white text-[10px] font-black italic rounded-xl shadow-2xl uppercase tracking-[0.2em]">
+                      <span className="px-6 py-2 bg-accent text-white text-[10px] font-black rounded-lg shadow-xl uppercase tracking-widest">
                         {featured.categoria}
                       </span>
                     )}
                   </div>
                 </div>
-                <CardContent className="p-10 flex flex-col justify-between flex-1 bg-gradient-to-b from-transparent to-black/40">
+                <CardContent className="p-10 flex flex-col justify-between flex-1 bg-white">
                   <div>
-                    <div className="flex items-center gap-3 text-[10px] font-black text-primary uppercase tracking-[0.3em] mb-6">
-                      <Calendar className="w-3.5 h-3.5" />
-                      {new Date(featured.data_postagem).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' })}
-                    </div>
-                    <h3 className="text-3xl md:text-5xl font-black italic mb-8 group-hover:text-primary transition-colors leading-[0.95] uppercase tracking-tighter">
+                    <h3 className="text-3xl md:text-4xl font-black mb-6 group-hover:text-primary transition-colors leading-[1.1] uppercase tracking-tight text-primary">
                       {featured.titulo}
                     </h3>
                   </div>
@@ -71,10 +67,9 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[], loading: boo
                       href={featured.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="btn-premium w-fit"
+                      className="clube-btn-yellow w-fit"
                     >
-                      Ler Notícia Completa
-                      <ExternalLink className="w-4 h-4" />
+                      LER NOTÍCIA
                     </a>
                   )}
                 </CardContent>
@@ -83,14 +78,15 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[], loading: boo
           </div>
         )}
 
-        <div className="lg:col-span-4 flex flex-col gap-8">
-          <h4 className="text-[10px] font-black text-primary uppercase tracking-[0.3em] mb-2 flex items-center gap-3">
-            <div className="w-2.5 h-2.5 bg-primary rounded-full animate-pulse shadow-[0_0_10px_#ff1e1e]" />
-            MAIS LIDAS
+        {/* Sidebar News Grid */}
+        <div className="lg:col-span-4 flex flex-col gap-6">
+          <h4 className="text-[10px] font-black text-accent uppercase tracking-[0.3em] mb-2 flex items-center gap-3">
+            <div className="w-2.5 h-2.5 bg-accent rounded-full animate-pulse" />
+            VÍDEOS E MAIS
           </h4>
           {sidebar.map((item) => (
-            <Card key={item.id} className="card-premium h-32 group cursor-pointer border-white/5">
-              <div className="flex h-full">
+            <Card key={item.id} className="h-32 group cursor-pointer border-none shadow-lg rounded-2xl overflow-hidden hover:scale-[1.02] transition-all">
+              <div className="flex h-full bg-white">
                 <div className="w-32 shrink-0 overflow-hidden relative">
                   <img 
                     src={item.imagem || ""} 
@@ -98,9 +94,9 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[], loading: boo
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
                 </div>
-                <CardContent className="p-5 flex flex-col justify-center gap-1.5 flex-1 bg-black/20">
-                  <span className="text-[9px] font-black text-primary uppercase tracking-[0.2em]">{item.categoria || "GERAL"}</span>
-                  <CardTitle className="text-sm font-black italic line-clamp-2 leading-tight group-hover:text-primary transition-colors uppercase tracking-tight">
+                <CardContent className="p-4 flex flex-col justify-center gap-1.5 flex-1">
+                  <span className="text-[9px] font-black text-accent uppercase">{item.categoria || "NEWS"}</span>
+                  <CardTitle className="text-sm font-black text-primary line-clamp-2 leading-tight uppercase tracking-tight">
                     {item.titulo}
                   </CardTitle>
                 </CardContent>
@@ -119,15 +115,15 @@ export const RemainingNews = ({ news, loading }: { news: NewsItem[], loading: bo
   if (remaining.length === 0 && !loading) return null;
 
   return (
-    <div className="container mx-auto px-4 py-20 border-t border-white/5">
+    <div className="container mx-auto px-4 py-20 bg-gray-50/50 rounded-[3rem] my-12 shadow-inner">
       <div className="flex items-center gap-4 mb-16">
-        <h2 className="text-2xl font-black italic tracking-tighter uppercase shrink-0">Últimas do Portal</h2>
-        <div className="h-px w-full bg-white/5" />
+        <h2 className="text-2xl font-black text-primary uppercase tracking-tighter shrink-0">MAIS NOTÍCIAS</h2>
+        <div className="h-0.5 w-full bg-gray-200" />
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {remaining.map((item) => (
-          <Card key={item.id} className="card-premium group hover:-translate-y-2">
+          <Card key={item.id} className="group hover:-translate-y-2 transition-all duration-500 border-none shadow-xl rounded-2xl overflow-hidden bg-white">
             {item.imagem && (
               <div className="aspect-video overflow-hidden">
                 <img 
@@ -137,19 +133,16 @@ export const RemainingNews = ({ news, loading }: { news: NewsItem[], loading: bo
                 />
               </div>
             )}
-            <CardHeader className="p-8 pb-3">
-              <span className="text-[9px] font-black text-primary uppercase tracking-[0.2em] mb-3 block">
-                {item.categoria || "INFORMAÇÃO"}
+            <CardHeader className="p-6 pb-2">
+              <span className="text-[10px] font-black text-accent uppercase tracking-widest mb-3 block">
+                {item.categoria || "LOCAL"}
               </span>
-              <CardTitle className="text-lg font-black italic line-clamp-2 group-hover:text-primary transition-colors cursor-pointer uppercase tracking-tight leading-tight">
+              <CardTitle className="text-base font-black text-primary line-clamp-2 hover:underline cursor-pointer uppercase tracking-tight leading-tight">
                 {item.titulo}
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-8 pt-0">
-              <div className="flex items-center gap-2 text-[10px] font-black text-foreground/30 uppercase tracking-[0.1em]">
-                <Calendar className="w-3.5 h-3.5" />
-                {new Date(item.data_postagem).toLocaleDateString('pt-BR')}
-              </div>
+            <CardContent className="p-6 pt-0">
+               <div className="text-[10px] font-bold text-gray-300 uppercase">{new Date(item.data_postagem).toLocaleDateString('pt-BR')}</div>
             </CardContent>
           </Card>
         ))}
@@ -192,8 +185,8 @@ const EnhancedNewsSection = ({ showNews = true }: EnhancedNewsSectionProps) => {
       <FeaturedNews news={news} loading={loading} />
       {loading && (
         <div className="container mx-auto px-4 text-center py-20">
-          <div className="animate-spin w-12 h-12 border-4 border-primary border-t-transparent rounded-full mx-auto mb-6 shadow-[0_0_20px_#ff1e1e]"></div>
-          <p className="text-xs font-black uppercase tracking-[0.3em] text-primary">Sintonizando informações...</p>
+          <div className="animate-spin w-12 h-12 border-4 border-accent border-t-transparent rounded-full mx-auto mb-6"></div>
+          <p className="text-xs font-black uppercase text-accent">CARREGANDO...</p>
         </div>
       )}
       <RemainingNews news={news} loading={loading} />

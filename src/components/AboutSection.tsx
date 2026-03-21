@@ -1,4 +1,4 @@
-import { MapPin, Phone, Mail, Info } from "lucide-react";
+import { MapPin, Phone, Mail, Info, Send } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getSiteConfig } from "@/lib/radioStore";
 
@@ -26,73 +26,69 @@ const AboutSection = () => {
   if (loading) return null;
 
   return (
-    <section id="sobre" className="py-32 bg-transparent relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] -z-10" />
-      <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-primary/10 rounded-full blur-[100px] -z-10" />
-      
+    <section id="sobre" className="py-32 bg-white relative overflow-hidden">
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-          <div className="space-y-10">
+          <div className="space-y-12">
             <div className="space-y-4">
-              <span className="text-[10px] font-black text-primary uppercase tracking-[0.5em] mb-4 block animate-pulse">Nossa História</span>
-              <h2 className="text-5xl md:text-7xl font-black italic tracking-tighter uppercase leading-none">
-                Sobre a <span className="text-primary italic">Rádio</span>
+              <span className="text-[10px] font-black text-accent uppercase tracking-[0.5em] mb-4 block underline decoration-[var(--clube-yellow)]">NOSSA RÁDIO</span>
+              <h2 className="text-4xl md:text-7xl font-black text-primary tracking-tighter uppercase leading-[0.9]">
+                Sobre a <span className="text-accent underline decoration-[var(--clube-yellow)]">Impacto</span>
               </h2>
-              <div className="w-20 h-2 bg-primary rounded-full" />
             </div>
             
-            <p className="text-xl text-foreground/70 leading-relaxed font-medium whitespace-pre-wrap max-w-xl">
+            <p className="text-xl text-gray-500 font-medium leading-relaxed whitespace-pre-wrap max-w-xl">
               {data.descricao || "A rádio que toca você com a melhor programação, música de qualidade e informação em tempo real para toda a nossa região."}
             </p>
 
-            <div className="flex gap-4">
-               <button className="btn-premium">Saiba Mais</button>
-               <button className="px-8 py-4 rounded-2xl border border-white/10 font-black uppercase tracking-widest text-xs hover:bg-white/5 transition-all">Programação</button>
+            <div className="flex flex-wrap gap-4">
+               <button className="clube-btn-yellow shadow-lg shadow-yellow-400/20">Saiba Mais</button>
+               <button className="px-10 py-3 rounded-full border-2 border-primary text-primary font-black uppercase tracking-widest text-[10px] hover:bg-primary hover:text-white transition-all">Programação</button>
             </div>
           </div>
 
-          <div id="contato" className="card-premium p-12 space-y-10 bg-black/40 border-primary/10 relative overflow-hidden group">
-            <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-110 transition-transform duration-700">
-              <Info className="w-32 h-32 text-primary" />
+          <div id="contato" className="bg-gray-50 p-12 space-y-10 rounded-[3rem] border border-gray-100 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:scale-110 transition-transform duration-700">
+              <Info className="w-48 h-48 text-primary shadow-2xl" />
             </div>
             
-            <h3 className="text-2xl font-black italic uppercase tracking-tight text-white flex items-center gap-4 relative z-10">
-              <div className="w-8 h-px bg-primary" /> Contato Direto
+            <h3 className="text-2xl font-black uppercase tracking-tighter text-primary flex items-center gap-4 relative z-10">
+              Central de Contato
             </h3>
             
-            <div className="grid grid-cols-1 gap-8 relative z-10">
+            <div className="grid grid-cols-1 gap-10 relative z-10">
               {data.endereco && (
                 <div className="flex items-start gap-6 group/item">
-                  <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 group-hover/item:border-primary/50 transition-colors">
-                    <MapPin className="w-6 h-6 text-primary" />
+                  <div className="w-12 h-12 rounded-2xl bg-white border border-gray-100 flex items-center justify-center shrink-0 group-hover/item:border-accent group-hover/item:shadow-lg transition-all">
+                    <MapPin className="w-6 h-6 text-accent" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-1">Localização</p>
-                    <p className="text-lg font-bold text-foreground/80 leading-tight">{data.endereco}</p>
+                    <p className="text-[10px] font-black uppercase text-accent mb-1 underline decoration-yellow-400">Localização</p>
+                    <p className="text-lg font-bold text-primary truncate max-w-xs">{data.endereco}</p>
                   </div>
                 </div>
               )}
 
               {data.telefone && (
                 <div className="flex items-start gap-6 group/item">
-                  <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 group-hover/item:border-primary/50 transition-colors">
-                    <Phone className="w-6 h-6 text-primary" />
+                  <div className="w-12 h-12 rounded-2xl bg-white border border-gray-100 flex items-center justify-center shrink-0 group-hover/item:border-accent group-hover/item:shadow-lg transition-all">
+                    <Phone className="w-6 h-6 text-accent" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-1">Central de Ouvintes</p>
-                    <p className="text-2xl font-black text-white">{data.telefone}</p>
+                    <p className="text-[10px] font-black uppercase text-accent mb-1 underline decoration-yellow-400">Atendimento Ouvinte</p>
+                    <p className="text-3xl font-black text-primary leading-none mt-1">{data.telefone}</p>
                   </div>
                 </div>
               )}
 
               {data.email && (
                 <div className="flex items-start gap-6 group/item">
-                  <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 group-hover/item:border-primary/50 transition-colors">
-                    <Mail className="w-6 h-6 text-primary" />
+                  <div className="w-12 h-12 rounded-2xl bg-white border border-gray-100 flex items-center justify-center shrink-0 group-hover/item:border-accent group-hover/item:shadow-lg transition-all">
+                    <Mail className="w-6 h-6 text-accent" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-1">Publicidade e SAC</p>
-                    <p className="text-lg font-bold text-white lowercase">{data.email}</p>
+                    <p className="text-[10px] font-black uppercase text-accent mb-1 underline decoration-yellow-400">E-mail Comercial</p>
+                    <p className="text-lg font-bold text-primary truncate max-w-xs lowercase">{data.email}</p>
                   </div>
                 </div>
               )}

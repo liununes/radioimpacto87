@@ -36,75 +36,67 @@
 
     --radius: 0.75rem;
 
-    /* Custom tokens */
-    --header-bg: 220 25% 10%;
-    --nav-bg: 220 20% 12%;
-    --gradient-primary: linear-gradient(135deg, #FF1E1E 0%, #A80000 100%);
-    --gradient-secondary: linear-gradient(135deg, #3B82F6 0%, #1E40AF 100%);
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --primary: 211 100% 18%; /* Dark Blue from Image: #002E5D */
+    --primary-foreground: 210 40% 98%;
+    --secondary: 48 100% 50%; /* Yellow from Image: #FFD700 */
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --accent: 358 83% 53%; /* Red from Image: #EC2027 */
+    --accent-foreground: 210 40% 98%;
+    
+    /* Custom tokens matching image */
+    --clube-blue: #002e5d;
+    --clube-yellow: #ffed32;
+    --clube-red: #ec2027;
+    
+    --header-bg: var(--clube-blue);
+    --player-bg: #ffffff;
+    
+    --gradient-primary: linear-gradient(135deg, var(--clube-blue) 0%, #001a35 100%);
+    --gradient-yellow: linear-gradient(135deg, var(--clube-yellow) 0%, #e6d52d 100%);
     --primary-gradient: var(--gradient-primary);
-    --secondary-gradient: var(--gradient-secondary);
-    --background-gradient: linear-gradient(180deg, #0A0A0B 0%, #17171A 100%);
-    --header-gradient: rgba(10, 10, 11, 0.95);
-    --shadow-glow: 0 0 30px rgba(255, 30, 30, 0.4);
-    --shadow-card: 0 10px 40px rgba(0, 0, 0, 0.5);
-    --radius: 1.25rem;
+    --secondary-gradient: var(--gradient-yellow);
+    --background-gradient: #f8f9fa;
+    --radius: 0.5rem;
   }
 
   .dark {
-    --background: 220 25% 8%;
-    --foreground: 0 0% 100%;
-    --card: 220 20% 12%;
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
   }
 }
 
 @layer base {
   * {
-    @apply border-white/5;
+    @apply border-border;
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-foreground;
     font-family: 'Inter', system-ui, sans-serif;
-    background-attachment: fixed;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-black tracking-tighter uppercase italic;
-    font-family: 'Poppins', system-ui, sans-serif;
+    @apply font-bold tracking-tight text-primary;
   }
 }
 
 @layer components {
-  .btn-premium {
-    @apply relative overflow-hidden px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all duration-300;
-    background: var(--primary-gradient);
-    box-shadow: 0 4px 15px rgba(255, 30, 30, 0.3);
+  .clube-btn-yellow {
+    @apply bg-[var(--clube-yellow)] text-black font-bold px-6 py-2.5 rounded-full hover:brightness-110 transition-all uppercase text-xs tracking-wider;
   }
 
-  .btn-premium:hover {
-    @apply -translate-y-1 shadow-primary/40 brightness-110;
+  .clube-btn-outline {
+    @apply border-2 border-[var(--clube-yellow)] text-[var(--clube-yellow)] font-bold px-6 py-2 rounded-full hover:bg-[var(--clube-yellow)] hover:text-black transition-all uppercase text-xs tracking-wider;
   }
 
-  .card-premium {
-    @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] overflow-hidden transition-all duration-500;
+  .top-nav-clube {
+    @apply bg-[var(--clube-blue)] text-white py-4 shadow-xl;
   }
 
-  .card-premium:hover {
-    @apply border-primary/30 shadow-2xl shadow-primary/10;
-  }
-
-  .nav-link {
-    @apply px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all duration-300 text-foreground/60 hover:text-foreground hover:bg-white/5;
-  }
-
-  .nav-link-active {
-    @apply bg-white/10 text-primary shadow-xl scale-105;
-    background: linear-gradient(to right, rgba(255, 30, 30, 0.1), transparent);
-    border-left: 3px solid #ff1e1e;
-  }
-
-  .glass-header {
-    @apply sticky top-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/5;
+  .bottom-player-clube {
+    @apply fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 py-3 z-[100] shadow-[0_-10px_30px_rgba(0,0,0,0.1)];
   }
 }
 

@@ -10,9 +10,9 @@ const songs = [
 ];
 
 const rankColors = [
-  "from-yellow-500 to-amber-600",
-  "from-gray-400 to-gray-500",
-  "from-amber-700 to-amber-800",
+  "bg-accent",
+  "bg-gray-400",
+  "bg-gray-300",
 ];
 
 const TopSongs = () => {
@@ -31,38 +31,35 @@ const TopSongs = () => {
   const textClass = alignment === 'left' ? 'text-left' : alignment === 'right' ? 'text-right' : 'text-center';
 
   return (
-    <section className="py-24 border-t border-white/5 bg-black/20">
+    <section className="py-24 bg-white border-y border-gray-100">
       <div className="container mx-auto px-6">
         <div className={`max-w-4xl flex flex-col ${alignClass}`}>
-          <div className={`flex flex-col gap-2 mb-16 ${textClass}`}>
-             <span className="text-primary font-black uppercase tracking-[0.5em] text-[10px]">As Favoritas</span>
-            <div className={`flex items-center gap-4 ${alignment === 'center' ? 'justify-center' : alignment === 'right' ? 'justify-end' : ''}`}>
-               <Trophy className="w-10 h-10 text-primary drop-shadow-[0_0_10px_#ff1e1e]" />
-               <h2 className="text-4xl md:text-6xl font-black italic tracking-tighter uppercase leading-none">
-                Top 3 <span className="text-primary italic">Explosão</span>
+          <div className={`flex flex-col gap-2 mb-12 ${textClass}`}>
+             <span className="text-accent font-black uppercase tracking-[0.5em] text-[10px]">AS MAIS PEDIDAS</span>
+             <h2 className="text-4xl md:text-5xl font-black text-primary tracking-tighter uppercase leading-none">
+                Top 3 <span className="text-accent underline decoration-[var(--clube-yellow)]">Impacto</span>
               </h2>
-            </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 w-full">
+          <div className="grid grid-cols-1 gap-4 w-full">
             {songs.map((song, i) => (
               <div
                 key={song.rank}
-                className="card-premium flex items-center gap-8 p-8 group hover:-translate-y-1 transition-all duration-500 bg-white/5 border-white/5 hover:border-primary/20"
+                className="flex items-center gap-6 p-6 md:p-8 group hover:bg-gray-50 transition-all duration-300 border border-gray-100 rounded-3xl"
               >
-                <div className={`w-16 h-16 md:w-20 md:h-20 rounded-3xl bg-gradient-to-br ${rankColors[i]} flex items-center justify-center text-3xl font-black italic text-white shadow-[0_10px_30px_rgba(0,0,0,0.5)] shrink-0 group-hover:scale-110 transition-transform duration-500`}>
+                <div className={`w-12 h-12 md:w-16 md:h-16 rounded-2xl ${rankColors[i]} flex items-center justify-center text-2xl font-black text-white shrink-0 shadow-lg`}>
                   {song.rank}°
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-xl md:text-3xl font-black italic text-white group-hover:text-primary transition-colors line-clamp-1 uppercase tracking-tighter">
+                  <p className="text-xl md:text-2xl font-black text-primary group-hover:text-accent transition-colors line-clamp-1 uppercase tracking-tight">
                     {song.title}
                   </p>
-                  <p className="text-sm md:text-lg font-black uppercase tracking-[0.2em] text-foreground/40 mt-1">{song.artist}</p>
+                  <p className="text-xs md:text-sm font-bold uppercase tracking-[0.1em] text-gray-400 mt-1">{song.artist}</p>
                 </div>
                 <div className="hidden md:block">
-                   <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:border-primary transition-colors">
-                      <Music className="w-5 h-5 text-white/20 group-hover:text-primary transition-colors" />
-                   </div>
+                   <button className="w-12 h-12 rounded-full border border-gray-200 flex items-center justify-center group-hover:border-accent transition-colors">
+                      <Music className="w-5 h-5 text-gray-300 group-hover:text-accent transition-colors" />
+                   </button>
                 </div>
               </div>
             ))}
