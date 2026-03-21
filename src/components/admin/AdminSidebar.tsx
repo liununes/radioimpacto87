@@ -50,7 +50,7 @@ export function AdminSidebar() {
           {!collapsed && (
             <div className="flex flex-col leading-none">
               <span className="text-sm font-black text-white tracking-widest uppercase">Admin</span>
-              <span className="text-[10px] font-bold text-yellow-400 uppercase tracking-tighter opacity-80">Rádio Clube FM</span>
+              <span className="text-[10px] font-bold text-yellow-400 uppercase tracking-tighter opacity-80">Gestão de Rádio</span>
             </div>
           )}
         </div>

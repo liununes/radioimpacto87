@@ -120,7 +120,7 @@ export const DEFAULT_THEME: ThemeConfig = {
     navEntertainment: "ENTRETENIMENTO",
     navMusic: "MÚSICA",
     navSchedule: "PROGRAMAÇÃO",
-    navAbout: "A CLUBE",
+    navAbout: "A RÁDIO",
     navContact: "CONTATO",
   }
 };

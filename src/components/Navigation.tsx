@@ -31,11 +31,17 @@ const Navigation = () => {
       <div className="container mx-auto flex items-center justify-between gap-12">
         {/* Logo */}
         <div className="flex items-center gap-6 shrink-0">
-          <img 
-            src={siteConfig.logo || "https://clube.fm/wp-content/uploads/2021/05/cropped-favicon-clube-192x192.png"} 
-            alt="Logo Clube" 
-            className="h-16 md:h-20 object-contain hover:scale-110 transition-transform cursor-pointer"
-          />
+          {siteConfig.logo ? (
+            <img 
+              src={siteConfig.logo} 
+              alt="Logo" 
+              className="h-16 md:h-20 object-contain hover:scale-110 transition-transform cursor-pointer"
+            />
+          ) : (
+            <div className="h-16 md:h-20 flex items-center bg-white/5 px-4 rounded-xl border border-white/10 italic text-white font-black">
+               LOGO
+            </div>
+          )}
         </div>
 
         {/* Desktop Menu */}

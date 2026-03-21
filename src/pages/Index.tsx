@@ -5,6 +5,7 @@ import WeatherWidget from "@/components/WeatherWidget";
 import TopSongs from "@/components/TopSongs";
 import { FeaturedNews, RemainingNews, useNews } from "@/components/EnhancedNewsSection";
 import GaleriaSection from "@/components/GaleriaSection";
+import ProgramacaoSection from "@/components/ProgramacaoSection";
 import AboutSection from "@/components/AboutSection";
 import Footer from "@/components/Footer";
 import { useTheme } from "@/hooks/useTheme";
@@ -43,37 +44,49 @@ const Index = () => {
   const topSongsPos = theme.topSongsPosition || 'hero';
 
   return (
-    <div className="min-h-screen bg-white pb-32 md:pb-40 overflow-x-hidden">
+    <div className="min-h-screen bg-white pb-32 md:pb-40 overflow-x-hidden" id="home">
       <Navigation />
       
       <main className="relative z-10">
-        {/* Notícias no topo, como solicitado - Estilo Clube FM */}
-        {theme.showNews && (
-          <div className="pt-8 md:pt-12 bg-white">
-            <FeaturedNews news={news} loading={loading} />
-            <div className="mt-8">
-              <RemainingNews news={news} loading={loading} />
-            </div>
-          </div>
-        )}
+        {/* Notícias no topo, como solicitado - Estilo Universal */}
+        <section id="noticias" className="pt-8 md:pt-12 bg-white">
+          {theme.showNews && (
+            <>
+              <FeaturedNews news={news} loading={loading} />
+              <div id="entretenimento" className="mt-8">
+                <RemainingNews news={news} loading={loading} />
+              </div>
+            </>
+          )}
+        </section>
 
         {/* Slide de fotos abaixo das notícias */}
-        <div className="mt-12">
+        <section id="promocoes" className="mt-12">
           <HeroCarousel />
+        </section>
+        
+        {theme.showTopSongs && topSongsPos === 'hero' && (
+          <section id="musica">
+            <TopSongs />
+          </section>
+        )}
+
+        <div id="programacao" className="mt-20">
+           <ProgramacaoSection />
         </div>
         
-        {theme.showTopSongs && topSongsPos === 'hero' && <TopSongs />}
-        
         {theme.showGallery && (
-          <div className="mt-20">
+          <section id="galeria" className="mt-20">
             <GaleriaSection />
-          </div>
+          </section>
         )}
         
         {theme.showTopSongs && topSongsPos === 'gallery' && <TopSongs />}
         
         <div className="bg-gray-50/50 mt-20 py-10">
-          {theme.showAbout && <AboutSection />}
+          <div id="sobre">
+            {theme.showAbout && <AboutSection />}
+          </div>
           {theme.showTopSongs && (topSongsPos === 'news' || topSongsPos === 'contact') && <TopSongs />}
         </div>
       </main>

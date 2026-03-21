@@ -7,6 +7,7 @@ import { AuthProvider } from "@/hooks/useAuth";
 import ThemeLoader from "@/components/ThemeLoader";
 import Index from "./pages/Index";
 import ProgramacaoPage from "./pages/ProgramacaoPage";
+import PlayerPage from "./pages/Player";
 import NotFound from "./pages/NotFound";
 import AdminLogin from "./pages/AdminLogin";
 import AdminLayout from "./pages/AdminLayout";
@@ -35,6 +36,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/programacao" element={<ProgramacaoPage />} />
+            <Route path="/player" element={<PlayerPage />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminHome />} />
