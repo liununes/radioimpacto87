@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Menu, X, Search, SunMoon } from "lucide-react";
+import { Menu, X, Search, Moon } from "lucide-react";
 import { getSiteConfig } from "@/lib/radioStore";
 
 const Navigation = () => {
@@ -25,61 +25,63 @@ const Navigation = () => {
   ];
 
   return (
-    <nav className="top-nav-clube sticky top-0 z-[100] px-6">
-      <div className="container mx-auto flex items-center justify-between">
+    <nav className="top-nav-clube sticky top-0 z-[100] border-b border-white/5 shadow-2xl">
+      <div className="container mx-auto flex items-center justify-between gap-12">
         {/* Logo */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-6 shrink-0">
           <img 
             src={siteConfig.logo || "https://clube.fm/wp-content/uploads/2021/05/cropped-favicon-clube-192x192.png"} 
             alt="Logo Clube" 
-            className="h-12 md:h-16 object-contain"
+            className="h-16 md:h-20 object-contain hover:scale-110 transition-transform cursor-pointer"
           />
         </div>
 
         {/* Desktop Menu */}
-        <div className="hidden lg:flex items-center gap-6">
+        <div className="hidden lg:flex items-center gap-10">
           {navItems.map((item) => (
             <a
               key={item.label}
               href={item.href}
-              className="text-[11px] font-black tracking-widest text-white/90 hover:text-[var(--clube-yellow)] transition-colors"
+              className="text-[12px] font-black tracking-[0.2em] text-white hover:text-[var(--clube-yellow)] transition-all relative group"
             >
               {item.label}
+              <div className="absolute -bottom-2 left-0 right-0 h-0.5 bg-[var(--clube-yellow)] scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
             </a>
           ))}
         </div>
 
-        {/* Right Actions */}
-        <div className="hidden lg:flex items-center gap-6">
-          <div className="flex items-center gap-2 text-[10px] font-bold text-white/60">
-            <span>A+</span>
-            <span>A-</span>
-            <SunMoon className="w-4 h-4" />
+        {/* Right Actions - Exactly like photo */}
+        <div className="hidden lg:flex items-center gap-8 shrink-0">
+          <div className="flex items-center gap-4 text-[11px] font-black text-white/50 border-r border-white/10 pr-8">
+            <button className="hover:text-white transition-colors">A+</button>
+            <button className="hover:text-white transition-colors">A-</button>
+            <button className="hover:text-[var(--clube-yellow)] transition-colors"><Moon className="w-4 h-4 fill-white/20" /></button>
           </div>
-          <div className="relative group">
+          
+          <div className="relative group flex items-center">
             <input 
               type="text" 
               placeholder="Buscar" 
-              className="bg-[var(--clube-yellow)]/20 border border-[var(--clube-yellow)]/50 rounded-full px-4 py-1.5 text-xs text-white placeholder:text-white/60 focus:outline-none focus:bg-[var(--clube-yellow)]/30 w-32 focus:w-48 transition-all"
+              className="bg-transparent border border-[var(--clube-yellow)]/40 rounded-full px-6 py-2.5 text-xs text-white placeholder:text-white/60 focus:outline-none focus:border-[var(--clube-yellow)] w-36 focus:w-56 transition-all"
             />
-            <Search className="w-3.5 h-3.5 text-[var(--clube-yellow)] absolute right-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-[var(--clube-yellow)] absolute right-4 cursor-pointer hover:scale-110 transition-transform" />
           </div>
         </div>
 
         {/* Mobile Toggle */}
-        <button className="lg:hidden p-2 text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+        <button className="lg:hidden p-3 text-white bg-white/5 rounded-xl border border-white/10" onClick={() => setIsMenuOpen(!isMenuOpen)}>
           {isMenuOpen ? <X /> : <Menu />}
         </button>
       </div>
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="lg:hidden bg-[var(--clube-blue)] border-t border-white/10 absolute top-full left-0 right-0 p-6 flex flex-col gap-4 shadow-2xl animate-in slide-in-from-top duration-300">
+        <div className="lg:hidden bg-[var(--clube-blue)] border-t border-white/10 fixed top-[112px] left-0 right-0 bottom-0 z-50 p-10 flex flex-col gap-6 shadow-2xl animate-in slide-in-from-right duration-500 overflow-y-auto">
           {navItems.map((item) => (
             <a
               key={item.label}
               href={item.href}
-              className="text-white font-bold tracking-widest text-sm py-2"
+              className="text-white font-black tracking-widest text-2xl py-4 border-b border-white/5 active:text-[var(--clube-yellow)]"
               onClick={() => setIsMenuOpen(false)}
             >
               {item.label}

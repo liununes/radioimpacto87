@@ -53,26 +53,29 @@ const Index = () => {
   const topSongsPos = theme.topSongsPosition || 'hero';
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] pb-24 md:pb-32">
+    <div className="min-h-screen bg-white pb-32 md:pb-40 overflow-x-hidden">
       <Navigation />
       
-      {theme.showNews && <FeaturedNews news={news} loading={loading} />}
-      
-      <div className="w-full">
+      <main className="relative z-10">
         <HeroCarousel />
-      </div>
-
-      {theme.showNews && <RemainingNews news={news} loading={loading} />}
-      
-      {theme.showTopSongs && topSongsPos === 'hero' && <TopSongs />}
-      
-      {theme.showGallery && <GaleriaSection />}
-      {theme.showTopSongs && topSongsPos === 'gallery' && <TopSongs />}
-      
-      {theme.showTopSongs && topSongsPos === 'news' && <TopSongs />}
-      
-      {theme.showAbout && <AboutSection />}
-      {theme.showTopSongs && topSongsPos === 'contact' && <TopSongs />}
+        
+        {theme.showNews && (
+          <>
+            <FeaturedNews news={news} loading={loading} />
+            <RemainingNews news={news} loading={loading} />
+          </>
+        )}
+        
+        {theme.showTopSongs && topSongsPos === 'hero' && <TopSongs />}
+        
+        {theme.showGallery && <GaleriaSection />}
+        {theme.showTopSongs && topSongsPos === 'gallery' && <TopSongs />}
+        
+        <div className="bg-gray-50/50">
+          {theme.showAbout && <AboutSection />}
+          {theme.showTopSongs && (topSongsPos === 'news' || topSongsPos === 'contact') && <TopSongs />}
+        </div>
+      </main>
       
       <Footer />
       <RadioPlayer />

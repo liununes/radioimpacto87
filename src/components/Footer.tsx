@@ -1,68 +1,56 @@
 import { Instagram, Facebook, Youtube, MessageCircle } from "lucide-react";
-import { getSiteConfig as getRadioSiteConfig } from "@/lib/radioStore";
+import { getSiteConfig } from "@/lib/radioStore";
 import { useState, useEffect } from "react";
 
 const Footer = () => {
-  const [siteConfig, setSiteConfig] = useState({
-    logo: "/logo.png",
-    radioName: "Impacto FM",
-    radioFreq: "87.9 FM"
-  });
+  const [siteConfig, setSiteConfig] = useState<any>({});
 
   useEffect(() => {
     const fetchConfig = async () => {
-      try {
-        const config = await getRadioSiteConfig("streaming");
-        if (config) {
-          setSiteConfig({
-            logo: config.logo || "/logo.png",
-            radioName: config.radioName || "Impacto FM",
-            radioFreq: config.radioFreq || "87.9 FM"
-          });
-        }
-      } catch (error) {
-        console.error("Erro ao buscar configuração:", error);
-      }
+      const config = await getSiteConfig("site");
+      if (config) setSiteConfig(config);
     };
     fetchConfig();
   }, []);
 
   return (
-    <footer id="redes-sociais" className="border-t border-border/30 bg-header py-10">
-      <div className="container px-4">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-3">
-            {siteConfig.logo ? (
-              <img src={siteConfig.logo} alt={siteConfig.radioName} className="w-12 h-12 rounded-full object-contain bg-white/10 p-1" />
-            ) : (
-              <div className="w-12 h-12 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center">
-                <div className="w-4 h-4 rounded-full bg-primary" />
-              </div>
-            )}
-            <div className="text-left">
-              <h3 className="text-lg font-display font-bold text-foreground">{siteConfig.radioName}</h3>
-              <p className="text-sm text-secondary font-semibold">{siteConfig.radioFreq}</p>
+    <footer id="redes-sociais" className="bg-white border-t border-gray-100 py-16">
+      <div className="container mx-auto px-6">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-12">
+          <div className="flex items-center gap-6">
+            <img 
+              src={siteConfig.logo || "https://clube.fm/wp-content/uploads/2021/05/cropped-favicon-clube-192x192.png"} 
+              alt="Logo Clube" 
+              className="h-16 object-contain"
+            />
+            <div className="h-10 w-px bg-gray-200" />
+            <div className="text-left font-black uppercase tracking-tighter">
+              <h3 className="text-lg text-primary leading-none">{siteConfig.radioName || "Impacto FM"}</h3>
+              <p className="text-accent text-sm mt-1">{siteConfig.radioFreq || "105.5 FM"}</p>
             </div>
           </div>
 
           <div className="flex items-center gap-4">
-            <a href="#" className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-primary transition-colors group">
-              <Instagram className="w-5 h-5 text-muted-foreground group-hover:text-primary-foreground" />
+            <a href="#" className="w-12 h-12 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center hover:bg-accent hover:border-accent transition-all group">
+              <Instagram className="w-5 h-5 text-gray-400 group-hover:text-white" />
             </a>
-            <a href="#" className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-primary transition-colors group">
-              <Facebook className="w-5 h-5 text-muted-foreground group-hover:text-primary-foreground" />
+            <a href="#" className="w-12 h-12 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center hover:bg-accent hover:border-accent transition-all group">
+              <Facebook className="w-5 h-5 text-gray-400 group-hover:text-white" />
             </a>
-            <a href="#" className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-primary transition-colors group">
-              <Youtube className="w-5 h-5 text-muted-foreground group-hover:text-primary-foreground" />
+            <a href="#" className="w-12 h-12 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center hover:bg-accent hover:border-accent transition-all group">
+              <Youtube className="w-5 h-5 text-gray-400 group-hover:text-white" />
             </a>
-            <a href="#" className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-green-600 transition-colors group">
-              <MessageCircle className="w-5 h-5 text-muted-foreground group-hover:text-primary-foreground" />
+            <a href="#" className="w-12 h-12 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center hover:bg-[#25D366] hover:border-[#25D366] transition-all group">
+              <MessageCircle className="w-5 h-5 text-gray-400 group-hover:text-white" />
             </a>
           </div>
 
-          <p className="text-xs text-muted-foreground">
-            © 2026 Impacto FM 87.9. Todos os direitos reservados.
-          </p>
+          <div className="text-center md:text-right">
+            <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest leading-loose">
+              © {new Date().getFullYear()} {siteConfig.radioName || "IMPACTO FM"}.<br/>
+              TODOS OS DIREITOS RESERVADOS.
+            </p>
+          </div>
         </div>
       </div>
     </footer>

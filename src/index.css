@@ -38,26 +38,20 @@
 
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
-    --primary: 211 100% 18%; /* Dark Blue from Image: #002E5D */
+    --primary: 211 100% 18%; /* Deep Blue: #002e5d */
     --primary-foreground: 210 40% 98%;
-    --secondary: 48 100% 50%; /* Yellow from Image: #FFD700 */
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --accent: 358 83% 53%; /* Red from Image: #EC2027 */
+    --secondary: 48 100% 50%; /* Yellow: #ffed32 */
+    --secondary-foreground: 0 0% 0%;
+    --accent: 358 83% 53%; /* Red: #ec2027 */
     --accent-foreground: 210 40% 98%;
     
-    /* Custom tokens matching image */
     --clube-blue: #002e5d;
     --clube-yellow: #ffed32;
     --clube-red: #ec2027;
+    --clube-gray: #f2f2f2;
     
     --header-bg: var(--clube-blue);
     --player-bg: #ffffff;
-    
-    --gradient-primary: linear-gradient(135deg, var(--clube-blue) 0%, #001a35 100%);
-    --gradient-yellow: linear-gradient(135deg, var(--clube-yellow) 0%, #e6d52d 100%);
-    --primary-gradient: var(--gradient-primary);
-    --secondary-gradient: var(--gradient-yellow);
-    --background-gradient: #f8f9fa;
     --radius: 0.5rem;
   }
 
@@ -84,19 +78,32 @@
 
 @layer components {
   .clube-btn-yellow {
-    @apply bg-[var(--clube-yellow)] text-black font-bold px-6 py-2.5 rounded-full hover:brightness-110 transition-all uppercase text-xs tracking-wider;
+    @apply bg-[var(--clube-yellow)] text-black font-bold px-6 py-2.5 rounded-lg hover:brightness-110 transition-all uppercase text-[10px] tracking-wider;
+    box-shadow: 0 4px 10px rgba(255, 237, 50, 0.2);
   }
 
   .clube-btn-outline {
-    @apply border-2 border-[var(--clube-yellow)] text-[var(--clube-yellow)] font-bold px-6 py-2 rounded-full hover:bg-[var(--clube-yellow)] hover:text-black transition-all uppercase text-xs tracking-wider;
+    @apply border border-[var(--clube-yellow)] text-[var(--clube-yellow)] font-bold px-6 py-2.5 rounded-lg hover:bg-[var(--clube-yellow)] hover:text-black transition-all uppercase text-[10px] tracking-wider;
+  }
+
+  .clube-btn-white-outline {
+    @apply border border-gray-300 text-primary font-bold px-6 py-2.5 rounded-lg hover:bg-gray-50 transition-all uppercase text-[10px] tracking-wider;
   }
 
   .top-nav-clube {
-    @apply bg-[var(--clube-blue)] text-white py-4 shadow-xl;
+    @apply bg-[var(--clube-blue)] text-white py-6 px-12;
   }
 
   .bottom-player-clube {
-    @apply fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 py-3 z-[100] shadow-[0_-10px_30px_rgba(0,0,0,0.1)];
+    @apply fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 h-24 md:h-20 z-[100] shadow-[0_-15px_40px_rgba(0,0,0,0.1)];
+  }
+
+  .hero-indicator {
+    @apply h-0.5 bg-white/30 transition-all duration-300;
+  }
+
+  .hero-indicator-active {
+    @apply bg-[var(--clube-yellow)] w-16;
   }
 }
 
