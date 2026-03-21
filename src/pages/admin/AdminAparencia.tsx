@@ -54,27 +54,57 @@ function hexToHsl(hex: string): string {
 
 interface ColorFieldProps {
   label: string;
+  description: string;
   value: string;
   onChange: (val: string) => void;
+  gradientValue?: string;
+  onGradientChange?: (val: string) => void;
 }
 
-const ColorField = ({ label, value, onChange }: ColorFieldProps) => (
-  <div className="flex items-center gap-3">
-    <input
-      type="color"
-      value={hslToHex(value)}
-      onChange={e => onChange(hexToHsl(e.target.value))}
-      className="w-10 h-10 rounded-md border border-border cursor-pointer bg-transparent"
-    />
-    <div className="flex-1">
-      <Label className="text-xs">{label}</Label>
-      <p className="text-[10px] text-muted-foreground font-mono">{value}</p>
+const ColorField = ({ label, description, value, onChange, gradientValue, onGradientChange }: ColorFieldProps) => (
+  <div className="space-y-3 p-4 bg-muted/30 rounded-xl border border-border/50">
+    <div className="flex items-center justify-between">
+      <Label className="text-sm font-bold">{label}</Label>
+      <div className="flex items-center gap-2">
+        <input
+          type="color"
+          value={hslToHex(value)}
+          onChange={e => onChange(hexToHsl(e.target.value))}
+          className="w-8 h-8 rounded-lg border border-border cursor-pointer bg-transparent overflow-hidden"
+        />
+      </div>
     </div>
+    <p className="text-[10px] text-muted-foreground leading-tight">{description}</p>
+    
+    {onGradientChange && (
+      <div className="mt-4 pt-4 border-t border-border/50 space-y-2">
+        <Label className="text-[10px] uppercase tracking-wider font-bold opacity-70">Efeito Degradê (Opcional)</Label>
+        <Input 
+          placeholder="Ex: linear-gradient(135deg, #000 0%, #fff 100%)"
+          value={gradientValue || ""}
+          onChange={e => onGradientChange(e.target.value)}
+          className="text-[10px] h-8 font-mono bg-background"
+        />
+      </div>
+    )}
   </div>
 );
 
 const PRESETS: { name: string; theme: Partial<ThemeConfig> }[] = [
-  { name: "Azul Padrão", theme: { ...DEFAULT_THEME } },
+  { name: "Azul Impacto", theme: { ...DEFAULT_THEME } },
+  {
+    name: "Clube FM Style",
+    theme: {
+      background: "220 20% 10%", foreground: "0 0% 100%", card: "220 20% 15%",
+      primary: "217 91% 60%", primaryForeground: "0 0% 100%",
+      secondary: "45 93% 58%", secondaryForeground: "220 20% 10%",
+      muted: "220 15% 20%", mutedForeground: "220 10% 60%",
+      border: "220 15% 20%", headerBg: "220 20% 8%", navBg: "220 15% 15%",
+      headerGradient: "linear-gradient(180deg, #1a1f2c 0%, #0d0f14 100%)",
+      primaryGradient: "linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)",
+      secondaryGradient: "linear-gradient(135deg, #fbbf24 0%, #d97706 100%)",
+    },
+  },
   {
     name: "Vermelho Energia",
     theme: {
@@ -83,36 +113,7 @@ const PRESETS: { name: string; theme: Partial<ThemeConfig> }[] = [
       secondary: "35 90% 55%", secondaryForeground: "0 10% 10%",
       muted: "0 8% 22%", mutedForeground: "0 5% 55%",
       border: "0 8% 22%", headerBg: "0 10% 8%", navBg: "0 8% 18%",
-    },
-  },
-  {
-    name: "Verde Natural",
-    theme: {
-      background: "150 15% 12%", foreground: "0 0% 98%", card: "150 15% 16%",
-      primary: "142 70% 45%", primaryForeground: "0 0% 100%",
-      secondary: "45 90% 55%", secondaryForeground: "150 15% 10%",
-      muted: "150 10% 22%", mutedForeground: "150 5% 55%",
-      border: "150 10% 22%", headerBg: "150 15% 8%", navBg: "150 10% 18%",
-    },
-  },
-  {
-    name: "Roxo Moderno",
-    theme: {
-      background: "270 15% 12%", foreground: "0 0% 98%", card: "270 15% 16%",
-      primary: "265 85% 60%", primaryForeground: "0 0% 100%",
-      secondary: "45 90% 60%", secondaryForeground: "270 15% 10%",
-      muted: "270 10% 22%", mutedForeground: "270 5% 55%",
-      border: "270 10% 22%", headerBg: "270 15% 8%", navBg: "270 10% 18%",
-    },
-  },
-  {
-    name: "Laranja Quente",
-    theme: {
-      background: "25 15% 12%", foreground: "0 0% 98%", card: "25 15% 16%",
-      primary: "25 95% 55%", primaryForeground: "0 0% 100%",
-      secondary: "45 90% 55%", secondaryForeground: "25 15% 10%",
-      muted: "25 10% 22%", mutedForeground: "25 5% 55%",
-      border: "25 10% 22%", headerBg: "25 15% 8%", navBg: "25 10% 18%",
+      primaryGradient: "linear-gradient(135deg, #ef4444 0%, #991b1b 100%)",
     },
   },
 ];
@@ -125,14 +126,11 @@ const AdminAparencia = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const [savedTheme, radioConfig] = await Promise.all([
-        getSiteConfig("theme"),
-        getSiteConfig("streaming")
-      ]);
+      const savedTheme = await getSiteConfig("theme");
+      const radioConfig = await getSiteConfig("streaming");
 
       if (savedTheme) {
-        setTheme(savedTheme);
-        saveThemeConfig(savedTheme);
+        setTheme(prev => ({ ...prev, ...savedTheme }));
       }
 
       if (radioConfig) {
@@ -143,29 +141,28 @@ const AdminAparencia = () => {
     fetchData();
   }, []);
 
-  const updateField = (field: keyof ThemeConfig, value: string | boolean) => {
+  const updateField = (field: keyof ThemeConfig, value: any) => {
     setTheme(prev => ({ ...prev, [field]: value }));
   };
 
   const handleSave = async () => {
     setLoading(true);
-    const latestTheme = getThemeConfig();
+    
+    // Use a temporary object instead of just passing `theme` as it may have different structure now
+    const themeToSave = { ...theme };
     
     const [themeRes, streamingRes] = await Promise.all([
-      saveSiteConfig("theme", theme),
+      saveSiteConfig("theme", themeToSave),
       getSiteConfig("streaming").then(config => 
         saveSiteConfig("streaming", { ...(config || {}), logo, favicon })
       )
     ]);
     
     if (!themeRes.error) {
-      saveThemeConfig(theme); // Atualiza local após sucesso no servidor
-    }
-
-    if (themeRes.error || (streamingRes as any).error) {
-      toast.error("Erro ao salvar configurações.");
-    } else {
+      saveThemeConfig(themeToSave);
       toast.success("Configurações salvas com sucesso!");
+    } else {
+      toast.error("Erro ao salvar configurações.");
     }
     setLoading(false);
   };
@@ -173,112 +170,165 @@ const AdminAparencia = () => {
   const handleReset = () => {
     setTheme({ ...DEFAULT_THEME });
     saveThemeConfig({ ...DEFAULT_THEME });
+    toast.info("Cores restauradas para o padrão.");
   };
 
   const applyPreset = (preset: Partial<ThemeConfig>) => {
     const updated = { ...DEFAULT_THEME, ...preset } as ThemeConfig;
     setTheme(updated);
     saveThemeConfig(updated);
+    toast.success("Tema aplicado!");
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-foreground">Aparência / Design</h2>
-        <Button onClick={handleSave} className="gap-2" disabled={loading}>
-          <Save className="w-4 h-4" /> {loading ? "Salvando..." : "Salvar Configurações"}
+    <div className="space-y-6 pb-20">
+      <div className="flex justify-between items-center bg-card p-6 rounded-2xl border border-border/50 shadow-sm">
+        <div>
+          <h2 className="text-2xl font-black text-foreground tracking-tight">Personalização Visual</h2>
+          <p className="text-sm text-muted-foreground">Ajuste as cores, degradês e identidade da sua rádio</p>
+        </div>
+        <Button onClick={handleSave} className="gap-2 px-6 h-12 rounded-xl font-bold font-display" disabled={loading}>
+          <Save className="w-5 h-5" /> {loading ? "Salvando..." : "Aplicar Mudanças"}
         </Button>
       </div>
 
-      <Card>
-        <CardHeader><CardTitle className="flex items-center gap-2"><ImageIcon className="w-5 h-5 text-primary" /> Identidade Visual</CardTitle></CardHeader>
-        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="space-y-3">
-            <Label>Logo Principal</Label>
-            <div className="flex items-center gap-4">
-              {logo && (
-                <img src={logo} alt="Logo" className="w-20 h-20 rounded-lg object-contain border border-border bg-muted p-1" />
-              )}
-              <div className="flex gap-2">
-                <label className="flex items-center gap-2 px-4 py-2 bg-muted rounded-md cursor-pointer hover:bg-muted/80 transition-colors text-sm h-10">
-                  <Upload className="w-4 h-4" /> {logo ? "Trocar Logo" : "Escolher Logo"}
-                  <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) setLogo(await fileToBase64(f)); }} />
-                </label>
-                {logo && (
-                  <Button variant="ghost" size="sm" className="text-destructive h-10" onClick={() => setLogo("")}>Remover</Button>
-                )}
-              </div>
-            </div>
-            <p className="text-[10px] text-muted-foreground">Recomendado: PNG fundo transparente, 512x512 ou superior.</p>
-          </div>
-
-          <div className="space-y-3">
-            <Label>Ícone do Site (Favicon)</Label>
-            <div className="flex items-center gap-4">
-              {favicon && (
-                <img src={favicon} alt="Favicon" className="w-12 h-12 rounded-lg object-contain border border-border bg-muted p-1" />
-              )}
-              <div className="flex gap-2">
-                <label className="flex items-center gap-2 px-4 py-2 bg-muted rounded-md cursor-pointer hover:bg-muted/80 transition-colors text-sm h-10">
-                  <Upload className="w-4 h-4" /> {favicon ? "Trocar Ícone" : "Escolher Ícone"}
-                  <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) setFavicon(await fileToBase64(f)); }} />
-                </label>
-                {favicon && (
-                  <Button variant="ghost" size="sm" className="text-destructive h-10" onClick={() => setFavicon("")}>Remover</Button>
-                )}
-              </div>
-            </div>
-            <p className="text-[10px] text-muted-foreground">Ícone que aparece na aba do seu navegador.</p>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader><CardTitle className="flex items-center gap-2"><Palette className="w-5 h-5 text-primary" /> Temas Prontos</CardTitle></CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-            {PRESETS.map(preset => (
-              <button
-                key={preset.name}
-                onClick={() => applyPreset(preset.theme)}
-                className="p-3 rounded-lg border border-border hover:border-primary/50 transition-all text-left group"
-              >
-                <div className="flex gap-1 mb-2">
-                  <div className="w-4 h-4 rounded-full" style={{ background: `hsl(${preset.theme.primary})` }} />
-                  <div className="w-4 h-4 rounded-full" style={{ background: `hsl(${preset.theme.secondary})` }} />
-                  <div className="w-4 h-4 rounded-full" style={{ background: `hsl(${preset.theme.background})` }} />
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
+        <div className="xl:col-span-4 space-y-6">
+          <Card className="rounded-2xl overflow-hidden border-border/50 overflow-hidden">
+            <CardHeader className="bg-muted/50"><CardTitle className="text-lg flex items-center gap-2 font-black"><ImageIcon className="w-5 h-5 text-primary" /> Logotipos</CardTitle></CardHeader>
+            <CardContent className="p-6 space-y-8">
+              <div className="space-y-4">
+                <Label className="text-xs font-bold uppercase tracking-widest opacity-70">Logo Principal</Label>
+                <div className="flex flex-col gap-4">
+                  {logo && (
+                    <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-border bg-slate-100 p-4">
+                      <img src={logo} alt="Logo" className="w-full h-full object-contain" />
+                    </div>
+                  )}
+                  <div className="flex gap-2">
+                    <label className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-primary text-primary-foreground rounded-xl cursor-pointer hover:opacity-90 transition-all font-bold text-sm">
+                      <Upload className="w-4 h-4" /> {logo ? "Trocar" : "Enviar Logo"}
+                      <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) setLogo(await fileToBase64(f)); }} />
+                    </label>
+                    {logo && (
+                      <Button variant="outline" size="icon" className="w-12 h-12 rounded-xl text-destructive hover:bg-destructive/10" onClick={() => setLogo("")}>Remover</Button>
+                    )}
+                  </div>
                 </div>
-                <span className="text-xs font-medium text-foreground group-hover:text-primary transition-colors">{preset.name}</span>
-              </button>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+              </div>
 
-      <Card>
-        <CardHeader><CardTitle>Cores Personalizadas</CardTitle></CardHeader>
-        <CardContent className="space-y-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <ColorField label="Cor Principal (Primary)" value={theme.primary} onChange={v => updateField("primary", v)} />
-            <ColorField label="Cor Secundária" value={theme.secondary} onChange={v => updateField("secondary", v)} />
-            <ColorField label="Fundo da Página" value={theme.background} onChange={v => updateField("background", v)} />
-            <ColorField label="Texto Principal" value={theme.foreground} onChange={v => updateField("foreground", v)} />
-            <ColorField label="Fundo dos Cards" value={theme.card} onChange={v => updateField("card", v)} />
-            <ColorField label="Texto Primário" value={theme.primaryForeground} onChange={v => updateField("primaryForeground", v)} />
-            <ColorField label="Texto Secundário" value={theme.secondaryForeground} onChange={v => updateField("secondaryForeground", v)} />
-            <ColorField label="Fundo Muted" value={theme.muted} onChange={v => updateField("muted", v)} />
-            <ColorField label="Bordas" value={theme.border} onChange={v => updateField("border", v)} />
-            <ColorField label="Fundo do Header" value={theme.headerBg} onChange={v => updateField("headerBg", v)} />
-            <ColorField label="Fundo da Navegação" value={theme.navBg} onChange={v => updateField("navBg", v)} />
-          </div>
+              <div className="space-y-4 pt-6 border-t border-border/50">
+                <Label className="text-xs font-bold uppercase tracking-widest opacity-70">Favicon (Ícone)</Label>
+                <div className="flex items-center gap-4">
+                  {favicon && (
+                    <div className="w-16 h-16 rounded-xl overflow-hidden border border-border bg-slate-100 p-2">
+                      <img src={favicon} alt="Favicon" className="w-full h-full object-contain" />
+                    </div>
+                  )}
+                  <label className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-muted rounded-xl cursor-pointer hover:bg-muted/80 transition-all font-bold text-sm h-12">
+                    <Upload className="w-4 h-4" /> Enviar Ícone
+                    <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) setFavicon(await fileToBase64(f)); }} />
+                  </label>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
-          <div className="flex gap-2 pt-4 border-t border-border">
-            <Button variant="outline" onClick={handleReset} className="gap-2">
-              <RotateCcw className="w-4 h-4" /> Restaurar Padrão
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+          <Card className="rounded-2xl overflow-hidden border-border/50">
+            <CardHeader className="bg-muted/50"><CardTitle className="text-lg flex items-center gap-2 font-black"><Palette className="w-5 h-5 text-primary" /> Temas Prontos</CardTitle></CardHeader>
+            <CardContent className="p-6">
+              <div className="grid grid-cols-1 gap-3">
+                {PRESETS.map(preset => (
+                  <button
+                    key={preset.name}
+                    onClick={() => applyPreset(preset.theme)}
+                    className="p-4 rounded-xl border border-border/50 hover:border-primary/50 hover:bg-muted/30 transition-all text-left flex items-center justify-between group"
+                  >
+                    <span className="text-sm font-bold text-foreground group-hover:text-primary transition-colors">{preset.name}</span>
+                    <div className="flex -space-x-2">
+                      <div className="w-6 h-6 rounded-full border-2 border-background" style={{ background: `hsl(${preset.theme.primary})` }} />
+                      <div className="w-6 h-6 rounded-full border-2 border-background" style={{ background: `hsl(${preset.theme.secondary})` }} />
+                      <div className="w-6 h-6 rounded-full border-2 border-background" style={{ background: `hsl(${preset.theme.background})` }} />
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="xl:col-span-8 space-y-6">
+          <Card className="rounded-2xl overflow-hidden border-border/50">
+            <CardHeader className="bg-muted/50"><CardTitle className="text-lg font-black">Cores e Degradês Customizados</CardTitle></CardHeader>
+            <CardContent className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <ColorField 
+                  label="Cor de Destaque (Principal)" 
+                  description="Usada no player, botões de ação e elementos principais de interatividade."
+                  value={theme.primary} 
+                  onChange={v => updateField("primary", v)}
+                  gradientValue={theme.primaryGradient}
+                  onGradientChange={v => updateField("primaryGradient", v)}
+                />
+                <ColorField 
+                  label="Cor Secundária" 
+                  description="Usada para detalhes, etiquetas (tags) e elementos de apoio visual."
+                  value={theme.secondary} 
+                  onChange={v => updateField("secondary", v)}
+                  gradientValue={theme.secondaryGradient}
+                  onGradientChange={v => updateField("secondaryGradient", v)}
+                />
+                <ColorField 
+                  label="Fundo do Player (Header)" 
+                  description="Define a cor da barra fixa do player no topo do site."
+                  value={theme.headerBg} 
+                  onChange={v => updateField("headerBg", v)}
+                  gradientValue={theme.headerGradient}
+                  onGradientChange={v => updateField("headerGradient", v)}
+                />
+                <ColorField 
+                  label="Fundo Geral (Background)" 
+                  description="Cor de fundo de toda a página. Recomendado cores escuras para o estilo moderno."
+                  value={theme.background} 
+                  onChange={v => updateField("background", v)}
+                  gradientValue={theme.backgroundGradient}
+                  onGradientChange={v => updateField("backgroundGradient", v)}
+                />
+                <ColorField 
+                  label="Fundo dos Cards" 
+                  description="Cor interna dos cartões de notícias e seções do site."
+                  value={theme.card} 
+                  onChange={v => updateField("card", v)} 
+                />
+                <ColorField 
+                  label="Fundo da Navegação" 
+                  description="Cor de fundo do menu lateral ou barras de navegação."
+                  value={theme.navBg} 
+                  onChange={v => updateField("navBg", v)} 
+                />
+                <ColorField 
+                  label="Texto Principal" 
+                  description="A cor que será usada na maioria das fontes do site."
+                  value={theme.foreground} 
+                  onChange={v => updateField("foreground", v)} 
+                />
+                <ColorField 
+                  label="Cor das Bordas" 
+                  description="Linhas divisórias e contornos de campos e cards."
+                  value={theme.border} 
+                  onChange={v => updateField("border", v)} 
+                />
+              </div>
+
+              <div className="flex gap-4 pt-8 mt-8 border-t border-border/50">
+                <Button variant="outline" onClick={handleReset} className="gap-2 rounded-xl text-xs font-bold">
+                  <RotateCcw className="w-4 h-4" /> Restaurar Padrão de Fábrica
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
 
       <Card>
         <CardHeader><CardTitle>Distribuição do Layout</CardTitle></CardHeader>

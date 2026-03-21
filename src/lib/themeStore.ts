@@ -12,6 +12,12 @@ export interface ThemeConfig {
   border: string;
   headerBg: string;
   navBg: string;
+  // Gradients
+  primaryGradient?: string;
+  secondaryGradient?: string;
+  backgroundGradient?: string;
+  headerGradient?: string;
+  // Layout
   topSongsPosition: 'hero' | 'gallery' | 'news' | 'contact';
   pedidoPosition: 'left' | 'center' | 'right';
   playerPosition: 'left' | 'center' | 'right';
@@ -54,6 +60,8 @@ export const DEFAULT_THEME: ThemeConfig = {
   border: "220 15% 25%",
   headerBg: "220 20% 10%",
   navBg: "220 15% 20%",
+  primaryGradient: "linear-gradient(135deg, hsl(217, 91%, 60%) 0%, hsl(217, 91%, 40%) 100%)",
+  secondaryGradient: "linear-gradient(135deg, hsl(45, 93%, 58%) 0%, hsl(45, 93%, 38%) 100%)",
   topSongsPosition: 'hero',
   pedidoPosition: 'center',
   playerPosition: 'center',
@@ -106,6 +114,19 @@ export function applyTheme(config: ThemeConfig) {
   root.style.setProperty("--ring", config.primary);
   root.style.setProperty("--header-bg", config.headerBg);
   root.style.setProperty("--nav-bg", config.navBg);
+
+  // Apply Gradients
+  if (config.primaryGradient) root.style.setProperty("--primary-gradient", config.primaryGradient);
+  else root.style.setProperty("--primary-gradient", `hsl(${config.primary})`);
+
+  if (config.secondaryGradient) root.style.setProperty("--secondary-gradient", config.secondaryGradient);
+  else root.style.setProperty("--secondary-gradient", `hsl(${config.secondary})`);
+
+  if (config.backgroundGradient) root.style.setProperty("--background-gradient", config.backgroundGradient);
+  else root.style.setProperty("--background-gradient", `hsl(${config.background})`);
+
+  if (config.headerGradient) root.style.setProperty("--header-gradient", config.headerGradient);
+  else root.style.setProperty("--header-gradient", `hsl(${config.headerBg})`);
 }
 
 export function getSiteConfig(): SiteConfig {

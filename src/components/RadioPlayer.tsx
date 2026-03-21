@@ -85,145 +85,136 @@ const RadioPlayer = () => {
     : "";
 
   return (
-    <header className="sticky top-0 z-50 bg-header border-b border-border/30 backdrop-blur-md">
-      <div className="container flex items-center justify-between h-16 px-4 gap-2">
-        {/* Logo */}
-        <div className="flex items-center gap-3 shrink-0">
-          {siteConfig.logo ? (
-            <img src={siteConfig.logo} alt={siteConfig.radioName} className="w-10 h-10 rounded-full object-contain" />
-          ) : (
-            <div className="w-10 h-10 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center animate-pulse-ring">
-              <div className="w-3 h-3 rounded-full bg-primary" />
-            </div>
-          )}
-          <div className="hidden sm:block">
-            <h1 className="text-base font-bold font-display leading-tight text-foreground">{siteConfig.radioName}</h1>
-            <span className="text-xs text-secondary font-semibold">{siteConfig.radioFreq}</span>
+    <header className="sticky top-0 z-50 bg-[var(--header-gradient)] border-b border-white/10 backdrop-blur-xl shadow-lg">
+      <div className="container flex items-center justify-between h-20 px-4 gap-4">
+        {/* Logo and Station Info */}
+        <div className="flex items-center gap-4 shrink-0">
+          <div className="relative group">
+            {siteConfig.logo ? (
+              <img 
+                src={siteConfig.logo} 
+                alt={siteConfig.radioName} 
+                className="w-12 h-12 rounded-2xl object-contain bg-white/5 p-1 border border-white/10 group-hover:scale-105 transition-transform shadow-inner" 
+              />
+            ) : (
+              <div className="w-12 h-12 rounded-2xl bg-primary/20 border-2 border-primary flex items-center justify-center animate-pulse-ring">
+                <div className="w-4 h-4 rounded-full bg-primary" />
+              </div>
+            )}
           </div>
-          
-          {/* Weather for Mobile/Tablet */}
-          {theme.showWeather && (
-            <div className="lg:hidden ml-1">
-              <WeatherWidget showWeather={theme.showWeather} />
+          <div className="hidden sm:block">
+            <h1 className="text-lg font-black font-display tracking-tight text-white m-0 leading-none">{siteConfig.radioName}</h1>
+            <div className="flex items-center gap-2 mt-1">
+              <span className="text-[10px] font-bold py-0.5 px-2 bg-secondary text-secondary-foreground rounded-full shadow-sm">{siteConfig.radioFreq}</span>
+              {theme.showWeather && (
+                <div className="scale-75 origin-left opacity-80">
+                  <WeatherWidget showWeather={theme.showWeather} />
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
 
-        {/* Player Controls */}
-        <div className="flex items-center gap-3 flex-1 justify-center relative">
-          {theme.showWeather && theme.weatherPosition === 'left' && (
-            <div className="hidden lg:block absolute left-0">
-               <WeatherWidget showWeather={theme.showWeather} />
-            </div>
-          )}
-
+        {/* Player Controls - Main Focus */}
+        <div className="flex items-center gap-4 flex-1 justify-center max-w-2xl px-4 py-2 bg-black/20 rounded-3xl border border-white/5 backdrop-blur-sm">
           <button
             onClick={togglePlay}
-            className="w-11 h-11 rounded-full bg-primary flex items-center justify-center hover:bg-primary/80 transition-all glow-effect shrink-0"
+            className="w-14 h-14 rounded-2xl bg-[var(--primary-gradient)] flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-[0_0_20px_hsl(var(--primary)/0.3)] group shrink-0"
             aria-label={isPlaying ? "Pausar" : "Reproduzir"}
           >
-            {isPlaying ? <Pause className="w-5 h-5 text-primary-foreground" /> : <Play className="w-5 h-5 text-primary-foreground ml-0.5" />}
+            {isPlaying ? 
+              <Pause className="w-6 h-6 text-primary-foreground fill-current" /> : 
+              <Play className="w-6 h-6 text-primary-foreground fill-current ml-1" />
+            }
           </button>
           
-          <div className="flex flex-col items-start -space-y-1">
-            <div className="flex items-center gap-1 bg-destructive/10 px-1.5 py-0.5 rounded-full border border-destructive/20 scale-75 origin-left">
-              <span className="text-[8px] font-bold text-destructive uppercase tracking-widest animate-pulse">
-                {isPlaying ? "No Ar" : "Pausado"}
-              </span>
-              {isPlaying && <div className="w-1 h-1 rounded-full bg-destructive animate-ping" />}
-            </div>
+          <div className="hidden md:flex flex-col flex-1 min-w-0">
+            {liveInfo ? (
+              <div className="flex items-center gap-3 overflow-hidden">
+                {liveInfo.foto && (
+                  <img src={liveInfo.foto} alt={liveInfo.locutor} className="w-10 h-10 rounded-xl object-cover border border-white/10 shadow-md shrink-0" />
+                )}
+                <div className="text-left truncate">
+                  <p className="text-[10px] font-bold text-secondary uppercase tracking-widest leading-none mb-1">No Ar Agora</p>
+                  <p className="text-sm font-bold text-white leading-tight truncate">{liveInfo.programa}</p>
+                  <p className="text-xs text-secondary/80 font-medium truncate">{liveInfo.locutor}</p>
+                </div>
+              </div>
+            ) : (
+              <div className="text-left truncate">
+                <p className="text-[10px] font-bold text-primary uppercase tracking-widest leading-none mb-1">Impacto FM</p>
+                <p className="text-sm font-bold text-white leading-tight">Música e Informação</p>
+              </div>
+            )}
           </div>
 
-          {liveInfo && (
-            <>
-              {/* Mobile version */}
-              <div className="flex md:hidden items-center gap-2">
-                {liveInfo.foto && (
-                  <img src={liveInfo.foto} alt={liveInfo.locutor} className="w-10 h-10 rounded-full object-cover border-2 border-secondary" />
-                )}
-                <div className="text-left flex-1">
-                  <div className="flex items-center gap-1 mb-0.5">
-                    <p className="text-xs font-bold text-secondary leading-tight">{liveInfo.programa}</p>
-                  </div>
-                  <p className="text-xs font-semibold text-foreground leading-tight">{liveInfo.locutor}</p>
-                </div>
-              </div>
-
-              {/* Desktop version */}
-              <div className="hidden md:flex items-center gap-3">
-                {liveInfo.foto && (
-                  <img src={liveInfo.foto} alt={liveInfo.locutor} className="w-12 h-12 rounded-full object-cover border-2 border-secondary shadow-lg" />
-                )}
-                <div className="text-left">
-                  <div className="flex items-center gap-1.5 mb-1">
-                    <p className="text-sm font-bold text-secondary leading-tight">{liveInfo.programa}</p>
-                  </div>
-                  <p className="text-sm font-semibold text-foreground leading-tight">{liveInfo.locutor}</p>
-                </div>
-              </div>
-            </>
-          )}
-
-          {theme.showWeather && theme.weatherPosition === 'center' && (
-            <div className="hidden lg:block ml-4">
-               <WeatherWidget showWeather={theme.showWeather} />
+          <div className="flex items-center gap-4 shrink-0">
+            <div className="hidden lg:flex items-end gap-1 h-6">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div
+                  key={i}
+                  className={`w-1 rounded-full bg-secondary/80 transition-all duration-300 ${isPlaying ? "animate-bounce" : ""}`}
+                  style={{ 
+                    height: isPlaying ? `${Math.random() * 20 + 8}px` : "4px", 
+                    animationDelay: `${i * 0.1}s`,
+                    animationDuration: `${0.5 + Math.random()}s`
+                  }}
+                />
+              ))}
             </div>
-          )}
 
-          <div className="hidden sm:flex items-end gap-0.5 h-5">
-            {[1, 2, 3, 4, 5].map((i) => (
-              <div
-                key={i}
-                className={`w-1 rounded-full bg-primary transition-all duration-150 ${isPlaying ? "animate-pulse" : ""}`}
-                style={{ height: isPlaying ? `${Math.random() * 16 + 4}px` : "4px", animationDelay: `${i * 0.1}s` }}
+            <div className="flex items-center gap-3 bg-black/30 px-3 py-1.5 rounded-2xl">
+              <button 
+                onClick={toggleMute} 
+                className="text-white/70 hover:text-white transition-colors"
+              >
+                {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+              </button>
+              <input 
+                type="range" 
+                min="0" 
+                max="1" 
+                step="0.01" 
+                value={isMuted ? 0 : volume} 
+                onChange={handleVolumeChange} 
+                className="w-16 h-1 accent-secondary cursor-pointer bg-white/10 rounded-full" 
               />
-            ))}
-          </div>
-
-          <div className="hidden sm:flex items-center gap-2 ml-4">
-            <button onClick={toggleMute} className="text-muted-foreground hover:text-foreground transition-colors">
-              {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-            </button>
-            <input type="range" min="0" max="1" step="0.01" value={isMuted ? 0 : volume} onChange={handleVolumeChange} className="w-16 h-1 accent-primary cursor-pointer" />
-          </div>
-          
-          {theme.showWeather && theme.weatherPosition === 'right' && (
-            <div className="hidden lg:block absolute right-0">
-               <WeatherWidget showWeather={theme.showWeather} />
             </div>
-          )}
+          </div>
         </div>
 
-        {/* WhatsApp Pedido + Social Links */}
-        <div className="flex items-center gap-1.5 shrink-0">
+        {/* Social and Actions */}
+        <div className="flex items-center gap-2 shrink-0">
           {whatsapp && (
             <a
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 bg-green-600 hover:bg-green-700 text-primary-foreground px-3 py-1.5 rounded-full text-xs font-semibold transition-colors"
+              className="flex items-center gap-2 bg-[#25D366] hover:bg-[#128C7E] text-white p-3 md:px-5 md:py-2.5 rounded-2xl text-xs font-bold transition-all shadow-lg hover:shadow-[#25D366]/20 active:scale-95 group"
               title="Faça seu pedido musical"
             >
-              <MessageCircle className="w-4 h-4" />
-              <span className="hidden sm:inline">Pedido</span>
+              <MessageCircle className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+              <span className="hidden lg:inline">Pedir Música</span>
             </a>
           )}
 
-          {redes.slice(0, 5).map(rede => {
-            const Icon = iconMap[rede.icone] || Globe;
-            return (
-              <a
-                key={rede.id}
-                href={rede.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-8 h-8 rounded-full bg-muted flex items-center justify-center hover:bg-primary transition-colors group"
-                title={rede.nome}
-              >
-                <Icon className="w-4 h-4 text-muted-foreground group-hover:text-primary-foreground" />
-              </a>
-            );
-          })}
+          <div className="hidden xl:flex items-center gap-1.5 ml-2">
+            {redes.slice(0, 4).map(rede => {
+              const Icon = iconMap[rede.icone] || Globe;
+              return (
+                <a
+                  key={rede.id}
+                  href={rede.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center hover:bg-white/10 transition-all border border-white/5 hover:border-white/10 hover:-translate-y-0.5"
+                  title={rede.nome}
+                >
+                  <Icon className="w-4 h-4 text-white/70" />
+                </a>
+              );
+            })}
+          </div>
         </div>
       </div>
 

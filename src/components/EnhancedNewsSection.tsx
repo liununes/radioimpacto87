@@ -46,19 +46,74 @@ const EnhancedNewsSection = ({ showNews = true }: EnhancedNewsSectionProps) => {
 
   if (!showNews) return null;
 
-  return (
-    <section className="py-12 px-4">
-      <div className="container mx-auto">
-        <div className="mb-8">
-          <div>
-            <h2 className="text-3xl font-bold text-foreground mb-2">Notícias</h2>
-            <p className="text-muted-foreground">Acompanhe as últimas notícias locais e regionais</p>
-          </div>
-        </div>
+  const featuredNews = news[0];
+  const otherNews = news.slice(1);
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {news.map((item) => (
-            <Card key={item.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+  return (
+    <section className="py-12 w-full">
+      <div className="px-4 mb-8">
+        <h2 className="text-3xl font-bold text-foreground mb-2">Notícias em Destaque</h2>
+        <p className="text-muted-foreground">Acompanhe as últimas notícias locais e regionais</p>
+      </div>
+
+      {featuredNews && (
+        <div className="mb-12">
+          <Card className="mx-4 overflow-hidden border-none shadow-xl bg-card/60 backdrop-blur-md hover:shadow-2xl transition-all duration-500 group">
+            <div className="grid grid-cols-1 lg:grid-cols-2">
+              <div className="aspect-video lg:aspect-auto overflow-hidden relative">
+                <img 
+                  src={featuredNews.imagem || ""} 
+                  alt={featuredNews.titulo}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute top-4 left-4">
+                  {featuredNews.categoria && (
+                    <span className="px-3 py-1 bg-primary text-primary-foreground text-xs font-bold rounded-full shadow-lg">
+                      {featuredNews.categoria}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <CardContent className="p-8 flex flex-col justify-center">
+                <div className="flex items-center gap-2 text-xs text-muted-foreground mb-4">
+                  <Calendar className="w-4 h-4" />
+                  {new Date(featuredNews.data_postagem).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                  {featuredNews.fonte && (
+                    <>
+                      <span className="mx-2">•</span>
+                      <span>{featuredNews.fonte}</span>
+                    </>
+                  )}
+                </div>
+                <h3 className="text-3xl font-bold mb-4 group-hover:text-primary transition-colors leading-tight">
+                  {featuredNews.titulo}
+                </h3>
+                {featuredNews.resumo && (
+                  <p className="text-lg text-muted-foreground mb-8 line-clamp-4 leading-relaxed">
+                    {featuredNews.resumo}
+                  </p>
+                )}
+                {featuredNews.url && (
+                  <a
+                    href={featuredNews.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--primary-gradient)] text-primary-foreground rounded-full font-bold hover:opacity-90 transition-all shadow-lg w-fit"
+                  >
+                    Ler matéria completa
+                    <ExternalLink className="w-4 h-4" />
+                  </a>
+                )}
+              </CardContent>
+            </div>
+          </Card>
+        </div>
+      )}
+
+      <div className="px-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {otherNews.map((item) => (
+            <Card key={item.id} className="overflow-hidden bg-card/40 backdrop-blur-sm hover:shadow-lg transition-all hover:-translate-y-1">
               {item.imagem && (
                 <div className="aspect-video overflow-hidden">
                   <img 
@@ -68,72 +123,45 @@ const EnhancedNewsSection = ({ showNews = true }: EnhancedNewsSectionProps) => {
                   />
                 </div>
               )}
-              <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  {item.categoria && (
-                    <span className={`text-xs px-2 py-1 rounded-full font-semibold ${
-                      item.categoria.toLowerCase() === 'local' ? 'bg-blue-100 text-blue-800' :
-                      item.categoria.toLowerCase() === 'regional' ? 'bg-green-100 text-green-800' :
-                      'bg-purple-100 text-purple-800'
-                    }`}>
-                      {item.categoria}
-                    </span>
-                  )}
-                </div>
-                <CardTitle className="text-lg line-clamp-2">{item.titulo}</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {item.resumo && (
-                  <p className="text-sm text-muted-foreground line-clamp-3">
-                    {item.resumo}
-                  </p>
+              <CardHeader className="p-4 pb-2">
+                {item.categoria && (
+                  <span className="text-[10px] font-bold text-primary uppercase tracking-wider mb-2 block">
+                    {item.categoria}
+                  </span>
                 )}
-                
-                <div className="flex items-center justify-between text-xs text-muted-foreground">
-                  <div className="flex items-center gap-2">
+                <CardTitle className="text-base line-clamp-2 hover:text-primary transition-colors cursor-pointer">
+                  {item.titulo}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-4 pt-0 space-y-3">
+                <div className="flex items-center justify-between text-[10px] text-muted-foreground">
+                  <div className="flex items-center gap-1">
                     <Calendar className="w-3 h-3" />
                     {new Date(item.data_postagem).toLocaleDateString('pt-BR')}
                   </div>
-                  {item.fonte && (
-                    <span className="text-xs">{item.fonte}</span>
-                  )}
                 </div>
-
-                {item.url && (
-                  <a
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1 text-xs text-primary hover:underline"
-                  >
-                    <ExternalLink className="w-3 h-3" />
-                    Ler mais
-                  </a>
-                )}
               </CardContent>
             </Card>
           ))}
         </div>
-
-        {loading && (
-          <div className="text-center py-12">
-            <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
-            <p className="text-muted-foreground">Carregando notícias...</p>
-          </div>
-        )}
-
-        {!loading && news.length === 0 && (
-          <div className="text-center py-12">
-            <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-              <ImageIcon className="w-8 h-8 text-muted-foreground" />
-            </div>
-            <h3 className="text-lg font-semibold mb-2">Nenhuma notícia encontrada</h3>
-            <p className="text-muted-foreground mb-4">
-              Comece adicionando sua primeira notícia usando o botão acima.
-            </p>
-          </div>
-        )}
       </div>
+
+      {loading && (
+        <div className="text-center py-12">
+          <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Carregando notícias...</p>
+        </div>
+      )}
+
+      {!loading && news.length === 0 && (
+        <div className="text-center py-12 px-4">
+          <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+            <ImageIcon className="w-8 h-8 text-muted-foreground" />
+          </div>
+          <h3 className="text-lg font-semibold mb-2 text-foreground">Ainda não há notícias hoje</h3>
+          <p className="text-muted-foreground">Fique ligado para as atualizações da nossa rádio!</p>
+        </div>
+      )}
     </section>
   );
 };

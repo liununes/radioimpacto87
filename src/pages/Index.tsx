@@ -52,14 +52,14 @@ const Index = () => {
   const topSongsPos = theme.topSongsPosition || 'hero';
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[var(--background-gradient)]">
       <RadioPlayer />
       <Navigation />
       
-      <div className="container mx-auto px-4 py-8">
-        <div className="space-y-6">
-          <HeroCarousel />
-        </div>
+      {theme.showNews && <EnhancedNewsSection showNews={theme.showNews} />}
+      
+      <div className="w-full">
+        <HeroCarousel />
       </div>
       
       {theme.showTopSongs && topSongsPos === 'hero' && <TopSongs />}
@@ -67,7 +67,6 @@ const Index = () => {
       {theme.showGallery && <GaleriaSection />}
       {theme.showTopSongs && topSongsPos === 'gallery' && <TopSongs />}
       
-      {theme.showNews && <EnhancedNewsSection showNews={theme.showNews} />}
       {theme.showTopSongs && topSongsPos === 'news' && <TopSongs />}
       
       {theme.showAbout && <AboutSection />}
