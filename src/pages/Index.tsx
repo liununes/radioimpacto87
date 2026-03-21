@@ -19,9 +19,6 @@ const Index = () => {
   useEffect(() => {
     // Rastreador de Acessos
     const logAccess = async () => {
-    
-    // Rastreador de Acessos
-    const logAccess = async () => {
       const today = new Date().toISOString().split('T')[0];
       const lastAccessDate = localStorage.getItem('lastAccessDate');
       
@@ -50,21 +47,32 @@ const Index = () => {
       <Navigation />
       
       <main className="relative z-10">
-        <HeroCarousel />
-        
+        {/* Notícias no topo, como solicitado - Estilo Clube FM */}
         {theme.showNews && (
-          <>
+          <div className="pt-8 md:pt-12 bg-white">
             <FeaturedNews news={news} loading={loading} />
-            <RemainingNews news={news} loading={loading} />
-          </>
+            <div className="mt-8">
+              <RemainingNews news={news} loading={loading} />
+            </div>
+          </div>
         )}
+
+        {/* Slide de fotos abaixo das notícias */}
+        <div className="mt-12">
+          <HeroCarousel />
+        </div>
         
         {theme.showTopSongs && topSongsPos === 'hero' && <TopSongs />}
         
-        {theme.showGallery && <GaleriaSection />}
+        {theme.showGallery && (
+          <div className="mt-20">
+            <GaleriaSection />
+          </div>
+        )}
+        
         {theme.showTopSongs && topSongsPos === 'gallery' && <TopSongs />}
         
-        <div className="bg-gray-50/50">
+        <div className="bg-gray-50/50 mt-20 py-10">
           {theme.showAbout && <AboutSection />}
           {theme.showTopSongs && (topSongsPos === 'news' || topSongsPos === 'contact') && <TopSongs />}
         </div>

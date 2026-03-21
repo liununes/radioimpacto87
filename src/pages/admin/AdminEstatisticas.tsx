@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
-import { Clock, Calendar, BarChart3, Users, CalendarDays, Activity } from "lucide-react";
+import { Clock, Calendar, BarChart3, Users, CalendarDays, Activity, Loader2 } from "lucide-react";
 import { format, subHours, subDays, startOfMonth, startOfYear, isAfter, isWithinInterval, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Input } from "@/components/ui/input";
@@ -60,94 +60,84 @@ const AdminEstatisticas = () => {
   });
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500 pb-10">
-      <div>
-        <h2 className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-2">
-          <BarChart3 className="w-8 h-8 text-primary" /> Relatórios de Acesso
-        </h2>
-        <p className="text-muted-foreground">Monitore o tráfego do site em tempo real pelo sistema de sessão única.</p>
+    <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+      <div className="flex justify-between items-center bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+        <div>
+          <h2 className="text-3xl font-black text-primary tracking-tighter uppercase italic leading-none">Métricas de <span className="text-secondary italic">Audiência</span></h2>
+          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Monitore o tráfego do site em tempo real</p>
+        </div>
+        {!loading && (
+          <div className="flex items-center gap-3 px-6 py-3 bg-primary/5 rounded-2xl border border-primary/10">
+            <Activity className="w-4 h-4 text-primary animate-pulse" />
+            <span className="text-[10px] font-black uppercase text-primary tracking-widest">Sistema de Monitoramento Ativo</span>
+          </div>
+        )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="border-primary/20 bg-primary/5">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-              <Clock className="w-4 h-4 text-primary" /> Últimas 24 Horas
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-4xl font-bold">{loading ? "..." : inLast24h}</div>
-            <p className="text-xs text-muted-foreground mt-1">Acessos únicos</p>
-          </CardContent>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <Card className="rounded-[2.5rem] border-none shadow-xl bg-primary text-white overflow-hidden p-8 relative">
+           <div className="relative z-10">
+              <p className="text-[10px] font-black uppercase tracking-widest text-white/50 mb-2">Últimas 24 Horas</p>
+              <h3 className="text-5xl font-black italic">{loading ? "..." : inLast24h}</h3>
+              <p className="text-[9px] font-bold text-white/30 uppercase mt-4">Acessos únicos registrados</p>
+           </div>
+           <Clock className="absolute top-8 right-8 w-12 h-12 text-white/5" />
         </Card>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-              <Activity className="w-4 h-4 text-orange-400" /> Últimas 1h / 12h
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-end gap-2">
-              <div className="text-3xl font-bold">{loading ? "..." : inLast1h}</div>
-              <span className="text-xs text-muted-foreground mb-1">/ {inLast12h} acessos</span>
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">Visitantes ativos hoje</p>
-          </CardContent>
+        <Card className="rounded-[2.5rem] border-none shadow-xl bg-white overflow-hidden p-8">
+           <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">Pico (1h / 12h)</p>
+           <div className="flex items-baseline gap-2">
+              <h3 className="text-4xl font-black text-primary italic">{loading ? "..." : inLast1h}</h3>
+              <span className="text-xl font-bold text-gray-200">/ {inLast12h}</span>
+           </div>
+           <p className="text-[9px] font-bold text-gray-300 uppercase mt-4">Visitantes ativos hoje</p>
         </Card>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-              <CalendarDays className="w-4 h-4 text-indigo-400" /> Neste Mês
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-4xl font-bold">{loading ? "..." : inMonth}</div>
-            <p className="text-xs text-muted-foreground mt-1">{format(now, "MMMM", { locale: ptBR })}</p>
-          </CardContent>
+        <Card className="rounded-[2.5rem] border-none shadow-xl bg-white overflow-hidden p-8">
+           <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">{format(now, "MMMM", { locale: ptBR })}</p>
+           <h3 className="text-4xl font-black text-primary italic">{loading ? "..." : inMonth}</h3>
+           <p className="text-[9px] font-bold text-gray-300 uppercase mt-4">Total acumulado no mês</p>
         </Card>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-              <Users className="w-4 h-4 text-green-400" /> Neste Ano
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-4xl font-bold">{loading ? "..." : inYear}</div>
-            <p className="text-xs text-muted-foreground mt-1">Volume total gerado</p>
-          </CardContent>
+        <Card className="rounded-[2.5rem] border-none shadow-xl bg-[#002e5d] text-white overflow-hidden p-8 relative">
+           <div className="relative z-10">
+              <p className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-2">Volume Anual</p>
+              <h3 className="text-4xl font-black italic">{loading ? "..." : inYear}</h3>
+              <p className="text-[9px] font-bold text-white/20 uppercase mt-4">Métricas de alcance total</p>
+           </div>
+           <Users className="absolute top-8 right-8 w-12 h-12 text-white/5" />
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="lg:col-span-2 shadow-sm border-border">
-          <CardHeader>
-            <CardTitle>Fluxo de Acesso (24H)</CardTitle>
-            <CardDescription>Pico de acessos de ontem para hoje</CardDescription>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <Card className="lg:col-span-8 rounded-[2.5rem] border-none shadow-xl bg-white overflow-hidden">
+          <CardHeader className="p-10 pb-0">
+            <CardTitle className="text-xl font-black uppercase tracking-tight text-primary italic">Fluxo de Acesso (24H)</CardTitle>
+            <CardDescription className="text-[10px] font-bold uppercase tracking-widest text-gray-300 mt-2">Oscilação de audiência por hora</CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="h-[300px] w-full">
+          <CardContent className="p-10">
+            <div className="h-[350px] w-full">
               {loading ? (
-                <div className="flex h-full items-center justify-center text-muted-foreground">Carregando gráfico...</div>
+                <div className="flex h-full items-center justify-center text-gray-200">
+                   <Loader2 className="w-8 h-8 animate-spin" />
+                </div>
               ) : (
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={hourlyData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                     <defs>
                       <linearGradient id="colorAcessos" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#4f46e5" stopOpacity={0.8}/>
-                        <stop offset="95%" stopColor="#4f46e5" stopOpacity={0}/>
+                        <stop offset="5%" stopColor="#002e5d" stopOpacity={0.1}/>
+                        <stop offset="95%" stopColor="#002e5d" stopOpacity={0}/>
                       </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#333" />
-                    <XAxis dataKey="name" fontSize={11} tickLine={false} axisLine={false} />
-                    <YAxis fontSize={11} tickLine={false} axisLine={false} />
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+                    <XAxis dataKey="name" fontSize={9} fontWeight="900" tickLine={false} axisLine={false} tick={{fill: '#94a3b8'}} />
+                    <YAxis fontSize={9} fontWeight="900" tickLine={false} axisLine={false} tick={{fill: '#94a3b8'}} />
                     <Tooltip 
-                      contentStyle={{ backgroundColor: '#1f2937', borderColor: '#374151', color: '#f3f4f6' }}
-                      itemStyle={{ color: '#818cf8' }}
+                      contentStyle={{ backgroundColor: '#ffffff', borderRadius: '1.5rem', border: 'none', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)', padding: '1.5rem' }}
+                      itemStyle={{ color: '#002e5d', fontWeight: '900', fontSize: '12px' }}
                     />
-                    <Area type="monotone" dataKey="acessos" stroke="#818cf8" strokeWidth={3} fillOpacity={1} fill="url(#colorAcessos)" />
+                    <Area type="monotone" dataKey="acessos" stroke="#002e5d" strokeWidth={4} fillOpacity={1} fill="url(#colorAcessos)" />
                   </AreaChart>
                 </ResponsiveContainer>
               )}
@@ -155,25 +145,28 @@ const AdminEstatisticas = () => {
           </CardContent>
         </Card>
 
-        <Card className="shadow-sm border-border flex flex-col justify-between">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Calendar className="w-5 h-5 text-purple-400" /> Buscar Data Específica
-            </CardTitle>
-            <CardDescription>Confira o tráfego exato de um dia que já passou.</CardDescription>
+        <Card className="lg:col-span-4 rounded-[2.5rem] border-none shadow-xl bg-gray-50 overflow-hidden flex flex-col justify-between">
+          <CardHeader className="p-10">
+            <CardTitle className="text-xl font-black uppercase tracking-tight text-primary italic">Arquivo Histórico</CardTitle>
+            <CardDescription className="text-[10px] font-bold uppercase tracking-widest text-gray-300 mt-2">Consulte tráfego de datas específicas</CardDescription>
           </CardHeader>
-          <CardContent className="flex-1 flex flex-col items-center justify-center gap-6">
+          <CardContent className="p-10 pt-0 flex-1 flex flex-col items-center justify-center gap-10">
             <div className="w-full">
               <Input 
                 type="date" 
                 value={customDate}
                 onChange={(e) => setCustomDate(e.target.value)}
-                className="w-full text-lg p-6 bg-muted/50"
+                className="h-14 rounded-2xl border-none bg-white font-black text-primary text-center shadow-sm"
               />
             </div>
-            <div className="text-center bg-card border rounded-full px-8 py-6 w-full shadow-inner">
-              <p className="text-sm text-muted-foreground mb-1">Acessos registrados</p>
-              <h3 className="text-5xl font-black text-primary">{customDateAccesses}</h3>
+            <div className="text-center bg-white border border-gray-100 rounded-[2.5rem] px-8 py-10 w-full shadow-lg">
+              <p className="text-[9px] font-black text-gray-300 uppercase tracking-widest mb-4">Acessos no dia</p>
+              <h3 className="text-6xl font-black text-primary italic">{customDateAccesses}</h3>
+              <div className="mt-6 flex justify-center">
+                 <div className="px-4 py-1.5 bg-secondary/10 rounded-full border border-secondary/20">
+                    <span className="text-[8px] font-black text-secondary uppercase tracking-[0.2em]">Registros Verificados</span>
+                 </div>
+              </div>
             </div>
           </CardContent>
         </Card>

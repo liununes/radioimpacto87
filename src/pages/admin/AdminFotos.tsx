@@ -77,76 +77,99 @@ const AdminFotos = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-foreground">Galeria de Fotos</h2>
+    <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+      <div className="flex justify-between items-center bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+        <div>
+          <h2 className="text-3xl font-black text-primary tracking-tighter uppercase italic leading-none">Galeria de <span className="text-secondary italic">Momentos</span></h2>
+          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Publique fotos de eventos e vips da rádio</p>
+        </div>
+        <div className="flex items-center gap-3 px-6 py-3 bg-primary/5 rounded-2xl border border-primary/10">
+          <ImageIcon className="w-4 h-4 text-primary" />
+          <span className="text-[10px] font-black uppercase text-primary tracking-widest">{fotos.length} Fotos Ativas</span>
+        </div>
+      </div>
 
-      <Card>
-        <CardHeader><CardTitle>Adicionar Fotos</CardTitle></CardHeader>
-        <CardContent className="space-y-4">
-          <div className="bg-muted/50 border border-border rounded-lg p-4 space-y-2">
-            <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
-              <ImageIcon className="w-4 h-4 text-primary" />
-              Requisitos das Fotos
+      <Card className="rounded-[2.5rem] border-none shadow-xl bg-white overflow-hidden">
+        <CardHeader className="p-10 pb-4">
+          <CardTitle className="text-xl font-black uppercase tracking-tight text-primary italic">Upload de Imagens</CardTitle>
+        </CardHeader>
+        <CardContent className="p-10 pt-4 space-y-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <div className="space-y-6">
+               <div className="space-y-3">
+                 <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Descrição Geral (Opcional)</Label>
+                 <Input value={descricao} onChange={e => setDescricao(e.target.value)} placeholder="Ex: Show de aniversário..." className="h-14 rounded-2xl border-gray-100 bg-gray-50 font-bold text-primary" />
+               </div>
+
+               <div className="space-y-3">
+                 <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Seleção de Arquivos</Label>
+                 <label className="flex flex-col items-center justify-center gap-4 h-40 border-2 border-dashed border-gray-100 rounded-[2rem] bg-gray-50/50 cursor-pointer hover:bg-gray-100/50 hover:border-primary/20 transition-all">
+                    <Upload className="w-8 h-8 text-primary/30" />
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">Clique ou arraste múltiplas fotos</span>
+                    <input type="file" accept="image/jpeg,image/png,image/webp" multiple className="hidden" onChange={handleFilesChange} />
+                 </label>
+               </div>
             </div>
-            <ul className="text-xs text-muted-foreground space-y-1 list-disc list-inside">
-              <li>Formatos aceitos: JPG, PNG, WebP</li>
-              <li>Tamanho recomendado: 1080×1080px (quadrada) ou 1920×1080px (paisagem)</li>
-              <li>Tamanho máximo: 5MB por foto</li>
-            </ul>
-          </div>
 
-          <div className="space-y-2">
-            <Label>Descrição (opcional, aplicada a todas as fotos)</Label>
-            <Input value={descricao} onChange={e => setDescricao(e.target.value)} placeholder="Descrição das fotos" />
-          </div>
-
-          <div className="space-y-2">
-            <Label>Selecionar Imagens (múltiplas)</Label>
-            <label className="flex items-center gap-2 px-4 py-3 bg-muted rounded-md cursor-pointer hover:bg-muted/80 transition-colors text-sm border-2 border-dashed border-border">
-              <Upload className="w-5 h-5 text-primary" /> Clique para escolher fotos ou arraste aqui
-              <input type="file" accept="image/jpeg,image/png,image/webp" multiple className="hidden" onChange={handleFilesChange} />
-            </label>
-          </div>
-
-          {imagens.length > 0 && (
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">{imagens.length} foto(s) selecionada(s)</p>
-              <div className="flex gap-2 flex-wrap">
-                {imagens.map((img, idx) => (
-                  <div key={idx} className="relative group">
-                    <img src={img} alt="Preview" className="h-20 w-20 rounded-lg object-cover border border-border" />
-                    <button
-                      onClick={() => removePreview(idx)}
-                      className="absolute -top-1 -right-1 w-5 h-5 bg-destructive rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <span className="text-destructive-foreground text-xs">✕</span>
-                    </button>
-                  </div>
-                ))}
-              </div>
+            <div className="space-y-6">
+               <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Preview para Postagem ({imagens.length})</Label>
+               <div className="min-h-[220px] bg-gray-50/50 rounded-[2rem] p-6 border border-gray-100">
+                  {imagens.length > 0 ? (
+                    <div className="grid grid-cols-4 gap-4">
+                      {imagens.map((img, idx) => (
+                        <div key={idx} className="relative group aspect-square rounded-xl overflow-hidden shadow-sm border border-white">
+                          <img src={img} alt="Preview" className="w-full h-full object-cover" />
+                          <button
+                            onClick={() => removePreview(idx)}
+                            className="absolute inset-0 bg-red-500/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <span className="text-[10px] font-black uppercase tracking-widest">Remover</span>
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="h-full flex items-center justify-center text-gray-200">
+                       <span className="text-[9px] font-black uppercase tracking-widest">Nenhuma foto selecionada</span>
+                    </div>
+                  )}
+               </div>
             </div>
-          )}
+          </div>
 
-          <Button onClick={handleAdd} className="gap-2" disabled={imagens.length === 0 || loading}>
-            {loading ? <Plus className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
-            {loading ? "Enviando..." : `Adicionar ${imagens.length > 1 ? `${imagens.length} Fotos` : "Foto"}`}
-          </Button>
+          <div className="pt-6 border-t border-gray-50">
+             <Button onClick={handleAdd} className="h-16 px-12 rounded-2xl bg-primary text-white font-black uppercase text-xs tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all disabled:opacity-50" disabled={imagens.length === 0 || loading}>
+               {loading ? <Plus className="w-5 h-5 animate-spin mr-3" /> : <Plus className="w-5 h-5 mr-3" />}
+               {loading ? "Processando..." : `Publicar ${imagens.length} ${imagens.length === 1 ? 'Foto' : 'Fotos'} agora`}
+             </Button>
+          </div>
         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
         {fotos.map(foto => (
-          <div key={foto.id} className="relative group rounded-lg overflow-hidden border border-border">
-            <img src={foto.imagem} alt={foto.descricao} className="w-full aspect-square object-cover" />
-            <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <Button size="icon" variant="ghost" className="text-destructive" onClick={() => handleDelete(foto.id)}>
-                <Trash2 className="w-5 h-5" />
-              </Button>
+          <div key={foto.id} className="group relative rounded-[2.5rem] overflow-hidden bg-white shadow-xl hover:shadow-2xl transition-all duration-500">
+            <div className="aspect-square relative overflow-hidden">
+               <img src={foto.imagem} alt={foto.descricao} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+               <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                 <Button size="icon" variant="ghost" className="h-12 w-12 bg-white text-destructive rounded-2xl shadow-xl hover:scale-110" onClick={() => handleDelete(foto.id)}>
+                   <Trash2 className="w-5 h-5" />
+                 </Button>
+               </div>
             </div>
-            {foto.descricao && <p className="text-xs text-muted-foreground p-2 truncate">{foto.descricao}</p>}
+            {foto.descricao && (
+              <div className="p-4 border-t border-gray-50">
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest truncate">{foto.descricao}</p>
+              </div>
+            )}
           </div>
         ))}
-        {fotos.length === 0 && <p className="col-span-full text-center text-muted-foreground py-8">Nenhuma foto cadastrada.</p>}
+        {fotos.length === 0 && (
+           <div className="col-span-full h-64 flex flex-col items-center justify-center bg-gray-50/50 rounded-[3rem] border-2 border-dashed border-gray-100">
+              <ImageIcon className="w-12 h-12 text-gray-200 mb-4" />
+              <p className="text-xs font-black text-gray-300 uppercase tracking-widest">A galeria está vazia.</p>
+           </div>
+        )}
       </div>
     </div>
   );

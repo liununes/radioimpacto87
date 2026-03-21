@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Users, Shield, ShieldCheck, Trash2, Plus, Save, AlertCircle } from "lucide-react";
+import { Users, Shield, ShieldCheck, Trash2, Plus, Save, AlertCircle, X, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -285,178 +285,160 @@ GRANT EXECUTE ON FUNCTION public.deletar_usuario TO authenticated, anon;
   if (!isAdmin && !hasPermission('usuarios')) return <div className="p-8 text-center bg-destructive/10 text-destructive rounded-lg border border-destructive/20 m-8">Acesso restrito. Sua conta não tem permissão para gerenciar usuários.</div>;
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
-      <div className="flex items-center justify-between">
-        <div className="space-y-1">
-          <h2 className="text-3xl font-bold tracking-tight">Equipe e Acessos</h2>
-          <p className="text-muted-foreground">Gerencie quem pode editar cada seção da rádio.</p>
+    <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+      <div className="flex justify-between items-center bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+        <div>
+          <h2 className="text-3xl font-black text-primary tracking-tighter uppercase italic leading-none">Equipe & <span className="text-secondary italic">Acessos</span></h2>
+          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Gerencie quem pode editar cada seção da rádio</p>
         </div>
-        <Button onClick={() => setIsAdding(!isAdding)} variant={isAdding ? "outline" : "default"} className="shadow-md">
-          {isAdding ? "Cancelar" : <><Plus className="w-4 h-4 mr-2" /> Novo Colaborador</>}
-        </Button>
+        {!isAdding && (
+          <Button onClick={() => setIsAdding(true)} className="rounded-xl font-black uppercase tracking-widest text-[10px] h-12 px-8 bg-primary text-white hover:bg-primary/90 transition-all shadow-lg active:scale-95">
+             <Plus className="w-4 h-4 mr-2" /> Novo Colaborador
+          </Button>
+        )}
       </div>
 
       {error && (
-        <Card className="border-destructive/50 bg-destructive/5 shadow-inner">
-          <CardContent className="pt-6">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-              <div className="flex items-start gap-3">
-                <AlertCircle className="w-6 h-6 text-destructive flex-shrink-0" />
-                <div className="text-sm">
-                  <p className="font-bold text-destructive">Erro de Configuração</p>
-                  <p className="mt-1 opacity-90">{error}</p>
-                </div>
+        <Card className="rounded-[2rem] border-none bg-red-50 p-6 flex items-center justify-between border border-red-100">
+           <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm text-red-500">
+                 <AlertCircle className="w-6 h-6" />
               </div>
-              <Button variant="outline" size="sm" onClick={copyRepairSQL} className="border-destructive/30 hover:bg-destructive/10">
-                <Save className="w-4 h-4 mr-2" /> Copiar SQL Admin
-              </Button>
-            </div>
-          </CardContent>
+              <div>
+                 <p className="text-[10px] font-black uppercase tracking-widest text-red-400">Erro de Configuração</p>
+                 <p className="text-xs font-bold text-red-900 mt-1">{error}</p>
+              </div>
+           </div>
+           <Button variant="outline" size="sm" onClick={copyRepairSQL} className="rounded-xl border-red-200 text-red-600 font-black uppercase text-[9px] tracking-widest bg-white">
+              <Save className="w-3.5 h-3.5 mr-2" /> Copiar SQL Fix
+           </Button>
         </Card>
       )}
 
-      {isAdding && (
-        <Card className="border-primary/20 shadow-lg">
-          <CardHeader>
-            <CardTitle>Novo Colaborador</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Login / Usuário (Para entrar no sistema)</Label>
-                <Input 
-                  value={newUsername} 
-                  onChange={e => setNewUsername(e.target.value)} 
-                  placeholder="Ex: joao_silva" 
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Nome Completo (Exibição)</Label>
-                <Input 
-                  value={newDisplayName} 
-                  onChange={e => setNewDisplayName(e.target.value)} 
-                  placeholder="Ex: João da Silva" 
-                />
-              </div>
-              <div className="space-y-2 md:col-span-2">
-                <Label>Senha</Label>
-                <Input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} />
-              </div>
+      {(isAdding || editingUser) && (
+        <Card className="rounded-[2.5rem] border-none shadow-2xl bg-white overflow-hidden animate-in zoom-in-95 duration-500">
+          <CardHeader className="p-10 pb-4 flex flex-row items-center justify-between">
+            <div>
+               <CardTitle className="text-xl font-black uppercase tracking-tight text-primary italic">
+                 {editingUser ? `Configurar: ${editingUser.username}` : "Dados do Novo Colaborador"}
+               </CardTitle>
+               <p className="text-[10px] font-bold text-gray-300 uppercase mt-2">Defina as credenciais e o nível de acesso</p>
             </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {ALL_PERMISSIONS.map((perm) => (
-                <div key={perm.id} className="flex items-center space-x-2 border p-2 rounded hover:bg-muted">
-                  <Checkbox 
-                    id={`p-${perm.id}`} 
-                    checked={newPermissions.includes(perm.id)}
-                    onCheckedChange={() => togglePermission(perm.id)}
-                  />
-                  <label htmlFor={`p-${perm.id}`} className="text-xs cursor-pointer">{perm.label}</label>
-                </div>
-              ))}
-            </div>
-
-            <Button onClick={handleAddUser} disabled={loading} className="w-full">
-              {loading ? "Processando..." : "Finalizar Cadastro"}
+            <Button variant="ghost" size="icon" className="rounded-2xl h-12 w-12" onClick={() => { setIsAdding(false); setEditingUser(null); }}>
+               <X className="w-6 h-6 text-gray-300" />
             </Button>
-          </CardContent>
-        </Card>
-      )}
-
-      {editingUser && (
-        <Card className="border-primary bg-primary/5 shadow-xl animate-in zoom-in duration-300">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Plus className="w-5 h-5 rotate-45" /> Editando: {editingUser.username}
-            </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Nome Completo (Exibição)</Label>
-                <Input 
-                  value={editingUser.display_name || ""} 
-                  onChange={e => setEditingUser({...editingUser, display_name: e.target.value})} 
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Nova Senha (Deixe em branco p/ manter)</Label>
-                <Input 
-                  type="password" 
-                  value={editingUser.new_password || ""} 
-                  onChange={e => setEditingUser({...editingUser, new_password: e.target.value})} 
-                  placeholder="********"
-                />
-              </div>
+          <CardContent className="p-10 pt-4 space-y-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+               <div className="space-y-3">
+                 <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Login de Acesso</Label>
+                 <Input 
+                   disabled={!!editingUser}
+                   value={editingUser ? editingUser.username : newUsername} 
+                   onChange={e => editingUser ? setEditingUser({...editingUser, username: e.target.value}) : setNewUsername(e.target.value)} 
+                   placeholder="Ex: joao_silva" 
+                   className="h-14 rounded-2xl border-gray-100 bg-gray-50 font-bold text-primary"
+                 />
+               </div>
+               <div className="space-y-3">
+                 <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Nome de Exibição</Label>
+                 <Input 
+                   value={editingUser ? (editingUser.display_name || "") : newDisplayName} 
+                   onChange={e => editingUser ? setEditingUser({...editingUser, display_name: e.target.value}) : setNewDisplayName(e.target.value)} 
+                   placeholder="Ex: João da Silva" 
+                   className="h-14 rounded-2xl border-gray-100 bg-gray-50 font-bold text-primary"
+                 />
+               </div>
+               <div className="space-y-3">
+                 <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">
+                    {editingUser ? "Nova Senha (Opcional)" : "Senha do Colaborador"}
+                 </Label>
+                 <Input 
+                   type="password" 
+                   value={editingUser ? (editingUser.new_password || "") : newPassword} 
+                   onChange={e => editingUser ? setEditingUser({...editingUser, new_password: e.target.value}) : setNewPassword(e.target.value)} 
+                   placeholder={editingUser ? "********" : "Mínimo 6 dígitos"}
+                   className="h-14 rounded-2xl border-gray-100 bg-gray-50 font-bold text-primary"
+                 />
+               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {ALL_PERMISSIONS.map((perm) => (
-                <div key={perm.id} className="flex items-center space-x-2 border p-2 rounded bg-background/50 hover:bg-muted">
-                  <Checkbox 
-                    id={`edit-p-${perm.id}`} 
-                    checked={editingUser.permissions.includes(perm.id)}
-                    onCheckedChange={() => toggleEditPermission(perm.id)}
-                  />
-                  <label htmlFor={`edit-p-${perm.id}`} className="text-xs cursor-pointer">{perm.label}</label>
-                </div>
-              ))}
+            <div className="space-y-6">
+               <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Módulos que este usuário pode gerenciar</Label>
+               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {ALL_PERMISSIONS.map((perm) => {
+                    const isChecked = editingUser ? editingUser.permissions.includes(perm.id) : newPermissions.includes(perm.id);
+                    return (
+                      <button 
+                        key={perm.id} 
+                        type="button"
+                        onClick={() => editingUser ? toggleEditPermission(perm.id) : togglePermission(perm.id)}
+                        className={`flex items-center gap-3 p-4 rounded-xl border text-left transition-all ${
+                          isChecked 
+                            ? "bg-primary border-primary shadow-lg shadow-blue-900/10" 
+                            : "bg-background border-gray-100 hover:border-primary/20"
+                        }`}
+                      >
+                         <div className={`w-5 h-5 rounded flex items-center justify-center transition-colors ${isChecked ? 'bg-secondary text-primary' : 'bg-gray-100'}`}>
+                            {isChecked && <ShieldCheck className="w-3.5 h-3.5" />}
+                         </div>
+                         <span className={`text-[10px] font-black uppercase tracking-tight ${isChecked ? 'text-white' : 'text-gray-400'}`}>
+                            {perm.label}
+                         </span>
+                      </button>
+                    )
+                  })}
+               </div>
             </div>
 
-            <div className="flex gap-2">
-              <Button onClick={handleUpdateUser} disabled={loading} className="flex-1">
-                {loading ? "Salvando..." : "Salvar Alterações"}
-              </Button>
-              <Button variant="outline" onClick={() => setEditingUser(null)}>Cancelar</Button>
+            <div className="pt-6 border-t border-gray-50">
+               <Button onClick={editingUser ? handleUpdateUser : handleAddUser} disabled={loading} className="h-16 px-12 rounded-2xl bg-primary text-white font-black uppercase text-xs tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all w-full md:w-auto">
+                 {loading ? <Loader2 className="w-5 h-5 animate-spin mr-3" /> : (editingUser ? <Save className="w-5 h-5 mr-3" /> : <Plus className="w-5 h-5 mr-3" />)}
+                 {loading ? "Processando..." : (editingUser ? "Atualizar Usuário" : "Finalizar Cadastro")}
+               </Button>
             </div>
           </CardContent>
         </Card>
       )}
 
-      <div className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
         {users.map((u) => (
-          <Card key={u.user_id} className="hover:border-primary/30 transition-all overflow-hidden group">
-            <div className="flex items-center justify-between p-4 bg-muted/20">
-              <div className="flex items-center gap-3">
-                <div className="bg-primary/10 p-2 rounded-full">
-                  <ShieldCheck className="w-5 h-5 text-primary" />
+          <Card key={u.user_id} className="group overflow-hidden rounded-[2.5rem] border-none shadow-xl hover:shadow-2xl transition-all duration-500 bg-white">
+             <div className="p-8 space-y-6">
+                <div className="flex items-center justify-between">
+                   <div className="w-14 h-14 bg-primary/5 rounded-[1.5rem] flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-500">
+                      <Shield className="w-6 h-6" />
+                   </div>
+                   <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Button size="icon" variant="ghost" className="h-10 w-10 bg-gray-50 rounded-xl" onClick={() => setEditingUser({ ...u })}><ShieldCheck className="w-4 h-4 text-primary" /></Button>
+                      <Button size="icon" variant="ghost" className="h-10 w-10 bg-red-50 rounded-xl text-red-400 hover:text-red-600" onClick={() => handleDeleteUser(u.user_id, u.email)}><Trash2 className="w-4 h-4" /></Button>
+                   </div>
                 </div>
+
                 <div>
-                  <p className="font-bold text-lg">{u.display_name || u.username}</p>
-                  <p className="text-[10px] text-muted-foreground uppercase tracking-widest">
-                    USUÁRIO: <span className="text-primary font-mono">{u.username}</span>
-                  </p>
+                   <h3 className="text-xl font-black text-primary uppercase italic tracking-tight truncate leading-none mb-2">{u.display_name || u.username}</h3>
+                   <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">@{u.username}</span>
                 </div>
-              </div>
-              <div className="flex gap-1">
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="hover:bg-primary/10 hover:text-primary transition-colors"
-                  onClick={() => setEditingUser({ ...u })}
-                >
-                  <Plus className="w-4 h-4" />
-                </Button>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="hover:bg-destructive/10 hover:text-destructive transition-colors" 
-                  onClick={() => handleDeleteUser(u.user_id, u.email)}
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
-              </div>
-            </div>
-            <div className="p-4 flex flex-wrap gap-2 bg-background/40">
-              {u.permissions?.map((p: string) => (
-                <span key={p} className="text-[9px] bg-primary/5 text-primary/80 px-2 py-1 rounded-sm border border-primary/10 uppercase font-bold tracking-tight">
-                  {ALL_PERMISSIONS.find(a => a.id === p)?.label || p}
-                </span>
-              ))}
-            </div>
+
+                <div className="pt-4 border-t border-gray-50">
+                   <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-3 italic">Módulos Autorizados:</p>
+                   <div className="flex flex-wrap gap-1.5">
+                      {u.permissions?.map((p: string) => (
+                         <span key={p} className="text-[8px] font-black bg-gray-50 text-primary/70 px-2.5 py-1 rounded-lg uppercase tracking-tight border border-gray-100">
+                            {ALL_PERMISSIONS.find(a => a.id === p)?.label || p}
+                         </span>
+                      ))}
+                   </div>
+                </div>
+             </div>
           </Card>
         ))}
+        {users.length === 0 && (
+           <div className="col-span-full h-64 flex flex-col items-center justify-center bg-gray-50/50 rounded-[3rem] border-2 border-dashed border-gray-100">
+              <Users className="w-12 h-12 text-gray-200 mb-4" />
+              <p className="text-xs font-black text-gray-300 uppercase tracking-widest">Nenhum colaborador registrado.</p>
+           </div>
+        )}
       </div>
     </div>
   );
