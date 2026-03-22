@@ -43,7 +43,7 @@ const AdminSobre = () => {
 
   return (
     <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      <div className="flex justify-between items-center bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+      <div className="flex justify-between items-center bg-white text-slate-900 p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
         <div>
           <h2 className="text-3xl font-black text-primary tracking-tighter uppercase italic leading-none">Sobre a <span className="text-secondary italic">Estação</span></h2>
           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Gerencie a história e os contatos da sua rádio</p>
@@ -54,7 +54,7 @@ const AdminSobre = () => {
         </Button>
       </div>
 
-      <Card className="rounded-[2.5rem] border-none shadow-xl bg-white overflow-hidden">
+      <Card className="rounded-[2.5rem] border-none shadow-xl bg-white text-slate-900 overflow-hidden">
         <CardContent className="p-12 space-y-10">
           <div className="space-y-4">
             <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Título da Seção (Ex: A Rádio)</Label>

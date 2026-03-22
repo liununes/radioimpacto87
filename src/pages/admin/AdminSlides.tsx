@@ -81,7 +81,7 @@ const AdminSlides = () => {
 
   return (
     <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      <div className="flex justify-between items-center bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+      <div className="flex justify-between items-center bg-white text-slate-900 p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
         <div>
           <h2 className="text-3xl font-black text-primary tracking-tighter uppercase italic leading-none">Banners & <span className="text-secondary italic">Slides</span></h2>
           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Destaques visuais que aparecem no topo do site</p>
@@ -94,7 +94,7 @@ const AdminSlides = () => {
         )}
       </div>
 
-      <Card className="rounded-[2.5rem] border-none shadow-xl bg-white overflow-hidden">
+      <Card className="rounded-[2.5rem] border-none shadow-xl bg-white text-slate-900 overflow-hidden">
         <CardHeader className="p-10 pb-4">
           <CardTitle className="text-xl font-black uppercase tracking-tight text-primary italic">{editId ? "Editar Slide em Destaque" : "Cadastrar Novo Destaque"}</CardTitle>
         </CardHeader>
@@ -118,7 +118,7 @@ const AdminSlides = () => {
                      <img src={imagem} alt="Preview" className="w-full h-full object-cover rounded-2xl" />
                    ) : (
                      <div className="flex flex-col items-center gap-4">
-                        <div className="p-6 bg-white rounded-full shadow-sm text-gray-200">
+                        <div className="p-6 bg-white text-slate-900 rounded-full shadow-sm text-gray-200">
                            <Upload className="w-8 h-8" />
                         </div>
                         <p className="text-xs font-bold text-gray-300 uppercase tracking-widest">Nenhuma imagem selecionada</p>
@@ -126,7 +126,7 @@ const AdminSlides = () => {
                    )}
                 </div>
                 <label className="absolute inset-0 cursor-pointer flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-3xl">
-                   <div className="h-12 px-8 bg-white text-primary rounded-xl flex items-center gap-3 font-black uppercase text-[10px] tracking-widest border-none shadow-xl">
+                   <div className="h-12 px-8 bg-white text-slate-900 text-primary rounded-xl flex items-center gap-3 font-black uppercase text-[10px] tracking-widest border-none shadow-xl">
                       <Upload className="w-4 h-4" /> Importar Foto
                    </div>
                    <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) setImagem(await fileToBase64(f)); }} />
@@ -152,12 +152,12 @@ const AdminSlides = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {slides.map(slide => (
-          <Card key={slide.id} className="group overflow-hidden rounded-[2.5rem] border-none shadow-xl hover:shadow-2xl transition-all duration-500 bg-white">
+          <Card key={slide.id} className="group overflow-hidden rounded-[2.5rem] border-none shadow-xl hover:shadow-2xl transition-all duration-500 bg-white text-slate-900">
             <div className="aspect-[16/9] relative overflow-hidden">
                <img src={slide.imagem} alt={slide.titulo} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-8 gap-4">
                   <div className="flex gap-2">
-                     <Button size="sm" className="flex-1 bg-white text-primary font-black uppercase text-[9px] tracking-widest h-10 rounded-lg" onClick={() => handleEdit(slide)}>
+                     <Button size="sm" className="flex-1 bg-white text-slate-900 text-primary font-black uppercase text-[9px] tracking-widest h-10 rounded-lg" onClick={() => handleEdit(slide)}>
                         <Edit2 className="w-3 h-3 mr-2" /> Editar
                      </Button>
                      <Button size="icon" className="bg-red-500 text-white hover:bg-red-600 h-10 w-10 rounded-lg" onClick={() => handleDelete(slide.id)}>

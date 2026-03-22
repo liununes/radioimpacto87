@@ -44,7 +44,7 @@ const AdminHome = () => {
            <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">Controle total da sua estação de rádio</p>
         </div>
         <div className="flex gap-3">
-           <div className="px-6 py-4 bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col">
+           <div className="px-6 py-4 bg-white text-slate-900 rounded-2xl border border-gray-100 shadow-sm flex flex-col">
               <span className="text-[10px] font-black text-gray-300 uppercase tracking-widest">Status Stream</span>
               <span className="text-sm font-black text-green-500 uppercase flex items-center gap-2">
                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" /> ONLINE
@@ -55,7 +55,7 @@ const AdminHome = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((s, idx) => (
-          <Card key={s.label} className="group overflow-hidden rounded-[2rem] border-none shadow-xl hover:shadow-2xl transition-all duration-500 cursor-default bg-white">
+          <Card key={s.label} className="group overflow-hidden rounded-[2rem] border-none shadow-xl hover:shadow-2xl transition-all duration-500 cursor-default bg-white text-slate-900">
             <CardContent className="p-8 flex items-center justify-between">
               <div className="space-y-2">
                 <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{s.label}</p>
@@ -75,11 +75,11 @@ const AdminHome = () => {
                <h3 className="text-3xl font-black uppercase italic tracking-tighter">Otimize sua Experiência</h3>
                <p className="opacity-60 text-sm font-medium max-w-xl leading-relaxed">Personalize a identidade da sua rádio, gerencie locutores e acompanhe os relatórios de audiência diretamente no menu lateral.</p>
             </div>
-            <Link to="/admin/aparencia" className="bg-white text-primary h-16 flex items-center px-10 rounded-2xl font-black uppercase text-xs tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all shrink-0">
+            <Link to="/admin/aparencia" className="bg-white text-slate-900 text-primary h-16 flex items-center px-10 rounded-2xl font-black uppercase text-xs tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all shrink-0">
                Ir para Aparência
             </Link>
          </div>
-         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
+         <div className="absolute top-0 right-0 w-64 h-64 bg-white text-slate-900/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
          <div className="absolute bottom-0 left-0 w-32 h-32 bg-accent/20 rounded-full translate-y-1/2 -translate-x-1/2 blur-2xl" />
       </div>
     </div>

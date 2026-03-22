@@ -87,7 +87,7 @@ const AdminAparencia = () => {
       <div className="relative overflow-hidden rounded-[2.5rem] bg-[var(--admin-blue)] p-12 text-white shadow-2xl" style={{ backgroundColor: 'var(--admin-blue)' }}>
         <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="text-center md:text-left space-y-2">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 rounded-full text-[10px] font-black tracking-widest uppercase mb-4">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white text-slate-900/10 rounded-full text-[10px] font-black tracking-widest uppercase mb-4">
               <CheckCircle2 className="w-3 h-3 text-[var(--admin-yellow)]" style={{ color: 'var(--admin-yellow)' }} /> Sistema de Design Ativo
             </div>
             <h2 className="text-4xl md:text-5xl font-black tracking-tighter uppercase italic leading-none">
@@ -101,13 +101,13 @@ const AdminAparencia = () => {
         </div>
         
         {/* Abstract Background Shapes */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-white text-slate-900/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-red-500/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl" />
       </div>
 
       <Tabs defaultValue="visual" className="space-y-8" onValueChange={setActiveTab}>
         <div className="flex justify-center">
-          <TabsList className="bg-white p-1.5 h-auto rounded-3xl border border-gray-100 shadow-xl gap-2 flex-wrap justify-center">
+          <TabsList className="bg-white text-slate-900 p-1.5 h-auto rounded-3xl border border-gray-100 shadow-xl gap-2 flex-wrap justify-center text-slate-400">
             <TabsTrigger value="visual" className="rounded-2xl px-6 py-4 data-[state=active]:bg-[var(--admin-blue)] data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
               <Palette className="w-4 h-4 mr-2" /> Identidade Visual
             </TabsTrigger>
@@ -136,7 +136,7 @@ const AdminAparencia = () => {
 
         {/* --- MENUS TAB --- */}
         <TabsContent value="menus" className="space-y-8 animate-in fade-in zoom-in-95 duration-500">
-          <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-white">
+          <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-white text-slate-900">
             <CardHeader className="p-10 pb-4">
               <CardTitle className="text-2xl font-black uppercase tracking-tight text-[#002e5d]">Gerenciar Links de Navegação</CardTitle>
               <CardDescription>Crie e organize os itens do menu superior do seu site.</CardDescription>
@@ -198,7 +198,7 @@ const AdminAparencia = () => {
         {/* --- VISUAL TAB --- */}
         <TabsContent value="visual" className="space-y-8 animate-in fade-in zoom-in-95 duration-500">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-white">
+            <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-white text-slate-900">
               <CardHeader className="p-8 pb-4">
                 <CardTitle className="text-xl font-black uppercase text-primary tracking-tight">Cores da Marca</CardTitle>
                 <CardDescription className="text-xs font-medium text-slate-700">Defina os tons que darão vida ao site da sua rádio</CardDescription>
@@ -291,7 +291,7 @@ const AdminAparencia = () => {
               </CardContent>
             </Card>
 
-            <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-white">
+            <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-white text-slate-900">
               <CardHeader className="p-8 pb-4">
                 <CardTitle className="text-xl font-black uppercase text-primary tracking-tight">Logotipos</CardTitle>
                 <CardDescription className="text-xs font-medium text-slate-700">Identidade visual em todos os dispositivos</CardDescription>
@@ -332,7 +332,7 @@ const AdminAparencia = () => {
 
         {/* --- TEXTOS TAB --- */}
         <TabsContent value="textos" className="space-y-8 animate-in fade-in zoom-in-95 duration-500">
-           <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-white">
+           <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-white text-slate-900">
               <CardContent className="p-12">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
                   <div className="space-y-8">
@@ -390,7 +390,7 @@ const AdminAparencia = () => {
         {/* --- ESTRUTURA TAB --- */}
         <TabsContent value="layout" className="space-y-8 animate-in fade-in zoom-in-95 duration-500">
            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <Card className="rounded-[2.5rem] border-none shadow-xl bg-white">
+              <Card className="rounded-[2.5rem] border-none shadow-xl bg-white text-slate-900">
                  <CardHeader className="p-8">
                     <CardTitle className="text-xl font-black uppercase tracking-tight">Cidade Padrão</CardTitle>
                     <CardDescription className="text-xs">Define a cidade exibida na barra do player ("Você está em:")</CardDescription>
@@ -400,14 +400,14 @@ const AdminAparencia = () => {
                        <MapPin className="w-6 h-6 text-red-500" />
                        <Input value={theme.weatherCity} onChange={e => updateField("weatherCity", e.target.value)} className="rounded-xl border-none bg-transparent font-black uppercase text-lg h-auto p-0 focus-visible:ring-0" placeholder="Ex: São Paulo" />
                     </div>
-                         </CardContent>
+                 </CardContent>
               </Card>
            </div>
         </TabsContent>
 
         {/* --- VISIBILIDADE TAB --- */}
         <TabsContent value="visibilidade" className="space-y-8 animate-in fade-in zoom-in-95 duration-500">
-           <Card className="rounded-[2.5rem] border-none shadow-xl bg-white overflow-hidden">
+           <Card className="rounded-[2.5rem] border-none shadow-xl bg-white text-slate-900 overflow-hidden">
               <div className="bg-emerald-600 p-8 text-white relative overflow-hidden">
                 <div className="relative z-10">
                   <h3 className="text-xl font-black uppercase italic tracking-tighter">Visibilidade Front-end</h3>
@@ -449,7 +449,7 @@ const AdminAparencia = () => {
 
         {/* --- RADIO TAB --- */}
         <TabsContent value="radio" className="space-y-8 animate-in fade-in zoom-in-95 duration-500">
-           <Card className="rounded-[2.5rem] border-none shadow-xl bg-white">
+           <Card className="rounded-[2.5rem] border-none shadow-xl bg-white text-slate-900">
               <CardHeader className="p-10 pb-4">
                  <CardTitle className="text-2xl font-black uppercase tracking-tight text-[#002e5d]">Sintonização e Link</CardTitle>
               </CardHeader>
@@ -474,7 +474,7 @@ const AdminAparencia = () => {
         {/* --- WHITE LABEL TAB --- */}
         {isSuperAdmin && (
           <TabsContent value="whitelabel" className="space-y-8 animate-in fade-in zoom-in-95 duration-500 text-slate-700">
-            <Card className="rounded-[2.5rem] border-none shadow-xl bg-white overflow-hidden">
+            <Card className="rounded-[2.5rem] border-none shadow-xl bg-white text-slate-900 overflow-hidden">
                <div className="bg-purple-600 p-8 text-white relative overflow-hidden">
                  <div className="relative z-10">
                    <h3 className="text-xl font-black uppercase italic tracking-tighter">Presets do Painel</h3>
@@ -497,7 +497,7 @@ const AdminAparencia = () => {
                            updateField("adminHeaderGradEnd", p.gre);
                            toast.info(`Tema ${p.l} aplicado! Clique em Publicar para salvar.`);
                          }}
-                         className="bg-white/10 hover:bg-white/20 p-4 rounded-2xl transition-all text-left flex flex-col gap-2"
+                         className="bg-white text-slate-900/10 hover:bg-white text-slate-900/20 p-4 rounded-2xl transition-all text-left flex flex-col gap-2"
                        >
                          <span className="text-[9px] font-black uppercase text-white/80">{p.l}</span>
                          <div className="flex gap-1 h-2">
@@ -530,7 +530,7 @@ const AdminAparencia = () => {
             </Card>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-white">
+              <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-white text-slate-900">
                 <CardHeader className="p-8">
                   <CardTitle className="text-xl font-black uppercase tracking-tight text-purple-600">Logo do Painel</CardTitle>
                   <CardDescription>Esta logo aparece no topo da barra lateral do Admin.</CardDescription>
@@ -551,7 +551,7 @@ const AdminAparencia = () => {
                 </CardContent>
               </Card>
 
-              <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-white">
+              <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-white text-slate-900">
                 <CardHeader className="p-8">
                   <CardTitle className="text-xl font-black uppercase tracking-tight text-purple-600">Cores do Painel (White Label)</CardTitle>
                 </CardHeader>

@@ -91,7 +91,7 @@ const AdminProgramacao = () => {
 
   return (
     <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      <div className="flex justify-between items-center bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+      <div className="flex justify-between items-center bg-white text-slate-900 p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
         <div>
           <h2 className="text-3xl font-black text-primary tracking-tighter uppercase italic leading-none">Grade de <span className="text-secondary italic">Programação</span></h2>
           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Organize os horários e locutores da rádio</p>
@@ -104,7 +104,7 @@ const AdminProgramacao = () => {
         )}
       </div>
 
-      <Card className="rounded-[2.5rem] border-none shadow-xl bg-white overflow-hidden">
+      <Card className="rounded-[2.5rem] border-none shadow-xl bg-white text-slate-900 overflow-hidden">
         <CardHeader className="p-10 pb-4">
           <CardTitle className="text-xl font-black uppercase tracking-tight text-primary italic">{editId ? "Editar Programa Existente" : "Registrar Novo Programa"}</CardTitle>
         </CardHeader>
@@ -144,7 +144,7 @@ const AdminProgramacao = () => {
                      <div className="w-20 h-20 rounded-2xl bg-gray-50 border border-gray-100 overflow-hidden flex items-center justify-center shrink-0">
                         {foto ? <img src={foto} alt="Preview" className="w-full h-full object-cover" /> : <Upload className="w-6 h-6 text-gray-200" />}
                      </div>
-                     <label className="flex-1 h-14 bg-white border border-gray-100 rounded-2xl flex items-center justify-center gap-3 cursor-pointer hover:bg-gray-50 transition-all font-black uppercase text-[10px] tracking-widest text-primary shadow-sm">
+                     <label className="flex-1 h-14 bg-white text-slate-900 border border-gray-100 rounded-2xl flex items-center justify-center gap-3 cursor-pointer hover:bg-gray-50 transition-all font-black uppercase text-[10px] tracking-widest text-primary shadow-sm">
                         <Upload className="w-4 h-4" /> Importar Arte
                         <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) setFoto(await fileToBase64(f)); }} />
                      </label>
@@ -165,7 +165,7 @@ const AdminProgramacao = () => {
                   className={`px-6 py-3 rounded-xl border font-black text-[10px] uppercase tracking-widest transition-all ${
                     dias.includes(i) 
                       ? "bg-primary text-white border-primary shadow-lg shadow-blue-900/10" 
-                      : "bg-white text-gray-400 border-gray-100 hover:border-primary/20"
+                      : "bg-white text-slate-900 text-gray-400 border-gray-100 hover:border-primary/20"
                   }`}
                 >
                   {dia}
@@ -191,7 +191,7 @@ const AdminProgramacao = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {programas.map(prog => (
-          <Card key={prog.id} className="group overflow-hidden rounded-[2.5rem] border-none shadow-xl hover:shadow-2xl transition-all duration-500 bg-white">
+          <Card key={prog.id} className="group overflow-hidden rounded-[2.5rem] border-none shadow-xl hover:shadow-2xl transition-all duration-500 bg-white text-slate-900">
             <CardContent className="p-8 flex items-center gap-8">
               <div className="relative shrink-0">
                  <div className="w-24 h-24 rounded-[2rem] overflow-hidden border-4 border-gray-50 group-hover:border-primary/5 transition-all duration-500">

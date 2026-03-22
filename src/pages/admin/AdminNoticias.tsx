@@ -157,7 +157,7 @@ const AdminNoticias = () => {
 
   return (
     <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <div className="flex justify-between items-center bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+      <div className="flex justify-between items-center bg-white text-slate-900 p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
         <div>
           <h2 className="text-3xl font-black text-primary tracking-tighter uppercase italic leading-none">Portal de <span className="text-secondary italic">Notícias</span></h2>
           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Gerencie o conteúdo informativo do seu site</p>
@@ -173,7 +173,7 @@ const AdminNoticias = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
         <div className="lg:col-span-8 space-y-10">
            {/* URL Scraper */}
-           <Card className="rounded-[2.5rem] border-none shadow-xl bg-white overflow-hidden">
+           <Card className="rounded-[2.5rem] border-none shadow-xl bg-white text-slate-900 overflow-hidden">
              <CardHeader className="bg-primary/5 p-8 border-b border-gray-100/50">
                <CardTitle className="text-lg font-black uppercase tracking-tight text-primary flex items-center gap-3">
                  <Link className="w-5 h-5 text-secondary" /> Importação Inteligente
@@ -198,7 +198,7 @@ const AdminNoticias = () => {
            </Card>
 
            {/* Form Card */}
-           <Card className="rounded-[2.5rem] border-none shadow-xl bg-white overflow-hidden">
+           <Card className="rounded-[2.5rem] border-none shadow-xl bg-white text-slate-900 overflow-hidden">
              <CardHeader className="p-8 border-b border-gray-50">
                <CardTitle className="text-xl font-black uppercase tracking-tight text-primary italic">
                  {editId ? "Editando Publicação" : "Nova Publicação"}
@@ -263,14 +263,14 @@ const AdminNoticias = () => {
 
         <div className="lg:col-span-4 space-y-10">
            {/* Category Management */}
-           <Card className="rounded-[2.5rem] border-none shadow-xl bg-white overflow-hidden">
+           <Card className="rounded-[2.5rem] border-none shadow-xl bg-white text-slate-900 overflow-hidden">
              <CardHeader className="p-8 pb-4">
                <CardTitle className="text-xl font-black uppercase tracking-tight text-primary italic">Categorias</CardTitle>
              </CardHeader>
              <CardContent className="p-8 pt-4 space-y-8">
                <div className="flex flex-wrap gap-2">
                  {categorias.map(cat => (
-                   <div key={cat} className="group relative flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-xl border border-gray-100/50 hover:bg-white hover:shadow-md transition-all">
+                   <div key={cat} className="group relative flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-xl border border-gray-100/50 hover:bg-white text-slate-900 hover:shadow-md transition-all">
                      <span className="text-[11px] font-bold text-primary uppercase">{cat}</span>
                      {categorias.length > 1 && (
                        <button 
@@ -300,7 +300,7 @@ const AdminNoticias = () => {
              </div>
              <div className="space-y-4">
                {filtered.map(n => (
-                 <Card key={n.id} className="group rounded-[1.8rem] border-none shadow-md overflow-hidden bg-white hover:shadow-xl transition-all duration-300 cursor-default">
+                 <Card key={n.id} className="group rounded-[1.8rem] border-none shadow-md overflow-hidden bg-white text-slate-900 hover:shadow-xl transition-all duration-300 cursor-default">
                    <CardContent className="p-4 flex gap-4">
                      <div className="w-20 h-20 rounded-2xl overflow-hidden bg-gray-100 shrink-0 shadow-inner">
                         <img src={n.imagem || ""} alt={n.titulo} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />

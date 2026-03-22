@@ -78,7 +78,7 @@ const AdminLocutores = () => {
 
   return (
     <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <div className="flex justify-between items-center bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+      <div className="flex justify-between items-center bg-white text-slate-900 p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
         <div>
           <h2 className="text-3xl font-black text-primary tracking-tighter uppercase italic leading-none">Time de <span className="text-secondary italic">Locutores</span></h2>
           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Gerencie as vozes que comandam a sua programação</p>
@@ -88,7 +88,7 @@ const AdminLocutores = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
         <div className="lg:col-span-4 space-y-10">
-          <Card className="rounded-[2.5rem] border-none shadow-xl bg-white overflow-hidden sticky top-32">
+          <Card className="rounded-[2.5rem] border-none shadow-xl bg-white text-slate-900 overflow-hidden sticky top-32">
             <CardHeader className="bg-primary/5 p-8 border-b border-gray-100/50 text-center">
               <CardTitle className="text-xl font-black uppercase tracking-tight text-primary italic">
                 {editId ? "Editar Cadastro" : "Novo Cadastro"}
@@ -131,7 +131,7 @@ const AdminLocutores = () => {
         <div className="lg:col-span-8">
            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {locutores.map(loc => (
-                <Card key={loc.id} className="group rounded-[2.5rem] border-none shadow-md hover:shadow-2xl transition-all duration-500 bg-white overflow-hidden p-8 flex flex-col items-center text-center">
+                <Card key={loc.id} className="group rounded-[2.5rem] border-none shadow-md hover:shadow-2xl transition-all duration-500 bg-white text-slate-900 overflow-hidden p-8 flex flex-col items-center text-center">
                    <div className="relative mb-6">
                       <div className="w-24 h-24 rounded-[2rem] bg-gray-50 border-4 border-white shadow-lg overflow-hidden flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
                          {loc.foto ? <img src={loc.foto} alt={loc.nome} className="w-full h-full object-cover" /> : <div className="text-3xl font-black text-primary/20">{loc.nome.charAt(0)}</div>}

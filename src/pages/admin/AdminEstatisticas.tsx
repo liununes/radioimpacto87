@@ -61,7 +61,7 @@ const AdminEstatisticas = () => {
 
   return (
     <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      <div className="flex justify-between items-center bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+      <div className="flex justify-between items-center bg-white text-slate-900 p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
         <div>
           <h2 className="text-3xl font-black text-primary tracking-tighter uppercase italic leading-none">Métricas de <span className="text-secondary italic">Audiência</span></h2>
           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Monitore o tráfego do site em tempo real</p>
@@ -84,7 +84,7 @@ const AdminEstatisticas = () => {
            <Clock className="absolute top-8 right-8 w-12 h-12 text-white/5" />
         </Card>
 
-        <Card className="rounded-[2.5rem] border-none shadow-xl bg-white overflow-hidden p-8">
+        <Card className="rounded-[2.5rem] border-none shadow-xl bg-white text-slate-900 overflow-hidden p-8">
            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">Pico (1h / 12h)</p>
            <div className="flex items-baseline gap-2">
               <h3 className="text-4xl font-black text-primary italic">{loading ? "..." : inLast1h}</h3>
@@ -93,7 +93,7 @@ const AdminEstatisticas = () => {
            <p className="text-[9px] font-bold text-gray-300 uppercase mt-4">Visitantes ativos hoje</p>
         </Card>
 
-        <Card className="rounded-[2.5rem] border-none shadow-xl bg-white overflow-hidden p-8">
+        <Card className="rounded-[2.5rem] border-none shadow-xl bg-white text-slate-900 overflow-hidden p-8">
            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">{format(now, "MMMM", { locale: ptBR })}</p>
            <h3 className="text-4xl font-black text-primary italic">{loading ? "..." : inMonth}</h3>
            <p className="text-[9px] font-bold text-gray-300 uppercase mt-4">Total acumulado no mês</p>
@@ -110,7 +110,7 @@ const AdminEstatisticas = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        <Card className="lg:col-span-8 rounded-[2.5rem] border-none shadow-xl bg-white overflow-hidden">
+        <Card className="lg:col-span-8 rounded-[2.5rem] border-none shadow-xl bg-white text-slate-900 overflow-hidden">
           <CardHeader className="p-10 pb-0">
             <CardTitle className="text-xl font-black uppercase tracking-tight text-primary italic">Fluxo de Acesso (24H)</CardTitle>
             <CardDescription className="text-[10px] font-bold uppercase tracking-widest text-gray-300 mt-2">Oscilação de audiência por hora</CardDescription>
@@ -156,10 +156,10 @@ const AdminEstatisticas = () => {
                 type="date" 
                 value={customDate}
                 onChange={(e) => setCustomDate(e.target.value)}
-                className="h-14 rounded-2xl border-none bg-white font-black text-primary text-center shadow-sm"
+                className="h-14 rounded-2xl border-none bg-white text-slate-900 font-black text-primary text-center shadow-sm"
               />
             </div>
-            <div className="text-center bg-white border border-gray-100 rounded-[2.5rem] px-8 py-10 w-full shadow-lg">
+            <div className="text-center bg-white text-slate-900 border border-gray-100 rounded-[2.5rem] px-8 py-10 w-full shadow-lg">
               <p className="text-[9px] font-black text-gray-300 uppercase tracking-widest mb-4">Acessos no dia</p>
               <h3 className="text-6xl font-black text-primary italic">{customDateAccesses}</h3>
               <div className="mt-6 flex justify-center">

@@ -58,7 +58,7 @@ const AdminPedidos = () => {
 
   return (
     <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      <div className="flex justify-between items-center bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+      <div className="flex justify-between items-center bg-white text-slate-900 p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
         <div>
           <h2 className="text-3xl font-black text-primary tracking-tighter uppercase italic leading-none">Central de <span className="text-secondary italic">Pedidos</span></h2>
           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Músicas e recados enviados pelos ouvintes em tempo real</p>
@@ -68,7 +68,7 @@ const AdminPedidos = () => {
 
       <div className="grid grid-cols-1 gap-6">
         {pedidos.map(pedido => (
-          <Card key={pedido.id} className={`group rounded-[2rem] border-none shadow-md hover:shadow-xl transition-all duration-300 bg-white overflow-hidden p-8 ${pedido.status === 'tocada' ? 'opacity-60 saturate-50' : ''}`}>
+          <Card key={pedido.id} className={`group rounded-[2rem] border-none shadow-md hover:shadow-xl transition-all duration-300 bg-white text-slate-900 overflow-hidden p-8 ${pedido.status === 'tocada' ? 'opacity-60 saturate-50' : ''}`}>
             <CardContent className="p-0 flex flex-col md:flex-row items-center gap-8">
               <div className={`w-20 h-20 rounded-[1.5rem] flex items-center justify-center shrink-0 shadow-inner ${pedido.status === 'tocada' ? 'bg-gray-100' : 'bg-primary/5'}`}>
                  <Music className={`w-8 h-8 ${pedido.status === 'tocada' ? 'text-gray-300' : 'text-primary'}`} />

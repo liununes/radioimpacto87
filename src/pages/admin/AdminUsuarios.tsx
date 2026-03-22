@@ -295,7 +295,7 @@ GRANT EXECUTE ON FUNCTION public.deletar_usuario TO authenticated, anon;
 
   return (
     <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      <div className="flex justify-between items-center bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+      <div className="flex justify-between items-center bg-white text-slate-900 p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
         <div>
           <h2 className="text-3xl font-black text-primary tracking-tighter uppercase italic leading-none">Equipe & <span className="text-secondary italic">Acessos</span></h2>
           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Gerencie quem pode editar cada seção da rádio</p>
@@ -310,7 +310,7 @@ GRANT EXECUTE ON FUNCTION public.deletar_usuario TO authenticated, anon;
       {error && (
         <Card className="rounded-[2rem] border-none bg-red-50 p-6 flex items-center justify-between border border-red-100">
            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm text-red-500">
+              <div className="w-12 h-12 bg-white text-slate-900 rounded-2xl flex items-center justify-center shadow-sm text-red-500">
                  <AlertCircle className="w-6 h-6" />
               </div>
               <div>
@@ -318,14 +318,14 @@ GRANT EXECUTE ON FUNCTION public.deletar_usuario TO authenticated, anon;
                  <p className="text-xs font-bold text-red-900 mt-1">{error}</p>
               </div>
            </div>
-           <Button variant="outline" size="sm" onClick={copyRepairSQL} className="rounded-xl border-red-200 text-red-600 font-black uppercase text-[9px] tracking-widest bg-white">
+           <Button variant="outline" size="sm" onClick={copyRepairSQL} className="rounded-xl border-red-200 text-red-600 font-black uppercase text-[9px] tracking-widest bg-white text-slate-900">
               <Save className="w-3.5 h-3.5 mr-2" /> Copiar SQL Fix
            </Button>
         </Card>
       )}
 
       {(isAdding || editingUser) && (
-        <Card className="rounded-[2.5rem] border-none shadow-2xl bg-white overflow-hidden animate-in zoom-in-95 duration-500">
+        <Card className="rounded-[2.5rem] border-none shadow-2xl bg-white text-slate-900 overflow-hidden animate-in zoom-in-95 duration-500">
           <CardHeader className="p-10 pb-4 flex flex-row items-center justify-between">
             <div>
                <CardTitle className="text-xl font-black uppercase tracking-tight text-primary italic">
@@ -412,7 +412,7 @@ GRANT EXECUTE ON FUNCTION public.deletar_usuario TO authenticated, anon;
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
         {users.map((u) => (
-          <Card key={u.user_id} className="group overflow-hidden rounded-[2.5rem] border-none shadow-xl hover:shadow-2xl transition-all duration-500 bg-white">
+          <Card key={u.user_id} className="group overflow-hidden rounded-[2.5rem] border-none shadow-xl hover:shadow-2xl transition-all duration-500 bg-white text-slate-900">
              <div className="p-8 space-y-6">
                 <div className="flex items-center justify-between">
                    <div className="w-14 h-14 bg-primary/5 rounded-[1.5rem] flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-500">

@@ -127,7 +127,7 @@ const AdminStreaming = () => {
 
   return (
     <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      <div className="flex justify-between items-center bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+      <div className="flex justify-between items-center bg-white text-slate-900 p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
         <div>
           <h2 className="text-3xl font-black text-primary tracking-tighter uppercase italic leading-none">Player & <span className="text-secondary italic">Conexões</span></h2>
           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Configure o sinal de áudio e seus canais de interação</p>
@@ -142,7 +142,7 @@ const AdminStreaming = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
         <div className="lg:col-span-8 space-y-10">
-           <Card className="rounded-[2.5rem] border-none shadow-xl bg-white overflow-hidden">
+           <Card className="rounded-[2.5rem] border-none shadow-xl bg-white text-slate-900 overflow-hidden">
              <CardHeader className="bg-primary/5 p-8 border-b border-gray-100/50">
                <CardTitle className="text-lg font-black uppercase tracking-tight text-primary flex items-center gap-3">
                  <Radio className="w-5 h-5 text-secondary" /> Transmissão Principal
@@ -185,14 +185,14 @@ const AdminStreaming = () => {
                         value={whatsappMessage} 
                         onChange={e => setWhatsappMessage(e.target.value)} 
                         placeholder="Ex: Olá Impacto! Gostaria de pedir a música..." 
-                        className="h-12 rounded-xl border-gray-100 bg-white" 
+                        className="h-12 rounded-xl border-gray-100 bg-white text-slate-900" 
                      />
                    </div>
                 </div>
              </CardContent>
            </Card>
 
-           <Card className="rounded-[2.5rem] border-none shadow-xl bg-white overflow-hidden">
+           <Card className="rounded-[2.5rem] border-none shadow-xl bg-white text-slate-900 overflow-hidden">
              <CardHeader className="p-8 pb-4">
                <CardTitle className="text-xl font-black uppercase tracking-tight text-primary italic">Redes Sociais</CardTitle>
              </CardHeader>
@@ -226,9 +226,9 @@ const AdminStreaming = () => {
 
                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6 mt-6 border-t border-gray-50">
                  {redes.map(rede => (
-                   <div key={rede.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-[1.5rem] border border-gray-100 group hover:bg-white hover:shadow-lg transition-all">
+                   <div key={rede.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-[1.5rem] border border-gray-100 group hover:bg-white text-slate-900 hover:shadow-lg transition-all">
                       <div className="flex items-center gap-4">
-                         <div className="w-10 h-10 rounded-xl bg-white border border-gray-100 flex items-center justify-center text-primary">
+                         <div className="w-10 h-10 rounded-xl bg-white text-slate-900 border border-gray-100 flex items-center justify-center text-primary">
                                {rede.icone === 'instagram' && <Instagram className="w-5 h-5" />}
                                {rede.icone === 'facebook' && <Facebook className="w-5 h-5" />}
                                {rede.icone === 'youtube' && <Youtube className="w-5 h-5" />}
@@ -258,15 +258,15 @@ const AdminStreaming = () => {
               <div className="relative z-10 space-y-6">
                  <h3 className="text-xl font-black uppercase tracking-tight italic">Identidade Visual</h3>
                  <p className="text-xs text-white/50 font-medium leading-relaxed">As logos e favicons agora são gerenciados na central de Personalização.</p>
-                 <Button asChild className="w-full h-12 rounded-xl bg-[#ffed32] text-[#002e5d] font-black uppercase text-[10px] tracking-widest hover:bg-white transition-all shadow-lg shadow-yellow-400/10">
+                 <Button asChild className="w-full h-12 rounded-xl bg-[#ffed32] text-[#002e5d] font-black uppercase text-[10px] tracking-widest hover:bg-white text-slate-900 transition-all shadow-lg shadow-yellow-400/10">
                     <a href="/admin/aparencia">Ir para Personalização</a>
                  </Button>
               </div>
-              <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-white text-slate-900/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl" />
            </Card>
 
            <div className="p-8 bg-gray-50 rounded-[2.5rem] border border-gray-100 flex flex-col items-center text-center space-y-4">
-              <div className="w-16 h-16 rounded-3xl bg-white border border-gray-100 flex items-center justify-center shadow-sm">
+              <div className="w-16 h-16 rounded-3xl bg-white text-slate-900 border border-gray-100 flex items-center justify-center shadow-sm">
                  <Info className="w-8 h-8 text-primary/20" />
               </div>
               <h4 className="text-[10px] font-black text-primary uppercase tracking-[0.2em]">Dica do Admin</h4>

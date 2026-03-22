@@ -88,8 +88,8 @@ export function AdminSidebar() {
                         end={item.url === "/admin"}
                         className="flex items-center gap-4 px-3"
                       >
-                        <item.icon className={`h-4.5 w-4.5 shrink-0`} style={{ color: isActive ? 'var(--admin-blue)' : 'var(--admin-sidebar-text)' }} />
-                        {!collapsed && <span className="text-[11px] font-black uppercase tracking-wider">{item.title}</span>}
+                        <item.icon className="h-4.5 w-4.5 shrink-0" style={{ color: isActive ? 'var(--admin-blue)' : 'var(--admin-sidebar-text)' }} />
+                        {!collapsed && <span className="text-[11px] font-black uppercase tracking-wider" style={{ color: isActive ? 'var(--admin-blue)' : 'var(--admin-sidebar-text)' }}>{item.title}</span>}
                       </NavLink>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

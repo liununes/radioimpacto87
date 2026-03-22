@@ -78,7 +78,7 @@ const AdminFotos = () => {
 
   return (
     <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      <div className="flex justify-between items-center bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+      <div className="flex justify-between items-center bg-white text-slate-900 p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
         <div>
           <h2 className="text-3xl font-black text-primary tracking-tighter uppercase italic leading-none">Galeria de <span className="text-secondary italic">Momentos</span></h2>
           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Publique fotos de eventos e vips da rádio</p>
@@ -89,7 +89,7 @@ const AdminFotos = () => {
         </div>
       </div>
 
-      <Card className="rounded-[2.5rem] border-none shadow-xl bg-white overflow-hidden">
+      <Card className="rounded-[2.5rem] border-none shadow-xl bg-white text-slate-900 overflow-hidden">
         <CardHeader className="p-10 pb-4">
           <CardTitle className="text-xl font-black uppercase tracking-tight text-primary italic">Upload de Imagens</CardTitle>
         </CardHeader>
@@ -149,11 +149,11 @@ const AdminFotos = () => {
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
         {fotos.map(foto => (
-          <div key={foto.id} className="group relative rounded-[2.5rem] overflow-hidden bg-white shadow-xl hover:shadow-2xl transition-all duration-500">
+          <div key={foto.id} className="group relative rounded-[2.5rem] overflow-hidden bg-white text-slate-900 shadow-xl hover:shadow-2xl transition-all duration-500">
             <div className="aspect-square relative overflow-hidden">
                <img src={foto.imagem} alt={foto.descricao} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                 <Button size="icon" variant="ghost" className="h-12 w-12 bg-white text-destructive rounded-2xl shadow-xl hover:scale-110" onClick={() => handleDelete(foto.id)}>
+                 <Button size="icon" variant="ghost" className="h-12 w-12 bg-white text-slate-900 text-destructive rounded-2xl shadow-xl hover:scale-110" onClick={() => handleDelete(foto.id)}>
                    <Trash2 className="w-5 h-5" />
                  </Button>
                </div>
