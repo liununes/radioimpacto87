@@ -439,6 +439,61 @@ const AdminAparencia = () => {
         {/* --- WHITE LABEL TAB --- */}
         {isSuperAdmin && (
           <TabsContent value="whitelabel" className="space-y-8 animate-in fade-in zoom-in-95 duration-500 text-slate-700">
+            <Card className="rounded-[2.5rem] border-none shadow-xl bg-white overflow-hidden">
+               <div className="bg-purple-600 p-8 text-white relative overflow-hidden">
+                 <div className="relative z-10">
+                   <h3 className="text-xl font-black uppercase italic tracking-tighter">Presets do Painel</h3>
+                   <p className="text-white/60 text-xs font-medium max-w-sm mt-2">Escolha um estilo pronto para o seu painel gerencial.</p>
+                   
+                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8">
+                     {[
+                       { l: "Impacto FM", b: "#002e5d", y: "#ffed32", t: "#ffffff", grs: "#ffffff", gre: "#f8fafc" },
+                       { l: "Dark Pro", b: "#0f172a", y: "#38bdf8", t: "#f1f5f9", grs: "#1e293b", gre: "#0f172a" },
+                       { l: "Soft Green", b: "#064e3b", y: "#10b981", t: "#ffffff", grs: "#ecfdf5", gre: "#d1fae5" },
+                       { l: "Ocean Blue", b: "#1e3a8a", y: "#6366f1", t: "#ffffff", grs: "#eff6ff", gre: "#dbeafe" },
+                     ].map(p => (
+                       <button 
+                         key={p.l}
+                         onClick={() => {
+                           updateField("adminBlue", p.b);
+                           updateField("adminYellow", p.y);
+                           updateField("adminText", p.t);
+                           updateField("adminHeaderGradStart", p.grs);
+                           updateField("adminHeaderGradEnd", p.gre);
+                           toast.info(`Tema ${p.l} aplicado! Clique em Publicar para salvar.`);
+                         }}
+                         className="bg-white/10 hover:bg-white/20 p-4 rounded-2xl transition-all text-left flex flex-col gap-2"
+                       >
+                         <span className="text-[9px] font-black uppercase text-white/80">{p.l}</span>
+                         <div className="flex gap-1 h-2">
+                           <div className="flex-1 rounded-full" style={{ backgroundColor: p.b }} />
+                           <div className="w-2 rounded-full" style={{ backgroundColor: p.y }} />
+                         </div>
+                       </button>
+                     ))}
+                   </div>
+
+                   <Button 
+                     variant="link" 
+                     onClick={() => {
+                       updateField("adminBlue", "#002e5d");
+                       updateField("adminYellow", "#ffed32");
+                       updateField("adminText", "#ffffff");
+                       updateField("adminSidebarText", "rgba(255,255,255,0.6)");
+                       updateField("adminContentTitle", "#002e5d");
+                       updateField("adminCardText", "#475569");
+                       updateField("adminHeaderGradStart", "#ffffff");
+                       updateField("adminHeaderGradEnd", "#f8fafc");
+                       toast.success("Cores padrão restauradas!");
+                     }}
+                     className="text-white/60 hover:text-white mt-4 text-[10px] font-black uppercase tracking-widest p-0 h-auto"
+                   >
+                      Restaurar Tudo para o Padrão
+                   </Button>
+                 </div>
+               </div>
+            </Card>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-white">
                 <CardHeader className="p-8">
