@@ -59,7 +59,7 @@ const Navigation = () => {
                   style={{ borderColor: 'var(--logo-circle-1)' }}
                 >
                   <div 
-                    className="w-full h-full rounded-full border-4 flex items-center justify-center overflow-hidden p-2"
+                    className="w-full h-full rounded-full border-4 flex items-center justify-center overflow-hidden p-5"
                     style={{ borderColor: 'var(--logo-circle-2)' }}
                   >
                     <img 

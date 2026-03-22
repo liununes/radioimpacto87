@@ -108,6 +108,7 @@ const AdminFotos = () => {
                     <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">Clique ou arraste múltiplas fotos</span>
                     <input type="file" accept="image/jpeg,image/png,image/webp" multiple className="hidden" onChange={handleFilesChange} />
                  </label>
+                 <p className="text-[9px] text-gray-400 font-bold text-center mt-2">800×600px · JPG, PNG ou WebP · Máx. 2MB cada</p>
                </div>
             </div>
 

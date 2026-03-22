@@ -301,6 +301,7 @@ const AdminAparencia = () => {
                          <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) setLogo(await fileToBase64(f)); }} />
                       </label>
                     </div>
+                    <p className="text-[9px] text-gray-400 font-bold text-center">500×500px · PNG com fundo transparente</p>
                   </div>
                   <div className="w-40 space-y-3">
                     <Label className="text-[10px] font-black uppercase tracking-widest opacity-50 block">Favicon</Label>
@@ -313,6 +314,7 @@ const AdminAparencia = () => {
                          <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) setFavicon(await fileToBase64(f)); }} />
                       </label>
                     </div>
+                    <p className="text-[9px] text-gray-400 font-bold text-center">64×64px · ICO ou PNG</p>
                   </div>
                 </div>
               </CardContent>
@@ -529,6 +531,7 @@ const AdminAparencia = () => {
                       <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) updateField("adminLogo", await fileToBase64(f)); }} />
                     </label>
                   </div>
+                  <p className="text-[10px] text-gray-400 font-bold border-t pt-4">Recomendado: 400x120px | PNG Transparente</p>
                 </CardContent>
               </Card>
 

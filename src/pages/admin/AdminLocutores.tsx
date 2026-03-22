@@ -106,6 +106,7 @@ const AdminLocutores = () => {
                     </label>
                  </div>
                  <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Foto do Perfil</Label>
+                 <p className="text-[9px] text-gray-400 font-bold">400×400px · JPG ou PNG</p>
               </div>
 
               <div className="space-y-6">

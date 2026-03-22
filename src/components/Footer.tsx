@@ -22,11 +22,21 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row items-center justify-between gap-12">
           <div className="flex items-center gap-6">
             {siteConfig.logo ? (
-              <img 
-                src={siteConfig.logo} 
-                alt="Logo Footer" 
-                className="h-20 md:h-28 w-auto object-contain drop-shadow-[0_12px_20px_rgba(0,0,0,0.15)] hover:scale-110 transition-all duration-500"
-              />
+              <div 
+                className="w-20 h-20 md:w-24 md:h-24 rounded-full border-4 flex items-center justify-center bg-white shadow-xl hover:scale-105 transition-all duration-500"
+                style={{ borderColor: 'var(--logo-circle-1)' }}
+              >
+                <div 
+                  className="w-full h-full rounded-full border-4 flex items-center justify-center overflow-hidden p-3"
+                  style={{ borderColor: 'var(--logo-circle-2)' }}
+                >
+                  <img 
+                    src={siteConfig.logo} 
+                    alt="Logo Footer" 
+                    className="max-w-full max-h-full object-contain"
+                  />
+                </div>
+              </div>
             ) : (
               <div className="h-16 px-6 flex items-center bg-gray-50 rounded-2xl border border-gray-100 italic text-primary font-black text-sm uppercase">
                  Impacto

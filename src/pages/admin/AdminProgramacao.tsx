@@ -149,6 +149,7 @@ const AdminProgramacao = () => {
                         <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) setFoto(await fileToBase64(f)); }} />
                      </label>
                   </div>
+                  <p className="text-[9px] text-gray-400 font-bold">600×600px · JPG ou PNG</p>
                 </div>
              </div>
           </div>
