@@ -69,11 +69,18 @@
   body {
     @apply bg-background text-foreground;
     font-family: 'Inter', system-ui, sans-serif;
+    color: var(--text-primary);
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-bold tracking-tight text-primary;
+    @apply font-bold tracking-tight;
+    color: var(--text-primary);
   }
+
+  .text-dynamic-primary { color: var(--text-primary); }
+  .text-dynamic-secondary { color: var(--text-secondary); }
+  .text-dynamic-muted { color: var(--text-muted); }
+  .text-dynamic-accent { color: var(--text-accent); }
 }
 
 @layer components {

@@ -10,12 +10,17 @@ export interface ThemeConfig {
   muted: string;
   mutedForeground: string;
   border: string;
-  headerBg: string; // Nav Blue
+  headerBg: string;
   navBg: string;
+  // Text Colors
+  textPrimary: string;
+  textSecondary: string;
+  textMuted: string;
+  textAccent: string;
   // Radio Config
   radioFreq: string;
   playerOpenUrl: string;
-  // Clube Specific Colors (Hex)
+  // Brand Colors (Hex)
   clubeBlue: string;
   clubeYellow: string;
   clubeRed: string;
@@ -65,6 +70,12 @@ export interface ThemeConfig {
     navSchedule: string;
     navAbout: string;
     navContact: string;
+    footerAbout: string;
+    footerRights: string;
+    searchPlaceholder: string;
+    btnMore: string;
+    btnSend: string;
+    labelOnAir: string;
   };
   navMenus?: { label: string; href: string }[];
 }
@@ -82,6 +93,10 @@ export const DEFAULT_THEME: ThemeConfig = {
   border: "214.3 31.8% 91.4%",
   headerBg: "211 100% 18%",
   navBg: "211 100% 18%",
+  textPrimary: "#002e5d",
+  textSecondary: "#ffed32",
+  textMuted: "#94a3b8",
+  textAccent: "#ec2027",
   radioFreq: "87.9",
   playerOpenUrl: "/player",
   clubeBlue: "#002e5d",
@@ -132,6 +147,12 @@ export const DEFAULT_THEME: ThemeConfig = {
     navSchedule: "PROGRAMAÇÃO",
     navAbout: "A RÁDIO",
     navContact: "CONTATO",
+    footerAbout: "A rádio que toca você com a melhor programação, música de qualidade e informação em tempo real.",
+    footerRights: "Todos os direitos reservados.",
+    searchPlaceholder: "Buscar na rádio...",
+    btnMore: "CARREGAR MAIS",
+    btnSend: "ENVIAR PEDIDO",
+    labelOnAir: "NO AR AGORA",
   }
 };
 
@@ -153,7 +174,13 @@ export function applyTheme(config: ThemeConfig) {
   root.style.setProperty("--accent", config.primary);
   root.style.setProperty("--border", config.border);
   
-  // Clube Specific Hex
+  // Custom Dynamic Text Colors (Hex)
+  root.style.setProperty("--text-primary", config.textPrimary);
+  root.style.setProperty("--text-secondary", config.textSecondary);
+  root.style.setProperty("--text-muted", config.textMuted);
+  root.style.setProperty("--text-accent", config.textAccent);
+  
+  // Brand Colors (Hex)
   root.style.setProperty("--clube-blue", config.clubeBlue);
   root.style.setProperty("--clube-yellow", config.clubeYellow);
   root.style.setProperty("--clube-red", config.clubeRed);

@@ -47,10 +47,16 @@ const Footer = () => {
             </a>
           </div>
 
+          <div className="text-center flex flex-col items-center max-w-sm">
+             <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-loose text-center">
+                {theme.labels.footerAbout}
+             </p>
+          </div>
+
           <div className="text-center md:text-right">
             <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest leading-loose">
               © {new Date().getFullYear()} {siteConfig.radioName || "IMPACTO FM"}.<br/>
-              TODOS OS DIREITOS RESERVADOS.
+              {theme.labels.footerRights}
             </p>
           </div>
         </div>
