@@ -53,11 +53,13 @@ const Navigation = () => {
         <div className="flex items-center gap-4 shrink-0">
           <Link to="/">
             {siteConfig.logo ? (
-              <img 
-                src={siteConfig.logo} 
-                alt="Logo" 
-                className="h-14 md:h-18 object-contain hover:scale-105 transition-transform cursor-pointer"
-              />
+              <div className="relative group p-2">
+                <img 
+                  src={siteConfig.logo} 
+                  alt="Logo" 
+                  className="h-16 md:h-24 w-auto object-contain drop-shadow-[0_10px_15px_rgba(0,0,0,0.35)] group-hover:drop-shadow-[0_15px_25px_rgba(0,0,0,0.5)] transition-all duration-500 hover:scale-110 cursor-pointer"
+                />
+              </div>
             ) : (
               <div className="h-14 md:h-18 flex items-center bg-white/5 px-4 rounded-xl border border-white/10 italic text-white font-black text-xs">
                  IMPACTO

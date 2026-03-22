@@ -25,7 +25,7 @@ const Footer = () => {
               <img 
                 src={siteConfig.logo} 
                 alt="Logo Footer" 
-                className="h-16 md:h-20 object-contain hover:scale-105 transition-transform"
+                className="h-20 md:h-28 w-auto object-contain drop-shadow-[0_12px_20px_rgba(0,0,0,0.15)] hover:scale-110 transition-all duration-500"
               />
             ) : (
               <div className="h-16 px-6 flex items-center bg-gray-50 rounded-2xl border border-gray-100 italic text-primary font-black text-sm uppercase">
