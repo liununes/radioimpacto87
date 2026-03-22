@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Save, Upload, Palette, Image as ImageIcon, Layout, Type, Smartphone, Globe, Radio, ExternalLink, MapPin, CheckCircle2 } from "lucide-react";
+import { Save, Upload, Palette, Image as ImageIcon, Layout, Type, Smartphone, Globe, Radio, ExternalLink, MapPin, CheckCircle2, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getThemeConfig, applyTheme, DEFAULT_THEME, type ThemeConfig } from "@/lib/themeStore";
 import { getSiteConfig, saveSiteConfig } from "@/lib/radioStore";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
 
 const fileToBase64 = (file: File): Promise<string> => {
   return new Promise((resolve, reject) => {
@@ -25,6 +26,8 @@ const AdminAparencia = () => {
   const [favicon, setFavicon] = useState("");
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("visual");
+  const { user } = useAuth();
+  const isSuperAdmin = user?.email === 'liununes06@gmail.com';
 
   useEffect(() => {
     const fetchData = async () => {
@@ -81,18 +84,18 @@ const AdminAparencia = () => {
   return (
     <div className="max-w-[1200px] mx-auto space-y-10 pb-40 animate-in fade-in slide-in-from-bottom-4 duration-700">
       {/* Premium Header */}
-      <div className="relative overflow-hidden rounded-[2.5rem] bg-[#002e5d] p-12 text-white shadow-2xl">
+      <div className="relative overflow-hidden rounded-[2.5rem] bg-[var(--admin-blue)] p-12 text-white shadow-2xl" style={{ backgroundColor: 'var(--admin-blue)' }}>
         <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="text-center md:text-left space-y-2">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 rounded-full text-[10px] font-black tracking-widest uppercase mb-4">
-              <CheckCircle2 className="w-3 h-3 text-[#ffed32]" /> Sistema de Design Ativo
+              <CheckCircle2 className="w-3 h-3 text-[var(--admin-yellow)]" style={{ color: 'var(--admin-yellow)' }} /> Sistema de Design Ativo
             </div>
             <h2 className="text-4xl md:text-5xl font-black tracking-tighter uppercase italic leading-none">
-              Controle <span className="text-[#ffed32]">Geral do Site</span>
+              Controle <span className="text-[var(--admin-yellow)]" style={{ color: 'var(--admin-yellow)' }}>Geral do Site</span>
             </h2>
             <p className="text-white/60 font-bold uppercase tracking-widest text-[11px]">Personalize os dados da rádio, cores e textos</p>
           </div>
-          <Button onClick={handleSave} className="bg-[#ffed32] hover:bg-[#ffe500] text-[#002e5d] gap-3 px-10 h-16 rounded-2xl font-black uppercase tracking-widest text-xs shadow-xl transition-all hover:scale-105 active:scale-95" disabled={loading}>
+          <Button onClick={handleSave} className="bg-[var(--admin-yellow)] hover:opacity-90 text-[var(--admin-blue)] gap-3 px-10 h-16 rounded-2xl font-black uppercase tracking-widest text-xs shadow-xl transition-all hover:scale-105 active:scale-95" disabled={loading} style={{ backgroundColor: 'var(--admin-yellow)', color: 'var(--admin-blue)' }}>
             <Save className="w-5 h-5" /> {loading ? "Processando..." : "Publicar Mudanças"}
           </Button>
         </div>
@@ -120,6 +123,11 @@ const AdminAparencia = () => {
             <TabsTrigger value="menus" className="rounded-2xl px-8 py-4 data-[state=active]:bg-[#002e5d] data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
               <ExternalLink className="w-4 h-4 mr-2" /> Menus do Site
             </TabsTrigger>
+            {isSuperAdmin && (
+              <TabsTrigger value="whitelabel" className="rounded-2xl px-8 py-4 data-[state=active]:bg-purple-600 data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
+                <Settings className="w-4 h-4 mr-2" /> White Label (Painel)
+              </TabsTrigger>
+            )}
           </TabsList>
         </div>
 
@@ -397,6 +405,52 @@ const AdminAparencia = () => {
               </CardContent>
            </Card>
         </TabsContent>
+        {/* --- WHITE LABEL TAB --- */}
+        {isSuperAdmin && (
+          <TabsContent value="whitelabel" className="space-y-8 animate-in fade-in zoom-in-95 duration-500 text-slate-700">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-white">
+                <CardHeader className="p-8">
+                  <CardTitle className="text-xl font-black uppercase tracking-tight text-purple-600">Logo do Painel</CardTitle>
+                  <CardDescription>Esta logo aparece no topo da barra lateral do Admin.</CardDescription>
+                </CardHeader>
+                <CardContent className="p-8 pt-0 space-y-6">
+                  <div className="relative group h-40 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-100 flex items-center justify-center p-8 overflow-hidden">
+                    {theme.adminLogo ? (
+                      <img src={theme.adminLogo} alt="Admin Logo" className="max-h-full object-contain" />
+                    ) : (
+                      <Radio className="w-10 h-10 text-gray-200" />
+                    )}
+                    <label className="absolute inset-0 cursor-pointer bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <Upload className="text-white w-8 h-8" />
+                      <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) updateField("adminLogo", await fileToBase64(f)); }} />
+                    </label>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-white">
+                <CardHeader className="p-8">
+                  <CardTitle className="text-xl font-black uppercase tracking-tight text-purple-600">Cores do Painel (White Label)</CardTitle>
+                </CardHeader>
+                <CardContent className="p-8 pt-0 space-y-8">
+                  <div className="grid grid-cols-2 gap-8">
+                    <div className="flex flex-col items-center gap-3">
+                      <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Fundo Sidebar</Label>
+                      <input type="color" value={theme.adminBlue} onChange={e => updateField("adminBlue", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-slate-50 shadow-inner" />
+                      <span className="text-[9px] font-mono text-slate-400">{theme.adminBlue}</span>
+                    </div>
+                    <div className="flex flex-col items-center gap-3">
+                      <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Destaque Sidebar</Label>
+                      <input type="color" value={theme.adminYellow} onChange={e => updateField("adminYellow", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-slate-50 shadow-inner" />
+                      <span className="text-[9px] font-mono text-slate-400">{theme.adminYellow}</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+        )}
       </Tabs>
     </div>
   );

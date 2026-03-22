@@ -33,30 +33,37 @@ const menuItems = [
   { title: "Configurações", url: "/admin/usuarios", icon: Settings, permission: "usuarios" },
 ];
 
+import { getThemeConfig } from "@/lib/themeStore";
+
 export function AdminSidebar() {
   const { hasPermission } = useAuth();
-  const { state, toggleSidebar } = useSidebar();
+  const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const location = useLocation();
+  const theme = getThemeConfig();
   const filteredItems = menuItems.filter(item => item.permission === "base" || hasPermission(item.permission));
 
   return (
     <Sidebar collapsible="icon" className="border-r border-white/5 shadow-2xl">
-      <SidebarHeader className="bg-[#002e5d] p-6 pb-2">
+      <SidebarHeader className="bg-[var(--admin-blue)] p-6 pb-2" style={{ backgroundColor: 'var(--admin-blue)' }}>
         <div className={`flex items-center gap-3 ${collapsed ? "justify-center" : ""}`}>
-          <div className="w-10 h-10 rounded-xl bg-[#ffed32] flex items-center justify-center shrink-0 shadow-lg shadow-yellow-400/20">
-            <Radio className="w-6 h-6 text-[#002e5d]" />
+          <div className="w-10 h-10 rounded-xl bg-[var(--admin-yellow)] flex items-center justify-center shrink-0 shadow-lg shadow-yellow-400/20" style={{ backgroundColor: 'var(--admin-yellow)' }}>
+            {theme.adminLogo ? (
+              <img src={theme.adminLogo} alt="Admin Logo" className="w-8 h-8 object-contain" />
+            ) : (
+              <Radio className="w-6 h-6 text-[var(--admin-blue)]" style={{ color: 'var(--admin-blue)' }} />
+            )}
           </div>
           {!collapsed && (
             <div className="flex flex-col leading-none">
               <span className="text-sm font-black text-white tracking-widest uppercase">Admin</span>
-              <span className="text-[10px] font-bold text-yellow-400 uppercase tracking-tighter opacity-80">Gestão de Rádio</span>
+              <span className="text-[10px] font-bold text-[var(--admin-yellow)] uppercase tracking-tighter opacity-80" style={{ color: 'var(--admin-yellow)' }}>Gestão de Rádio</span>
             </div>
           )}
         </div>
       </SidebarHeader>
 
-      <SidebarContent className="bg-[#002e5d] px-3 pt-6">
+      <SidebarContent className="bg-[var(--admin-blue)] px-3 pt-6" style={{ backgroundColor: 'var(--admin-blue)' }}>
         <SidebarGroup>
           <SidebarGroupLabel className="text-[9px] font-black text-white/30 uppercase tracking-[0.3em] mb-4">
             {!collapsed && "Navegação Principal"}
@@ -71,14 +78,14 @@ export function AdminSidebar() {
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild isActive={isActive} className={`
                       h-12 rounded-xl transition-all duration-300
-                      ${isActive ? "bg-[#ffed32] text-[#002e5d] shadow-lg shadow-yellow-400/10" : "text-white/60 hover:text-white hover:bg-white/5"}
-                    `}>
+                      ${isActive ? "bg-[var(--admin-yellow)] text-[var(--admin-blue)] shadow-lg" : "text-white/60 hover:text-white hover:bg-white/5"}
+                    `} style={isActive ? { backgroundColor: 'var(--admin-yellow)', color: 'var(--admin-blue)' } : {}}>
                       <NavLink
                         to={item.url}
                         end={item.url === "/admin"}
                         className="flex items-center gap-4 px-3"
                       >
-                        <item.icon className={`h-4.5 w-4.5 shrink-0 ${isActive ? "text-[#002e5d]" : "text-white/40"}`} />
+                        <item.icon className={`h-4.5 w-4.5 shrink-0 ${isActive ? "text-[var(--admin-blue)]" : "text-white/40"}`} style={isActive ? { color: 'var(--admin-blue)' } : {}} />
                         {!collapsed && <span className="text-[11px] font-black uppercase tracking-wider">{item.title}</span>}
                       </NavLink>
                     </SidebarMenuButton>
@@ -90,7 +97,7 @@ export function AdminSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="bg-[#001d3d] p-6 border-t border-white/5">
+      <SidebarFooter className="bg-black/20 p-6 border-t border-white/5" style={{ backgroundColor: 'rgba(0,0,0,0.2)' }}>
         <SidebarMenu>
            <SidebarMenuItem>
               <SidebarMenuButton asChild className="h-10 text-white/40 hover:text-[#ffed32] transition-colors">

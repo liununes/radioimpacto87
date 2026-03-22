@@ -78,6 +78,10 @@ export interface ThemeConfig {
     labelOnAir: string;
   };
   navMenus?: { label: string; href: string }[];
+  // Admin Panel (Back-end) Colors & Brand
+  adminBlue: string;
+  adminYellow: string;
+  adminLogo?: string;
 }
 
 export const DEFAULT_THEME: ThemeConfig = {
@@ -153,7 +157,9 @@ export const DEFAULT_THEME: ThemeConfig = {
     btnMore: "CARREGAR MAIS",
     btnSend: "ENVIAR PEDIDO",
     labelOnAir: "NO AR AGORA",
-  }
+  },
+  adminBlue: "#002e5d",
+  adminYellow: "#ffed32",
 };
 
 export function getThemeConfig(): ThemeConfig {
@@ -184,4 +190,8 @@ export function applyTheme(config: ThemeConfig) {
   root.style.setProperty("--clube-blue", config.clubeBlue);
   root.style.setProperty("--clube-yellow", config.clubeYellow);
   root.style.setProperty("--clube-red", config.clubeRed);
+
+  // Admin Variables
+  root.style.setProperty("--admin-blue", config.adminBlue || "#002e5d");
+  root.style.setProperty("--admin-yellow", config.adminYellow || "#ffed32");
 }
