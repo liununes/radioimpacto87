@@ -26,8 +26,8 @@ const AdminAparencia = () => {
   const [favicon, setFavicon] = useState("");
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("visual");
-  const { user } = useAuth();
-  const isSuperAdmin = user?.email === 'liununes06@gmail.com';
+  const { user, hasPermission } = useAuth();
+  const isSuperAdmin = hasPermission("*");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -107,24 +107,24 @@ const AdminAparencia = () => {
 
       <Tabs defaultValue="visual" className="space-y-8" onValueChange={setActiveTab}>
         <div className="flex justify-center">
-          <TabsList className="bg-white p-1.5 h-auto rounded-3xl border border-gray-100 shadow-xl gap-2">
-            <TabsTrigger value="visual" className="rounded-2xl px-8 py-4 data-[state=active]:bg-[#002e5d] data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
+          <TabsList className="bg-white p-1.5 h-auto rounded-3xl border border-gray-100 shadow-xl gap-2 flex-wrap justify-center">
+            <TabsTrigger value="visual" className="rounded-2xl px-6 py-4 data-[state=active]:bg-[var(--admin-blue)] data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
               <Palette className="w-4 h-4 mr-2" /> Identidade Visual
             </TabsTrigger>
-            <TabsTrigger value="textos" className="rounded-2xl px-8 py-4 data-[state=active]:bg-[#002e5d] data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
+            <TabsTrigger value="textos" className="rounded-2xl px-6 py-4 data-[state=active]:bg-[var(--admin-blue)] data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
               <Type className="w-4 h-4 mr-2" /> Textos e Rótulos
             </TabsTrigger>
-            <TabsTrigger value="layout" className="rounded-2xl px-8 py-4 data-[state=active]:bg-[#002e5d] data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
+            <TabsTrigger value="layout" className="rounded-2xl px-6 py-4 data-[state=active]:bg-[var(--admin-blue)] data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
               <Layout className="w-4 h-4 mr-2" /> Estrutura
             </TabsTrigger>
-            <TabsTrigger value="radio" className="rounded-2xl px-8 py-4 data-[state=active]:bg-[#002e5d] data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
+            <TabsTrigger value="radio" className="rounded-2xl px-6 py-4 data-[state=active]:bg-[var(--admin-blue)] data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
               <Radio className="w-4 h-4 mr-2" /> Rádio & Frequência
             </TabsTrigger>
-            <TabsTrigger value="menus" className="rounded-2xl px-8 py-4 data-[state=active]:bg-[#002e5d] data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
+            <TabsTrigger value="menus" className="rounded-2xl px-6 py-4 data-[state=active]:bg-[var(--admin-blue)] data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
               <ExternalLink className="w-4 h-4 mr-2" /> Menus do Site
             </TabsTrigger>
             {isSuperAdmin && (
-              <TabsTrigger value="whitelabel" className="rounded-2xl px-8 py-4 data-[state=active]:bg-purple-600 data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
+              <TabsTrigger value="whitelabel" className="rounded-2xl px-6 py-4 data-[state=active]:bg-purple-600 data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
                 <Settings className="w-4 h-4 mr-2" /> White Label (Painel)
               </TabsTrigger>
             )}
