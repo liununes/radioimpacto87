@@ -3,6 +3,7 @@ import { Users, Calendar, Radio, Image, Music } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { getLocutores, getProgramas, getSlides } from "@/lib/radioStore";
 import { supabase } from "@/integrations/supabase/client";
+import { Link } from "react-router-dom";
 
 const AdminHome = () => {
   const [stats, setStats] = useState([
@@ -74,9 +75,9 @@ const AdminHome = () => {
                <h3 className="text-3xl font-black uppercase italic tracking-tighter">Otimize sua Experiência</h3>
                <p className="opacity-60 text-sm font-medium max-w-xl leading-relaxed">Personalize a identidade da sua rádio, gerencie locutores e acompanhe os relatórios de audiência diretamente no menu lateral.</p>
             </div>
-            <button className="bg-white text-primary h-16 px-10 rounded-2xl font-black uppercase text-xs tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all shrink-0">
+            <Link to="/admin/aparencia" className="bg-white text-primary h-16 flex items-center px-10 rounded-2xl font-black uppercase text-xs tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all shrink-0">
                Ir para Aparência
-            </button>
+            </Link>
          </div>
          <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
          <div className="absolute bottom-0 left-0 w-32 h-32 bg-accent/20 rounded-full translate-y-1/2 -translate-x-1/2 blur-2xl" />
