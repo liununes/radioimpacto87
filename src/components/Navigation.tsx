@@ -159,7 +159,8 @@ const Navigation = () => {
             <Link
               key={item.label}
               to={item.href.startsWith("#") ? `/${item.href}` : item.href}
-              className="text-white font-black tracking-tighter text-3xl py-4 border-b border-white/5 flex justify-between items-center group active:text-[var(--clube-yellow)]"
+              className="font-black tracking-tighter text-3xl py-4 border-b border-white/5 flex justify-between items-center group active:text-[var(--clube-yellow)]"
+              style={{ color: 'var(--header-text-color)' }}
               onClick={(e) => {
                 handleNavClick(e, item.href);
                 setIsMenuOpen(false);

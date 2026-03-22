@@ -281,6 +281,11 @@ const AdminAparencia = () => {
                       <input type="color" value={theme.headerGradEnd || "#001a35"} onChange={e => updateField("headerGradEnd", e.target.value)} className="w-12 h-12 rounded-xl cursor-pointer border-4 border-gray-50 shadow-inner" />
                       <span className="text-[9px] font-mono text-slate-700">{theme.headerGradEnd}</span>
                     </div>
+                    <div className="flex flex-col items-center gap-3">
+                      <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Texto dos Menus</Label>
+                      <input type="color" value={theme.headerTextColor || "#ffffff"} onChange={e => updateField("headerTextColor", e.target.value)} className="w-12 h-12 rounded-xl cursor-pointer border-4 border-gray-50 shadow-inner" />
+                      <span className="text-[9px] font-mono text-slate-700">{theme.headerTextColor}</span>
+                    </div>
                   </div>
                 </div>
               </CardContent>
