@@ -370,7 +370,12 @@ const AdminAparencia = () => {
                        { l: "Notícias", f: "showNews", p: "vis_noticias" },
                        { l: "Galeria", f: "showGallery", p: "vis_galeria" },
                        { l: "Top Songs", f: "showTopSongs", p: "vis_top3" },
-                       { l: "Sobre", f: "showAbout", p: "vis_sobre" }
+                       { l: "Sobre", f: "showAbout", p: "vis_sobre" },
+                       { l: "Programas", f: "showProgramas", p: "vis_programas" },
+                       { l: "Locutores", f: "showLocutores", p: "vis_locutores" },
+                       { l: "Slides", f: "showSlides", p: "vis_slides" },
+                       { l: "Pedidos", f: "showPedidos", p: "vis_pedidos" },
+                       { l: "Clima", f: "showWeather", p: "vis_clima" }
                      ].map(item => {
                        // Super Admin can change anything. 
                        // 'aparencia' manager can change all. 

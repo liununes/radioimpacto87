@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Play, Pause, ChevronDown, MapPin, ExternalLink, Volume2, Info } from "lucide-react";
+import { Play, Pause, ChevronDown, MapPin, ExternalLink, Volume2, Info, MessageCircle } from "lucide-react";
 import { getSiteConfig, getProgramaAtual, type Programa, type Locutor } from "@/lib/radioStore";
 import { useTheme } from "@/hooks/useTheme";
 
@@ -76,7 +76,7 @@ const RadioPlayer = () => {
       {/* Centro: Play Button e Info do Ar */}
       <div className="absolute left-1/2 -translate-x-1/2 -top-10 md:-top-14 flex items-center gap-6 md:gap-8">
         {/* Foto do Locutor em Destaque */}
-        {programaAtual?.locutor?.foto && (
+        {theme.showLocutores !== false && programaAtual?.locutor?.foto && (
           <div 
             className="hidden md:block relative animate-in slide-in-from-left-4 duration-1000"
             onClick={() => setShowPhotoBig(true)}
@@ -164,9 +164,22 @@ const RadioPlayer = () => {
            />
         </div>
 
-        <Link to="/programacao" className="clube-btn-white-outline px-8 h-12 hidden sm:flex items-center justify-center">
-          {theme.labels.playerSchedule}
-        </Link>
+        {theme.showProgramas !== false && (
+          <Link to="/programacao" className="clube-btn-white-outline px-8 h-12 hidden sm:flex items-center justify-center">
+            {theme.labels.playerSchedule}
+          </Link>
+        )}
+        
+        {theme.showPedidos !== false && (
+           <a 
+            href={`https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(siteConfig.whatsappMessage || "Olá! Gostaria de pedir uma música.")}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-12 h-12 rounded-full bg-green-500 text-white flex items-center justify-center hover:scale-110 transition-all shadow-lg shadow-green-500/20"
+           >
+              <MessageCircle className="w-6 h-6" />
+           </a>
+        )}
         
         <button 
            onClick={openPlayerPopup}

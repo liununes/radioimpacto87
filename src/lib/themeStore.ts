@@ -39,6 +39,11 @@ export interface ThemeConfig {
   showNews: boolean;
   showAbout: boolean;
   showWeather: boolean;
+  showProgramas: boolean;
+  showLocutores: boolean;
+  showSlides: boolean;
+  showPedidos: boolean;
+  showPromos: boolean;
   showSponsors: boolean;
   showBackToTop: boolean;
   // Weather settings
@@ -120,6 +125,11 @@ export const DEFAULT_THEME: ThemeConfig = {
   showNews: true,
   showAbout: true,
   showWeather: true,
+  showProgramas: true,
+  showLocutores: true,
+  showSlides: true,
+  showPedidos: true,
+  showPromos: true,
   showSponsors: true,
   showBackToTop: true,
   weatherCity: 'Brasília',

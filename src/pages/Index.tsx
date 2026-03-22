@@ -50,7 +50,7 @@ const Index = () => {
       <main className="relative z-10">
         {/* Slide de fotos no topo, como solicitado - Padrão do site */}
         <section id="home" className="pt-0">
-          <HeroCarousel />
+          {theme.showSlides && <HeroCarousel />}
         </section>
 
         {/* Notícias abaixo do slide */}
@@ -69,15 +69,17 @@ const Index = () => {
           )}
         </section>
 
-        <section id="promocoes" className="py-32 flex flex-col items-center justify-center bg-white border-y border-gray-100">
-           <div className="container mx-auto px-6 text-center mb-12">
-              <span className="text-[10px] font-black text-accent uppercase tracking-[0.5em] block mb-2">Participe</span>
-              <h2 className="text-4xl md:text-6xl font-black text-primary tracking-tighter uppercase italic leading-none mb-8 text-center">Promoções <span className="text-accent underline">Ativas</span></h2>
-           </div>
-           <div className="w-full max-w-4xl mx-auto min-h-[300px] flex items-center justify-center bg-gray-50 rounded-[3rem] border-2 border-dashed border-gray-200">
-              <div className="text-center italic opacity-30 font-black uppercase tracking-widest text-sm">Fique ligado! Novas promoções em breve.</div>
-           </div>
-        </section>
+        {theme.showPromos !== false && (
+          <section id="promocoes" className="py-32 flex flex-col items-center justify-center bg-white border-y border-gray-100">
+             <div className="container mx-auto px-6 text-center mb-12">
+                <span className="text-[10px] font-black text-accent uppercase tracking-[0.5em] block mb-2">Participe</span>
+                <h2 className="text-4xl md:text-6xl font-black text-primary tracking-tighter uppercase italic leading-none mb-8 text-center">Promoções <span className="text-accent underline">Ativas</span></h2>
+             </div>
+             <div className="w-full max-w-4xl mx-auto min-h-[300px] flex items-center justify-center bg-gray-50 rounded-[3rem] border-2 border-dashed border-gray-200">
+                <div className="text-center italic opacity-30 font-black uppercase tracking-widest text-sm">Fique ligado! Novas promoções em breve.</div>
+             </div>
+          </section>
+        )}
         
         {theme.showTopSongs && topSongsPos === 'hero' && (
           <section id="musica" className="py-20">
@@ -85,9 +87,11 @@ const Index = () => {
           </section>
         )}
 
-        <div id="programacao" className="mt-32 py-20">
-           <ProgramacaoSection />
-        </div>
+        {theme.showProgramas && (
+          <div id="programacao" className="mt-32 py-20">
+             <ProgramacaoSection />
+          </div>
+        )}
         
         {theme.showGallery && (
           <section id="galeria" className="mt-32 py-20 bg-primary text-white">

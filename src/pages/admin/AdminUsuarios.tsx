@@ -26,6 +26,11 @@ const ALL_PERMISSIONS = [
   { id: "vis_galeria", label: "Visibilidade: Galeria" },
   { id: "vis_top3", label: "Visibilidade: Top Songs" },
   { id: "vis_sobre", label: "Visibilidade: Sobre" },
+  { id: "vis_programas", label: "Visibilidade: Programação" },
+  { id: "vis_locutores", label: "Visibilidade: Locutores" },
+  { id: "vis_slides", label: "Visibilidade: Slides" },
+  { id: "vis_pedidos", label: "Visibilidade: Pedidos" },
+  { id: "vis_clima", label: "Visibilidade: Clima" },
 ];
 
 const AdminUsuarios = () => {

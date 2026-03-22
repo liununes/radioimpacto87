@@ -19,14 +19,16 @@ const Navigation = () => {
     loadSiteConfig();
   }, []);
 
-  const navItems = theme.navMenus && theme.navMenus.length > 0 ? theme.navMenus : [
+  const defaultNavItems = [
     { label: "Home", href: "#home" },
-    { label: "Promoções", href: "#promocoes" },
-    { label: theme.labels.navMusic, href: "#musica" },
-    { label: "Programação", href: "#programacao" },
-    { label: "Sobre", href: "#sobre" },
+    { label: "Promoções", href: "#promocoes", visible: theme.showPromos !== false },
+    { label: theme.labels.navMusic || "MÚSICA", href: "#musica", visible: theme.showTopSongs },
+    { label: "Programação", href: "#programacao", visible: theme.showProgramas },
+    { label: "Sobre", href: "#sobre", visible: theme.showAbout },
     { label: "Contato", href: "#contato" },
-  ];
+  ].filter(item => item.visible !== false);
+
+  const navItems = theme.navMenus && theme.navMenus.length > 0 ? theme.navMenus : defaultNavItems;
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (href.startsWith("#") && location.pathname === "/") {
