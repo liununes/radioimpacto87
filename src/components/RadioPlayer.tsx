@@ -7,6 +7,7 @@ const RadioPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [siteConfig, setSiteConfig] = useState<any>({});
   const [programaAtual, setProgramaAtual] = useState<{ programa: Programa; locutor: Locutor } | null>(null);
+  const [showPhotoBig, setShowPhotoBig] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
   const theme = useTheme();
 
@@ -101,11 +102,46 @@ const RadioPlayer = () => {
             {siteConfig.radioFreq || theme.radioFreq || "87.9"} FM
           </span>
           {/* Programa Atual Subtitle */}
-          <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider mt-1">
-             {programaAtual?.programa?.nome || "Impacto FM"}
-          </span>
+          <div className="flex items-center gap-3 mt-1">
+            <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">
+               {programaAtual?.programa?.nome || "Impacto FM"}
+            </span>
+            {programaAtual?.locutor?.foto && (
+              <div 
+                className="flex items-center gap-2 px-2 py-0.5 bg-accent/10 rounded-full border border-accent/20 cursor-pointer hover:bg-accent/20 transition-all group/loc"
+                onClick={() => setShowPhotoBig(true)}
+              >
+                <div className="w-4 h-4 rounded-full overflow-hidden border border-white shadow-sm">
+                   <img src={programaAtual.locutor.foto} alt={programaAtual.locutor.nome} className="w-full h-full object-cover" />
+                </div>
+                <span className="text-[8px] font-black text-accent uppercase tracking-tighter group-hover/loc:scale-105 transition-transform">
+                  Ver {programaAtual.locutor.nome.split(' ')[0]}
+                </span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
+
+      {/* --- ZOOM MODAL DA FOTO --- */}
+      {showPhotoBig && programaAtual?.locutor?.foto && (
+        <div 
+          className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-xl flex items-center justify-center p-8 animate-in fade-in duration-300 cursor-zoom-out"
+          onClick={() => setShowPhotoBig(false)}
+        >
+          <div className="relative max-w-2xl w-full aspect-square md:aspect-[3/4] overflow-hidden rounded-[3rem] shadow-[0_0_100px_rgba(236,32,39,0.2)] border-8 border-white animate-in zoom-in-95 duration-500">
+             <img src={programaAtual.locutor.foto} alt="Locutor" className="w-full h-full object-cover" />
+             <div className="absolute inset-x-0 bottom-0 p-10 bg-gradient-to-t from-black/80 via-black/40 to-transparent text-white">
+                <p className="text-[10px] font-black uppercase tracking-[0.4em] text-accent mb-2">Locutor no Ar</p>
+                <h3 className="text-4xl md:text-5xl font-black uppercase italic tracking-tighter leading-none">{programaAtual.locutor.nome}</h3>
+                <p className="text-white/60 font-bold uppercase tracking-widest text-[11px] mt-4">{programaAtual.programa.nome}</p>
+             </div>
+             <button className="absolute top-8 right-8 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md flex items-center justify-center text-white transition-all">
+                <ChevronDown className="w-6 h-6 rotate-180" />
+             </button>
+          </div>
+        </div>
+      )}
 
       {/* Direita: Botões de Ação */}
       <div className="flex items-center gap-4 shrink-0">
