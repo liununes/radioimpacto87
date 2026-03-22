@@ -3,6 +3,7 @@ import { Menu, X, Search, Moon, Sun } from "lucide-react";
 import { getSiteConfig } from "@/lib/radioStore";
 import { useTheme } from "@/hooks/useTheme";
 import { Link, useLocation } from "react-router-dom";
+import WeatherWidget from "./WeatherWidget";
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -48,7 +49,6 @@ const Navigation = () => {
         element.scrollIntoView({ behavior: "smooth" });
       }
     }
-    // Else it follows the normal Link behavior to the path
   };
 
   return (
@@ -60,8 +60,8 @@ const Navigation = () => {
       }}
     >
       <div className="container-fluid mx-auto px-6 md:px-12 flex items-center justify-between gap-4 md:gap-8">
-        {/* Logo */}
-        <div className="flex items-center gap-4 shrink-0">
+        {/* Logo & Weather */}
+        <div className="flex items-center gap-4 md:gap-8 shrink-0">
           <Link to="/">
             {siteConfig.logo ? (
               <div className="relative group p-2">
@@ -70,8 +70,8 @@ const Navigation = () => {
                   style={{ borderColor: 'var(--logo-circle-1)' }}
                 >
                   <div 
-                    className="w-full h-full rounded-full border-4 flex items-center justify-center overflow-hidden p-5"
-                    style={{ borderColor: 'var(--logo-circle-2)' }}
+                     className="w-full h-full rounded-full border-4 flex items-center justify-center overflow-hidden p-5"
+                     style={{ borderColor: 'var(--logo-circle-2)' }}
                   >
                     <img 
                       src={siteConfig.logo} 
@@ -87,6 +87,10 @@ const Navigation = () => {
               </div>
             )}
           </Link>
+          
+          <div className="flex shrink-0">
+            <WeatherWidget showWeather={theme.showWeather} />
+          </div>
         </div>
 
         {/* Desktop Menu - Improved Layout to avoid 'embolado' */}

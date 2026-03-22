@@ -1,7 +1,6 @@
 import RadioPlayer from "@/components/RadioPlayer";
 import Navigation from "@/components/Navigation";
 import HeroCarousel from "@/components/HeroCarousel";
-import WeatherWidget from "@/components/WeatherWidget";
 import TopSongs from "@/components/TopSongs";
 import { FeaturedNews, RemainingNews, useNews } from "@/components/EnhancedNewsSection";
 import GaleriaSection from "@/components/GaleriaSection";
