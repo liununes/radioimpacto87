@@ -95,6 +95,8 @@ export interface ThemeConfig {
   adminHeaderGradStart: string;
   adminHeaderGradEnd: string;
   adminLogo?: string;
+  logoCircleColor1?: string;
+  logoCircleColor2?: string;
 }
 
 export const DEFAULT_THEME: ThemeConfig = {
@@ -186,6 +188,8 @@ export const DEFAULT_THEME: ThemeConfig = {
   adminCardText: "#475569",
   adminHeaderGradStart: "#ffffff",
   adminHeaderGradEnd: "#f8fafc",
+  logoCircleColor1: "#ffed32",
+  logoCircleColor2: "#ec2027",
 };
 
 export function getThemeConfig(): ThemeConfig {
@@ -228,4 +232,6 @@ export function applyTheme(config: ThemeConfig) {
   root.style.setProperty("--admin-card-text", config.adminCardText || "#475569");
   root.style.setProperty("--admin-header-grad-start", config.adminHeaderGradStart || "#ffffff");
   root.style.setProperty("--admin-header-grad-end", config.adminHeaderGradEnd || "#f8fafc");
+  root.style.setProperty("--logo-circle-1", config.logoCircleColor1 || "#ffed32");
+  root.style.setProperty("--logo-circle-2", config.logoCircleColor2 || "#ec2027");
 }

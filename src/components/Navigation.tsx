@@ -54,11 +54,21 @@ const Navigation = () => {
           <Link to="/">
             {siteConfig.logo ? (
               <div className="relative group p-2">
-                <img 
-                  src={siteConfig.logo} 
-                  alt="Logo" 
-                  className="h-16 md:h-24 w-auto object-contain drop-shadow-[0_10px_15px_rgba(0,0,0,0.35)] group-hover:drop-shadow-[0_15px_25px_rgba(0,0,0,0.5)] transition-all duration-500 hover:scale-110 cursor-pointer"
-                />
+                <div 
+                  className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 flex items-center justify-center bg-white shadow-2xl transition-all duration-500 group-hover:scale-105"
+                  style={{ borderColor: 'var(--logo-circle-1)' }}
+                >
+                  <div 
+                    className="w-full h-full rounded-full border-4 flex items-center justify-center overflow-hidden p-2"
+                    style={{ borderColor: 'var(--logo-circle-2)' }}
+                  >
+                    <img 
+                      src={siteConfig.logo} 
+                      alt="Logo" 
+                      className="max-w-full max-h-full object-contain drop-shadow-[0_4px_6px_rgba(0,0,0,0.1)] group-hover:scale-110 transition-transform duration-500"
+                    />
+                  </div>
+                </div>
               </div>
             ) : (
               <div className="h-14 md:h-18 flex items-center bg-white/5 px-4 rounded-xl border border-white/10 italic text-white font-black text-xs">
