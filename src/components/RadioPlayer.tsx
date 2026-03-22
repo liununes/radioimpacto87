@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Play, Pause, ChevronDown, MapPin, ExternalLink, Volume2, Info } from "lucide-react";
 import { getSiteConfig, getProgramaAtual, type Programa, type Locutor } from "@/lib/radioStore";
 import { useTheme } from "@/hooks/useTheme";
@@ -163,9 +164,9 @@ const RadioPlayer = () => {
            />
         </div>
 
-        <button className="clube-btn-white-outline px-8 h-12 hidden sm:block">
+        <Link to="/programacao" className="clube-btn-white-outline px-8 h-12 hidden sm:flex items-center justify-center">
           {theme.labels.playerSchedule}
-        </button>
+        </Link>
         
         <button 
            onClick={openPlayerPopup}
