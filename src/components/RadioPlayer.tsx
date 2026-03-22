@@ -73,7 +73,25 @@ const RadioPlayer = () => {
       </div>
 
       {/* Centro: Play Button e Info do Ar */}
-      <div className="absolute left-1/2 -translate-x-1/2 -top-10 md:-top-12 flex items-center gap-6">
+      <div className="absolute left-1/2 -translate-x-1/2 -top-10 md:-top-14 flex items-center gap-6 md:gap-8">
+        {/* Foto do Locutor em Destaque */}
+        {programaAtual?.locutor?.foto && (
+          <div 
+            className="hidden md:block relative animate-in slide-in-from-left-4 duration-1000"
+            onClick={() => setShowPhotoBig(true)}
+          >
+            <div className="w-24 h-24 md:w-28 md:h-28 rounded-3xl overflow-hidden border-4 border-white shadow-2xl rotate-3 hover:rotate-0 transition-all cursor-pointer group/loc">
+              <img src={programaAtual.locutor.foto} alt={programaAtual.locutor.nome} className="w-full h-full object-cover scale-110 group-hover/loc:scale-100 transition-transform duration-700" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover/loc:opacity-100 transition-opacity flex items-end justify-center p-3">
+                 <span className="text-[10px] font-black text-white uppercase tracking-tighter">Ver Perfil</span>
+              </div>
+            </div>
+            <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-accent rounded-xl flex items-center justify-center text-white shadow-lg border-2 border-white translate-y-0 group-hover/loc:-translate-y-1 transition-transform">
+               <Info className="w-5 h-5" />
+            </div>
+          </div>
+        )}
+
         <div className="relative">
            {/* Ring de foto do programa se houver */}
            {programaAtual?.programa?.foto && (
@@ -81,44 +99,34 @@ const RadioPlayer = () => {
            )}
            <button
              onClick={togglePlay}
-             className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-accent flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-[0_15px_35px_rgba(236,32,39,0.3)] border-8 border-white group relative overflow-hidden"
+             className="w-24 h-24 md:w-28 md:h-28 rounded-full bg-accent flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-[0_15px_35px_rgba(236,32,39,0.3)] border-8 border-white group relative overflow-hidden"
              style={{ backgroundImage: isPlaying && programaAtual?.programa?.foto ? `url(${programaAtual.programa.foto})` : 'none', backgroundSize: 'cover' }}
            >
              <div className={`absolute inset-0 bg-accent/60 flex items-center justify-center transition-opacity ${isPlaying && programaAtual?.programa?.foto ? 'opacity-0 hover:opacity-100' : 'opacity-100'}`}>
                 {isPlaying ? 
-                  <Pause className="w-8 h-8 md:w-10 md:h-10 fill-white text-white" /> : 
-                  <Play className="w-8 h-8 md:w-10 md:h-10 fill-white text-white ml-2" />
+                  <Pause className="w-10 h-10 md:w-12 md:h-12 fill-white text-white" /> : 
+                  <Play className="w-10 h-10 md:w-12 md:h-12 fill-white text-white ml-2" />
                 }
              </div>
            </button>
         </div>
         
-        <div className="flex flex-col pt-10 md:pt-14 whitespace-nowrap">
+        <div className="flex flex-col pt-12 md:pt-16 whitespace-nowrap">
           <div className="flex items-center gap-2">
             <div className={`w-2 h-2 rounded-full ${isPlaying ? 'bg-accent animate-pulse shadow-[0_0_8px_#ec2027]' : 'bg-gray-300'}`} />
             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-accent">{theme.labels.playerLive}</span>
           </div>
-          <span className="text-xl md:text-2xl font-black text-primary leading-none uppercase tracking-tighter">
+          <span className="text-xl md:text-3xl font-black text-primary leading-none uppercase tracking-tighter">
             {siteConfig.radioFreq || theme.radioFreq || "87.9"} FM
           </span>
           {/* Programa Atual Subtitle */}
-          <div className="flex items-center gap-3 mt-1">
-            <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">
+          <div className="flex flex-col mt-1">
+            <span className="text-[10px] md:text-[11px] font-black text-primary uppercase tracking-tight">
                {programaAtual?.programa?.nome || "Impacto FM"}
             </span>
-            {programaAtual?.locutor?.foto && (
-              <div 
-                className="flex items-center gap-2 px-2 py-0.5 bg-accent/10 rounded-full border border-accent/20 cursor-pointer hover:bg-accent/20 transition-all group/loc"
-                onClick={() => setShowPhotoBig(true)}
-              >
-                <div className="w-4 h-4 rounded-full overflow-hidden border border-white shadow-sm">
-                   <img src={programaAtual.locutor.foto} alt={programaAtual.locutor.nome} className="w-full h-full object-cover" />
-                </div>
-                <span className="text-[8px] font-black text-accent uppercase tracking-tighter group-hover/loc:scale-105 transition-transform">
-                  Ver {programaAtual.locutor.nome.split(' ')[0]}
-                </span>
-              </div>
-            )}
+            <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider italic">
+               {programaAtual?.locutor?.nome || "Equipe Impacto"}
+            </span>
           </div>
         </div>
       </div>
