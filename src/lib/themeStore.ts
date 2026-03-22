@@ -31,6 +31,7 @@ export interface ThemeConfig {
   headerGradStart?: string;
   headerGradEnd?: string;
   headerGradient?: string;
+  headerTextColor?: string;
   // Layout
   topSongsPosition: 'hero' | 'gallery' | 'news' | 'contact';
   pedidoPosition: 'left' | 'center' | 'right';
@@ -123,6 +124,7 @@ export const DEFAULT_THEME: ThemeConfig = {
   clubeRed: "#ec2027",
   headerGradStart: "#002e5d",
   headerGradEnd: "#001a35",
+  headerTextColor: "#ffffff",
   topSongsPosition: 'hero',
   pedidoPosition: 'center',
   playerPosition: 'center',
@@ -222,6 +224,7 @@ export function applyTheme(config: ThemeConfig) {
   root.style.setProperty("--clube-red", config.clubeRed);
   root.style.setProperty("--header-grad-start", config.headerGradStart || "#002e5d");
   root.style.setProperty("--header-grad-end", config.headerGradEnd || "#001a35");
+  root.style.setProperty("--header-text-color", config.headerTextColor || "#ffffff");
 
   // Admin Variables
   root.style.setProperty("--admin-blue", config.adminBlue || "#002e5d");

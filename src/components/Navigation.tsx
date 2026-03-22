@@ -55,7 +55,8 @@ const Navigation = () => {
     <nav 
       className="top-nav-clube sticky top-0 z-[100] border-b border-white/5 shadow-2xl transition-all duration-500"
       style={{ 
-        background: `linear-gradient(to right, var(--header-grad-start), var(--header-grad-end))`
+        background: `linear-gradient(to right, var(--header-grad-start), var(--header-grad-end))`,
+        color: 'var(--header-text-color)'
       }}
     >
       <div className="container-fluid mx-auto px-6 md:px-12 flex items-center justify-between gap-4 md:gap-8">
@@ -111,7 +112,7 @@ const Navigation = () => {
                 to={item.href.startsWith("#") ? `/${item.href}` : item.href}
                 onClick={(e) => handleNavClick(e, item.href)}
                 className="text-[10px] xl:text-[11px] font-black tracking-[0.15em] transition-all relative group py-2 whitespace-nowrap"
-                style={{ color: location.pathname === "/" && item.href.startsWith("#") ? 'white' : 'white' /* Force white for nav on blue for now, or use dynamic */ }}
+                style={{ color: 'var(--header-text-color)' }}
               >
                 {item.label}
                 <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[var(--clube-yellow)] scale-x-0 group-hover:scale-x-100 transition-transform origin-left" style={{ backgroundColor: theme.textSecondary }} />
@@ -122,7 +123,7 @@ const Navigation = () => {
 
         {/* Right Actions */}
         <div className="hidden lg:flex items-center gap-4 xl:gap-6 shrink-0">
-          <div className="flex items-center gap-3 text-[10px] font-black border-r border-white/5 pr-4 xl:pr-6" style={{ color: 'white' }}>
+          <div className="flex items-center gap-3 text-[10px] font-black border-r border-white/5 pr-4 xl:pr-6" style={{ color: 'var(--header-text-color)' }}>
              <button onClick={() => setDarkMode(!darkMode)} className="hover:text-[var(--clube-yellow)] transition-colors" title={darkMode ? "Modo Claro" : "Modo Escuro"}>
                {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
              </button>
@@ -139,7 +140,7 @@ const Navigation = () => {
         </div>
 
         {/* Mobile Toggle */}
-        <button className="lg:hidden p-2 text-white bg-white/5 rounded-lg border border-white/10" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+        <button className="lg:hidden p-2 bg-white/5 rounded-lg border border-white/10" style={{ color: 'var(--header-text-color)' }} onClick={() => setIsMenuOpen(!isMenuOpen)}>
           {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
       </div>
