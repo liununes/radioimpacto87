@@ -20,6 +20,7 @@ const AdminSlides = () => {
   const [slides, setSlides] = useState<Slide[]>([]);
   const [titulo, setTitulo] = useState("");
   const [imagem, setImagem] = useState("");
+  const [link, setLink] = useState("");
   const [editId, setEditId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -39,7 +40,8 @@ const AdminSlides = () => {
     const { error } = await saveSlide({ 
       id: editId || undefined,
       titulo, 
-      imagem 
+      imagem,
+      link: link || undefined
     });
     
     if (error) {
@@ -56,6 +58,7 @@ const AdminSlides = () => {
     setEditId(slide.id);
     setTitulo(slide.titulo);
     setImagem(slide.imagem);
+    setLink(slide.link || "");
   };
 
   const handleDelete = async (id: string) => {
@@ -73,6 +76,7 @@ const AdminSlides = () => {
     setEditId(null);
     setTitulo("");
     setImagem("");
+    setLink("");
   };
 
   return (
@@ -96,13 +100,18 @@ const AdminSlides = () => {
         </CardHeader>
         <CardContent className="p-10 pt-4 space-y-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-            <div className="lg:col-span-12 space-y-4">
-              <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Título / Chamada Curta</Label>
+            <div className="lg:col-span-8 space-y-4">
+              <Label className="text-[10px] font-black uppercase tracking-widest text-slate-700">Título / Chamada Curta</Label>
               <Input value={titulo} onChange={e => setTitulo(e.target.value)} placeholder="Ex: Grande Show de Prêmios Clube" className="h-14 rounded-2xl border-gray-100 bg-gray-50 text-xl font-bold text-primary" />
+            </div>
+
+            <div className="lg:col-span-4 space-y-4">
+              <Label className="text-[10px] font-black uppercase tracking-widest text-slate-700">Link de Destino (Opcional)</Label>
+              <Input value={link} onChange={e => setLink(e.target.value)} placeholder="https://..." className="h-14 rounded-2xl border-gray-100 bg-gray-50 font-bold text-primary" />
             </div>
             
             <div className="lg:col-span-8">
-              <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400 block mb-4">Escolha a Imagem (Mínimo 1920x600 recomendado)</Label>
+              <Label className="text-[10px] font-black uppercase tracking-widest text-slate-700 block mb-4">Escolha a Imagem (Mínimo 1920x600 recomendado)</Label>
               <div className="relative group">
                 <div className={`h-[300px] rounded-3xl overflow-hidden border-2 border-dashed ${imagem ? 'border-transparent' : 'border-gray-100'} bg-gray-50 flex items-center justify-center p-4 transition-all group-hover:bg-gray-100`}>
                    {imagem ? (

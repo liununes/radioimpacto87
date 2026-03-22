@@ -135,7 +135,7 @@ const AdminAparencia = () => {
                 {(theme.navMenus || []).map((menu, idx) => (
                   <div key={idx} className="flex items-center gap-4 bg-gray-50 p-4 rounded-2xl border border-gray-100">
                     <div className="flex-1 space-y-1">
-                      <Label className="text-[10px] font-bold uppercase text-gray-400">Texto do Link</Label>
+                      <Label className="text-[10px] font-bold uppercase text-slate-600">Texto do Link</Label>
                       <Input 
                         value={menu.label} 
                         onChange={e => {
@@ -147,7 +147,7 @@ const AdminAparencia = () => {
                       />
                     </div>
                     <div className="flex-1 space-y-1">
-                      <Label className="text-[10px] font-bold uppercase text-gray-400">URL / Destino (Ex: #sobre)</Label>
+                      <Label className="text-[10px] font-bold uppercase text-slate-700">URL / Destino (Ex: #sobre)</Label>
                       <Input 
                         value={menu.href}
                         onChange={e => {
@@ -176,7 +176,7 @@ const AdminAparencia = () => {
                   const newMenus = [...(theme.navMenus || []), { label: "Novo Link", href: "#" }];
                   setTheme(prev => ({ ...prev, navMenus: newMenus }));
                 }}
-                className="w-full h-14 rounded-2xl border-2 border-dashed border-gray-200 text-gray-400 hover:text-primary hover:border-primary/50 bg-transparent gap-2"
+                className="w-full h-14 rounded-2xl border-2 border-dashed border-gray-200 text-slate-700 hover:text-primary hover:border-primary/50 bg-transparent gap-2"
               >
                 + Adicionar Novo Item ao Menu
               </Button>
@@ -190,52 +190,52 @@ const AdminAparencia = () => {
             <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-white">
               <CardHeader className="p-8 pb-4">
                 <CardTitle className="text-xl font-black uppercase text-primary tracking-tight">Cores da Marca</CardTitle>
-                <CardDescription className="text-xs font-medium text-gray-400">Defina os tons que darão vida ao site da sua rádio</CardDescription>
+                <CardDescription className="text-xs font-medium text-slate-700">Defina os tons que darão vida ao site da sua rádio</CardDescription>
               </CardHeader>
               <CardContent className="p-8 pt-4 space-y-8">
                 <div className="space-y-6">
-                  <h4 className="text-[10px] font-black uppercase text-gray-400 tracking-widest border-b pb-2">Paleta Institucional</h4>
+                  <h4 className="text-[10px] font-black uppercase text-slate-700 tracking-widest border-b pb-2">Paleta Institucional</h4>
                   <div className="grid grid-cols-3 gap-6">
                     <div className="flex flex-col items-center gap-3">
                       <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Fundo Navbar</Label>
                       <input type="color" value={theme.clubeBlue} onChange={e => updateField("clubeBlue", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-gray-50 shadow-inner" />
-                      <span className="text-[9px] font-mono text-gray-400">{theme.clubeBlue}</span>
+                      <span className="text-[9px] font-mono text-slate-700">{theme.clubeBlue}</span>
                     </div>
                     <div className="flex flex-col items-center gap-3">
                       <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Destaques</Label>
                       <input type="color" value={theme.clubeYellow} onChange={e => updateField("clubeYellow", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-gray-50 shadow-inner" />
-                      <span className="text-[9px] font-mono text-gray-400">{theme.clubeYellow}</span>
+                      <span className="text-[9px] font-mono text-slate-700">{theme.clubeYellow}</span>
                     </div>
                     <div className="flex flex-col items-center gap-3">
                       <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Botão Play</Label>
                       <input type="color" value={theme.clubeRed} onChange={e => updateField("clubeRed", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-gray-50 shadow-inner" />
-                      <span className="text-[9px] font-mono text-gray-400">{theme.clubeRed}</span>
+                      <span className="text-[9px] font-mono text-slate-700">{theme.clubeRed}</span>
                     </div>
                   </div>
                 </div>
 
                 <div className="space-y-6 pt-6">
-                  <h4 className="text-[10px] font-black uppercase text-gray-400 tracking-widest border-b pb-2">Cores de Texto</h4>
+                  <h4 className="text-[10px] font-black uppercase text-slate-700 tracking-widest border-b pb-2">Cores de Texto</h4>
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
                     <div className="flex flex-col items-center gap-3">
                       <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Texto Principal</Label>
                       <input type="color" value={theme.textPrimary} onChange={e => updateField("textPrimary", e.target.value)} className="w-12 h-12 rounded-xl cursor-pointer border-4 border-gray-50 shadow-inner" />
-                      <span className="text-[9px] font-mono text-gray-400">{theme.textPrimary}</span>
+                      <span className="text-[9px] font-mono text-slate-700">{theme.textPrimary}</span>
                     </div>
                     <div className="flex flex-col items-center gap-3">
                       <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Texto Destaque</Label>
                       <input type="color" value={theme.textSecondary} onChange={e => updateField("textSecondary", e.target.value)} className="w-12 h-12 rounded-xl cursor-pointer border-4 border-gray-50 shadow-inner" />
-                      <span className="text-[9px] font-mono text-gray-400">{theme.textSecondary}</span>
+                      <span className="text-[9px] font-mono text-slate-700">{theme.textSecondary}</span>
                     </div>
                     <div className="flex flex-col items-center gap-3">
                       <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Texto Suave</Label>
                       <input type="color" value={theme.textMuted} onChange={e => updateField("textMuted", e.target.value)} className="w-12 h-12 rounded-xl cursor-pointer border-4 border-gray-50 shadow-inner" />
-                      <span className="text-[9px] font-mono text-gray-400">{theme.textMuted}</span>
+                      <span className="text-[9px] font-mono text-slate-700">{theme.textMuted}</span>
                     </div>
                     <div className="flex flex-col items-center gap-3">
                       <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Texto Alerta</Label>
                       <input type="color" value={theme.textAccent} onChange={e => updateField("textAccent", e.target.value)} className="w-12 h-12 rounded-xl cursor-pointer border-4 border-gray-50 shadow-inner" />
-                      <span className="text-[9px] font-mono text-gray-400">{theme.textAccent}</span>
+                      <span className="text-[9px] font-mono text-slate-700">{theme.textAccent}</span>
                     </div>
                   </div>
                 </div>
@@ -245,7 +245,7 @@ const AdminAparencia = () => {
             <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-white">
               <CardHeader className="p-8 pb-4">
                 <CardTitle className="text-xl font-black uppercase text-primary tracking-tight">Logotipos</CardTitle>
-                <CardDescription className="text-xs font-medium text-gray-400">Identidade visual em todos os dispositivos</CardDescription>
+                <CardDescription className="text-xs font-medium text-slate-700">Identidade visual em todos os dispositivos</CardDescription>
               </CardHeader>
               <CardContent className="p-8 pt-4 space-y-6">
                 <div className="flex gap-6">
@@ -287,17 +287,17 @@ const AdminAparencia = () => {
                   <div className="space-y-8">
                     <div className="inline-flex items-center gap-2 px-3 py-1 bg-yellow-50 text-yellow-600 rounded-lg text-[9px] font-black uppercase tracking-widest">Interface Geral</div>
                     <div className="space-y-4">
-                      <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Input Busca</Label> <Input value={theme.labels.searchPlaceholder} onChange={e => updateLabel("searchPlaceholder", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
-                      <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Botão Carregar +</Label> <Input value={theme.labels.btnMore} onChange={e => updateLabel("btnMore", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
-                      <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Botão Enviar Pedido</Label> <Input value={theme.labels.btnSend} onChange={e => updateLabel("btnSend", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
-                      <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Label No Ar</Label> <Input value={theme.labels.labelOnAir} onChange={e => updateLabel("labelOnAir", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                      <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-slate-700 uppercase">Input Busca</Label> <Input value={theme.labels.searchPlaceholder} onChange={e => updateLabel("searchPlaceholder", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                      <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-slate-700 uppercase">Botão Carregar +</Label> <Input value={theme.labels.btnMore} onChange={e => updateLabel("btnMore", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                      <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-slate-700 uppercase">Botão Enviar Pedido</Label> <Input value={theme.labels.btnSend} onChange={e => updateLabel("btnSend", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                      <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-slate-700 uppercase">Label No Ar</Label> <Input value={theme.labels.labelOnAir} onChange={e => updateLabel("labelOnAir", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
                     </div>
 
                     <div className="pt-8 space-y-8">
                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-green-50 text-green-600 rounded-lg text-[9px] font-black uppercase tracking-widest">Rodapé (Footer)</div>
                        <div className="space-y-4">
-                         <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Descrição Sobre</Label> <textarea value={theme.labels.footerAbout} onChange={e => updateLabel("footerAbout", e.target.value)} className="w-full rounded-xl border-gray-100 p-3 text-sm min-h-[100px]" /> </div>
-                         <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Direitos Reservados</Label> <Input value={theme.labels.footerRights} onChange={e => updateLabel("footerRights", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                         <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-slate-700 uppercase">Descrição Sobre</Label> <textarea value={theme.labels.footerAbout} onChange={e => updateLabel("footerAbout", e.target.value)} className="w-full rounded-xl border-gray-100 p-3 text-sm min-h-[100px]" /> </div>
+                         <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-slate-700 uppercase">Direitos Reservados</Label> <Input value={theme.labels.footerRights} onChange={e => updateLabel("footerRights", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
                        </div>
                     </div>
                   </div> 
@@ -305,12 +305,12 @@ const AdminAparencia = () => {
                   <div className="space-y-8">
                     <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 text-blue-600 rounded-lg text-[9px] font-black uppercase tracking-widest">Player e Hero</div>
                     <div className="space-y-4">
-                      <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Botão Hero (Ler)</Label> <Input value={theme.labels.heroReadMore} onChange={e => updateLabel("heroReadMore", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
-                      <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Botão Hero (Mais)</Label> <Input value={theme.labels.heroMoreNews} onChange={e => updateLabel("heroMoreNews", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
-                      <div className="space-y-1.5 pt-4"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Localização Player</Label> <Input value={theme.labels.playerLocation} onChange={e => updateLabel("playerLocation", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
-                      <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Ao Vivo Label</Label> <Input value={theme.labels.playerLive} onChange={e => updateLabel("playerLive", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
-                      <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Ver Programação</Label> <Input value={theme.labels.playerSchedule} onChange={e => updateLabel("playerSchedule", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
-                      <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Abrir Player</Label> <Input value={theme.labels.playerOpen} onChange={e => updateLabel("playerOpen", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                      <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-slate-700 uppercase">Botão Hero (Ler)</Label> <Input value={theme.labels.heroReadMore} onChange={e => updateLabel("heroReadMore", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                      <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-slate-700 uppercase">Botão Hero (Mais)</Label> <Input value={theme.labels.heroMoreNews} onChange={e => updateLabel("heroMoreNews", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                      <div className="space-y-1.5 pt-4"> <Label className="text-[10px] font-bold text-slate-700 uppercase">Localização Player</Label> <Input value={theme.labels.playerLocation} onChange={e => updateLabel("playerLocation", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                      <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-slate-700 uppercase">Ao Vivo Label</Label> <Input value={theme.labels.playerLive} onChange={e => updateLabel("playerLive", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                      <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-slate-700 uppercase">Ver Programação</Label> <Input value={theme.labels.playerSchedule} onChange={e => updateLabel("playerSchedule", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                      <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-slate-700 uppercase">Abrir Player</Label> <Input value={theme.labels.playerOpen} onChange={e => updateLabel("playerOpen", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
                     </div>
                   </div>
 
@@ -318,16 +318,16 @@ const AdminAparencia = () => {
                     <div className="inline-flex items-center gap-2 px-3 py-1 bg-red-50 text-red-600 rounded-lg text-[9px] font-black uppercase tracking-widest">Títulos de Seções</div>
                     <div className="space-y-8">
                        <div className="grid grid-cols-2 gap-4">
-                         <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Notícias 1</Label> <Input value={theme.labels.newsTitle} onChange={e => updateLabel("newsTitle", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
-                         <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Notícias 2</Label> <Input value={theme.labels.newsSubtitle} onChange={e => updateLabel("newsSubtitle", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                         <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-slate-700 uppercase">Notícias 1</Label> <Input value={theme.labels.newsTitle} onChange={e => updateLabel("newsTitle", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                         <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-slate-700 uppercase">Notícias 2</Label> <Input value={theme.labels.newsSubtitle} onChange={e => updateLabel("newsSubtitle", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
                        </div>
                        <div className="grid grid-cols-2 gap-4">
-                         <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Top 1</Label> <Input value={theme.labels.topSongsTitle} onChange={e => updateLabel("topSongsTitle", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
-                         <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Top 2</Label> <Input value={theme.labels.topSongsSubtitle} onChange={e => updateLabel("topSongsSubtitle", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                         <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-slate-700 uppercase">Top 1</Label> <Input value={theme.labels.topSongsTitle} onChange={e => updateLabel("topSongsTitle", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                         <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-slate-700 uppercase">Top 2</Label> <Input value={theme.labels.topSongsSubtitle} onChange={e => updateLabel("topSongsSubtitle", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
                        </div>
                        <div className="grid grid-cols-2 gap-4">
-                         <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Galeria 1</Label> <Input value={theme.labels.galleryTitle} onChange={e => updateLabel("galleryTitle", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
-                         <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-gray-400 uppercase">Galeria 2</Label> <Input value={theme.labels.gallerySubtitle} onChange={e => updateLabel("gallerySubtitle", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                         <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-slate-700 uppercase">Galeria 1</Label> <Input value={theme.labels.galleryTitle} onChange={e => updateLabel("galleryTitle", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
+                         <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-slate-700 uppercase">Galeria 2</Label> <Input value={theme.labels.gallerySubtitle} onChange={e => updateLabel("gallerySubtitle", e.target.value)} className="rounded-xl border-gray-100 h-12" /> </div>
                        </div>
                     </div>
                   </div>
@@ -382,7 +382,7 @@ const AdminAparencia = () => {
               <CardContent className="p-10 pt-4 space-y-12">
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                     <div className="space-y-4">
-                       <Label className="text-xs font-black uppercase tracking-widest text-gray-400">Frequência da Rádio (Ex: 87.9)</Label>
+                       <Label className="text-xs font-black uppercase tracking-widest text-slate-700">Frequência da Rádio (Ex: 87.9)</Label>
                        <div className="relative">
                           <Input value={theme.radioFreq} onChange={e => updateField("radioFreq", e.target.value)} className="rounded-2xl border-gray-100 h-20 pl-8 pr-20 text-3xl font-black text-[#002e5d]" />
                           <div className="absolute right-8 top-1/2 -translate-y-1/2 text-sm font-black text-gray-300 tracking-widest">FM</div>
@@ -390,7 +390,7 @@ const AdminAparencia = () => {
                     </div>
 
                     <div className="space-y-4">
-                       <Label className="text-xs font-black uppercase tracking-widest text-gray-400">Link Externo (Abrir Player)</Label>
+                       <Label className="text-xs font-black uppercase tracking-widest text-slate-700">Link Externo (Abrir Player)</Label>
                        <Input value={theme.playerOpenUrl} onChange={e => updateField("playerOpenUrl", e.target.value)} className="rounded-2xl border-gray-100 h-20 px-8 text-sm font-bold text-[#002e5d]" />
                     </div>
                  </div>

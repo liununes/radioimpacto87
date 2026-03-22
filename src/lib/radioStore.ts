@@ -34,6 +34,7 @@ export interface Slide {
   id: string;
   titulo: string;
   imagem: string;
+  link?: string;
 }
 
 

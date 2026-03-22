@@ -3,7 +3,7 @@ import { getSlides } from "@/lib/radioStore";
 import { useTheme } from "@/hooks/useTheme";
 
 const HeroCarousel = () => {
-  const [slides, setSlides] = useState<{ image: string; title: string; category?: string }[]>([]);
+  const [slides, setSlides] = useState<{ image: string; title: string; category?: string; link?: string }[]>([]);
   const [current, setCurrent] = useState(0);
   const theme = useTheme();
 
@@ -14,7 +14,8 @@ const HeroCarousel = () => {
         setSlides(data.map(s => ({ 
           image: s.imagem, 
           title: s.titulo || "Sintonize a melhor programação",
-          category: "DESTAQUE"
+          category: "DESTAQUE",
+          link: s.link
         })));
       }
     };
@@ -30,7 +31,20 @@ const HeroCarousel = () => {
     }
   }, [slides.length]);
 
-  if (slides.length === 0) return null;
+  if (slides.length === 0) {
+    // Placeholder slide if empty
+    return (
+      <section id="home" className="relative h-[60vh] md:h-[70vh] min-h-[500px] overflow-hidden bg-[var(--clube-blue)]">
+         <div className="absolute inset-0 flex items-center justify-center text-center p-20">
+            <div className="space-y-6">
+               <h2 className="text-4xl md:text-6xl font-black text-white uppercase italic tracking-tighter">O Melhor da Música <br/><span className="text-[var(--clube-yellow)]">Sintonize com a gente</span></h2>
+               <p className="text-white/40 font-bold uppercase tracking-[0.3em] text-xs">Seu portal de notícias e entretenimento</p>
+            </div>
+         </div>
+         <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/60 pointer-events-none" />
+      </section>
+    );
+  }
 
   return (
     <section id="home" className="relative h-[90vh] md:h-[85vh] min-h-[700px] overflow-hidden bg-[var(--clube-blue)]">
@@ -61,12 +75,22 @@ const HeroCarousel = () => {
                 {slide.title}
               </h2>
               <div className="pt-12 flex flex-wrap gap-6 animate-in fade-in slide-in-from-bottom duration-1000">
-                 <button className="clube-btn-yellow h-14 px-12 text-sm tracking-widest">
-                   {theme.labels.heroReadMore}
-                 </button>
-                 <button className="clube-btn-outline h-14 px-12 text-sm tracking-widest border-2">
-                   {theme.labels.heroMoreNews}
-                 </button>
+                 {slide.link ? (
+                    <a href={slide.link} target="_blank" rel="noopener noreferrer">
+                      <button className="clube-btn-yellow h-14 px-12 text-sm tracking-widest">
+                        {theme.labels.heroReadMore}
+                      </button>
+                    </a>
+                 ) : (
+                    <button className="clube-btn-yellow h-14 px-12 text-sm tracking-widest">
+                      {theme.labels.heroReadMore}
+                    </button>
+                 )}
+                 <a href="#noticias">
+                   <button className="clube-btn-outline h-14 px-12 text-sm tracking-widest border-2">
+                     {theme.labels.heroMoreNews}
+                   </button>
+                 </a>
               </div>
             </div>
           </div>
