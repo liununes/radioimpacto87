@@ -1,10 +1,11 @@
-import { Instagram, Facebook, Youtube, MessageCircle } from "lucide-react";
-import { getSiteConfig } from "@/lib/radioStore";
+import { Instagram, Facebook, Youtube, MessageCircle, Twitter, Music2, Globe } from "lucide-react";
+import { getSiteConfig, getRedesSociais, type RedeSocial } from "@/lib/radioStore";
 import { useState, useEffect } from "react";
 import { useTheme } from "@/hooks/useTheme";
 
 const Footer = () => {
   const [siteConfig, setSiteConfig] = useState<any>({});
+  const [redes, setRedes] = useState<RedeSocial[]>([]);
   const theme = useTheme();
 
   useEffect(() => {
@@ -12,12 +13,24 @@ const Footer = () => {
       const site = await getSiteConfig("site");
       const streaming = await getSiteConfig("streaming");
       setSiteConfig({ ...(site || {}), ...(streaming || {}) });
+      setRedes(await getRedesSociais());
     };
     fetchConfig();
   }, []);
 
+  const getIcon = (icone: string) => {
+    switch (icone) {
+      case 'instagram': return <Instagram className="w-5 h-5" />;
+      case 'facebook': return <Facebook className="w-5 h-5" />;
+      case 'youtube': return <Youtube className="w-5 h-5" />;
+      case 'twitter': return <Twitter className="w-5 h-5" />;
+      case 'tiktok': return <Music2 className="w-5 h-5" />;
+      default: return <Globe className="w-5 h-5" />;
+    }
+  };
+
   return (
-    <footer id="redes-sociais" className="bg-white border-t border-gray-100 py-16">
+    <footer id="redes-sociais" className="bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-white/10 py-16 transition-colors duration-500">
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-12">
           <div className="flex items-center gap-6">
@@ -50,18 +63,16 @@ const Footer = () => {
           </div>
 
           <div className="flex items-center gap-4">
-            <a href="#" className="w-12 h-12 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center hover:bg-accent hover:border-accent transition-all group">
-              <Instagram className="w-5 h-5 text-gray-400 group-hover:text-white" />
-            </a>
-            <a href="#" className="w-12 h-12 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center hover:bg-accent hover:border-accent transition-all group">
-              <Facebook className="w-5 h-5 text-gray-400 group-hover:text-white" />
-            </a>
-            <a href="#" className="w-12 h-12 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center hover:bg-accent hover:border-accent transition-all group">
-              <Youtube className="w-5 h-5 text-gray-400 group-hover:text-white" />
-            </a>
-            <a href="#" className="w-12 h-12 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center hover:bg-[#25D366] hover:border-[#25D366] transition-all group">
-              <MessageCircle className="w-5 h-5 text-gray-400 group-hover:text-white" />
-            </a>
+            {redes.map(rede => (
+              <a key={rede.id} href={rede.url} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-2xl bg-gray-50 dark:bg-white/10 border border-gray-100 dark:border-white/10 flex items-center justify-center hover:bg-accent hover:border-accent hover:text-white transition-all group text-gray-400 group-hover:text-white">
+                {getIcon(rede.icone)}
+              </a>
+            ))}
+            {siteConfig.whatsapp && (
+              <a href={`https://wa.me/${siteConfig.whatsapp}`} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-2xl bg-gray-50 dark:bg-white/10 border border-gray-100 dark:border-white/10 flex items-center justify-center hover:bg-[#25D366] hover:border-[#25D366] transition-all group text-gray-400 group-hover:text-white">
+                <MessageCircle className="w-5 h-5" />
+              </a>
+            )}
           </div>
 
           <div className="text-center flex flex-col items-center max-w-sm">

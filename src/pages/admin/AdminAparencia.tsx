@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Save, Upload, Palette, Image as ImageIcon, Layout, Type, Smartphone, Globe, Radio, ExternalLink, MapPin, CheckCircle2, Settings } from "lucide-react";
+import { Save, Upload, Palette, Image as ImageIcon, Layout, Type, Smartphone, Globe, Radio, ExternalLink, MapPin, CheckCircle2, Settings, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -122,6 +122,9 @@ const AdminAparencia = () => {
             </TabsTrigger>
             <TabsTrigger value="menus" className="rounded-2xl px-6 py-4 data-[state=active]:bg-[var(--admin-blue)] data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
               <ExternalLink className="w-4 h-4 mr-2" /> Menus do Site
+            </TabsTrigger>
+            <TabsTrigger value="visibilidade" className="rounded-2xl px-6 py-4 data-[state=active]:bg-emerald-600 data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
+              <Eye className="w-4 h-4 mr-2" /> Visibilidade
             </TabsTrigger>
             {isSuperAdmin && (
               <TabsTrigger value="whitelabel" className="rounded-2xl px-6 py-4 data-[state=active]:bg-purple-600 data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">

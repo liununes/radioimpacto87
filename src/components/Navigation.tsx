@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Menu, X, Search, Moon } from "lucide-react";
+import { Menu, X, Search, Moon, Sun } from "lucide-react";
 import { getSiteConfig } from "@/lib/radioStore";
 import { useTheme } from "@/hooks/useTheme";
 import { Link, useLocation } from "react-router-dom";
@@ -7,8 +7,18 @@ import { Link, useLocation } from "react-router-dom";
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [siteConfig, setSiteConfig] = useState<any>({});
+  const [darkMode, setDarkMode] = useState(() => localStorage.getItem('darkMode') === 'true');
   const theme = useTheme();
   const location = useLocation();
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    localStorage.setItem('darkMode', String(darkMode));
+  }, [darkMode]);
 
   useEffect(() => {
     const loadSiteConfig = async () => {
@@ -113,7 +123,9 @@ const Navigation = () => {
         {/* Right Actions */}
         <div className="hidden lg:flex items-center gap-4 xl:gap-6 shrink-0">
           <div className="flex items-center gap-3 text-[10px] font-black border-r border-white/5 pr-4 xl:pr-6" style={{ color: 'white' }}>
-             <button className="hover:text-[var(--clube-yellow)] transition-colors"><Moon className="w-3.5 h-3.5" /></button>
+             <button onClick={() => setDarkMode(!darkMode)} className="hover:text-[var(--clube-yellow)] transition-colors" title={darkMode ? "Modo Claro" : "Modo Escuro"}>
+               {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+             </button>
           </div>
           
           <div className="relative group flex items-center">

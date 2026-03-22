@@ -58,7 +58,7 @@ const RadioPlayer = () => {
   };
 
   return (
-    <div className="bottom-player-clube flex items-center justify-between px-12 gap-8">
+    <div className="bottom-player-clube dark:bg-gray-900 dark:border-gray-800 flex items-center justify-between px-12 gap-8">
       <audio ref={audioRef} src={siteConfig.streamUrl} style={{ display: 'none' }} />
       
       {/* Esquerda: Localização */}
