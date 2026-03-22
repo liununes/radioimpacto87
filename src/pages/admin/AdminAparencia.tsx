@@ -222,7 +222,7 @@ const AdminAparencia = () => {
                   </div>
                 </div>
 
-                <div className="space-y-6 pt-6">
+                <div className="space-y-6 pt-6 pt-6 border-t">
                   <h4 className="text-[10px] font-black uppercase text-slate-700 tracking-widest border-b pb-2">Cores de Texto</h4>
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
                     <div className="flex flex-col items-center gap-3">
@@ -244,6 +244,22 @@ const AdminAparencia = () => {
                       <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Texto Alerta</Label>
                       <input type="color" value={theme.textAccent} onChange={e => updateField("textAccent", e.target.value)} className="w-12 h-12 rounded-xl cursor-pointer border-4 border-gray-50 shadow-inner" />
                       <span className="text-[9px] font-mono text-slate-700">{theme.textAccent}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-6 pt-6 pt-6 border-t">
+                  <h4 className="text-[10px] font-black uppercase text-slate-700 tracking-widest border-b pb-2">Degradê do Cabeçalho (Site)</h4>
+                  <div className="grid grid-cols-2 gap-6">
+                    <div className="flex flex-col items-center gap-3">
+                      <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Início do Degradê</Label>
+                      <input type="color" value={theme.headerGradStart || "#002e5d"} onChange={e => updateField("headerGradStart", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-gray-50 shadow-inner" />
+                      <span className="text-[9px] font-mono text-slate-700">{theme.headerGradStart}</span>
+                    </div>
+                    <div className="flex flex-col items-center gap-3">
+                      <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Fim do Degradê</Label>
+                      <input type="color" value={theme.headerGradEnd || "#001a35"} onChange={e => updateField("headerGradEnd", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-gray-50 shadow-inner" />
+                      <span className="text-[9px] font-mono text-slate-700">{theme.headerGradEnd}</span>
                     </div>
                   </div>
                 </div>

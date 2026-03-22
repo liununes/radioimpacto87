@@ -42,7 +42,12 @@ const Navigation = () => {
   };
 
   return (
-    <nav className="top-nav-clube sticky top-0 z-[100] border-b border-white/5 shadow-2xl">
+    <nav 
+      className="top-nav-clube sticky top-0 z-[100] border-b border-white/5 shadow-2xl transition-all duration-500"
+      style={{ 
+        background: `linear-gradient(to right, var(--header-grad-start), var(--header-grad-end))`
+      }}
+    >
       <div className="container-fluid mx-auto px-6 md:px-12 flex items-center justify-between gap-4 md:gap-8">
         {/* Logo */}
         <div className="flex items-center gap-4 shrink-0">
