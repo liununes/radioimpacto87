@@ -52,7 +52,7 @@ const ProgramacaoSection = () => {
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="flex w-full overflow-x-auto gap-6 pb-8 snap-x snap-mandatory no-scrollbar scroll-smooth">
           {displayed.map((prog) => {
             const isAoVivo = atual?.programa.id === prog.id;
             const foto = prog.foto || getLocutorFoto(prog.locutorId);
@@ -61,36 +61,37 @@ const ProgramacaoSection = () => {
             return (
               <div
                 key={prog.id}
-                className={`group relative aspect-square rounded-2xl overflow-hidden border border-border/50 hover:border-primary/50 transition-all duration-300 shadow-md ${isAoVivo ? "ring-2 ring-primary ring-offset-2 ring-offset-background" : ""}`}
+                className={`flex-none w-[200px] md:w-[240px] snap-center group relative aspect-[3/4] rounded-3xl overflow-hidden border border-border/50 hover:border-primary/50 transition-all duration-300 shadow-xl ${isAoVivo ? "ring-4 ring-primary ring-offset-4 ring-offset-background" : ""}`}
               >
                 {foto ? (
                   <img
                     src={foto}
                     alt={prog.nome}
-                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     onClick={() => imgIndex >= 0 && setLightboxIndex(imgIndex)}
                   />
                 ) : (
                   <div className="absolute inset-0 bg-muted flex items-center justify-center">
-                    <Radio className="w-10 h-10 text-muted-foreground opacity-20" />
+                    <Radio className="w-12 h-12 text-muted-foreground opacity-20" />
                   </div>
                 )}
 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent opacity-90" />
 
-                <div className="absolute inset-0 p-3 flex flex-col justify-end">
+                <div className="absolute inset-0 p-5 flex flex-col justify-end">
                   {isAoVivo && (
-                    <div className="absolute top-2 left-2 flex items-center gap-1 bg-destructive text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full animate-pulse">
+                    <div className="absolute top-4 left-4 flex items-center gap-2 bg-accent text-white text-[9px] font-black px-3 py-1 rounded-full animate-pulse shadow-lg">
+                      <div className="w-1.5 h-1.5 rounded-full bg-white" />
                       AO VIVO
                     </div>
                   )}
 
-                  <div className="space-y-0.5">
-                    <h3 className="font-bold text-white text-xs leading-tight group-hover:text-primary transition-colors line-clamp-1">{prog.nome}</h3>
-                    <p className="text-[10px] text-white/60 line-clamp-1">{getLocutorNome(prog.locutorId)}</p>
-                    <div className="flex items-center gap-1 text-[10px] text-secondary font-bold">
-                      <Clock className="w-3 h-3" />
-                      {prog.horaInicio}
+                  <div className="space-y-1">
+                    <h3 className="font-black text-white text-base md:text-lg leading-tight group-hover:text-accent transition-colors line-clamp-2 uppercase italic tracking-tighter">{prog.nome}</h3>
+                    <p className="text-[10px] font-bold text-white/50 uppercase tracking-widest">{getLocutorNome(prog.locutorId)}</p>
+                    <div className="flex items-center gap-2 text-accent font-black text-[11px] mt-2">
+                      <Clock className="w-3.5 h-3.5" />
+                      {prog.horaInicio} - {prog.horaFim}
                     </div>
                   </div>
                 </div>

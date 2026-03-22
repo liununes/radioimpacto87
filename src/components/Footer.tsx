@@ -21,11 +21,17 @@ const Footer = () => {
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-12">
           <div className="flex items-center gap-6">
-            <img 
-              src={siteConfig.logo || "https://clube.fm/wp-content/uploads/2021/05/cropped-favicon-clube-192x192.png"} 
-              alt="Logo Clube" 
-              className="h-16 object-contain"
-            />
+            {siteConfig.logo ? (
+              <img 
+                src={siteConfig.logo} 
+                alt="Logo Footer" 
+                className="h-16 md:h-20 object-contain hover:scale-105 transition-transform"
+              />
+            ) : (
+              <div className="h-16 px-6 flex items-center bg-gray-50 rounded-2xl border border-gray-100 italic text-primary font-black text-sm uppercase">
+                 Impacto
+              </div>
+            )}
             <div className="h-10 w-px bg-gray-200" />
             <div className="text-left font-black uppercase tracking-tighter">
               <h3 className="text-lg text-primary leading-none">{siteConfig.radioName || "Impacto FM"}</h3>
