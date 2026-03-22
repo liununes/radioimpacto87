@@ -9,8 +9,9 @@ const Footer = () => {
 
   useEffect(() => {
     const fetchConfig = async () => {
-      const config = await getSiteConfig("site");
-      if (config) setSiteConfig(config);
+      const site = await getSiteConfig("site");
+      const streaming = await getSiteConfig("streaming");
+      setSiteConfig({ ...(site || {}), ...(streaming || {}) });
     };
     fetchConfig();
   }, []);
