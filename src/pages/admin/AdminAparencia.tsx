@@ -452,21 +452,25 @@ const AdminAparencia = () => {
                   <div className="grid grid-cols-2 gap-8">
                     <div className="flex flex-col items-center gap-3">
                       <Label className="text-[10px] font-black uppercase tracking-widest opacity-80" style={{ color: 'var(--admin-card-text)' }}>Fundo Sidebar</Label>
+                      <p className="text-[8px] text-gray-400 -mt-2">Cor do menu lateral</p>
                       <input type="color" value={theme.adminBlue} onChange={e => updateField("adminBlue", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-slate-50 shadow-inner" />
                       <span className="text-[9px] font-mono" style={{ color: 'var(--admin-card-text)' }}>{theme.adminBlue}</span>
                     </div>
                     <div className="flex flex-col items-center gap-3">
                       <Label className="text-[10px] font-black uppercase tracking-widest opacity-80" style={{ color: 'var(--admin-card-text)' }}>Destaque Sidebar</Label>
+                      <p className="text-[8px] text-gray-400 -mt-2">Botão ativo no menu</p>
                       <input type="color" value={theme.adminYellow} onChange={e => updateField("adminYellow", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-slate-50 shadow-inner" />
                       <span className="text-[9px] font-mono" style={{ color: 'var(--admin-card-text)' }}>{theme.adminYellow}</span>
                     </div>
                     <div className="flex flex-col items-center gap-3">
                       <Label className="text-[10px] font-black uppercase tracking-widest opacity-80" style={{ color: 'var(--admin-card-text)' }}>Cor de Texto</Label>
+                      <p className="text-[8px] text-gray-400 -mt-2">Letras do menu ativo</p>
                       <input type="color" value={theme.adminText} onChange={e => updateField("adminText", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-slate-50 shadow-inner" />
                       <span className="text-[9px] font-mono" style={{ color: 'var(--admin-card-text)' }}>{theme.adminText}</span>
                     </div>
                     <div className="flex flex-col items-center gap-3">
-                      <Label className="text-[10px] font-black uppercase tracking-widest opacity-80" style={{ color: 'var(--admin-card-text)' }}>Texto Inativo Sidebar</Label>
+                      <Label className="text-[10px] font-black uppercase tracking-widest opacity-80" style={{ color: 'var(--admin-card-text)' }}>Texto Inativo</Label>
+                      <p className="text-[8px] text-gray-400 -mt-2">Letras do menu parado</p>
                       <input type="color" value={theme.adminSidebarText} onChange={e => updateField("adminSidebarText", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-slate-50 shadow-inner" />
                       <span className="text-[9px] font-mono" style={{ color: 'var(--admin-card-text)' }}>{theme.adminSidebarText}</span>
                     </div>
@@ -474,6 +478,7 @@ const AdminAparencia = () => {
                   <div className="grid grid-cols-2 gap-8 pt-8 border-t border-gray-50">
                     <div className="space-y-4">
                   <Label className="text-[10px] font-black uppercase tracking-widest opacity-80" style={{ color: 'var(--admin-card-text)' }}>Títulos Admin (Header)</Label>
+                  <p className="text-[9px] text-gray-400 mt-1">Cor do título principal das páginas</p>
                   <div className="flex items-center gap-4">
                     <input type="color" value={theme.adminContentTitle || "#002e5d"} onChange={e => updateField("adminContentTitle", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-slate-50 shadow-inner" />
                     <span className="text-[9px] font-mono" style={{ color: 'var(--admin-card-text)' }}>{theme.adminContentTitle}</span>
@@ -482,6 +487,7 @@ const AdminAparencia = () => {
 
                 <div className="space-y-4">
                   <Label className="text-[10px] font-black uppercase tracking-widest opacity-80" style={{ color: 'var(--admin-card-text)' }}>Texto de Rótulos (Cards)</Label>
+                  <p className="text-[9px] text-gray-400 mt-1">Nomes dos campos e legendas</p>
                   <div className="flex items-center gap-4">
                     <input type="color" value={theme.adminCardText || "#475569"} onChange={e => updateField("adminCardText", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-slate-50 shadow-inner" />
                     <span className="text-[9px] font-mono" style={{ color: 'var(--admin-card-text)' }}>{theme.adminCardText}</span>
@@ -489,18 +495,11 @@ const AdminAparencia = () => {
                 </div>
 
                 <div className="space-y-4">
-                  <Label className="text-[10px] font-black uppercase tracking-widest opacity-80" style={{ color: 'var(--admin-card-text)' }}>Degradê Superior (Início)</Label>
+                  <Label className="text-[10px] font-black uppercase tracking-widest opacity-80" style={{ color: 'var(--admin-card-text)' }}>Degradê Superior</Label>
+                  <p className="text-[9px] text-gray-400 mt-1">Barra de topo (Início e Fim)</p>
                   <div className="flex items-center gap-4">
-                    <input type="color" value={theme.adminHeaderGradStart || "#ffffff"} onChange={e => updateField("adminHeaderGradStart", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-slate-50 shadow-inner" />
-                    <span className="text-[9px] font-mono" style={{ color: 'var(--admin-card-text)' }}>{theme.adminHeaderGradStart}</span>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <Label className="text-[10px] font-black uppercase tracking-widest opacity-80" style={{ color: 'var(--admin-card-text)' }}>Degradê Superior (Fim)</Label>
-                  <div className="flex items-center gap-4">
-                    <input type="color" value={theme.adminHeaderGradEnd || "#f8fafc"} onChange={e => updateField("adminHeaderGradEnd", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-slate-50 shadow-inner" />
-                    <span className="text-[9px] font-mono" style={{ color: 'var(--admin-card-text)' }}>{theme.adminHeaderGradEnd}</span>
+                    <input type="color" value={theme.adminHeaderGradStart || "#ffffff"} onChange={e => updateField("adminHeaderGradStart", e.target.value)} className="w-10 h-10 rounded-xl cursor-pointer border-2" />
+                    <input type="color" value={theme.adminHeaderGradEnd || "#f8fafc"} onChange={e => updateField("adminHeaderGradEnd", e.target.value)} className="w-10 h-10 rounded-xl cursor-pointer border-2" />
                   </div>
                 </div>
                   </div>
