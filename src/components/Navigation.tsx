@@ -39,7 +39,10 @@ const Navigation = () => {
     { label: "Contato", href: "#contato" },
   ].filter(item => item.visible !== false);
 
-  const navItems = theme.navMenus && theme.navMenus.length > 0 ? theme.navMenus : defaultNavItems;
+  const navItems = (theme.navMenus && theme.navMenus.length > 0 ? theme.navMenus : defaultNavItems).filter(item => {
+    if (item.href === "#entretenimento" && theme.showEntretenimento === false) return false;
+    return true;
+  });
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (href.startsWith("#") && location.pathname === "/") {
