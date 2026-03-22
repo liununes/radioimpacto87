@@ -395,43 +395,48 @@ const AdminAparencia = () => {
                        <MapPin className="w-6 h-6 text-red-500" />
                        <Input value={theme.weatherCity} onChange={e => updateField("weatherCity", e.target.value)} className="rounded-xl border-none bg-transparent font-black uppercase text-lg h-auto p-0 focus-visible:ring-0" placeholder="Ex: São Paulo" />
                     </div>
-                 </CardContent>
+                         </CardContent>
               </Card>
-
-              <Card className="rounded-[2.5rem] border-none shadow-xl bg-white">
-                  <CardHeader className="p-8">
-                     <CardTitle className="text-xl font-black uppercase tracking-tight">Visibilidade Front-end</CardTitle>
-                     <CardDescription className="text-xs">Ative ou oculte as funções externas do site.</CardDescription>
-                  </CardHeader>
-                  <CardContent className="p-8 pt-0 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                     {[
-                       { l: "Notícias", f: "showNews", p: "vis_noticias" },
-                       { l: "Galeria", f: "showGallery", p: "vis_galeria" },
-                       { l: "Top Songs", f: "showTopSongs", p: "vis_top3" },
-                       { l: "Sobre", f: "showAbout", p: "vis_sobre" },
-                       { l: "Promoções", f: "showPromos", p: "vis_promos" },
-                       { l: "Programas", f: "showProgramas", p: "vis_programas" },
-                       { l: "Locutores", f: "showLocutores", p: "vis_locutores" },
-                       { l: "Slides", f: "showSlides", p: "vis_slides" },
-                       { l: "Pedidos", f: "showPedidos", p: "vis_pedidos" },
-                       { l: "Clima", f: "showWeather", p: "vis_clima" }
-                     ].map(item => {
-                       // Super Admin can change anything. 
-                       // 'aparencia' manager can change all. 
-                       // Restricted users can ONLY change what has their specific 'vis_' ID.
-                       const canChange = hasPermission("*") || hasPermission("aparencia") || hasPermission(item.p);
-                       if (!canChange) return null;
-
-                       return (
-                         <div key={item.f} className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                            <span className="text-[10px] font-black uppercase" style={{ color: 'var(--admin-card-text)' }}>{item.l}</span>
-                            <Switch checked={(theme as any)[item.f]} onCheckedChange={v => updateField(item.f as any, v)} />
-                         </div>
-                       );
-                     })}
-                  </CardContent>
-               </Card>
            </div>
+        </TabsContent>
+
+        {/* --- VISIBILIDADE TAB --- */}
+        <TabsContent value="visibilidade" className="space-y-8 animate-in fade-in zoom-in-95 duration-500">
+           <Card className="rounded-[2.5rem] border-none shadow-xl bg-white overflow-hidden">
+              <div className="bg-emerald-600 p-8 text-white relative overflow-hidden">
+                <div className="relative z-10">
+                  <h3 className="text-xl font-black uppercase italic tracking-tighter">Visibilidade Front-end</h3>
+                  <p className="text-white/60 text-xs font-medium max-w-lg mt-2">Ative ou oculte seções do site. Cada toggle controla uma seção visível para os visitantes.</p>
+                </div>
+              </div>
+              <CardContent className="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                 {[
+                   { l: "Notícias", f: "showNews", p: "vis_noticias", desc: "Seção de notícias e destaque" },
+                   { l: "Galeria", f: "showGallery", p: "vis_galeria", desc: "Galeria de fotos e imagens" },
+                   { l: "Top Songs", f: "showTopSongs", p: "vis_top3", desc: "Ranking das músicas mais pedidas" },
+                   { l: "Sobre", f: "showAbout", p: "vis_sobre", desc: "Informações sobre a rádio" },
+                   { l: "Promoções", f: "showPromos", p: "vis_promos", desc: "Promoções e sorteios" },
+                   { l: "Programas", f: "showProgramas", p: "vis_programas", desc: "Grade de programação" },
+                   { l: "Locutores", f: "showLocutores", p: "vis_locutores", desc: "Foto do locutor no player" },
+                   { l: "Slides", f: "showSlides", p: "vis_slides", desc: "Carrossel de banners no topo" },
+                   { l: "Pedidos", f: "showPedidos", p: "vis_pedidos", desc: "Botão WhatsApp no player" },
+                   { l: "Clima", f: "showWeather", p: "vis_clima", desc: "Temperatura e clima na barra" }
+                 ].map(item => {
+                   const canChange = hasPermission("*") || hasPermission("aparencia") || hasPermission(item.p);
+                   if (!canChange) return null;
+
+                   return (
+                     <div key={item.f} className="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-100 hover:border-emerald-200 transition-all group">
+                        <div>
+                          <span className="text-[10px] font-black uppercase block" style={{ color: 'var(--admin-card-text)' }}>{item.l}</span>
+                          <span className="text-[9px] text-gray-400 mt-0.5 block">{item.desc}</span>
+                        </div>
+                        <Switch checked={(theme as any)[item.f]} onCheckedChange={v => updateField(item.f as any, v)} />
+                     </div>
+                   );
+                 })}
+              </CardContent>
+           </Card>
         </TabsContent>
 
         {/* --- RADIO TAB --- */}
