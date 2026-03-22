@@ -78,14 +78,17 @@ export function AdminSidebar() {
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild isActive={isActive} className={`
                       h-12 rounded-xl transition-all duration-300
-                      ${isActive ? "bg-[var(--admin-yellow)] text-[var(--admin-blue)] shadow-lg" : "text-white/60 hover:text-white hover:bg-white/5"}
-                    `} style={isActive ? { backgroundColor: 'var(--admin-yellow)', color: 'var(--admin-blue)' } : {}}>
+                      ${isActive ? "bg-[var(--admin-yellow)] text-[var(--admin-blue)] shadow-lg" : "hover:text-white hover:bg-white/5"}
+                    `} style={{ 
+                      backgroundColor: isActive ? 'var(--admin-yellow)' : 'transparent',
+                      color: isActive ? 'var(--admin-blue)' : 'var(--admin-sidebar-text)'
+                    }}>
                       <NavLink
                         to={item.url}
                         end={item.url === "/admin"}
                         className="flex items-center gap-4 px-3"
                       >
-                        <item.icon className={`h-4.5 w-4.5 shrink-0 ${isActive ? "text-[var(--admin-blue)]" : "text-white/40"}`} style={isActive ? { color: 'var(--admin-blue)' } : {}} />
+                        <item.icon className={`h-4.5 w-4.5 shrink-0`} style={{ color: isActive ? 'var(--admin-blue)' : 'var(--admin-sidebar-text)' }} />
                         {!collapsed && <span className="text-[11px] font-black uppercase tracking-wider">{item.title}</span>}
                       </NavLink>
                     </SidebarMenuButton>

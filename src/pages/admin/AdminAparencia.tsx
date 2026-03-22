@@ -451,6 +451,18 @@ const AdminAparencia = () => {
                       <span className="text-[9px] font-mono text-slate-400">{theme.adminText}</span>
                     </div>
                   </div>
+                  <div className="grid grid-cols-2 gap-8 pt-8 border-t border-gray-50">
+                    <div className="flex flex-col items-center gap-3">
+                      <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Texto Inativo Sidebar</Label>
+                      <input type="color" value={theme.adminSidebarText} onChange={e => updateField("adminSidebarText", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-slate-50 shadow-inner" />
+                      <span className="text-[9px] font-mono text-slate-400">{theme.adminSidebarText}</span>
+                    </div>
+                    <div className="flex flex-col items-center gap-3">
+                      <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Títulos Admin (Header)</Label>
+                      <input type="color" value={theme.adminContentTitle} onChange={e => updateField("adminContentTitle", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-slate-50 shadow-inner" />
+                      <span className="text-[9px] font-mono text-slate-400">{theme.adminContentTitle}</span>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             </div>

@@ -82,6 +82,8 @@ export interface ThemeConfig {
   adminBlue: string;
   adminYellow: string;
   adminText: string;
+  adminSidebarText: string;
+  adminContentTitle: string;
   adminLogo?: string;
 }
 
@@ -162,6 +164,8 @@ export const DEFAULT_THEME: ThemeConfig = {
   adminBlue: "#002e5d",
   adminYellow: "#ffed32",
   adminText: "#ffffff",
+  adminSidebarText: "rgba(255,255,255,0.6)",
+  adminContentTitle: "#002e5d",
 };
 
 export function getThemeConfig(): ThemeConfig {
@@ -197,4 +201,6 @@ export function applyTheme(config: ThemeConfig) {
   root.style.setProperty("--admin-blue", config.adminBlue || "#002e5d");
   root.style.setProperty("--admin-yellow", config.adminYellow || "#ffed32");
   root.style.setProperty("--admin-text", config.adminText || "#ffffff");
+  root.style.setProperty("--admin-sidebar-text", config.adminSidebarText || "rgba(255,255,255,0.6)");
+  root.style.setProperty("--admin-content-title", config.adminContentTitle || "#002e5d");
 }

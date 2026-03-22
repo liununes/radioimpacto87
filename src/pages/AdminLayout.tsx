@@ -66,7 +66,7 @@ const AdminLayout = () => {
               <SidebarTrigger className="text-primary hover:bg-gray-100 p-2 rounded-xl transition-all" />
               <div className="h-6 w-px bg-gray-200 hidden md:block" />
               <div className="hidden md:flex flex-col">
-                 <h1 className="text-sm font-black text-primary uppercase tracking-tight leading-none italic">Impacto FM</h1>
+                 <h1 className="text-sm font-black uppercase tracking-tight leading-none italic" style={{ color: 'var(--admin-content-title)' }}>Impacto FM</h1>
                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Gerenciamento do Portal</span>
               </div>
             </div>
