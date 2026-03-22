@@ -44,7 +44,7 @@ const Index = () => {
   const topSongsPos = theme.topSongsPosition || 'hero';
 
   return (
-    <div className="min-h-screen bg-white pb-32 md:pb-40 overflow-x-hidden" id="home">
+    <div className="min-h-screen bg-white pb-32 md:pb-40 overflow-x-hidden">
       <Navigation />
       
       <main className="relative z-10">
@@ -54,23 +54,19 @@ const Index = () => {
         </section>
 
         {/* Notícias abaixo do slide */}
-        <section id="noticias" className="pt-12 md:pt-20 bg-white">
+        <section id="noticias" className="pt-0 md:pt-10 bg-white">
           {theme.showNews && (
             <>
-              <div className="container mx-auto px-6 mb-12 text-center md:text-left">
-                 <span className="text-[10px] font-black text-accent uppercase tracking-[0.5em] block mb-2">{theme.labels.newsTitle || "PLANTÃO"}</span>
-                 <h2 className="text-4xl md:text-6xl font-black text-primary tracking-tighter uppercase italic leading-none">{theme.labels.newsSubtitle || "DE NOTÍCIAS"}</h2>
-              </div>
               <FeaturedNews news={news} loading={loading} />
-              <div id="entretenimento" className="mt-12">
+              <div id="entretenimento" className="mt-12 min-h-[400px]">
                 <RemainingNews news={news} loading={loading} />
               </div>
             </>
           )}
         </section>
 
-        <section id="promocoes" className="mt-12">
-          {/* Espaço para promoções se houver outro componente, por enquanto mantendo IDs para navegação */}
+        <section id="promocoes" className="mt-12 min-h-[400px] flex items-center justify-center bg-gray-50/30 rounded-[3rem] mx-6">
+           <div className="text-center italic opacity-30 font-black uppercase tracking-widest text-sm">Espaço Para Promoções</div>
         </section>
         
         {theme.showTopSongs && topSongsPos === 'hero' && (

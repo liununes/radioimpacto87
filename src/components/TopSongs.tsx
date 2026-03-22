@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { useTheme } from "@/hooks/useTheme";
 
 const songs = [
-  { rank: 1, title: "Suave", artist: "Seu Jorge" },
-  { rank: 2, title: "Evidências", artist: "Chitãozinho & Xororó" },
-  { rank: 3, title: "Asa Branca", artist: "Luiz Gonzaga" },
+  { rank: 1, title: "Suave", artist: "Seu Jorge", url: "https://www.youtube.com/results?search_query=seu+jorge+suave" },
+  { rank: 2, title: "Evidências", artist: "Chitãozinho & Xororó", url: "https://www.youtube.com/results?search_query=chitaozinho+e+xororo+evidencias" },
+  { rank: 3, title: "Asa Branca", artist: "Luiz Gonzaga", url: "https://www.youtube.com/results?search_query=luiz+gonzaga+asa+branca" },
 ];
 
 const rankColors = [
@@ -48,11 +48,14 @@ const TopSongs = () => {
                   </p>
                   <p className="text-xs md:text-sm font-bold uppercase tracking-[0.1em] text-gray-400 mt-1">{song.artist}</p>
                 </div>
-                <div className="hidden md:block">
-                   <button className="w-12 h-12 rounded-full border border-gray-200 flex items-center justify-center group-hover:border-accent transition-colors">
-                      <Music className="w-5 h-5 text-gray-300 group-hover:text-accent transition-colors" />
-                   </button>
-                </div>
+                <a 
+                  href={song.url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="hidden md:flex w-12 h-12 rounded-full border border-gray-200 items-center justify-center group-hover:border-accent group-hover:bg-accent transition-all"
+                >
+                   <Music className="w-5 h-5 text-gray-300 group-hover:text-white transition-colors" />
+                </a>
               </div>
             ))}
           </div>
