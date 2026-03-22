@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Save, Plus, Trash2, MessageCircle, Upload, Loader2, Edit2, X, Radio, Info } from "lucide-react";
+import { Save, Plus, Trash2, MessageCircle, Upload, Loader2, Edit2, X, Radio, Info, Instagram, Facebook, Youtube, Twitter, Music2, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -228,20 +228,25 @@ const AdminStreaming = () => {
                  {redes.map(rede => (
                    <div key={rede.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-[1.5rem] border border-gray-100 group hover:bg-white hover:shadow-lg transition-all">
                       <div className="flex items-center gap-4">
-                         <div className="w-10 h-10 rounded-xl bg-white border border-gray-100 flex items-center justify-center">
-                            {/* Simple dynamic icon mapping would go here */}
-                            <span className="text-lg">📱</span>
+                         <div className="w-10 h-10 rounded-xl bg-white border border-gray-100 flex items-center justify-center text-primary">
+                               {rede.icone === 'instagram' && <Instagram className="w-5 h-5" />}
+                               {rede.icone === 'facebook' && <Facebook className="w-5 h-5" />}
+                               {rede.icone === 'youtube' && <Youtube className="w-5 h-5" />}
+                               {rede.icone === 'twitter' && <Twitter className="w-5 h-5" />}
+                               {rede.icone === 'tiktok' && <Music2 className="w-5 h-5" />}
+                               {rede.icone === 'other' && <Globe className="w-5 h-5" />}
+                               {!['instagram', 'facebook', 'youtube', 'twitter', 'tiktok', 'other'].includes(rede.icone) && <Globe className="w-5 h-5" />}
+                            </div>
+                            <div>
+                               <h5 className="text-[11px] font-black text-primary uppercase leading-none">{rede.nome}</h5>
+                               <p className="text-[9px] font-bold text-gray-300 uppercase mt-1 truncate max-w-[120px]">{rede.url}</p>
+                            </div>
                          </div>
-                         <div>
-                            <h5 className="text-[11px] font-black text-primary uppercase leading-none">{rede.nome}</h5>
-                            <p className="text-[9px] font-bold text-gray-300 uppercase mt-1 truncate max-w-[120px]">{rede.url}</p>
+                         <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <Button size="icon" variant="ghost" className="h-8 w-8 rounded-lg" onClick={() => handleEditRede(rede)}><Edit2 className="w-3.5 h-3.5" /></Button>
+                            <Button size="icon" variant="ghost" className="h-8 w-8 rounded-lg text-red-400 hover:text-red-500 hover:bg-red-50" onClick={() => handleDeleteRede(rede.id)}><Trash2 className="w-3.5 h-3.5" /></Button>
                          </div>
                       </div>
-                      <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                         <Button size="icon" variant="ghost" className="h-8 w-8 rounded-lg" onClick={() => handleEditRede(rede)}><Edit2 className="w-3.5 h-3.5" /></Button>
-                         <Button size="icon" variant="ghost" className="h-8 w-8 rounded-lg text-red-400 hover:text-red-500 hover:bg-red-50" onClick={() => handleDeleteRede(rede.id)}><Trash2 className="w-3.5 h-3.5" /></Button>
-                      </div>
-                   </div>
                  ))}
                </div>
              </CardContent>

@@ -420,7 +420,9 @@ const AdminAparencia = () => {
                    { l: "Locutores", f: "showLocutores", p: "vis_locutores", desc: "Foto do locutor no player" },
                    { l: "Slides", f: "showSlides", p: "vis_slides", desc: "Carrossel de banners no topo" },
                    { l: "Pedidos", f: "showPedidos", p: "vis_pedidos", desc: "Botão WhatsApp no player" },
-                   { l: "Clima", f: "showWeather", p: "vis_clima", desc: "Temperatura e clima na barra" }
+                   { l: "Clima", f: "showWeather", p: "vis_clima", desc: "Temperatura e clima na barra" },
+                   { l: "Patrocinadores", f: "showSponsors", p: "vis_sponsors", desc: "Exibir logos de patrocinadores" },
+                   { l: "Voltar ao Topo", f: "showBackToTop", p: "vis_topo", desc: "Botão de rolagem suave" }
                  ].map(item => {
                    const canChange = hasPermission("*") || hasPermission("aparencia") || hasPermission(item.p);
                    if (!canChange) return null;
