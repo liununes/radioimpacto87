@@ -33,14 +33,14 @@ const menuItems = [
   { title: "Configurações", url: "/admin/usuarios", icon: Settings, permission: "usuarios" },
 ];
 
-import { getThemeConfig } from "@/lib/themeStore";
+import { useTheme } from "@/hooks/useTheme";
 
 export function AdminSidebar() {
   const { hasPermission } = useAuth();
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const location = useLocation();
-  const theme = getThemeConfig();
+  const theme = useTheme();
   const filteredItems = menuItems.filter(item => item.permission === "base" || hasPermission(item.permission));
 
   return (
@@ -56,7 +56,7 @@ export function AdminSidebar() {
           </div>
           {!collapsed && (
             <div className="flex flex-col leading-none">
-              <span className="text-sm font-black text-white tracking-widest uppercase">Admin</span>
+              <span className="text-sm font-black tracking-widest uppercase" style={{ color: 'var(--admin-text)' }}>Admin</span>
               <span className="text-[10px] font-bold text-[var(--admin-yellow)] uppercase tracking-tighter opacity-80" style={{ color: 'var(--admin-yellow)' }}>Gestão de Rádio</span>
             </div>
           )}

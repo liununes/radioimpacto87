@@ -445,6 +445,11 @@ const AdminAparencia = () => {
                       <input type="color" value={theme.adminYellow} onChange={e => updateField("adminYellow", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-slate-50 shadow-inner" />
                       <span className="text-[9px] font-mono text-slate-400">{theme.adminYellow}</span>
                     </div>
+                    <div className="flex flex-col items-center gap-3">
+                      <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Cor de Texto</Label>
+                      <input type="color" value={theme.adminText} onChange={e => updateField("adminText", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-slate-50 shadow-inner" />
+                      <span className="text-[9px] font-mono text-slate-400">{theme.adminText}</span>
+                    </div>
                   </div>
                 </CardContent>
               </Card>

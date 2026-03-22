@@ -81,6 +81,7 @@ export interface ThemeConfig {
   // Admin Panel (Back-end) Colors & Brand
   adminBlue: string;
   adminYellow: string;
+  adminText: string;
   adminLogo?: string;
 }
 
@@ -160,6 +161,7 @@ export const DEFAULT_THEME: ThemeConfig = {
   },
   adminBlue: "#002e5d",
   adminYellow: "#ffed32",
+  adminText: "#ffffff",
 };
 
 export function getThemeConfig(): ThemeConfig {
@@ -194,4 +196,5 @@ export function applyTheme(config: ThemeConfig) {
   // Admin Variables
   root.style.setProperty("--admin-blue", config.adminBlue || "#002e5d");
   root.style.setProperty("--admin-yellow", config.adminYellow || "#ffed32");
+  root.style.setProperty("--admin-text", config.adminText || "#ffffff");
 }
