@@ -457,11 +457,37 @@ const AdminAparencia = () => {
                       <input type="color" value={theme.adminSidebarText} onChange={e => updateField("adminSidebarText", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-slate-50 shadow-inner" />
                       <span className="text-[9px] font-mono text-slate-400">{theme.adminSidebarText}</span>
                     </div>
-                    <div className="flex flex-col items-center gap-3">
-                      <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Títulos Admin (Header)</Label>
-                      <input type="color" value={theme.adminContentTitle} onChange={e => updateField("adminContentTitle", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-slate-50 shadow-inner" />
-                      <span className="text-[9px] font-mono text-slate-400">{theme.adminContentTitle}</span>
-                    </div>
+                    <div className="space-y-4">
+                  <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Títulos Admin (Header)</Label>
+                  <div className="flex items-center gap-4">
+                    <input type="color" value={theme.adminContentTitle || "#002e5d"} onChange={e => updateField("adminContentTitle", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-slate-50 shadow-inner" />
+                    <span className="text-[9px] font-mono text-slate-400">{theme.adminContentTitle}</span>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Texto de Rótulos (Cards)</Label>
+                  <div className="flex items-center gap-4">
+                    <input type="color" value={theme.adminCardText || "#475569"} onChange={e => updateField("adminCardText", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-slate-50 shadow-inner" />
+                    <span className="text-[9px] font-mono text-slate-400">{theme.adminCardText}</span>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Degradê Superior (Início)</Label>
+                  <div className="flex items-center gap-4">
+                    <input type="color" value={theme.adminHeaderGradStart || "#ffffff"} onChange={e => updateField("adminHeaderGradStart", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-slate-50 shadow-inner" />
+                    <span className="text-[9px] font-mono text-slate-400">{theme.adminHeaderGradStart}</span>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Degradê Superior (Fim)</Label>
+                  <div className="flex items-center gap-4">
+                    <input type="color" value={theme.adminHeaderGradEnd || "#f8fafc"} onChange={e => updateField("adminHeaderGradEnd", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-slate-50 shadow-inner" />
+                    <span className="text-[9px] font-mono text-slate-400">{theme.adminHeaderGradEnd}</span>
+                  </div>
+                </div>
                   </div>
                 </CardContent>
               </Card>

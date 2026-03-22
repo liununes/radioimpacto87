@@ -58,29 +58,43 @@ const Index = () => {
           {theme.showNews && (
             <>
               <FeaturedNews news={news} loading={loading} />
-              <div id="entretenimento" className="mt-12 min-h-[400px]">
+              <div id="entretenimento" className="mt-20 py-20 bg-gray-50/30 rounded-[3rem]">
+                <div className="container mx-auto px-6 mb-12">
+                   <span className="text-[10px] font-black text-accent uppercase tracking-[0.5em] block mb-2">Editoria</span>
+                   <h2 className="text-4xl md:text-5xl font-black text-primary tracking-tighter uppercase italic leading-none">Entretenimento</h2>
+                </div>
                 <RemainingNews news={news} loading={loading} />
               </div>
             </>
           )}
         </section>
 
-        <section id="promocoes" className="mt-12 min-h-[400px] flex items-center justify-center bg-gray-50/30 rounded-[3rem] mx-6">
-           <div className="text-center italic opacity-30 font-black uppercase tracking-widest text-sm">Espaço Para Promoções</div>
+        <section id="promocoes" className="py-32 flex flex-col items-center justify-center bg-white border-y border-gray-100">
+           <div className="container mx-auto px-6 text-center mb-12">
+              <span className="text-[10px] font-black text-accent uppercase tracking-[0.5em] block mb-2">Participe</span>
+              <h2 className="text-4xl md:text-6xl font-black text-primary tracking-tighter uppercase italic leading-none mb-8 text-center">Promoções <span className="text-accent underline">Ativas</span></h2>
+           </div>
+           <div className="w-full max-w-4xl mx-auto min-h-[300px] flex items-center justify-center bg-gray-50 rounded-[3rem] border-2 border-dashed border-gray-200">
+              <div className="text-center italic opacity-30 font-black uppercase tracking-widest text-sm">Fique ligado! Novas promoções em breve.</div>
+           </div>
         </section>
         
         {theme.showTopSongs && topSongsPos === 'hero' && (
-          <section id="musica">
+          <section id="musica" className="py-20">
             <TopSongs />
           </section>
         )}
 
-        <div id="programacao" className="mt-20">
+        <div id="programacao" className="mt-32 py-20">
            <ProgramacaoSection />
         </div>
         
         {theme.showGallery && (
-          <section id="galeria" className="mt-20">
+          <section id="galeria" className="mt-32 py-20 bg-primary text-white">
+            <div className="container mx-auto px-6 mb-12">
+               <span className="text-[10px] font-black text-secondary uppercase tracking-[0.5em] block mb-2">Registros</span>
+               <h2 className="text-4xl md:text-5xl font-black text-white tracking-tighter uppercase italic leading-none">Nossa Galeria</h2>
+            </div>
             <GaleriaSection />
           </section>
         )}

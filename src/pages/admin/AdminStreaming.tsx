@@ -31,6 +31,7 @@ const AdminStreaming = () => {
   const [radioFreq, setRadioFreq] = useState("");
   const [logo, setLogo] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
+  const [whatsappMessage, setWhatsappMessage] = useState("");
 
   const [favicon, setFavicon] = useState("");
 
@@ -54,6 +55,7 @@ const AdminStreaming = () => {
         setRadioFreq(config.radioFreq || "87.9 FM");
         setLogo(config.logo || "/logo.png");
         setFavicon(config.favicon || "/favicon.ico");
+        setWhatsappMessage(config.whatsappMessage || "");
       }
       setRedes(redesData);
       setWhatsapp(whatsappNum);
@@ -69,7 +71,8 @@ const AdminStreaming = () => {
       radioFreq, 
       logo, 
       favicon,
-      whatsapp 
+      whatsapp,
+      whatsappMessage 
     });
     if (configError) {
       toast.error("Erro ao salvar: " + configError.message);
@@ -162,18 +165,30 @@ const AdminStreaming = () => {
                  </div>
                </div>
 
-               <div className="pt-6 border-t border-gray-50 flex items-center justify-between p-6 bg-secondary/5 rounded-3xl">
-                  <div className="flex items-center gap-4">
-                     <div className="w-12 h-12 rounded-2xl bg-secondary flex items-center justify-center shadow-lg shadow-yellow-400/20">
-                        <MessageCircle className="w-6 h-6 text-primary" />
+                <div className="pt-6 border-t border-gray-50 p-6 bg-secondary/5 rounded-3xl space-y-6">
+                   <div className="flex items-center justify-between">
+                     <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-secondary flex items-center justify-center shadow-lg shadow-yellow-400/20">
+                           <MessageCircle className="w-6 h-6 text-primary" />
+                        </div>
+                        <div>
+                           <h4 className="text-xs font-black text-primary uppercase leading-none">Canal do Ouvinte</h4>
+                           <p className="text-[10px] font-bold text-gray-400 uppercase mt-1">WhatsApp para sorteios e pedidos</p>
+                        </div>
                      </div>
-                     <div>
-                        <h4 className="text-xs font-black text-primary uppercase leading-none">Canal do Ouvinte</h4>
-                        <p className="text-[10px] font-bold text-gray-400 uppercase mt-1">WhatsApp para sorteios e pedidos</p>
-                     </div>
-                  </div>
-                  <Input value={whatsapp} onChange={e => setWhatsapp(e.target.value)} placeholder="55..." className="max-w-[180px] h-12 rounded-xl border-gray-100 font-black text-center" />
-               </div>
+                     <Input value={whatsapp} onChange={e => setWhatsapp(e.target.value)} placeholder="55..." className="max-w-[180px] h-12 rounded-xl border-gray-100 font-black text-center" />
+                   </div>
+                   
+                   <div className="space-y-3">
+                     <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Texto Padrão para Pedidos (Auto-preenchimento)</Label>
+                     <Input 
+                        value={whatsappMessage} 
+                        onChange={e => setWhatsappMessage(e.target.value)} 
+                        placeholder="Ex: Olá Impacto! Gostaria de pedir a música..." 
+                        className="h-12 rounded-xl border-gray-100 bg-white" 
+                     />
+                   </div>
+                </div>
              </CardContent>
            </Card>
 

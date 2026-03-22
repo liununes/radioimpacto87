@@ -61,7 +61,12 @@ const AdminLayout = () => {
       <div className="min-h-screen flex w-full bg-gray-50/50">
         <AdminSidebar />
         <div className="flex-1 flex flex-col">
-          <header className="h-20 flex items-center justify-between border-b border-gray-100 bg-white/80 backdrop-blur-md px-8 sticky top-0 z-50">
+          <header 
+            className="h-20 flex items-center justify-between border-b border-gray-100 backdrop-blur-md px-8 sticky top-0 z-50 transition-all duration-500"
+            style={{ 
+              background: `linear-gradient(to right, var(--admin-header-grad-start), var(--admin-header-grad-end))`
+            }}
+          >
             <div className="flex items-center gap-6">
               <SidebarTrigger className="text-primary hover:bg-gray-100 p-2 rounded-xl transition-all" />
               <div className="h-6 w-px bg-gray-200 hidden md:block" />

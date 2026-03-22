@@ -84,6 +84,9 @@ export interface ThemeConfig {
   adminText: string;
   adminSidebarText: string;
   adminContentTitle: string;
+  adminCardText: string;
+  adminHeaderGradStart: string;
+  adminHeaderGradEnd: string;
   adminLogo?: string;
 }
 
@@ -166,6 +169,9 @@ export const DEFAULT_THEME: ThemeConfig = {
   adminText: "#ffffff",
   adminSidebarText: "rgba(255,255,255,0.6)",
   adminContentTitle: "#002e5d",
+  adminCardText: "#475569",
+  adminHeaderGradStart: "#ffffff",
+  adminHeaderGradEnd: "#f8fafc",
 };
 
 export function getThemeConfig(): ThemeConfig {
@@ -203,4 +209,7 @@ export function applyTheme(config: ThemeConfig) {
   root.style.setProperty("--admin-text", config.adminText || "#ffffff");
   root.style.setProperty("--admin-sidebar-text", config.adminSidebarText || "rgba(255,255,255,0.6)");
   root.style.setProperty("--admin-content-title", config.adminContentTitle || "#002e5d");
+  root.style.setProperty("--admin-card-text", config.adminCardText || "#475569");
+  root.style.setProperty("--admin-header-grad-start", config.adminHeaderGradStart || "#ffffff");
+  root.style.setProperty("--admin-header-grad-end", config.adminHeaderGradEnd || "#f8fafc");
 }
