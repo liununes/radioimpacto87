@@ -22,6 +22,10 @@ const ALL_PERMISSIONS = [
   { id: "sobre", label: "Sobre a Rádio" },
   { id: "estatisticas", label: "Relatórios de Acesso" },
   { id: "usuarios", label: "Gerenciar Usuários" },
+  { id: "vis_noticias", label: "Visibilidade: Notícias" },
+  { id: "vis_galeria", label: "Visibilidade: Galeria" },
+  { id: "vis_top3", label: "Visibilidade: Top Songs" },
+  { id: "vis_sobre", label: "Visibilidade: Sobre" },
 ];
 
 const AdminUsuarios = () => {

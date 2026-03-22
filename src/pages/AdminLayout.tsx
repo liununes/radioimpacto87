@@ -28,6 +28,13 @@ const AdminLayout = () => {
       'estatisticas': 'estatisticas',
       'usuarios': 'usuarios'
     };
+    if (segment === 'aparencia') {
+      return hasPermission("aparencia") || 
+             hasPermission("vis_noticias") || 
+             hasPermission("vis_galeria") || 
+             hasPermission("vis_top3") || 
+             hasPermission("vis_sobre") ? null : "aparencia";
+    }
     return map[segment] || "*";
   };
 

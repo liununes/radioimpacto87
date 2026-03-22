@@ -143,7 +143,7 @@ const AdminAparencia = () => {
                 {(theme.navMenus || []).map((menu, idx) => (
                   <div key={idx} className="flex items-center gap-4 bg-gray-50 p-4 rounded-2xl border border-gray-100">
                     <div className="flex-1 space-y-1">
-                      <Label className="text-[10px] font-bold uppercase text-slate-600">Texto do Link</Label>
+                      <Label className="text-[10px] font-bold uppercase" style={{ color: 'var(--admin-card-text)' }}>Texto do Link</Label>
                       <Input 
                         value={menu.label} 
                         onChange={e => {
@@ -155,7 +155,7 @@ const AdminAparencia = () => {
                       />
                     </div>
                     <div className="flex-1 space-y-1">
-                      <Label className="text-[10px] font-bold uppercase text-slate-700">URL / Destino (Ex: #sobre)</Label>
+                      <Label className="text-[10px] font-bold uppercase" style={{ color: 'var(--admin-card-text)' }}>Endereço (Link ou ID #)</Label>
                       <Input 
                         value={menu.href}
                         onChange={e => {
@@ -361,23 +361,32 @@ const AdminAparencia = () => {
               </Card>
 
               <Card className="rounded-[2.5rem] border-none shadow-xl bg-white">
-                 <CardHeader className="p-8">
-                    <CardTitle className="text-xl font-black uppercase tracking-tight">Visibilidade</CardTitle>
-                 </CardHeader>
-                 <CardContent className="p-8 pt-0 grid grid-cols-2 gap-4">
-                    {[
-                      { l: "Notícias", f: "showNews" },
-                      { l: "Galeria", f: "showGallery" },
-                      { l: "Top Songs", f: "showTopSongs" },
-                      { l: "Sobre", f: "showAbout" }
-                    ].map(item => (
-                      <div key={item.f} className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                         <span className="text-[10px] font-black uppercase">{item.l}</span>
-                         <Switch checked={(theme as any)[item.f]} onCheckedChange={v => updateField(item.f as any, v)} />
-                      </div>
-                    ))}
-                 </CardContent>
-              </Card>
+                  <CardHeader className="p-8">
+                     <CardTitle className="text-xl font-black uppercase tracking-tight">Visibilidade Front-end</CardTitle>
+                     <CardDescription className="text-xs">Ative ou oculte as funções externas do site.</CardDescription>
+                  </CardHeader>
+                  <CardContent className="p-8 pt-0 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                     {[
+                       { l: "Notícias", f: "showNews", p: "vis_noticias" },
+                       { l: "Galeria", f: "showGallery", p: "vis_galeria" },
+                       { l: "Top Songs", f: "showTopSongs", p: "vis_top3" },
+                       { l: "Sobre", f: "showAbout", p: "vis_sobre" }
+                     ].map(item => {
+                       // Super Admin can change anything. 
+                       // 'aparencia' manager can change all. 
+                       // Restricted users can ONLY change what has their specific 'vis_' ID.
+                       const canChange = hasPermission("*") || hasPermission("aparencia") || hasPermission(item.p);
+                       if (!canChange) return null;
+
+                       return (
+                         <div key={item.f} className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                            <span className="text-[10px] font-black uppercase" style={{ color: 'var(--admin-card-text)' }}>{item.l}</span>
+                            <Switch checked={(theme as any)[item.f]} onCheckedChange={v => updateField(item.f as any, v)} />
+                         </div>
+                       );
+                     })}
+                  </CardContent>
+               </Card>
            </div>
         </TabsContent>
 
@@ -436,56 +445,56 @@ const AdminAparencia = () => {
                 <CardContent className="p-8 pt-0 space-y-8">
                   <div className="grid grid-cols-2 gap-8">
                     <div className="flex flex-col items-center gap-3">
-                      <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Fundo Sidebar</Label>
+                      <Label className="text-[10px] font-black uppercase tracking-widest opacity-80" style={{ color: 'var(--admin-card-text)' }}>Fundo Sidebar</Label>
                       <input type="color" value={theme.adminBlue} onChange={e => updateField("adminBlue", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-slate-50 shadow-inner" />
-                      <span className="text-[9px] font-mono text-slate-400">{theme.adminBlue}</span>
+                      <span className="text-[9px] font-mono" style={{ color: 'var(--admin-card-text)' }}>{theme.adminBlue}</span>
                     </div>
                     <div className="flex flex-col items-center gap-3">
-                      <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Destaque Sidebar</Label>
+                      <Label className="text-[10px] font-black uppercase tracking-widest opacity-80" style={{ color: 'var(--admin-card-text)' }}>Destaque Sidebar</Label>
                       <input type="color" value={theme.adminYellow} onChange={e => updateField("adminYellow", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-slate-50 shadow-inner" />
-                      <span className="text-[9px] font-mono text-slate-400">{theme.adminYellow}</span>
+                      <span className="text-[9px] font-mono" style={{ color: 'var(--admin-card-text)' }}>{theme.adminYellow}</span>
                     </div>
                     <div className="flex flex-col items-center gap-3">
-                      <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Cor de Texto</Label>
+                      <Label className="text-[10px] font-black uppercase tracking-widest opacity-80" style={{ color: 'var(--admin-card-text)' }}>Cor de Texto</Label>
                       <input type="color" value={theme.adminText} onChange={e => updateField("adminText", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-slate-50 shadow-inner" />
-                      <span className="text-[9px] font-mono text-slate-400">{theme.adminText}</span>
+                      <span className="text-[9px] font-mono" style={{ color: 'var(--admin-card-text)' }}>{theme.adminText}</span>
+                    </div>
+                    <div className="flex flex-col items-center gap-3">
+                      <Label className="text-[10px] font-black uppercase tracking-widest opacity-80" style={{ color: 'var(--admin-card-text)' }}>Texto Inativo Sidebar</Label>
+                      <input type="color" value={theme.adminSidebarText} onChange={e => updateField("adminSidebarText", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-slate-50 shadow-inner" />
+                      <span className="text-[9px] font-mono" style={{ color: 'var(--admin-card-text)' }}>{theme.adminSidebarText}</span>
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-8 pt-8 border-t border-gray-50">
-                    <div className="flex flex-col items-center gap-3">
-                      <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Texto Inativo Sidebar</Label>
-                      <input type="color" value={theme.adminSidebarText} onChange={e => updateField("adminSidebarText", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-slate-50 shadow-inner" />
-                      <span className="text-[9px] font-mono text-slate-400">{theme.adminSidebarText}</span>
-                    </div>
                     <div className="space-y-4">
-                  <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Títulos Admin (Header)</Label>
+                  <Label className="text-[10px] font-black uppercase tracking-widest opacity-80" style={{ color: 'var(--admin-card-text)' }}>Títulos Admin (Header)</Label>
                   <div className="flex items-center gap-4">
                     <input type="color" value={theme.adminContentTitle || "#002e5d"} onChange={e => updateField("adminContentTitle", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-slate-50 shadow-inner" />
-                    <span className="text-[9px] font-mono text-slate-400">{theme.adminContentTitle}</span>
+                    <span className="text-[9px] font-mono" style={{ color: 'var(--admin-card-text)' }}>{theme.adminContentTitle}</span>
                   </div>
                 </div>
 
                 <div className="space-y-4">
-                  <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Texto de Rótulos (Cards)</Label>
+                  <Label className="text-[10px] font-black uppercase tracking-widest opacity-80" style={{ color: 'var(--admin-card-text)' }}>Texto de Rótulos (Cards)</Label>
                   <div className="flex items-center gap-4">
                     <input type="color" value={theme.adminCardText || "#475569"} onChange={e => updateField("adminCardText", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-slate-50 shadow-inner" />
-                    <span className="text-[9px] font-mono text-slate-400">{theme.adminCardText}</span>
+                    <span className="text-[9px] font-mono" style={{ color: 'var(--admin-card-text)' }}>{theme.adminCardText}</span>
                   </div>
                 </div>
 
                 <div className="space-y-4">
-                  <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Degradê Superior (Início)</Label>
+                  <Label className="text-[10px] font-black uppercase tracking-widest opacity-80" style={{ color: 'var(--admin-card-text)' }}>Degradê Superior (Início)</Label>
                   <div className="flex items-center gap-4">
                     <input type="color" value={theme.adminHeaderGradStart || "#ffffff"} onChange={e => updateField("adminHeaderGradStart", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-slate-50 shadow-inner" />
-                    <span className="text-[9px] font-mono text-slate-400">{theme.adminHeaderGradStart}</span>
+                    <span className="text-[9px] font-mono" style={{ color: 'var(--admin-card-text)' }}>{theme.adminHeaderGradStart}</span>
                   </div>
                 </div>
 
                 <div className="space-y-4">
-                  <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Degradê Superior (Fim)</Label>
+                  <Label className="text-[10px] font-black uppercase tracking-widest opacity-80" style={{ color: 'var(--admin-card-text)' }}>Degradê Superior (Fim)</Label>
                   <div className="flex items-center gap-4">
                     <input type="color" value={theme.adminHeaderGradEnd || "#f8fafc"} onChange={e => updateField("adminHeaderGradEnd", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-slate-50 shadow-inner" />
-                    <span className="text-[9px] font-mono text-slate-400">{theme.adminHeaderGradEnd}</span>
+                    <span className="text-[9px] font-mono" style={{ color: 'var(--admin-card-text)' }}>{theme.adminHeaderGradEnd}</span>
                   </div>
                 </div>
                   </div>
