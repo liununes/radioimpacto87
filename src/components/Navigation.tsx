@@ -1,6 +1,6 @@
+import { getSiteConfig, getRedesSociais, type RedeSocial } from "@/lib/radioStore";
 import { useState, useEffect } from "react";
-import { Menu, X, Search, Moon, Sun } from "lucide-react";
-import { getSiteConfig } from "@/lib/radioStore";
+import { Menu, X, Search, Moon, Sun, Instagram, Facebook, Youtube, Twitter, Music2, Globe, MessageCircle } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 import { Link, useLocation } from "react-router-dom";
 import WeatherWidget from "./WeatherWidget";
@@ -8,6 +8,7 @@ import WeatherWidget from "./WeatherWidget";
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [siteConfig, setSiteConfig] = useState<any>({});
+  const [redes, setRedes] = useState<RedeSocial[]>([]);
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem('darkMode') === 'true');
   const theme = useTheme();
   const location = useLocation();
@@ -26,6 +27,7 @@ const Navigation = () => {
       const site = await getSiteConfig("site");
       const streaming = await getSiteConfig("streaming");
       setSiteConfig({ ...(site || {}), ...(streaming || {}) });
+      setRedes(await getRedesSociais());
     };
     loadSiteConfig();
   }, []);
@@ -129,7 +131,22 @@ const Navigation = () => {
         </div>
 
         {/* Right Actions */}
-        <div className="hidden lg:flex items-center gap-4 xl:gap-6 shrink-0">
+          {theme.showSocial && redes.length > 0 && (
+            <div className="flex items-center gap-3 border-r border-white/5 pr-4 xl:pr-6">
+              {redes.map(rede => (
+                <a key={rede.id} href={rede.url} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-[var(--clube-yellow)] transition-all">
+                  {rede.icone === 'instagram' && <Instagram size={16} />}
+                  {rede.icone === 'facebook' && <Facebook size={16} />}
+                  {rede.icone === 'youtube' && <Youtube size={16} />}
+                  {rede.icone === 'twitter' && <Twitter size={16} />}
+                  {rede.icone === 'tiktok' && <Music2 size={16} />}
+                  {!['instagram', 'facebook', 'youtube', 'twitter', 'tiktok'].includes(rede.icone) && <Globe size={16} />}
+                </a>
+              ))}
+            </div>
+          )}
+          
+          <div className="hidden lg:flex items-center gap-4 xl:gap-6 shrink-0">
           <div className="flex items-center gap-3 text-[10px] font-black border-r border-white/5 pr-4 xl:pr-6" style={{ color: 'var(--header-text-color)' }}>
              <button onClick={() => setDarkMode(!darkMode)} className="hover:text-[var(--clube-yellow)] transition-colors" title={darkMode ? "Modo Claro" : "Modo Escuro"}>
                {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
@@ -170,6 +187,21 @@ const Navigation = () => {
               <span className="text-[var(--clube-yellow)] opacity-0 group-hover:opacity-100 transition-opacity">→</span>
             </Link>
           ))}
+
+          {theme.showSocial && redes.length > 0 && (
+            <div className="flex items-center gap-6 pt-8 mt-4 border-t border-white/5">
+              {redes.map(rede => (
+                <a key={rede.id} href={rede.url} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-[var(--clube-yellow)] transition-all">
+                  {rede.icone === 'instagram' && <Instagram size={24} />}
+                  {rede.icone === 'facebook' && <Facebook size={24} />}
+                  {rede.icone === 'youtube' && <Youtube size={24} />}
+                  {rede.icone === 'twitter' && <Twitter size={24} />}
+                  {rede.icone === 'tiktok' && <Music2 size={24} />}
+                  {!['instagram', 'facebook', 'youtube', 'twitter', 'tiktok'].includes(rede.icone) && <Globe size={24} />}
+                </a>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </nav>

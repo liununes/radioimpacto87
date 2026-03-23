@@ -65,6 +65,7 @@ export interface ThemeConfig {
   showSponsors: boolean;
   showBackToTop: boolean;
   showEntretenimento: boolean;
+  showSocial: boolean;
   // Weather settings
   weatherCity: string;
   // Sponsor settings
@@ -160,6 +161,7 @@ export const DEFAULT_THEME: ThemeConfig = {
   showSponsors: true,
   showBackToTop: true,
   showEntretenimento: true,
+  showSocial: true,
   weatherCity: 'Brasília',
   sponsorsPosition: 'center',
   topSongsAlignment: 'center',

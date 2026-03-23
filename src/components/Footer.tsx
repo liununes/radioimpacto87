@@ -62,18 +62,20 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
-            {redes.map(rede => (
-              <a key={rede.id} href={rede.url} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-2xl bg-gray-50 dark:bg-white/10 border border-gray-100 dark:border-white/10 flex items-center justify-center hover:bg-accent hover:border-accent hover:text-white transition-all group text-gray-400 group-hover:text-white">
-                {getIcon(rede.icone)}
-              </a>
-            ))}
-            {siteConfig.whatsapp && (
-              <a href={`https://wa.me/${siteConfig.whatsapp}`} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-2xl bg-gray-50 dark:bg-white/10 border border-gray-100 dark:border-white/10 flex items-center justify-center hover:bg-[#25D366] hover:border-[#25D366] transition-all group text-gray-400 group-hover:text-white">
-                <MessageCircle className="w-5 h-5" />
-              </a>
-            )}
-          </div>
+          {theme.showSocial && (
+            <div className="flex items-center gap-4">
+              {redes.map(rede => (
+                <a key={rede.id} href={rede.url} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-2xl bg-gray-50 dark:bg-white/10 border border-gray-100 dark:border-white/10 flex items-center justify-center hover:bg-accent hover:border-accent hover:text-white transition-all group text-gray-400 group-hover:text-white">
+                  {getIcon(rede.icone)}
+                </a>
+              ))}
+              {siteConfig.whatsapp && (
+                <a href={`https://wa.me/${siteConfig.whatsapp}`} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-2xl bg-gray-50 dark:bg-white/10 border border-gray-100 dark:border-white/10 flex items-center justify-center hover:bg-[#25D366] hover:border-[#25D366] transition-all group text-gray-400 group-hover:text-white">
+                  <MessageCircle className="w-5 h-5" />
+                </a>
+              )}
+            </div>
+          )}
 
           <div className="text-center flex flex-col items-center max-w-sm">
              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-loose text-center">

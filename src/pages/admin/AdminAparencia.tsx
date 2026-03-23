@@ -428,7 +428,8 @@ const AdminAparencia = () => {
                    { l: "Clima", f: "showWeather", p: "vis_clima", desc: "Temperatura e clima na barra" },
                    { l: "Patrocinadores", f: "showSponsors", p: "vis_sponsors", desc: "Exibir logos de patrocinadores" },
                    { l: "Voltar ao Topo", f: "showBackToTop", p: "vis_topo", desc: "Botão de rolagem suave" },
-                   { l: "Entretenimento", f: "showEntretenimento", p: "vis_news", desc: "Bloco de notícias secundárias" }
+                   { l: "Entretenimento", f: "showEntretenimento", p: "vis_news", desc: "Bloco de notícias secundárias" },
+                    { l: "Redes Sociais", f: "showSocial", p: "aparencia", desc: "Ícones sociais no topo e rodapé" }
                  ].map(item => {
                    const canChange = hasPermission("*") || hasPermission("aparencia") || hasPermission(item.p);
                    if (!canChange) return null;
