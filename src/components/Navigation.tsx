@@ -131,10 +131,11 @@ const Navigation = () => {
         </div>
 
         {/* Right Actions */}
+        <div className="hidden lg:flex items-center gap-4 xl:gap-6 shrink-0">
           {theme.showSocial && redes.length > 0 && (
             <div className="flex items-center gap-3 border-r border-white/5 pr-4 xl:pr-6">
               {redes.map(rede => (
-                <a key={rede.id} href={rede.url} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-[var(--clube-yellow)] transition-all">
+                <a key={rede.id} href={rede.url} target="_blank" rel="noopener noreferrer" className="text-white hover:text-[var(--clube-yellow)] transition-all opacity-80 hover:opacity-100">
                   {rede.icone === 'instagram' && <Instagram size={16} />}
                   {rede.icone === 'facebook' && <Facebook size={16} />}
                   {rede.icone === 'youtube' && <Youtube size={16} />}
@@ -145,8 +146,6 @@ const Navigation = () => {
               ))}
             </div>
           )}
-          
-          <div className="hidden lg:flex items-center gap-4 xl:gap-6 shrink-0">
           <div className="flex items-center gap-3 text-[10px] font-black border-r border-white/5 pr-4 xl:pr-6" style={{ color: 'var(--header-text-color)' }}>
              <button onClick={() => setDarkMode(!darkMode)} className="hover:text-[var(--clube-yellow)] transition-colors" title={darkMode ? "Modo Claro" : "Modo Escuro"}>
                {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
@@ -191,7 +190,7 @@ const Navigation = () => {
           {theme.showSocial && redes.length > 0 && (
             <div className="flex items-center gap-6 pt-8 mt-4 border-t border-white/5">
               {redes.map(rede => (
-                <a key={rede.id} href={rede.url} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-[var(--clube-yellow)] transition-all">
+                <a key={rede.id} href={rede.url} target="_blank" rel="noopener noreferrer" className="text-white opacity-70 hover:opacity-100 hover:text-[var(--clube-yellow)] transition-all">
                   {rede.icone === 'instagram' && <Instagram size={24} />}
                   {rede.icone === 'facebook' && <Facebook size={24} />}
                   {rede.icone === 'youtube' && <Youtube size={24} />}
