@@ -114,7 +114,7 @@ const RadioPlayer = () => {
         
         <div className="flex flex-col pt-12 md:pt-16 whitespace-nowrap">
           <div className="flex items-center gap-2">
-            <div className={`w-2 h-2 rounded-full ${isPlaying ? 'bg-accent animate-pulse shadow-[0_0_8px_#ec2027]' : 'bg-gray-300'}`} />
+            <div className={`w-2 h-2 rounded-full ${isPlaying ? 'bg-accent animate-pulse shadow-[0_0_8px_#ff8c00]' : 'bg-gray-300'}`} />
             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-accent">{theme.labels.playerLive}</span>
           </div>
           <span className="text-xl md:text-3xl font-black text-primary leading-none uppercase tracking-tighter">

@@ -262,7 +262,7 @@ const AdminAparencia = () => {
                     </div>
                     <div className="flex flex-col items-center gap-3">
                       <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Círculo Interno</Label>
-                      <input type="color" value={theme.logoCircleColor2 || "#ec2027"} onChange={e => updateField("logoCircleColor2", e.target.value)} className="w-12 h-12 rounded-xl cursor-pointer border-4 border-gray-50 shadow-inner" />
+                      <input type="color" value={theme.logoCircleColor2 || "#ff8c00"} onChange={e => updateField("logoCircleColor2", e.target.value)} className="w-12 h-12 rounded-xl cursor-pointer border-4 border-gray-50 shadow-inner" />
                       <span className="text-[9px] font-mono text-slate-700">{theme.logoCircleColor2}</span>
                     </div>
                   </div>
@@ -481,10 +481,10 @@ const AdminAparencia = () => {
                    
                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8">
                      {[
-                       { l: "Impacto FM", b: "#002e5d", y: "#ffed32", t: "#ffffff", grs: "#ffffff", gre: "#f8fafc" },
-                       { l: "Dark Pro", b: "#0f172a", y: "#38bdf8", t: "#f1f5f9", grs: "#1e293b", gre: "#0f172a" },
-                       { l: "Soft Green", b: "#064e3b", y: "#10b981", t: "#ffffff", grs: "#ecfdf5", gre: "#d1fae5" },
-                       { l: "Ocean Blue", b: "#1e3a8a", y: "#6366f1", t: "#ffffff", grs: "#eff6ff", gre: "#dbeafe" },
+                       { l: "Clube Premium", b: "#002e5d", y: "#ffed32", t: "#ffffff", grs: "#ffffff", gre: "#f1f5f9" },
+                       { l: "Laranja Vibrante", b: "#0f172a", y: "#ff8c00", t: "#ffffff", grs: "#1e293b", gre: "#0f172a" },
+                       { l: "Deep Oceanic", b: "#172554", y: "#60a5fa", t: "#ffffff", grs: "#f8fafc", gre: "#f1f5f9" },
+                       { l: "Contrast Pro", b: "#000000", y: "#ffed32", t: "#ffffff", grs: "#ffffff", gre: "#f8fafc" },
                      ].map(p => (
                        <button 
                          key={p.l}
@@ -513,11 +513,11 @@ const AdminAparencia = () => {
                        updateField("adminBlue", "#002e5d");
                        updateField("adminYellow", "#ffed32");
                        updateField("adminText", "#ffffff");
-                       updateField("adminSidebarText", "rgba(255,255,255,0.6)");
+                       updateField("adminSidebarText", "rgba(255,255,255,0.8)");
                        updateField("adminContentTitle", "#002e5d");
-                       updateField("adminCardText", "#475569");
+                       updateField("adminCardText", "#18181b");
                        updateField("adminHeaderGradStart", "#ffffff");
-                       updateField("adminHeaderGradEnd", "#f8fafc");
+                       updateField("adminHeaderGradEnd", "#f1f5f9");
                        toast.success("Cores padrão restauradas!");
                      }}
                      className="text-white/60 hover:text-white mt-4 text-[10px] font-black uppercase tracking-widest p-0 h-auto"

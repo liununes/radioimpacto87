@@ -42,12 +42,12 @@
     --primary-foreground: 210 40% 98%;
     --secondary: 48 100% 50%; /* Yellow: #ffed32 */
     --secondary-foreground: 0 0% 0%;
-    --accent: 358 83% 53%; /* Red: #ec2027 */
+    --accent: 33 100% 50%; /* Orange: #ff8c00 */
     --accent-foreground: 210 40% 98%;
     
     --clube-blue: #002e5d;
     --clube-yellow: #ffed32;
-    --clube-red: #ec2027;
+    --clube-red: #ff8c00;
     --clube-gray: #f2f2f2;
     
     --header-bg: var(--clube-blue);
