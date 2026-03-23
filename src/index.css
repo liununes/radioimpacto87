@@ -59,6 +59,19 @@
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
   }
+
+  .admin-view {
+    --background: 0 0% 100% !important;
+    --foreground: 222.2 84% 4.9% !important;
+    --muted: 210 40% 96.1% !important;
+    --muted-foreground: 215.4 16.3% 46.9% !important;
+    --border: 214.3 31.8% 91.4% !important;
+    --input: 214.3 31.8% 91.4% !important;
+    --card: 0 0% 100% !important;
+    --card-foreground: 222.2 84% 4.9% !important;
+    --primary: 211 100% 18% !important;
+    --accent: 33 100% 50% !important;
+  }
 }
 
 @layer base {

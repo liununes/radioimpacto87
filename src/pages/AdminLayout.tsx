@@ -65,7 +65,7 @@ const AdminLayout = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-gray-50/50">
+      <div className="min-h-screen flex w-full bg-gray-50/50 admin-view">
         <AdminSidebar />
         <div className="flex-1 flex flex-col">
           <header 
