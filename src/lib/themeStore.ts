@@ -1,3 +1,18 @@
+export interface Sponsor {
+  id: string;
+  nome: string;
+  logo: string;
+  url?: string;
+}
+
+export interface Promo {
+  id: string;
+  titulo: string;
+  imagem: string;
+  link?: string;
+  ativa: boolean;
+}
+
 // Store for theme/colors customization
 export interface ThemeConfig {
   background: string;
@@ -56,6 +71,9 @@ export interface ThemeConfig {
   sponsorsPosition: 'left' | 'center' | 'right';
   topSongsAlignment: 'left' | 'center' | 'right';
   weatherPosition: 'left' | 'center' | 'right';
+  // Dynamic Content
+  sponsors?: Sponsor[];
+  promos?: Promo[];
   // Dynamic Labels
   labels: {
     heroReadMore: string;
@@ -146,6 +164,8 @@ export const DEFAULT_THEME: ThemeConfig = {
   sponsorsPosition: 'center',
   topSongsAlignment: 'center',
   weatherPosition: 'left',
+  sponsors: [],
+  promos: [],
   navMenus: [
     { label: "AO VIVO", href: "#home" },
     { label: "PROMOÇÕES", href: "#promocoes" },

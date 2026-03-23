@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { Save, Upload, Palette, Image as ImageIcon, Layout, Type, Smartphone, Globe, Radio, ExternalLink, MapPin, CheckCircle2, Settings, Eye } from "lucide-react";
+import { Save, Upload, Palette, Image as ImageIcon, Layout, Type, Smartphone, Globe, Radio, ExternalLink, MapPin, CheckCircle2, Settings, Eye, Heart, Gift, Trash2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getThemeConfig, applyTheme, DEFAULT_THEME, type ThemeConfig } from "@/lib/themeStore";
+import { getThemeConfig, applyTheme, DEFAULT_THEME, type ThemeConfig, type Sponsor, type Promo } from "@/lib/themeStore";
 import { getSiteConfig, saveSiteConfig } from "@/lib/radioStore";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
@@ -125,6 +125,12 @@ const AdminAparencia = () => {
             </TabsTrigger>
             <TabsTrigger value="visibilidade" className="rounded-2xl px-6 py-4 data-[state=active]:bg-emerald-600 data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
               <Eye className="w-4 h-4 mr-2" /> Visibilidade
+            </TabsTrigger>
+            <TabsTrigger value="patrocinadores" className="rounded-2xl px-6 py-4 data-[state=active]:bg-orange-500 data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
+              <Heart className="w-4 h-4 mr-2" /> Patrocinadores
+            </TabsTrigger>
+            <TabsTrigger value="promocoes" className="rounded-2xl px-6 py-4 data-[state=active]:bg-pink-500 data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
+              <Gift className="w-4 h-4 mr-2" /> Promoções
             </TabsTrigger>
             {isSuperAdmin && (
               <TabsTrigger value="whitelabel" className="rounded-2xl px-6 py-4 data-[state=active]:bg-purple-600 data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
@@ -447,7 +453,178 @@ const AdminAparencia = () => {
            </Card>
         </TabsContent>
 
-        {/* --- RADIO TAB --- */}
+        {/* --- PATROCINADORES TAB --- */}
+        <TabsContent value="patrocinadores" className="space-y-8 animate-in fade-in zoom-in-95 duration-500">
+           <Card className="rounded-[2.5rem] border-none shadow-xl bg-white text-slate-900 overflow-hidden">
+              <div className="bg-orange-500 p-8 text-white">
+                <h3 className="text-xl font-black uppercase italic tracking-tighter">Gerenciar Patrocinadores</h3>
+                <p className="text-white/60 text-xs font-medium mt-2">Adicione os logotipos dos parceiros que apoiam a sua rádio.</p>
+              </div>
+              <CardContent className="p-10 space-y-8">
+                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {(theme.sponsors || []).map((s, idx) => (
+                      <div key={s.id || idx} className="relative group bg-gray-50 rounded-3xl p-6 border border-gray-100 flex flex-col items-center gap-4">
+                         <div className="w-full aspect-square bg-white rounded-2xl flex items-center justify-center p-4 border border-gray-50 shadow-sm relative overflow-hidden">
+                            {s.logo ? <img src={s.logo} alt={s.nome} className="max-h-full object-contain" /> : <ImageIcon className="w-8 h-8 text-gray-200" />}
+                            <label className="absolute inset-0 cursor-pointer bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                               <Upload className="text-white w-6 h-6" />
+                               <input type="file" accept="image/*" className="hidden" onChange={async e => {
+                                 const f = e.target.files?.[0];
+                                 if (f) {
+                                   const newSponsors = [...(theme.sponsors || [])];
+                                   newSponsors[idx].logo = await fileToBase64(f);
+                                   setTheme(prev => ({ ...prev, sponsors: newSponsors }));
+                                 }
+                               }} />
+                            </label>
+                         </div>
+                         <Input 
+                            value={s.nome} 
+                            onChange={e => {
+                               const newSponsors = [...(theme.sponsors || [])];
+                               newSponsors[idx].nome = e.target.value;
+                               setTheme(prev => ({ ...prev, sponsors: newSponsors }));
+                            }}
+                            placeholder="Nome do Parceiro"
+                            className="h-10 rounded-xl text-center text-xs font-bold"
+                         />
+                         <Input 
+                            value={s.url || ""} 
+                            onChange={e => {
+                               const newSponsors = [...(theme.sponsors || [])];
+                               newSponsors[idx].url = e.target.value;
+                               setTheme(prev => ({ ...prev, sponsors: newSponsors }));
+                            }}
+                            placeholder="Link (Opcional)"
+                            className="h-10 rounded-xl text-center text-[10px]"
+                         />
+                         <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="absolute -top-2 -right-2 h-8 w-8 bg-white shadow-md text-red-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                            onClick={() => {
+                               const newSponsors = (theme.sponsors || []).filter((_, i) => i !== idx);
+                               setTheme(prev => ({ ...prev, sponsors: newSponsors }));
+                            }}
+                         >
+                            <Trash2 className="w-4 h-4" />
+                         </Button>
+                      </div>
+                    ))}
+                    <button 
+                      onClick={() => {
+                        const newSponsors = [...(theme.sponsors || []), { id: crypto.randomUUID(), nome: "Novo Parceiro", logo: "", url: "" }];
+                        setTheme(prev => ({ ...prev, sponsors: newSponsors }));
+                      }}
+                      className="border-4 border-dashed border-gray-100 rounded-[2rem] flex flex-col items-center justify-center p-8 gap-4 hover:border-orange-200 hover:bg-orange-50/30 transition-all text-gray-300 hover:text-orange-400 group"
+                    >
+                       <Plus className="w-10 h-10 group-hover:scale-110 transition-transform" />
+                       <span className="text-[10px] font-black uppercase tracking-widest">Adicionar Parceiro</span>
+                    </button>
+                 </div>
+              </CardContent>
+           </Card>
+        </TabsContent>
+
+        {/* --- PROMOÇÕES TAB --- */}
+        <TabsContent value="promocoes" className="space-y-8 animate-in fade-in zoom-in-95 duration-500">
+           <Card className="rounded-[2.5rem] border-none shadow-xl bg-white text-slate-900 overflow-hidden">
+              <div className="bg-pink-500 p-8 text-white">
+                <h3 className="text-xl font-black uppercase italic tracking-tighter">Central de Promoções</h3>
+                <p className="text-white/60 text-xs font-medium mt-2">Crie banners para as promoções que serão exibidas na home.</p>
+              </div>
+              <CardContent className="p-10 space-y-8">
+                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    {(theme.promos || []).map((p, idx) => (
+                      <div key={p.id || idx} className="bg-gray-50 rounded-[2.5rem] p-8 border border-gray-100 relative group" style={{ color: p.ativa ? 'inherit' : '#94a3b8' }}>
+                         <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+                            <div className="md:col-span-5 space-y-4">
+                               <div className="aspect-[4/5] bg-white rounded-3xl border border-gray-100 shadow-sm relative overflow-hidden flex items-center justify-center p-2 group/img">
+                                  {p.imagem ? <img src={p.imagem} alt={p.titulo} className="w-full h-full object-cover rounded-2xl" /> : <Gift className="w-12 h-12 text-gray-100" />}
+                                  <label className="absolute inset-0 cursor-pointer bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
+                                     <Upload className="text-white w-8 h-8" />
+                                     <input type="file" accept="image/*" className="hidden" onChange={async e => {
+                                       const f = e.target.files?.[0];
+                                       if (f) {
+                                         const newPromos = [...(theme.promos || [])];
+                                         newPromos[idx].imagem = await fileToBase64(f);
+                                         setTheme(prev => ({ ...prev, promos: newPromos }));
+                                       }
+                                     }} />
+                                  </label>
+                               </div>
+                               <div className="flex items-center justify-between bg-white p-3 rounded-2xl border border-gray-50">
+                                  <span className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-2">Ativa</span>
+                                  <Switch 
+                                    checked={p.ativa} 
+                                    onCheckedChange={v => {
+                                       const newPromos = [...(theme.promos || [])];
+                                       newPromos[idx].ativa = v;
+                                       setTheme(prev => ({ ...prev, promos: newPromos }));
+                                    }} 
+                                  />
+                               </div>
+                            </div>
+                            <div className="md:col-span-7 space-y-6 flex flex-col justify-center">
+                               <div className="space-y-2">
+                                  <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Título Chamativo</Label>
+                                  <Input 
+                                    value={p.titulo} 
+                                    onChange={e => {
+                                       const newPromos = [...(theme.promos || [])];
+                                       newPromos[idx].titulo = e.target.value;
+                                       setTheme(prev => ({ ...prev, promos: newPromos }));
+                                    }}
+                                    className="h-12 rounded-xl bg-white font-bold"
+                                  />
+                               </div>
+                               <div className="space-y-2">
+                                  <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Link de Inscrição / WhatsApp</Label>
+                                  <Input 
+                                    value={p.link || ""} 
+                                    onChange={e => {
+                                       const newPromos = [...(theme.promos || [])];
+                                       newPromos[idx].link = e.target.value;
+                                       setTheme(prev => ({ ...prev, promos: newPromos }));
+                                    }}
+                                    placeholder="https://wa.me/..."
+                                    className="h-12 rounded-xl bg-white text-xs"
+                                  />
+                               </div>
+                               <Button 
+                                  variant="destructive" 
+                                  className="w-full h-12 rounded-xl font-black uppercase text-[10px] tracking-widest shadow-lg shadow-red-500/10"
+                                  onClick={() => {
+                                     const newPromos = (theme.promos || []).filter((_, i) => i !== idx);
+                                     setTheme(prev => ({ ...prev, promos: newPromos }));
+                                  }}
+                               >
+                                  Excluir Promoção
+                               </Button>
+                            </div>
+                         </div>
+                      </div>
+                    ))}
+                    <button 
+                      onClick={() => {
+                        const newPromos = [...(theme.promos || []), { id: crypto.randomUUID(), titulo: "Nova Promoção", imagem: "", link: "", ativa: true }];
+                        setTheme(prev => ({ ...prev, promos: newPromos }));
+                      }}
+                      className="border-4 border-dashed border-gray-100 rounded-[3rem] flex flex-col items-center justify-center p-12 gap-6 hover:border-pink-200 hover:bg-pink-50/30 transition-all text-gray-300 hover:text-pink-400 group min-h-[400px]"
+                    >
+                       <div className="w-20 h-20 rounded-full border-4 border-dashed border-current flex items-center justify-center group-hover:scale-110 transition-transform">
+                          <Plus className="w-10 h-10" />
+                       </div>
+                       <div className="text-center">
+                          <span className="text-sm font-black uppercase tracking-widest block">Criar Nova Promoção</span>
+                          <span className="text-[10px] font-bold opacity-50 mt-2 block">Upload de banner e link de ação</span>
+                       </div>
+                    </button>
+                 </div>
+              </CardContent>
+           </Card>
+        </TabsContent>
+
         <TabsContent value="radio" className="space-y-8 animate-in fade-in zoom-in-95 duration-500">
            <Card className="rounded-[2.5rem] border-none shadow-xl bg-white text-slate-900">
               <CardHeader className="p-10 pb-4">

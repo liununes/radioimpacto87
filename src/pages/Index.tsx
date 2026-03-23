@@ -6,6 +6,9 @@ import { FeaturedNews, RemainingNews, useNews } from "@/components/EnhancedNewsS
 import GaleriaSection from "@/components/GaleriaSection";
 import ProgramacaoSection from "@/components/ProgramacaoSection";
 import AboutSection from "@/components/AboutSection";
+import SponsorsSection from "@/components/SponsorsSection";
+import PromosSection from "@/components/PromosSection";
+import BackToTop from "@/components/BackToTop";
 import Footer from "@/components/Footer";
 import { useTheme } from "@/hooks/useTheme";
 import { getSiteConfig } from "@/lib/radioStore";
@@ -70,17 +73,7 @@ const Index = () => {
           )}
         </section>
 
-        {theme.showPromos !== false && (
-          <section id="promocoes" className="py-32 flex flex-col items-center justify-center bg-white dark:bg-gray-950 border-y border-gray-100 dark:border-gray-800">
-             <div className="container mx-auto px-6 text-center mb-12">
-                <span className="text-[10px] font-black text-accent uppercase tracking-[0.5em] block mb-2">Participe</span>
-                <h2 className="text-4xl md:text-6xl font-black text-primary tracking-tighter uppercase italic leading-none mb-8 text-center">Promoções <span className="text-accent underline">Ativas</span></h2>
-             </div>
-             <div className="w-full max-w-4xl mx-auto min-h-[300px] flex items-center justify-center bg-gray-50 dark:bg-gray-900 rounded-[3rem] border-2 border-dashed border-gray-200 dark:border-gray-700">
-                <div className="text-center italic opacity-30 font-black uppercase tracking-widest text-sm">Fique ligado! Novas promoções em breve.</div>
-             </div>
-          </section>
-        )}
+        {theme.showPromos && <PromosSection />}
         
         {theme.showTopSongs && topSongsPos === 'hero' && (
           <section id="musica" className="py-20">
@@ -112,8 +105,11 @@ const Index = () => {
           </div>
           {theme.showTopSongs && (topSongsPos === 'news' || topSongsPos === 'contact') && <TopSongs />}
         </div>
+        
+        {theme.showSponsors && <SponsorsSection />}
       </main>
       
+      <BackToTop />
       <Footer />
       <RadioPlayer />
     </div>
