@@ -102,7 +102,7 @@ const WeatherWidget = ({ showWeather = true }: WeatherWidgetProps) => {
   if (!showWeather || !weather) return null;
 
   return (
-    <div className={`flex items-center gap-2 px-3 py-1 rounded-full bg-black/20 backdrop-blur-sm border border-white/10 text-white ${
+    <div className={`flex items-center gap-3 px-4 py-2 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white shadow-[0_8px_20px_rgba(0,0,0,0.3)] hover:scale-105 transition-all ${
       theme.weatherPosition === 'center' ? 'mx-auto' : theme.weatherPosition === 'right' ? 'ml-auto' : ''
     }`}>
       {loading ? (

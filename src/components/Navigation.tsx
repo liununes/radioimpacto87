@@ -58,7 +58,7 @@ const Navigation = () => {
 
   return (
     <nav 
-      className="top-nav-clube sticky top-0 z-[100] border-b border-white/5 shadow-2xl transition-all duration-500"
+      className="top-nav-clube sticky top-0 z-[100] border-b border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.3)] backdrop-blur-2xl transition-all duration-500"
       style={{ 
         background: `linear-gradient(to right, var(--header-grad-start), var(--header-grad-end))`,
         color: 'var(--header-text-color)'
@@ -108,7 +108,7 @@ const Navigation = () => {
                   key={item.label}
                   to={item.href.startsWith("#") ? `/${item.href}` : item.href}
                   onClick={(e) => handleNavClick(e, item.href)}
-                  className="bg-[var(--clube-yellow)] text-[var(--clube-blue)] px-6 py-2.5 rounded-full text-[10px] xl:text-[11px] font-black tracking-[0.15em] hover:scale-105 transition-all uppercase shadow-lg shadow-yellow-400/20 whitespace-nowrap"
+                  className="bg-[var(--clube-yellow)] text-[var(--clube-blue)] px-7 py-3 rounded-full text-[10px] xl:text-[11px] font-[900] tracking-[0.2em] hover:scale-110 transition-all uppercase shadow-[0_10px_20px_rgba(0,0,0,0.2)] hover:shadow-yellow-400/40 whitespace-nowrap"
                   style={{ backgroundColor: theme.textSecondary, color: theme.clubeBlue }}
                 >
                   {item.label}
@@ -135,13 +135,13 @@ const Navigation = () => {
           {theme.showSocial && redes.length > 0 && (
             <div className="flex items-center gap-3 border-r border-white/5 pr-4 xl:pr-6">
               {redes.map(rede => (
-                <a key={rede.id} href={rede.url} target="_blank" rel="noopener noreferrer" className="text-white hover:text-[var(--clube-yellow)] transition-all opacity-80 hover:opacity-100">
-                  {rede.icone === 'instagram' && <Instagram size={16} />}
-                  {rede.icone === 'facebook' && <Facebook size={16} />}
-                  {rede.icone === 'youtube' && <Youtube size={16} />}
-                  {rede.icone === 'twitter' && <Twitter size={16} />}
-                  {rede.icone === 'tiktok' && <Music2 size={16} />}
-                  {!['instagram', 'facebook', 'youtube', 'twitter', 'tiktok'].includes(rede.icone) && <Globe size={16} />}
+                <a key={rede.id} href={rede.url} target="_blank" rel="noopener noreferrer" className="text-white hover:text-[var(--clube-yellow)] transition-all drop-shadow-[0_0_8px_rgba(255,255,255,0.3)] hover:scale-110 active:scale-95">
+                  {rede.icone === 'instagram' && <Instagram size={18} strokeWidth={2.5} />}
+                  {rede.icone === 'facebook' && <Facebook size={18} strokeWidth={2.5} />}
+                  {rede.icone === 'youtube' && <Youtube size={18} strokeWidth={2.5} />}
+                  {rede.icone === 'twitter' && <Twitter size={18} strokeWidth={2.5} />}
+                  {rede.icone === 'tiktok' && <Music2 size={18} strokeWidth={2.5} />}
+                  {!['instagram', 'facebook', 'youtube', 'twitter', 'tiktok'].includes(rede.icone) && <Globe size={18} strokeWidth={2.5} />}
                 </a>
               ))}
             </div>
