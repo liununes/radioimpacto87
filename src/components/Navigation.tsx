@@ -168,9 +168,15 @@ const Navigation = () => {
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu - Higher z-index to be above player */}
       {isMenuOpen && (
-        <div className="lg:hidden bg-[var(--clube-blue)] border-t border-white/10 fixed top-[80px] md:top-[100px] left-0 right-0 bottom-0 z-50 p-8 flex flex-col gap-4 shadow-2xl animate-in slide-in-from-top duration-300 overflow-y-auto">
+        <div 
+          className="lg:hidden fixed inset-0 top-[80px] md:top-[100px] z-[150] p-8 flex flex-col gap-4 shadow-2xl animate-in slide-in-from-top duration-300 overflow-y-auto pb-32"
+          style={{ 
+            background: `linear-gradient(to bottom, var(--header-grad-end), var(--clube-blue))`,
+            color: 'var(--header-text-color)'
+          }}
+        >
           {navItems.map((item) => (
             <Link
               key={item.label}
