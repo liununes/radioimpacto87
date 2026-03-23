@@ -26,12 +26,16 @@ const menuItems = [
   { title: "Locutores", url: "/admin/locutores", icon: Users, permission: "locutores" },
   { title: "Programação", url: "/admin/programacao", icon: Calendar, permission: "programacao" },
   { title: "Banners / Slides", url: "/admin/slides", icon: Image, permission: "slides" },
+  { title: "Patrocinadores", url: "/admin/patrocinadores", icon: Heart, permission: "aparencia" },
+  { title: "Promoções", url: "/admin/promocoes", icon: Gift, permission: "aparencia" },
   { title: "Galeria de Fotos", url: "/admin/fotos", icon: Image, permission: "fotos" },
   { title: "Portal de Notícias", url: "/admin/noticias", icon: FileText, permission: "noticias" },
   { title: "Sobre a Rádio", url: "/admin/sobre", icon: Info, permission: "sobre" },
   { title: "Estatísticas", url: "/admin/estatisticas", icon: BarChart3, permission: "estatisticas" },
   { title: "Configurações", url: "/admin/usuarios", icon: Settings, permission: "usuarios" },
 ];
+
+import { Heart, Gift } from "lucide-react";
 
 import { useTheme } from "@/hooks/useTheme";
 
