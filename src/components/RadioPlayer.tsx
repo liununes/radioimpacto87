@@ -58,11 +58,11 @@ const RadioPlayer = () => {
   };
 
   return (
-    <div className="bottom-player-clube dark:bg-gray-900 dark:border-gray-800 flex items-center justify-between px-12 gap-8">
+    <div className="bottom-player-clube dark:bg-gray-900 dark:border-gray-800 flex items-center justify-between px-6 md:px-12 gap-2 md:gap-8">
       <audio ref={audioRef} src={siteConfig.streamUrl} style={{ display: 'none' }} />
       
-      {/* Esquerda: Localização */}
-      <div className="flex items-center gap-4 shrink-0">
+      {/* Esquerda: Localização - Hidden on mobile to avoid crowding */}
+      <div className="hidden md:flex items-center gap-4 shrink-0">
         <div className="flex items-center gap-2">
            <MapPin className="w-4 h-4 text-accent fill-accent/20" />
            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{theme.labels.playerLocation}</span>
@@ -112,7 +112,7 @@ const RadioPlayer = () => {
            </button>
         </div>
         
-        <div className="flex flex-col pt-12 md:pt-16 whitespace-nowrap">
+        <div className="flex flex-col pt-12 md:pt-16 whitespace-nowrap overflow-hidden">
           <div className="flex items-center gap-2">
             <div className={`w-2 h-2 rounded-full ${isPlaying ? 'bg-accent animate-pulse shadow-[0_0_8px_#ff8c00]' : 'bg-gray-300'}`} />
             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-accent">{theme.labels.playerLive}</span>
@@ -122,10 +122,10 @@ const RadioPlayer = () => {
           </span>
           {/* Programa Atual Subtitle */}
           <div className="flex flex-col mt-1">
-            <span className="text-[10px] md:text-[11px] font-black text-primary uppercase tracking-tight">
+            <span className="text-[10px] md:text-[11px] font-[900] text-primary uppercase tracking-tight truncate max-w-[100px] md:max-w-none">
                {programaAtual?.programa?.nome || "Impacto FM"}
             </span>
-            <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider italic">
+            <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider italic truncate max-w-[100px] md:max-w-none">
                {programaAtual?.locutor?.nome || "Equipe Impacto"}
             </span>
           </div>
@@ -152,8 +152,8 @@ const RadioPlayer = () => {
         </div>
       )}
 
-      {/* Direita: Botões de Ação */}
-      <div className="flex items-center gap-4 shrink-0">
+      {/* Direita: Botões de Ação - Compact on mobile */}
+      <div className="flex items-center gap-2 md:gap-4 shrink-0">
         <div className="flex items-center gap-3 px-4 py-2 bg-gray-50 rounded-full border border-gray-100 hidden lg:flex">
            <Volume2 className="w-4 h-4 text-gray-400" />
            <input 
@@ -183,10 +183,11 @@ const RadioPlayer = () => {
         
         <button 
            onClick={openPlayerPopup}
-           className="clube-btn-yellow flex items-center gap-3 px-10 h-12"
+           className="clube-btn-yellow flex items-center gap-3 px-6 md:px-10 h-10 md:h-12"
+           title={theme.labels.playerOpen}
         >
           <ExternalLink className="w-4 h-4" />
-          <span className="font-black">{theme.labels.playerOpen}</span>
+          <span className="font-black hidden md:inline">{theme.labels.playerOpen}</span>
         </button>
       </div>
     </div>
