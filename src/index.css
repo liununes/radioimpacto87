@@ -82,12 +82,12 @@
   body {
     @apply bg-background text-foreground;
     font-family: 'Inter', system-ui, sans-serif;
-    color: var(--text-primary);
+    color: var(--text-content);
   }
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-bold tracking-tight;
-    color: var(--text-primary);
+    color: var(--text-title);
   }
 
   .text-dynamic-primary { color: var(--text-primary); }

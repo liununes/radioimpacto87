@@ -32,6 +32,8 @@ export interface ThemeConfig {
   textSecondary: string;
   textMuted: string;
   textAccent: string;
+  textTitle: string;
+  textContent: string;
   // Radio Config
   radioFreq: string;
   playerOpenUrl: string;
@@ -158,6 +160,8 @@ export const DEFAULT_THEME: ThemeConfig = {
   textSecondary: "#ffed32",
   textMuted: "#64748b",
   textAccent: "#ff8c00",
+  textTitle: "#002e5d",
+  textContent: "#475569",
   radioFreq: "87.9",
   playerOpenUrl: "/player",
   clubeBlue: "#002e5d",
@@ -280,6 +284,8 @@ export function applyTheme(config: ThemeConfig) {
   root.style.setProperty("--text-secondary", config.textSecondary);
   root.style.setProperty("--text-muted", config.textMuted);
   root.style.setProperty("--text-accent", config.textAccent);
+  root.style.setProperty("--text-title", config.textTitle || config.textPrimary);
+  root.style.setProperty("--text-content", config.textContent || "#475569");
   
   // Brand Colors (Hex)
   root.style.setProperty("--clube-blue", config.clubeBlue);

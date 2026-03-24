@@ -63,7 +63,7 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[], loading: boo
                 </div>
                 <CardContent className="p-10 flex flex-col justify-between flex-1 bg-white">
                   <div>
-                    <h3 className="text-3xl md:text-4xl font-black mb-6 group-hover:text-primary transition-colors leading-[1.1] uppercase tracking-tight text-primary">
+                    <h3 className="text-3xl md:text-4xl font-black mb-6 transition-colors leading-[1.1] uppercase tracking-tight" style={{ color: 'var(--text-title)' }}>
                       {featured.titulo}
                     </h3>
                   </div>
@@ -122,7 +122,7 @@ export const RemainingNews = ({ news, loading }: { news: NewsItem[], loading: bo
   return (
     <div className="container mx-auto px-4 py-20 bg-gray-50/50 rounded-[3rem] my-12 shadow-inner">
       <div className="flex items-center gap-4 mb-16">
-        <h2 className="text-2xl font-black text-primary uppercase tracking-tighter shrink-0">MAIS NOTÍCIAS</h2>
+        <h2 className="text-2xl font-black uppercase tracking-tighter shrink-0" style={{ color: 'var(--text-title)' }}>MAIS NOTÍCIAS</h2>
         <div className="h-0.5 w-full bg-gray-200" />
       </div>
       
@@ -142,7 +142,7 @@ export const RemainingNews = ({ news, loading }: { news: NewsItem[], loading: bo
               <span className="text-[10px] font-black text-accent uppercase tracking-widest mb-3 block">
                 {item.categoria || "LOCAL"}
               </span>
-              <CardTitle className="text-base font-black text-primary line-clamp-2 hover:underline cursor-pointer uppercase tracking-tight leading-tight">
+              <CardTitle className="text-base font-black line-clamp-2 hover:underline cursor-pointer uppercase tracking-tight leading-tight" style={{ color: 'var(--text-title)' }}>
                 {item.titulo}
               </CardTitle>
             </CardHeader>

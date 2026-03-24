@@ -64,7 +64,7 @@ const Index = () => {
                 <div id="entretenimento" className="mt-20 py-20 bg-gray-50/30 dark:bg-gray-900/50 rounded-[3rem]">
                   <div className="container mx-auto px-6 mb-12">
                      <span className="text-[10px] font-black text-accent uppercase tracking-[0.5em] block mb-2">Editoria</span>
-                     <h2 className="text-4xl md:text-5xl font-black text-primary tracking-tighter uppercase italic leading-none">Entretenimento</h2>
+                     <h2 className="text-4xl md:text-5xl font-black tracking-tighter uppercase italic leading-none" style={{ color: 'var(--text-title)' }}>Entretenimento</h2>
                   </div>
                   <RemainingNews news={news} loading={loading} />
                 </div>
@@ -91,7 +91,7 @@ const Index = () => {
           <section id="galeria" className="mt-32 py-20 bg-primary text-white">
             <div className="container mx-auto px-6 mb-12">
                <span className="text-[10px] font-black text-secondary uppercase tracking-[0.5em] block mb-2">Registros</span>
-               <h2 className="text-4xl md:text-5xl font-black text-white tracking-tighter uppercase italic leading-none">Nossa Galeria</h2>
+               <h2 className="text-4xl md:text-5xl font-black tracking-tighter uppercase italic leading-none" style={{ color: 'var(--text-title)' }}>Nossa Galeria</h2>
             </div>
             <GaleriaSection />
           </section>

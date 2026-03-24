@@ -34,13 +34,13 @@ const AboutSection = () => {
           <div className="space-y-12">
             <div className="space-y-4">
               <span className="text-[10px] font-black text-accent uppercase tracking-[0.5em] mb-4 block underline decoration-[var(--clube-yellow)]">NOSSA RÁDIO</span>
-              <h2 className="text-4xl md:text-7xl font-black text-primary tracking-tighter uppercase leading-[0.9]">
+              <h2 className="text-4xl md:text-7xl font-black tracking-tighter uppercase leading-[0.9]" style={{ color: 'var(--text-title)' }}>
                 {theme.labels.aboutTitle} <span className="text-accent underline decoration-[var(--clube-yellow)]">{theme.labels.aboutSubtitle}</span>
               </h2>
             </div>
             
-            <p className="text-xl text-gray-500 font-medium leading-relaxed whitespace-pre-wrap max-w-xl">
-              {data.descricao || "A rádio que toca você com a melhor programação, música de qualidade e informação em tempo real para toda a nossa região."}
+            <p className="text-xl font-medium leading-relaxed whitespace-pre-wrap max-w-xl" style={{ color: 'var(--text-content)' }}>
+              {theme.labels.footerAbout || data.descricao}
             </p>
 
             <div className="flex flex-wrap gap-4">

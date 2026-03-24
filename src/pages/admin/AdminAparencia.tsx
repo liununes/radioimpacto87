@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Save, Upload, Palette, Image as ImageIcon, Layout, Type, Smartphone, Globe, Radio, ExternalLink, MapPin, CheckCircle2, Settings, Eye, Heart, Gift, Trash2, Plus } from "lucide-react";
+import { Save, Upload, Palette, Image as ImageIcon, Layout, Type, Smartphone, Globe, Radio, ExternalLink, MapPin, CheckCircle2, Settings, Eye, Heart, Gift, Trash2, Plus, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -349,6 +349,51 @@ const AdminAparencia = () => {
                 </CardContent>
               </Card>
             </div>
+
+            {/* SEÇÃO: TIPOGRAFIA E CORES DE TEXTO */}
+            <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-white text-slate-900">
+              <div className="bg-slate-800 p-8 text-white">
+                <CardTitle className="text-xl font-black uppercase tracking-tight">Cores de Texto Globais</CardTitle>
+                <CardDescription className="text-white/60 text-xs font-medium">Controle as cores de todos os textos e notícias do site</CardDescription>
+              </div>
+              <CardContent className="p-8 grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div className="space-y-6">
+                  <div className="space-y-3">
+                    <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Títulos Gerais</Label>
+                    <div className="flex items-center gap-4">
+                      <input type="color" value={theme.textTitle} onChange={e => updateField("textTitle", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-gray-50 shadow-inner" />
+                      <div>
+                        <p className="text-xs font-bold text-slate-700">Títulos de Seções</p>
+                        <p className="text-[10px] text-gray-400 italic">Body: Index, Sobre, Notícias</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Conteúdo e Mensagens</Label>
+                    <div className="flex items-center gap-4">
+                      <input type="color" value={theme.textContent} onChange={e => updateField("textContent", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-gray-50 shadow-inner" />
+                      <div>
+                        <p className="text-xs font-bold text-slate-700">Notícias e Descrição</p>
+                        <p className="text-[10px] text-gray-400 italic">Parágrafos e resumos</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-6 bg-gray-50 p-6 rounded-3xl border border-gray-100">
+                   <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
+                     <Info className="w-3 h-3" /> Descrição da Rádio (Sobre)
+                   </Label>
+                   <textarea 
+                     className="w-full h-32 rounded-2xl border-none bg-white p-4 text-xs font-medium text-slate-600 focus:ring-2 focus:ring-primary/20 transition-all resize-none shadow-sm"
+                     placeholder="Escreva sobre a rádio aqui..."
+                     value={theme.labels.footerAbout}
+                     onChange={e => updateLabel("footerAbout", e.target.value)}
+                   />
+                   <p className="text-[9px] text-gray-400 font-bold uppercase tracking-wider text-center">Este texto aparece no rodapé e na seção "Sobre".</p>
+                </div>
+              </CardContent>
+            </Card>
 
             {/* SEÇÃO: ARQUIVOS DE LOGO */}
             <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-white text-slate-900">
