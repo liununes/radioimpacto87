@@ -50,12 +50,19 @@ const AdminStreaming = () => {
         getWhatsApp()
       ]);
       if (config) {
-        setStreamUrl(config.streamUrl || "");
+        setStreamUrl(config.streamUrl || "http://streaming.liurecord.com.br:8005/stream");
         setRadioName(config.radioName || "Impacto FM");
         setRadioFreq(config.radioFreq || "87.9 FM");
         setLogo(config.logo || "/logo.png");
         setFavicon(config.favicon || "/favicon.ico");
         setWhatsappMessage(config.whatsappMessage || "");
+      } else {
+        // Caso não exista config no banco, já pré-carrega o padrão solicitado
+        setStreamUrl("http://streaming.liurecord.com.br:8005/stream");
+        setRadioName("Impacto FM");
+        setRadioFreq("87.9 FM");
+        setLogo("/logo.png");
+        setFavicon("/favicon.ico");
       }
       setRedes(redesData);
       setWhatsapp(whatsappNum);
@@ -150,7 +157,7 @@ const AdminStreaming = () => {
              <CardContent className="p-8 space-y-8">
                <div className="space-y-3">
                  <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">URL do Fluxo (Stream URL)</Label>
-                 <Input value={streamUrl} onChange={e => setStreamUrl(e.target.value)} placeholder="https://servidor.com:8000/live" className="h-14 rounded-none border-gray-100 bg-gray-50 font-bold text-primary" />
+                 <Input value={streamUrl} onChange={e => setStreamUrl(e.target.value)} placeholder="http://89.116.186.216:8005/stream" className="h-14 rounded-none border-gray-100 bg-gray-50 font-bold text-primary" />
                </div>
                
                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
