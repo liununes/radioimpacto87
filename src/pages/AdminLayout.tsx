@@ -75,7 +75,7 @@ const AdminLayout = () => {
             }}
           >
             <div className="flex items-center gap-6">
-              <SidebarTrigger className="text-primary hover:bg-gray-100 p-2 rounded-xl transition-all" />
+              <SidebarTrigger className="text-primary hover:bg-gray-100 p-2 rounded-none transition-all" />
               <div className="h-6 w-px bg-gray-200 hidden md:block" />
               <div className="hidden md:flex flex-col">
                  <h1 className="text-sm font-black uppercase tracking-tight leading-none italic" style={{ color: 'var(--admin-content-title)' }}>Impacto FM</h1>
@@ -92,7 +92,7 @@ const AdminLayout = () => {
                 variant="ghost" 
                 size="sm" 
                 onClick={signOut} 
-                className="gap-3 h-12 px-6 rounded-2xl font-black uppercase text-[10px] tracking-widest text-red-500 hover:bg-red-50 hover:text-red-600 transition-all border border-transparent hover:border-red-100"
+                className="gap-3 h-12 px-6 rounded-none font-black uppercase text-[10px] tracking-widest text-red-500 hover:bg-red-50 hover:text-red-600 transition-all border border-transparent hover:border-red-100"
               >
                 <LogOut className="w-4 h-4" /> Sair
               </Button>

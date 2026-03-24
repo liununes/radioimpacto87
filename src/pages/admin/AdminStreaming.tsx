@@ -125,15 +125,14 @@ const AdminStreaming = () => {
   };
 ;
 
-  return (
-    <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      <div className="flex justify-between items-center bg-white text-slate-900 p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+  return (    <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+      <div className="flex justify-between items-center bg-white text-slate-900 p-8 rounded-none border border-gray-100 shadow-sm">
         <div>
           <h2 className="text-3xl font-black text-primary tracking-tighter uppercase italic leading-none">Player & <span className="text-secondary italic">Conexões</span></h2>
           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Configure o sinal de áudio e seus canais de interação</p>
         </div>
         <div className="flex gap-4">
-           <Button onClick={handleSaveConfig} className="rounded-xl font-black uppercase tracking-widest text-[10px] h-12 px-8 bg-primary text-white hover:bg-primary/90 transition-all shadow-lg shadow-blue-900/10" disabled={loading}>
+           <Button onClick={handleSaveConfig} className="rounded-none font-black uppercase tracking-widest text-[10px] h-12 px-8 bg-primary text-white hover:bg-primary/90 transition-all shadow-lg shadow-blue-900/10" disabled={loading}>
              {loading ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : <Save className="w-4 h-4 mr-2" />}
              Salvar Configurações
            </Button>
@@ -142,7 +141,7 @@ const AdminStreaming = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
         <div className="lg:col-span-8 space-y-10">
-           <Card className="rounded-[2.5rem] border-none shadow-xl bg-white text-slate-900 overflow-hidden">
+           <Card className="rounded-none border-none shadow-xl bg-white text-slate-900 overflow-hidden">
              <CardHeader className="bg-primary/5 p-8 border-b border-gray-100/50">
                <CardTitle className="text-lg font-black uppercase tracking-tight text-primary flex items-center gap-3">
                  <Radio className="w-5 h-5 text-secondary" /> Transmissão Principal
@@ -151,24 +150,24 @@ const AdminStreaming = () => {
              <CardContent className="p-8 space-y-8">
                <div className="space-y-3">
                  <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">URL do Fluxo (Stream URL)</Label>
-                 <Input value={streamUrl} onChange={e => setStreamUrl(e.target.value)} placeholder="https://servidor.com:8000/live" className="h-14 rounded-2xl border-gray-100 bg-gray-50 font-bold text-primary" />
+                 <Input value={streamUrl} onChange={e => setStreamUrl(e.target.value)} placeholder="https://servidor.com:8000/live" className="h-14 rounded-none border-gray-100 bg-gray-50 font-bold text-primary" />
                </div>
                
                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                  <div className="space-y-3">
                    <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Nome Oficial da Estação</Label>
-                   <Input value={radioName} onChange={e => setRadioName(e.target.value)} className="h-12 rounded-xl border-gray-100" />
+                   <Input value={radioName} onChange={e => setRadioName(e.target.value)} className="h-12 rounded-none border-gray-100" />
                  </div>
                  <div className="space-y-3">
                    <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Sintonização (Frequência)</Label>
-                   <Input value={radioFreq} onChange={e => setRadioFreq(e.target.value)} className="h-12 rounded-xl border-gray-100" />
+                   <Input value={radioFreq} onChange={e => setRadioFreq(e.target.value)} className="h-12 rounded-none border-gray-100" />
                  </div>
                </div>
 
-                <div className="pt-6 border-t border-gray-50 p-6 bg-secondary/5 rounded-3xl space-y-6">
+                <div className="pt-6 border-t border-gray-50 p-6 bg-secondary/5 rounded-none space-y-6">
                    <div className="flex items-center justify-between">
                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-2xl bg-secondary flex items-center justify-center shadow-lg shadow-yellow-400/20">
+                        <div className="w-12 h-12 rounded-none bg-secondary flex items-center justify-center shadow-lg shadow-yellow-400/20">
                            <MessageCircle className="w-6 h-6 text-primary" />
                         </div>
                         <div>
@@ -176,7 +175,7 @@ const AdminStreaming = () => {
                            <p className="text-[10px] font-bold text-gray-400 uppercase mt-1">WhatsApp para sorteios e pedidos</p>
                         </div>
                      </div>
-                     <Input value={whatsapp} onChange={e => setWhatsapp(e.target.value)} placeholder="55..." className="max-w-[180px] h-12 rounded-xl border-gray-100 font-black text-center" />
+                     <Input value={whatsapp} onChange={e => setWhatsapp(e.target.value)} placeholder="55..." className="max-w-[180px] h-12 rounded-none border-gray-100 font-black text-center" />
                    </div>
                    
                    <div className="space-y-3">
@@ -185,14 +184,14 @@ const AdminStreaming = () => {
                         value={whatsappMessage} 
                         onChange={e => setWhatsappMessage(e.target.value)} 
                         placeholder="Ex: Olá Impacto! Gostaria de pedir a música..." 
-                        className="h-12 rounded-xl border-gray-100 bg-white text-slate-900" 
+                        className="h-12 rounded-none border-gray-100 bg-white text-slate-900" 
                      />
                    </div>
                 </div>
              </CardContent>
            </Card>
 
-           <Card className="rounded-[2.5rem] border-none shadow-xl bg-white text-slate-900 overflow-hidden">
+           <Card className="rounded-none border-none shadow-xl bg-white text-slate-900 overflow-hidden">
              <CardHeader className="p-8 pb-4">
                <CardTitle className="text-xl font-black uppercase tracking-tight text-primary italic">Redes Sociais</CardTitle>
              </CardHeader>
@@ -200,35 +199,35 @@ const AdminStreaming = () => {
                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                  <div className="space-y-2">
                    <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Plataforma</Label>
-                   <Input value={novaRedeNome} onChange={e => setNovaRedeNome(e.target.value)} placeholder="Ex: Instagram" className="h-12 rounded-xl border-gray-100" />
+                   <Input value={novaRedeNome} onChange={e => setNovaRedeNome(e.target.value)} placeholder="Ex: Instagram" className="h-12 rounded-none border-gray-100" />
                  </div>
                  <div className="space-y-2">
                    <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Endereço (Link)</Label>
-                   <Input value={novaRedeUrl} onChange={e => setNovaRedeUrl(e.target.value)} placeholder="https://..." className="h-12 rounded-xl border-gray-100" />
+                   <Input value={novaRedeUrl} onChange={e => setNovaRedeUrl(e.target.value)} placeholder="https://..." className="h-12 rounded-none border-gray-100" />
                  </div>
                  <div className="space-y-2">
                    <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Ícone</Label>
                    <select value={novaRedeIcone} onChange={e => setNovaRedeIcone(e.target.value)}
-                     className="flex h-12 w-full rounded-xl border border-gray-100 bg-background px-4 text-sm font-bold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+                     className="flex h-12 w-full rounded-none border border-gray-100 bg-background px-4 text-sm font-bold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
                      {ICONE_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
                    </select>
                  </div>
                </div>
                
                <div className="flex gap-4">
-                 <Button onClick={handleSaveRede} className="h-12 px-10 rounded-xl bg-gray-100 text-primary hover:bg-primary hover:text-white font-black uppercase text-[10px] tracking-widest transition-all">
+                 <Button onClick={handleSaveRede} className="h-12 px-10 rounded-none bg-gray-100 text-primary hover:bg-primary hover:text-white font-black uppercase text-[10px] tracking-widest transition-all">
                    {editIdRede ? "Salvar Alteração" : "Adicionar Nova Rede"}
                  </Button>
                  {editIdRede && (
-                   <Button variant="ghost" onClick={resetRedeForm} className="h-12 px-6 rounded-xl font-bold uppercase text-[10px]">Cancelar</Button>
+                   <Button variant="ghost" onClick={resetRedeForm} className="h-12 px-6 rounded-none font-bold uppercase text-[10px]">Cancelar</Button>
                  )}
                </div>
 
                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6 mt-6 border-t border-gray-50">
                  {redes.map(rede => (
-                   <div key={rede.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-[1.5rem] border border-gray-100 group hover:bg-white text-slate-900 hover:shadow-lg transition-all">
+                   <div key={rede.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-none border border-gray-100 group hover:bg-white text-slate-900 hover:shadow-lg transition-all">
                       <div className="flex items-center gap-4">
-                         <div className="w-10 h-10 rounded-xl bg-white text-slate-900 border border-gray-100 flex items-center justify-center text-primary">
+                         <div className="w-10 h-10 rounded-none bg-white text-slate-900 border border-gray-100 flex items-center justify-center text-primary">
                                {rede.icone === 'instagram' && <Instagram className="w-5 h-5" />}
                                {rede.icone === 'facebook' && <Facebook className="w-5 h-5" />}
                                {rede.icone === 'youtube' && <Youtube className="w-5 h-5" />}
@@ -243,8 +242,8 @@ const AdminStreaming = () => {
                             </div>
                          </div>
                          <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <Button size="icon" variant="ghost" className="h-8 w-8 rounded-lg" onClick={() => handleEditRede(rede)}><Edit2 className="w-3.5 h-3.5" /></Button>
-                            <Button size="icon" variant="ghost" className="h-8 w-8 rounded-lg text-red-400 hover:text-red-500 hover:bg-red-50" onClick={() => handleDeleteRede(rede.id)}><Trash2 className="w-3.5 h-3.5" /></Button>
+                            <Button size="icon" variant="ghost" className="h-8 w-8 rounded-none" onClick={() => handleEditRede(rede)}><Edit2 className="w-3.5 h-3.5" /></Button>
+                            <Button size="icon" variant="ghost" className="h-8 w-8 rounded-none text-red-400 hover:text-red-500 hover:bg-red-50" onClick={() => handleDeleteRede(rede.id)}><Trash2 className="w-3.5 h-3.5" /></Button>
                          </div>
                       </div>
                  ))}
@@ -254,19 +253,18 @@ const AdminStreaming = () => {
         </div>
 
         <div className="lg:col-span-4 space-y-10">
-           <Card className="rounded-[2.5rem] border-none shadow-xl bg-[#002e5d] text-white p-8 relative overflow-hidden">
+           <Card className="rounded-none border-none shadow-xl bg-[#002e5d] text-white p-8 relative overflow-hidden">
               <div className="relative z-10 space-y-6">
                  <h3 className="text-xl font-black uppercase tracking-tight italic">Identidade Visual</h3>
                  <p className="text-xs text-white/50 font-medium leading-relaxed">As logos e favicons agora são gerenciados na central de Personalização.</p>
-                 <Button asChild className="w-full h-12 rounded-xl bg-[#ffed32] text-[#002e5d] font-black uppercase text-[10px] tracking-widest hover:bg-white text-slate-900 transition-all shadow-lg shadow-yellow-400/10">
+                 <Button asChild className="w-full h-12 rounded-none bg-[#ffed32] text-[#002e5d] font-black uppercase text-[10px] tracking-widest hover:bg-white text-slate-900 transition-all shadow-lg shadow-yellow-400/10">
                     <a href="/admin/aparencia">Ir para Personalização</a>
                  </Button>
               </div>
-              <div className="absolute top-0 right-0 w-32 h-32 bg-white text-slate-900/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl" />
            </Card>
 
-           <div className="p-8 bg-gray-50 rounded-[2.5rem] border border-gray-100 flex flex-col items-center text-center space-y-4">
-              <div className="w-16 h-16 rounded-3xl bg-white text-slate-900 border border-gray-100 flex items-center justify-center shadow-sm">
+           <div className="p-8 bg-gray-50 rounded-none border border-gray-100 flex flex-col items-center text-center space-y-4">
+              <div className="w-16 h-16 rounded-none bg-white text-slate-900 border border-gray-100 flex items-center justify-center shadow-sm">
                  <Info className="w-8 h-8 text-primary/20" />
               </div>
               <h4 className="text-[10px] font-black text-primary uppercase tracking-[0.2em]">Dica do Admin</h4>

@@ -1,5 +1,5 @@
 import {
-  Radio, Users, Calendar, Image, FileText, Info, LayoutDashboard, Music, Settings, Palette, BarChart3, ChevronLeft, ChevronRight, ExternalLink
+  Radio, Users, Calendar, Image, FileText, Info, LayoutDashboard, Music, Settings, Palette, BarChart3, ChevronLeft, ChevronRight, ExternalLink, Heart, Gift
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -35,8 +35,6 @@ const menuItems = [
   { title: "Configurações", url: "/admin/usuarios", icon: Settings, permission: "usuarios" },
 ];
 
-import { Heart, Gift } from "lucide-react";
-
 import { useTheme } from "@/hooks/useTheme";
 
 export function AdminSidebar() {
@@ -51,7 +49,7 @@ export function AdminSidebar() {
     <Sidebar collapsible="icon" className="border-r border-white/5 shadow-2xl">
       <SidebarHeader className="bg-[var(--admin-blue)] p-6 pb-2" style={{ backgroundColor: 'var(--admin-blue)' }}>
         <div className={`flex items-center gap-3 ${collapsed ? "justify-center" : ""}`}>
-          <div className="w-10 h-10 rounded-xl bg-[var(--admin-yellow)] flex items-center justify-center shrink-0 shadow-lg shadow-yellow-400/20" style={{ backgroundColor: 'var(--admin-yellow)' }}>
+          <div className="w-10 h-10 rounded-none bg-[var(--admin-yellow)] flex items-center justify-center shrink-0 shadow-lg shadow-yellow-400/20" style={{ backgroundColor: 'var(--admin-yellow)' }}>
             {theme.adminLogo ? (
               <img src={theme.adminLogo} alt="Admin Logo" className="w-8 h-8 object-contain" />
             ) : (
@@ -81,7 +79,7 @@ export function AdminSidebar() {
                 return (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild isActive={isActive} className={`
-                      h-12 rounded-xl transition-all duration-300
+                      h-12 rounded-none transition-all duration-300
                       ${isActive ? "bg-[var(--admin-yellow)] text-[var(--admin-blue)] shadow-lg" : "hover:text-white hover:bg-white/5"}
                     `} style={{ 
                       backgroundColor: isActive ? 'var(--admin-yellow)' : 'transparent',
