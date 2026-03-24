@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { type Noticia, getNoticias, saveNoticia, deleteNoticia, getCategorias, saveCategorias } from "@/lib/noticiasStore";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -204,60 +205,93 @@ const AdminNoticias = () => {
                  {editId ? "Editando Publicação" : "Nova Publicação"}
                </CardTitle>
              </CardHeader>
-             <CardContent className="p-8 space-y-8">
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                 <div className="space-y-3">
-                   <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Título da Notícia</Label>
-                   <Input value={titulo} onChange={e => setTitulo(e.target.value)} placeholder="O que está acontecendo?" className="h-12 rounded-none border-gray-100 shadow-sm" />
-                 </div>
-                 <div className="space-y-3">
-                   <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Categoria do Post</Label>
-                   <select value={categoria} onChange={e => setCategoria(e.target.value)}
-                     className="flex h-12 w-full rounded-none border border-gray-100 bg-background px-4 text-sm font-bold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
-                     {categorias.map(cat => <option key={cat} value={cat}>{cat}</option>)}
-                   </select>
-                 </div>
-               </div>
-               
-               <div className="space-y-3">
-                 <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Resumo de Chamada</Label>
-                 <Textarea value={resumo} onChange={e => setResumo(e.target.value)} rows={2} className="rounded-none border-gray-100 shadow-sm p-4 font-medium" />
-               </div>
+                     <CardContent className="p-8 space-y-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-3">
+                    <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Título da Notícia</Label>
+                    <Input value={titulo} onChange={e => setTitulo(e.target.value)} placeholder="O que está acontecendo?" className="h-12 rounded-none border-gray-100 shadow-sm" />
+                  </div>
+                  <div className="space-y-3">
+                    <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Categoria do Post</Label>
+                    <select value={categoria} onChange={e => setCategoria(e.target.value)}
+                      className="flex h-12 w-full rounded-none border border-gray-100 bg-background px-4 text-sm font-bold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+                      {categorias.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                    </select>
+                  </div>
+                </div>
+                
+                <div className="space-y-3">
+                  <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Resumo de Chamada</Label>
+                  <Textarea value={resumo} onChange={e => setResumo(e.target.value)} rows={2} className="rounded-none border-gray-100 shadow-sm p-4 font-medium" />
+                </div>
 
-               <div className="space-y-3">
-                 <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Conteúdo Detalhado</Label>
-                 <Textarea value={conteudo} onChange={e => setConteudo(e.target.value)} rows={8} className="rounded-none border-gray-100 shadow-sm p-6 font-medium leading-relaxed" />
-               </div>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Conteúdo Detalhado (Markdown)</Label>
+                    <div className="flex gap-2">
+                       <button onClick={() => setConteudo(prev => prev + "**negrito** ")} className="p-1.5 bg-gray-50 hover:bg-gray-100 text-[10px] font-bold uppercase tracking-tighter border border-gray-100">B</button>
+                       <button onClick={() => setConteudo(prev => prev + "_itálico_ ")} className="p-1.5 bg-gray-50 hover:bg-gray-100 text-[10px] font-bold uppercase tracking-tighter border border-gray-100 italic">I</button>
+                       <button onClick={() => setConteudo(prev => prev + "### Título\n")} className="p-1.5 bg-gray-50 hover:bg-gray-100 text-[10px] font-bold uppercase tracking-tighter border border-gray-100">H3</button>
+                       <button onClick={() => setConteudo(prev => prev + "[Link](http://...)\n")} className="p-1.5 bg-gray-50 hover:bg-gray-100 text-[10px] font-bold uppercase tracking-tighter border border-gray-100">Link</button>
+                    </div>
+                  </div>
+                  
+                  <Tabs defaultValue="editor" className="w-full">
+                    <TabsList className="bg-gray-50 rounded-none p-1 h-10 w-full md:w-max grid grid-cols-2">
+                      <TabsTrigger value="editor" className="rounded-none font-black uppercase text-[9px] tracking-widest data-[state=active]:bg-white data-[state=active]:shadow-sm">Editor</TabsTrigger>
+                      <TabsTrigger value="preview" className="rounded-none font-black uppercase text-[9px] tracking-widest data-[state=active]:bg-white data-[state=active]:shadow-sm">Visualização</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="editor" className="mt-4 ring-offset-background focus-visible:outline-none">
+                      <Textarea 
+                        value={conteudo} 
+                        onChange={e => setConteudo(e.target.value)} 
+                        rows={12} 
+                        className="rounded-none border-gray-100 shadow-sm p-6 font-medium leading-relaxed resize-y min-h-[300px]" 
+                        placeholder="Escreva sua notícia aqui... Você pode usar formatação básica."
+                      />
+                    </TabsContent>
+                    <TabsContent value="preview" className="mt-4 border border-dashed border-gray-200 p-8 min-h-[300px] bg-gray-50/30 overflow-y-auto">
+                       <div className="prose prose-sm max-w-none prose-slate">
+                          <h1 className="text-3xl font-black uppercase italic tracking-tighter text-primary">{titulo || "Título da Notícia"}</h1>
+                          <p className="text-gray-400 font-bold uppercase text-[10px] tracking-widest mb-6">Por: {fonte || "Impacto FM"}</p>
+                          <div className="whitespace-pre-wrap font-medium leading-relaxed text-slate-700">
+                            {conteudo || "Nenhum conteúdo para visualizar..."}
+                          </div>
+                       </div>
+                    </TabsContent>
+                  </Tabs>
+                </div>
 
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                 <div className="space-y-3">
-                   <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Fonte / Veículo</Label>
-                   <Input value={fonte} onChange={e => setFonte(e.target.value)} className="h-12 rounded-none border-gray-100" />
-                 </div>
-                 <div className="space-y-3">
-                   <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Link da Imagem Principal</Label>
-                   <Input value={imagem} onChange={e => setImagem(e.target.value)} className="h-12 rounded-none border-gray-100" />
-                 </div>
-               </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-3">
+                    <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Fonte / Veículo</Label>
+                    <Input value={fonte} onChange={e => setFonte(e.target.value)} className="h-12 rounded-none border-gray-100 placeholder:opacity-50" placeholder="Ex: G1, R7, Impacto FM" />
+                  </div>
+                  <div className="space-y-3">
+                    <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Link da Imagem Principal</Label>
+                    <Input value={imagem} onChange={e => setImagem(e.target.value)} className="h-12 rounded-none border-gray-100" placeholder="Cole a URL da imagem aqui" />
+                  </div>
+                </div>
 
-               {imagem && (
-                 <div className="relative group rounded-none overflow-hidden border-4 border-gray-50 h-64 shadow-inner bg-gray-50 flex items-center justify-center">
-                    <img src={imagem} alt="Preview" className="max-h-full object-contain" />
-                 </div>
-               )}
+                {imagem && (
+                  <div className="relative group rounded-none overflow-hidden border-4 border-gray-100 h-64 shadow-inner bg-gray-50 flex items-center justify-center">
+                     <img src={imagem} alt="Preview" className="max-h-full object-contain" />
+                     <div className="absolute top-4 right-4 p-2 bg-white/90 backdrop-blur-sm text-[8px] font-black text-primary uppercase shadow-lg">Prévia da Imagem</div>
+                  </div>
+                )}
 
-               <div className="flex gap-4 pt-4">
-                 <Button onClick={handleSave} className="h-14 px-12 rounded-none bg-primary hover:bg-primary/95 text-white font-black uppercase text-[10px] tracking-widest flex items-center gap-3 transition-all active:scale-95 shadow-lg shadow-blue-900/10" disabled={loading}>
-                   {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
-                   {editId ? "Atualizar Notícia" : "Publicar Notícia"}
-                 </Button>
-                 {editId && (
-                   <Button variant="ghost" onClick={resetForm} className="h-14 px-8 rounded-none font-black uppercase text-[10px] tracking-widest text-gray-400 hover:text-red-500 hover:bg-red-50">
-                     Cancelar
-                   </Button>
-                 )}
-               </div>
-             </CardContent>
+                <div className="flex gap-4 pt-4">
+                  <Button onClick={handleSave} className="h-14 px-12 rounded-none bg-primary hover:bg-primary/95 text-white font-black uppercase text-[10px] tracking-widest flex items-center gap-3 transition-all active:scale-95 shadow-lg shadow-blue-900/10" disabled={loading}>
+                    {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
+                    {editId ? "Atualizar Notícia" : "Publicar Notícia"}
+                  </Button>
+                  {editId && (
+                    <Button variant="ghost" onClick={resetForm} className="h-14 px-8 rounded-none font-black uppercase text-[10px] tracking-widest text-gray-400 hover:text-red-500 hover:bg-red-50">
+                      Cancelar Edição
+                    </Button>
+                  )}
+                </div>
+              </CardContent>
            </Card>
         </div>
 

@@ -1,5 +1,5 @@
 import {
-  Radio, Users, Calendar, Image, FileText, Info, LayoutDashboard, Music, Settings, Palette, BarChart3, ChevronLeft, ChevronRight, ExternalLink, Heart, Gift
+  Radio, Users, Calendar, Image, FileText, Info, LayoutDashboard, Music, Settings, Palette, BarChart3, ChevronLeft, ChevronRight, ExternalLink, Heart, Gift, Sun, Moon, HardDrive
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -21,6 +21,7 @@ import { Separator } from "@/components/ui/separator";
 
 const menuItems = [
   { title: "Painel Geral", url: "/admin", icon: LayoutDashboard, permission: "base" },
+  { title: "Mídias / Arquivos", url: "/admin/media", icon: HardDrive, permission: "base" },
   { title: "Player / Redes", url: "/admin/streaming", icon: Radio, permission: "streaming" },
   { title: "Personalização", url: "/admin/aparencia", icon: Palette, permission: "aparencia" },
   { title: "Locutores", url: "/admin/locutores", icon: Users, permission: "locutores" },
@@ -37,7 +38,12 @@ const menuItems = [
 
 import { useTheme } from "@/hooks/useTheme";
 
-export function AdminSidebar() {
+interface AdminSidebarProps {
+  isDark: boolean;
+  onToggleDark: () => void;
+}
+
+export function AdminSidebar({ isDark, onToggleDark }: AdminSidebarProps) {
   const { hasPermission } = useAuth();
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
@@ -104,6 +110,15 @@ export function AdminSidebar() {
 
       <SidebarFooter className="bg-black/20 p-6 border-t border-white/5" style={{ backgroundColor: 'rgba(0,0,0,0.2)' }}>
         <SidebarMenu>
+           <SidebarMenuItem>
+              <SidebarMenuButton 
+                onClick={onToggleDark} 
+                className="h-12 w-full flex items-center gap-4 px-3 text-white/40 hover:text-[var(--admin-yellow)] transition-all group"
+              >
+                {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                {!collapsed && <span className="text-[10px] font-black uppercase tracking-widest">{isDark ? "Modo Claro" : "Modo Escuro"}</span>}
+              </SidebarMenuButton>
+           </SidebarMenuItem>
            <SidebarMenuItem>
               <SidebarMenuButton asChild className="h-10 text-white/40 hover:text-[#ffed32] transition-colors">
                 <NavLink to="/" className="flex items-center gap-4 px-3 italic">

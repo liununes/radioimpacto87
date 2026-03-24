@@ -1,5 +1,6 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
@@ -9,6 +10,11 @@ import { LogOut } from "lucide-react";
 const AdminLayout = () => {
   const { user, isAdmin, hasPermission, loading, signOut } = useAuth();
   const location = useLocation();
+  const [isDark, setIsDark] = useState(() => localStorage.getItem('adminDarkMode') === 'true');
+
+  useEffect(() => {
+    localStorage.setItem('adminDarkMode', String(isDark));
+  }, [isDark]);
 
   // Map sub-paths to permission keys
   const getRequiredPermission = (path: string) => {
@@ -65,8 +71,8 @@ const AdminLayout = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-gray-50/50 admin-view">
-        <AdminSidebar />
+      <div className={`min-h-screen flex w-full admin-view ${isDark ? 'dark bg-slate-950 text-white' : 'bg-gray-50/50'}`}>
+        <AdminSidebar isDark={isDark} onToggleDark={() => setIsDark(!isDark)} />
         <div className="flex-1 flex flex-col">
           <header 
             className="h-20 flex items-center justify-between border-b border-gray-100 backdrop-blur-md px-8 sticky top-0 z-50 transition-all duration-500 glass-header"

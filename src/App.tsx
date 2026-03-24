@@ -19,6 +19,7 @@ import AdminProgramacao from "./pages/admin/AdminProgramacao";
 import AdminSlides from "./pages/admin/AdminSlides";
 import AdminFotos from "./pages/admin/AdminFotos";
 import AdminNoticias from "./pages/admin/AdminNoticias";
+import AdminMedia from "./pages/admin/AdminMedia";
 import AdminSobre from "./pages/admin/AdminSobre";
 import AdminEstatisticas from "./pages/admin/AdminEstatisticas";
 import AdminUsuarios from "./pages/admin/AdminUsuarios";
@@ -42,6 +43,7 @@ const App = () => (
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminHome />} />
+              <Route path="media" element={<AdminMedia />} />
               <Route path="streaming" element={<AdminStreaming />} />
               <Route path="aparencia" element={<AdminAparencia />} />
               <Route path="locutores" element={<AdminLocutores />} />

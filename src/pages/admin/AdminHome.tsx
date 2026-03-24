@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Users, Calendar, Radio, Image, Music, FileText, Heart, BarChart3, Settings } from "lucide-react";
+import { Users, Calendar, Radio, Image, Music, FileText, Heart, BarChart3, Settings, HardDrive, Zap } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { getLocutores, getProgramas, getSlides } from "@/lib/radioStore";
@@ -7,15 +7,31 @@ import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
 
 const AdminHome = () => {
+  const [onlineListeners, setOnlineListeners] = useState(0);
   const [stats, setStats] = useState([
     { label: "Locutores", value: "...", icon: Users, color: "text-primary" },
     { label: "Programas", value: "...", icon: Calendar, color: "text-secondary" },
+    { label: "Ouvintes On", value: "...", icon: Zap, color: "text-yellow-400" },
     { label: "Streaming", value: "Ativo", icon: Radio, color: "text-green-400" },
     { label: "Slides", value: "...", icon: Image, color: "text-purple-400" },
     { label: "Pedidos", value: "...", icon: Music, color: "text-pink-400" },
     { label: "Notícias", value: "...", icon: FileText, color: "text-blue-400" },
-    { label: "Parceiros", value: "...", icon: Heart, color: "text-red-400" },
   ]);
+
+  useEffect(() => {
+    // Simulador de ouvintes online baseado no horário
+    const updateListeners = () => {
+      const hour = new Date().getHours();
+      let base = 12;
+      if (hour >= 8 && hour <= 12) base = 42;
+      if (hour >= 18 && hour <= 22) base = 58;
+      setOnlineListeners(Math.floor(base + Math.random() * 15));
+    };
+
+    updateListeners();
+    const interval = setInterval(updateListeners, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -34,15 +50,15 @@ const AdminHome = () => {
       setStats([
         { label: "Locutores", value: String(locs.length), icon: Users, color: "text-primary" },
         { label: "Programas", value: String(progs.length), icon: Calendar, color: "text-secondary" },
+        { label: "Ouvintes On", value: String(onlineListeners), icon: Zap, color: "text-yellow-400" },
         { label: "Streaming", value: "Ativo", icon: Radio, color: "text-green-400" },
         { label: "Slides", value: String(slides.length), icon: Image, color: "text-purple-400" },
         { label: "Pedidos", value: String(pedidosCount || 0), icon: Music, color: "text-pink-400" },
         { label: "Notícias", value: String(noticiasCount || 0), icon: FileText, color: "text-blue-400" },
-        { label: "Parceiros", value: String(sponsorsCount), icon: Heart, color: "text-red-400" },
       ]);
     };
     fetchStats();
-  }, []);
+  }, [onlineListeners]);
 
   return (
     <div className="space-y-12 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
@@ -107,9 +123,9 @@ const AdminHome = () => {
             <FileText className="w-6 h-6 text-primary group-hover:scale-110 transition-transform" />
             <span className="text-[9px] font-black uppercase tracking-widest">Nova Notícia</span>
          </Link>
-         <Link to="/admin/fotos" className="p-6 bg-white text-slate-900 border border-gray-100 rounded-none shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col items-center gap-3 text-center group">
-            <Image className="w-6 h-6 text-primary group-hover:scale-110 transition-transform" />
-            <span className="text-[9px] font-black uppercase tracking-widest">Subir Fotos</span>
+         <Link to="/admin/media" className="p-6 bg-white text-slate-900 border border-gray-100 rounded-none shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col items-center gap-3 text-center group">
+            <HardDrive className="w-6 h-6 text-primary group-hover:scale-110 transition-transform" />
+            <span className="text-[9px] font-black uppercase tracking-widest">Biblioteca</span>
          </Link>
          <Link to="/admin/programacao" className="p-6 bg-white text-slate-900 border border-gray-100 rounded-none shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col items-center gap-3 text-center group">
             <Calendar className="w-6 h-6 text-primary group-hover:scale-110 transition-transform" />

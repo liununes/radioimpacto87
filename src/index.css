@@ -73,6 +73,35 @@
     --accent: 33 100% 50% !important;
   }
 
+  .admin-view.dark {
+    --background: 222 47% 11% !important;
+    --foreground: 213 27% 84% !important;
+    --muted: 223 47% 11% !important;
+    --muted-foreground: 215 20.2% 65.1% !important;
+    --border: 217 32% 17% !important;
+    --input: 217 32% 17% !important;
+    --card: 222 47% 11% !important;
+    --card-foreground: 213 27% 84% !important;
+    --primary: 217.2 91.2% 59.8% !important;
+    --accent: 48 100% 50% !important;
+    
+    background-color: #020617 !important;
+    color: #f1f5f9 !important;
+  }
+
+  .admin-view.dark .bg-white {
+    background-color: #0f172a !important;
+    color: #f1f5f9 !important;
+  }
+
+  .admin-view.dark .text-slate-900 {
+    color: #f1f5f9 !important;
+  }
+
+  .admin-view.dark .border-gray-100 {
+    border-color: #1e293b !important;
+  }
+
   /* FORÇAR PADRÃO INDUSTRIAL (CANTOS RETOS) NO ADMIN */
   .admin-view * {
     border-radius: 0 !important;
