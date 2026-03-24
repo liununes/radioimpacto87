@@ -31,10 +31,10 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[], loading: boo
 
   return (
     <div className="container mx-auto px-4 py-20">
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-l-[12px] border-primary pl-6">
+      <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-l-[12px] pl-6" style={{ borderColor: 'var(--plantao-line)' }}>
         <div>
-          <h2 className="text-4xl md:text-5xl font-black text-primary tracking-tighter uppercase leading-none">
-            {theme.labels.newsTitle} <span className="text-accent underline decoration-[var(--clube-yellow)]">{theme.labels.newsSubtitle}</span>
+          <h2 className="text-4xl md:text-5xl font-black tracking-tighter uppercase leading-none" style={{ color: 'var(--plantao-title)' }}>
+            {theme.labels.newsTitle} <span className="underline" style={{ color: 'var(--plantao-subtitle)', textDecorationColor: 'var(--nav-item-active)' }}>{theme.labels.newsSubtitle}</span>
           </h2>
           <p className="text-gray-400 font-bold uppercase tracking-[0.2em] text-[10px] mt-2">Destaques e últimas notícias</p>
         </div>
@@ -90,8 +90,8 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[], loading: boo
             VÍDEOS E MAIS
           </h4>
           {sidebar.map((item) => (
-            <Card key={item.id} className="h-32 group cursor-pointer border-none shadow-lg rounded-2xl overflow-hidden hover:scale-[1.02] transition-all">
-              <div className="flex h-full bg-white">
+            <Card key={item.id} className="h-32 group cursor-pointer border-none shadow-lg rounded-2xl overflow-hidden hover:scale-[1.02] transition-all" style={{ backgroundColor: 'var(--plantao-card-bg)' }}>
+              <div className="flex h-full">
                 <div className="w-32 shrink-0 overflow-hidden relative">
                   <img 
                     src={item.imagem || ""} 
@@ -100,8 +100,8 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[], loading: boo
                   />
                 </div>
                 <CardContent className="p-4 flex flex-col justify-center gap-1.5 flex-1">
-                  <span className="text-[9px] font-black text-accent uppercase">{item.categoria || "NEWS"}</span>
-                  <CardTitle className="text-sm font-black text-primary line-clamp-2 leading-tight uppercase tracking-tight">
+                  <span className="text-[9px] font-black uppercase" style={{ color: 'var(--nav-item-active)' }}>{item.categoria || "NEWS"}</span>
+                  <CardTitle className="text-sm font-black line-clamp-2 leading-tight uppercase tracking-tight" style={{ color: 'var(--plantao-card-text)' }}>
                     {item.titulo}
                   </CardTitle>
                 </CardContent>

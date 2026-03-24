@@ -197,111 +197,171 @@ const AdminAparencia = () => {
 
         {/* --- VISUAL TAB --- */}
         <TabsContent value="visual" className="space-y-8 animate-in fade-in zoom-in-95 duration-500">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-white text-slate-900">
-              <CardHeader className="p-8 pb-4">
-                <CardTitle className="text-xl font-black uppercase text-primary tracking-tight">Cores da Marca</CardTitle>
-                <CardDescription className="text-xs font-medium text-slate-700">Defina os tons que darão vida ao site da sua rádio</CardDescription>
-              </CardHeader>
-              <CardContent className="p-8 pt-4 space-y-8">
-                <div className="space-y-6">
-                  <h4 className="text-[10px] font-black uppercase text-slate-700 tracking-widest border-b pb-2">Paleta Institucional</h4>
-                  <div className="grid grid-cols-3 gap-6">
-                    <div className="flex flex-col items-center gap-3">
-                      <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Fundo Navbar</Label>
-                      <input type="color" value={theme.clubeBlue} onChange={e => updateField("clubeBlue", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-gray-50 shadow-inner" />
-                      <span className="text-[9px] font-mono text-slate-700">{theme.clubeBlue}</span>
-                    </div>
-                    <div className="flex flex-col items-center gap-3">
-                      <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Destaques</Label>
-                      <input type="color" value={theme.clubeYellow} onChange={e => updateField("clubeYellow", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-gray-50 shadow-inner" />
-                      <span className="text-[9px] font-mono text-slate-700">{theme.clubeYellow}</span>
-                    </div>
-                    <div className="flex flex-col items-center gap-3">
-                      <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Botão Play</Label>
-                      <input type="color" value={theme.clubeRed} onChange={e => updateField("clubeRed", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-gray-50 shadow-inner" />
-                      <span className="text-[9px] font-mono text-slate-700">{theme.clubeRed}</span>
-                    </div>
+          <div className="grid grid-cols-1 gap-8">
+            {/* SEÇÃO: MENU E NAVEGAÇÃO */}
+            <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-white text-slate-900 group">
+              <div className="bg-emerald-600 p-8 text-white relative overflow-hidden">
+                <div className="relative z-10 flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center">
+                    <Palette className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-xl font-black uppercase tracking-tight">Menu Superior</CardTitle>
+                    <CardDescription className="text-white/60 text-xs font-medium">Controle as cores das abas e da barra de navegação</CardDescription>
                   </div>
                 </div>
-
-                <div className="space-y-6 pt-6 pt-6 border-t">
-                  <h4 className="text-[10px] font-black uppercase text-slate-700 tracking-widest border-b pb-2">Cores de Texto</h4>
-                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div className="flex flex-col items-center gap-3">
-                      <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Texto Principal</Label>
-                      <input type="color" value={theme.textPrimary} onChange={e => updateField("textPrimary", e.target.value)} className="w-12 h-12 rounded-xl cursor-pointer border-4 border-gray-50 shadow-inner" />
-                      <span className="text-[9px] font-mono text-slate-700">{theme.textPrimary}</span>
-                    </div>
-                    <div className="flex flex-col items-center gap-3">
-                      <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Texto Destaque</Label>
-                      <input type="color" value={theme.textSecondary} onChange={e => updateField("textSecondary", e.target.value)} className="w-12 h-12 rounded-xl cursor-pointer border-4 border-gray-50 shadow-inner" />
-                      <span className="text-[9px] font-mono text-slate-700">{theme.textSecondary}</span>
-                    </div>
-                    <div className="flex flex-col items-center gap-3">
-                      <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Texto Suave</Label>
-                      <input type="color" value={theme.textMuted} onChange={e => updateField("textMuted", e.target.value)} className="w-12 h-12 rounded-xl cursor-pointer border-4 border-gray-50 shadow-inner" />
-                      <span className="text-[9px] font-mono text-slate-700">{theme.textMuted}</span>
-                    </div>
-                    <div className="flex flex-col items-center gap-3">
-                      <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Texto Alerta</Label>
-                      <input type="color" value={theme.textAccent} onChange={e => updateField("textAccent", e.target.value)} className="w-12 h-12 rounded-xl cursor-pointer border-4 border-gray-50 shadow-inner" />
-                      <span className="text-[9px] font-mono text-slate-700">{theme.textAccent}</span>
-                    </div>
-                  </div>
+              </div>
+              <CardContent className="p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="space-y-3">
+                  <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Texto das Abas</Label>
+                  <input type="color" value={theme.navItemColor} onChange={e => updateField("navItemColor", e.target.value)} className="w-full h-12 rounded-xl cursor-pointer border-4 border-gray-50" />
+                  <p className="text-[9px] text-gray-400">Cor base dos links</p>
                 </div>
-
-                <div className="space-y-6 pt-6 pt-6 border-t">
-                  <h4 className="text-[10px] font-black uppercase text-slate-700 tracking-widest border-b pb-2">Círculo da Logo (Site)</h4>
-                  <p className="text-[9px] text-gray-400 -mt-4">Define as cores da borda dupla circular da logo no topo.</p>
-                  <div className="grid grid-cols-2 gap-6">
-                    <div className="flex flex-col items-center gap-3">
-                      <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Círculo Externo</Label>
-                      <input type="color" value={theme.logoCircleColor1 || "#ffed32"} onChange={e => updateField("logoCircleColor1", e.target.value)} className="w-12 h-12 rounded-xl cursor-pointer border-4 border-gray-50 shadow-inner" />
-                      <span className="text-[9px] font-mono text-slate-700">{theme.logoCircleColor1}</span>
-                    </div>
-                    <div className="flex flex-col items-center gap-3">
-                      <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Círculo Interno</Label>
-                      <input type="color" value={theme.logoCircleColor2 || "#ff8c00"} onChange={e => updateField("logoCircleColor2", e.target.value)} className="w-12 h-12 rounded-xl cursor-pointer border-4 border-gray-50 shadow-inner" />
-                      <span className="text-[9px] font-mono text-slate-700">{theme.logoCircleColor2}</span>
-                    </div>
-                  </div>
+                <div className="space-y-3">
+                  <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Cor Hover</Label>
+                  <input type="color" value={theme.navItemHoverColor} onChange={e => updateField("navItemHoverColor", e.target.value)} className="w-full h-12 rounded-xl cursor-pointer border-4 border-gray-50" />
+                  <p className="text-[9px] text-gray-400">Ao passar o mouse</p>
                 </div>
-
-                <div className="space-y-6 pt-6 pt-6 border-t">
-                  <h4 className="text-[10px] font-black uppercase text-slate-700 tracking-widest border-b pb-2">Degradê do Cabeçalho (Site)</h4>
-                  <div className="grid grid-cols-2 gap-6">
-                    <div className="flex flex-col items-center gap-3">
-                      <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Início do Degradê</Label>
-                      <input type="color" value={theme.headerGradStart || "#002e5d"} onChange={e => updateField("headerGradStart", e.target.value)} className="w-12 h-12 rounded-xl cursor-pointer border-4 border-gray-50 shadow-inner" />
-                      <span className="text-[9px] font-mono text-slate-700">{theme.headerGradStart}</span>
-                    </div>
-                    <div className="flex flex-col items-center gap-3">
-                      <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Fim do Degradê</Label>
-                      <input type="color" value={theme.headerGradEnd || "#001a35"} onChange={e => updateField("headerGradEnd", e.target.value)} className="w-12 h-12 rounded-xl cursor-pointer border-4 border-gray-50 shadow-inner" />
-                      <span className="text-[9px] font-mono text-slate-700">{theme.headerGradEnd}</span>
-                    </div>
-                    <div className="flex flex-col items-center gap-3">
-                      <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Texto dos Menus</Label>
-                      <input type="color" value={theme.headerTextColor || "#ffffff"} onChange={e => updateField("headerTextColor", e.target.value)} className="w-12 h-12 rounded-xl cursor-pointer border-4 border-gray-50 shadow-inner" />
-                      <span className="text-[9px] font-mono text-slate-700">{theme.headerTextColor}</span>
-                    </div>
-                  </div>
+                <div className="space-y-3">
+                  <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Fundo Aba Ativa</Label>
+                  <input type="color" value={theme.navItemActiveColor} onChange={e => updateField("navItemActiveColor", e.target.value)} className="w-full h-12 rounded-xl cursor-pointer border-4 border-gray-50" />
+                  <p className="text-[9px] text-gray-400">Página selecionada</p>
+                </div>
+                <div className="space-y-3">
+                  <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Texto Aba Ativa</Label>
+                  <input type="color" value={theme.navItemActiveTextColor} onChange={e => updateField("navItemActiveTextColor", e.target.value)} className="w-full h-12 rounded-xl cursor-pointer border-4 border-gray-50" />
+                  <p className="text-[9px] text-gray-400">Texto na página ativa</p>
                 </div>
               </CardContent>
             </Card>
 
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {/* SEÇÃO: BOTÃO AO VIVO (PLAYER) */}
+              <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-white text-slate-900">
+                <div className="bg-orange-600 p-8 text-white">
+                  <CardTitle className="text-xl font-black uppercase tracking-tight">Botão Play (Ao Vivo)</CardTitle>
+                  <CardDescription className="text-white/60 text-xs font-medium">Personalize o botão flutuante de reprodução</CardDescription>
+                </div>
+                <CardContent className="p-8 space-y-8">
+                  <div className="grid grid-cols-2 gap-6">
+                    <div className="space-y-3">
+                      <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Fundo do Botão</Label>
+                      <input type="color" value={theme.playerLiveBg} onChange={e => updateField("playerLiveBg", e.target.value)} className="w-full h-16 rounded-2xl cursor-pointer border-4 border-gray-50" />
+                    </div>
+                    <div className="space-y-3">
+                      <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Cor do Ícone</Label>
+                      <input type="color" value={theme.playerLiveText} onChange={e => updateField("playerLiveText", e.target.value)} className="w-full h-16 rounded-2xl cursor-pointer border-4 border-gray-50" />
+                    </div>
+                  </div>
+                  <div className="pt-6 border-t border-gray-50 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-[11px] font-black uppercase text-gray-700">Linha na Borda?</Label>
+                      <Switch checked={theme.showPlayerLiveBorder} onCheckedChange={v => updateField("showPlayerLiveBorder", v)} />
+                    </div>
+                    {theme.showPlayerLiveBorder && (
+                      <div className="grid grid-cols-2 gap-6 animate-in fade-in slide-in-from-top-2">
+                        <div className="space-y-3">
+                          <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Cor da Linha</Label>
+                          <input type="color" value={theme.playerLiveBorderColor} onChange={e => updateField("playerLiveBorderColor", e.target.value)} className="w-full h-12 rounded-xl border-2" />
+                        </div>
+                        <div className="space-y-3">
+                          <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Espessura (px)</Label>
+                          <Input value={theme.playerLiveBorderSize} onChange={e => updateField("playerLiveBorderSize", e.target.value)} className="h-12 rounded-xl" placeholder="Ex: 8px" />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* SEÇÃO: PLANTÃO (NOTÍCIAS) */}
+              <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-white text-slate-900">
+                <div className="bg-red-600 p-8 text-white">
+                  <CardTitle className="text-xl font-black uppercase tracking-tight">Cores do Plantão</CardTitle>
+                  <CardDescription className="text-white/60 text-xs font-medium">Títulos e linhas da seção de notícias</CardDescription>
+                </div>
+                <CardContent className="p-8 space-y-6">
+                  <div className="grid grid-cols-3 gap-6">
+                    <div className="space-y-3">
+                      <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Título</Label>
+                      <input type="color" value={theme.plantaoTitleColor} onChange={e => updateField("plantaoTitleColor", e.target.value)} className="w-full h-10 rounded-xl cursor-pointer" />
+                    </div>
+                    <div className="space-y-3">
+                      <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Subtítulo</Label>
+                      <input type="color" value={theme.plantaoSubtitleColor} onChange={e => updateField("plantaoSubtitleColor", e.target.value)} className="w-full h-10 rounded-xl cursor-pointer" />
+                    </div>
+                    <div className="space-y-3">
+                      <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Linha</Label>
+                      <input type="color" value={theme.plantaoLineColor} onChange={e => updateField("plantaoLineColor", e.target.value)} className="w-full h-10 rounded-xl cursor-pointer" />
+                    </div>
+                  </div>
+                  <div className="pt-6 border-t border-gray-50 flex gap-6">
+                    <div className="flex-1 space-y-3">
+                      <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Fundo Cards</Label>
+                      <input type="color" value={theme.plantaoCardBg} onChange={e => updateField("plantaoCardBg", e.target.value)} className="w-full h-10 rounded-xl cursor-pointer" />
+                    </div>
+                    <div className="flex-1 space-y-3">
+                      <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Texto Cards</Label>
+                      <input type="color" value={theme.plantaoCardTextColor} onChange={e => updateField("plantaoCardTextColor", e.target.value)} className="w-full h-10 rounded-xl cursor-pointer" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {/* SEÇÃO: LOGOTIPO CÍRCULOS */}
+              <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-white text-slate-900 lg:col-span-1">
+                <div className="bg-blue-600 p-8 text-white">
+                  <CardTitle className="text-lg font-black uppercase tracking-tight">Design da Logo</CardTitle>
+                </div>
+                <CardContent className="p-8 grid grid-cols-2 gap-6">
+                  <div className="space-y-3">
+                    <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Círculo 1</Label>
+                    <input type="color" value={theme.logoCircleColor1} onChange={e => updateField("logoCircleColor1", e.target.value)} className="w-full h-14 rounded-2xl cursor-pointer" />
+                  </div>
+                  <div className="space-y-3">
+                    <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Círculo 2</Label>
+                    <input type="color" value={theme.logoCircleColor2} onChange={e => updateField("logoCircleColor2", e.target.value)} className="w-full h-14 rounded-2xl cursor-pointer" />
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* SEÇÃO: DESTAQUES (Botões) */}
+              <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-white text-slate-900 lg:col-span-2">
+                <div className="bg-purple-600 p-8 text-white">
+                  <CardTitle className="text-xl font-black uppercase tracking-tight">Destaques e Botões</CardTitle>
+                  <CardDescription className="text-white/60 text-xs font-medium">Cores globais de interação</CardDescription>
+                </div>
+                <CardContent className="p-8 grid grid-cols-3 gap-6">
+                  <div className="space-y-3">
+                    <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Fundo Botão</Label>
+                    <input type="color" value={theme.highlightBtnBg} onChange={e => updateField("highlightBtnBg", e.target.value)} className="w-full h-12 rounded-xl cursor-pointer" />
+                  </div>
+                  <div className="space-y-3">
+                    <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Texto Botão</Label>
+                    <input type="color" value={theme.highlightBtnText} onChange={e => updateField("highlightBtnText", e.target.value)} className="w-full h-12 rounded-xl cursor-pointer" />
+                  </div>
+                  <div className="space-y-3">
+                    <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Cor Hover</Label>
+                    <input type="color" value={theme.highlightBtnHoverBg} onChange={e => updateField("highlightBtnHoverBg", e.target.value)} className="w-full h-12 rounded-xl cursor-pointer" />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* SEÇÃO: ARQUIVOS DE LOGO */}
             <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-white text-slate-900">
               <CardHeader className="p-8 pb-4">
-                <CardTitle className="text-xl font-black uppercase text-primary tracking-tight">Logotipos</CardTitle>
-                <CardDescription className="text-xs font-medium text-slate-700">Identidade visual em todos os dispositivos</CardDescription>
+                <CardTitle className="text-xl font-black uppercase text-primary tracking-tight">Arquivos de Identidade</CardTitle>
+                <CardDescription className="text-xs font-medium text-slate-700">Upload de logotipo e favicon</CardDescription>
               </CardHeader>
-              <CardContent className="p-8 pt-4 space-y-6">
-                <div className="flex gap-6">
+              <CardContent className="p-8 pt-4">
+                <div className="flex flex-col md:flex-row gap-6">
                   <div className="flex-1 space-y-3">
                     <Label className="text-[10px] font-black uppercase tracking-widest opacity-50 block">Logotipo do Site</Label>
                     <div className="relative group">
-                      <div className="h-28 bg-gray-50 rounded-2xl flex items-center justify-center p-6 border-2 border-dashed border-gray-100 group-hover:border-primary/20 transition-all overflow-hidden">
+                      <div className="h-32 bg-gray-50 rounded-2xl flex items-center justify-center p-6 border-2 border-dashed border-gray-100 group-hover:border-primary/20 transition-all overflow-hidden">
                         {logo ? <img src={logo} alt="Logo" className="max-h-full object-contain" /> : <ImageIcon className="w-8 h-8 text-gray-200" />}
                       </div>
                       <label className="absolute inset-0 cursor-pointer flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl">
@@ -309,12 +369,12 @@ const AdminAparencia = () => {
                          <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) setLogo(await fileToBase64(f)); }} />
                       </label>
                     </div>
-                    <p className="text-[9px] text-gray-400 font-bold text-center">500×500px · PNG com fundo transparente</p>
+                    <p className="text-[9px] text-gray-400 font-bold text-center">Recomendado: 500×500px · PNG Transparente</p>
                   </div>
-                  <div className="w-40 space-y-3">
-                    <Label className="text-[10px] font-black uppercase tracking-widest opacity-50 block">Favicon</Label>
+                  <div className="w-full md:w-60 space-y-3">
+                    <Label className="text-[10px] font-black uppercase tracking-widest opacity-50 block">Favicon (Ícone de Aba)</Label>
                     <div className="relative group">
-                      <div className="h-28 bg-gray-50 rounded-2xl flex items-center justify-center p-6 border-2 border-dashed border-gray-100 group-hover:border-primary/20 transition-all">
+                      <div className="h-32 bg-gray-50 rounded-2xl flex items-center justify-center p-6 border-2 border-dashed border-gray-100 group-hover:border-primary/20 transition-all">
                         {favicon ? <img src={favicon} alt="Fav" className="w-10 h-10 object-contain" /> : <Globe className="w-8 h-8 text-gray-200" />}
                       </div>
                       <label className="absolute inset-0 cursor-pointer flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl">

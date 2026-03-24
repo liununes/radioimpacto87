@@ -98,12 +98,27 @@
 
 @layer components {
   .clube-btn-yellow {
-    @apply bg-[var(--clube-yellow)] text-black font-bold px-6 py-2.5 rounded-lg hover:brightness-110 transition-all uppercase text-[10px] tracking-wider;
-    box-shadow: 0 4px 10px rgba(255, 237, 50, 0.2);
+    background-color: var(--highlight-btn-bg);
+    color: var(--highlight-btn-text);
+    @apply font-black px-6 py-2.5 rounded-lg transition-all uppercase text-[10px] tracking-widest;
+    box-shadow: 0 10px 20px -5px rgba(0,0,0,0.2);
+  }
+
+  .clube-btn-yellow:hover {
+    background-color: var(--highlight-btn-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px -5px rgba(0,0,0,0.3);
   }
 
   .clube-btn-outline {
-    @apply border border-[var(--clube-yellow)] text-[var(--clube-yellow)] font-bold px-6 py-2.5 rounded-lg hover:bg-[var(--clube-yellow)] hover:text-black transition-all uppercase text-[10px] tracking-wider;
+    border: 2px solid var(--highlight-btn-bg);
+    color: var(--highlight-btn-bg);
+    @apply font-black px-6 py-2.5 rounded-lg transition-all uppercase text-[10px] tracking-widest;
+  }
+
+  .clube-btn-outline:hover {
+    background-color: var(--highlight-btn-bg);
+    color: var(--highlight-btn-text);
   }
 
   .clube-btn-white-outline {

@@ -100,13 +100,21 @@ const RadioPlayer = () => {
            )}
            <button
              onClick={togglePlay}
-             className="w-16 h-16 md:w-28 md:h-28 rounded-full bg-accent flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-[0_10px_30px_rgba(255,140,0,0.4)] border-4 md:border-8 border-white group relative overflow-hidden"
-             style={{ backgroundImage: isPlaying && programaAtual?.programa?.foto ? `url(${programaAtual.programa.foto})` : 'none', backgroundSize: 'cover' }}
+             className="w-16 h-16 md:w-28 md:h-28 rounded-full flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-[0_10px_30px_rgba(0,0,0,0.3)] group relative overflow-hidden"
+             style={{ 
+               backgroundColor: 'var(--player-live-bg)', 
+               border: `var(--player-live-border-size) solid var(--player-live-border)`,
+               backgroundImage: isPlaying && programaAtual?.programa?.foto ? `url(${programaAtual.programa.foto})` : 'none', 
+               backgroundSize: 'cover' 
+             }}
            >
-             <div className={`absolute inset-0 bg-accent/60 flex items-center justify-center transition-opacity ${isPlaying && programaAtual?.programa?.foto ? 'opacity-0 hover:opacity-100' : 'opacity-100'}`}>
+             <div 
+               className={`absolute inset-0 flex items-center justify-center transition-opacity ${isPlaying && programaAtual?.programa?.foto ? 'opacity-0 hover:opacity-100' : 'opacity-100'}`}
+               style={{ backgroundColor: 'rgba(0,0,0,0.4)', color: 'var(--player-live-text)' }}
+             >
                 {isPlaying ? 
-                  <Pause className="w-6 h-6 md:w-12 md:h-12 fill-white text-white" /> : 
-                  <Play className="w-6 h-6 md:w-12 md:h-12 fill-white text-white ml-1 md:ml-2" />
+                  <Pause className="w-6 h-6 md:w-12 md:h-12 fill-current" /> : 
+                  <Play className="w-6 h-6 md:w-12 md:h-12 fill-current ml-1 md:ml-2" />
                 }
              </div>
            </button>

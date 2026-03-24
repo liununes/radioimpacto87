@@ -118,6 +118,27 @@ export interface ThemeConfig {
   adminLogo?: string;
   logoCircleColor1?: string;
   logoCircleColor2?: string;
+  // Navigation Granular Colors
+  navItemColor?: string;
+  navItemHoverColor?: string;
+  navItemActiveColor?: string;
+  navItemActiveTextColor?: string;
+  // Live Player Granular Colors
+  playerLiveBg?: string;
+  playerLiveText?: string;
+  playerLiveBorderColor?: string;
+  playerLiveBorderSize?: string;
+  showPlayerLiveBorder?: boolean;
+  // News / Plantão Colors
+  plantaoTitleColor?: string;
+  plantaoSubtitleColor?: string;
+  plantaoLineColor?: string;
+  plantaoCardBg?: string;
+  plantaoCardTextColor?: string;
+  // Highlights / Global Buttons
+  highlightBtnBg?: string;
+  highlightBtnText?: string;
+  highlightBtnHoverBg?: string;
 }
 
 export const DEFAULT_THEME: ThemeConfig = {
@@ -216,6 +237,24 @@ export const DEFAULT_THEME: ThemeConfig = {
   adminHeaderGradEnd: "#f1f5f9",
   logoCircleColor1: "#ffed32",
   logoCircleColor2: "#ff8c00",
+  // New Granular Defaults
+  navItemColor: "#ffffff",
+  navItemHoverColor: "#ffed32",
+  navItemActiveColor: "#ffed32",
+  navItemActiveTextColor: "#002e5d",
+  playerLiveBg: "#ff8c00",
+  playerLiveText: "#ffffff",
+  playerLiveBorderColor: "#ffffff",
+  playerLiveBorderSize: "8px",
+  showPlayerLiveBorder: true,
+  plantaoTitleColor: "#002e5d",
+  plantaoSubtitleColor: "#002e5d",
+  plantaoLineColor: "#002e5d",
+  plantaoCardBg: "#ffffff",
+  plantaoCardTextColor: "#18181b",
+  highlightBtnBg: "#ffed32",
+  highlightBtnText: "#002e5d",
+  highlightBtnHoverBg: "#ffdb00",
 };
 
 export function getThemeConfig(): ThemeConfig {
@@ -261,4 +300,25 @@ export function applyTheme(config: ThemeConfig) {
   root.style.setProperty("--admin-header-grad-end", config.adminHeaderGradEnd || "#f8fafc");
   root.style.setProperty("--logo-circle-1", config.logoCircleColor1 || "#ffed32");
   root.style.setProperty("--logo-circle-2", config.logoCircleColor2 || "#ec2027");
+
+  // New Granular Variables
+  root.style.setProperty("--nav-item-color", config.navItemColor || config.headerTextColor || "#ffffff");
+  root.style.setProperty("--nav-item-hover", config.navItemHoverColor || config.textSecondary || "#ffed32");
+  root.style.setProperty("--nav-item-active", config.navItemActiveColor || config.textSecondary || "#ffed32");
+  root.style.setProperty("--nav-item-active-text", config.navItemActiveTextColor || config.clubeBlue || "#002e5d");
+  
+  root.style.setProperty("--player-live-bg", config.playerLiveBg || config.clubeRed || "#ff8c00");
+  root.style.setProperty("--player-live-text", config.playerLiveText || "#ffffff");
+  root.style.setProperty("--player-live-border", config.playerLiveBorderColor || "#ffffff");
+  root.style.setProperty("--player-live-border-size", config.showPlayerLiveBorder ? (config.playerLiveBorderSize || "8px") : "0px");
+  
+  root.style.setProperty("--plantao-title", config.plantaoTitleColor || config.clubeBlue || "#002e5d");
+  root.style.setProperty("--plantao-subtitle", config.plantaoSubtitleColor || config.clubeBlue || "#002e5d");
+  root.style.setProperty("--plantao-line", config.plantaoLineColor || config.clubeBlue || "#002e5d");
+  root.style.setProperty("--plantao-card-bg", config.plantaoCardBg || "#ffffff");
+  root.style.setProperty("--plantao-card-text", config.plantaoCardTextColor || "#18181b");
+  
+  root.style.setProperty("--highlight-btn-bg", config.highlightBtnBg || config.clubeYellow || "#ffed32");
+  root.style.setProperty("--highlight-btn-text", config.highlightBtnText || config.clubeBlue || "#002e5d");
+  root.style.setProperty("--highlight-btn-hover", config.highlightBtnHoverBg || "#ffdb00");
 }

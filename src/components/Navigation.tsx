@@ -108,8 +108,11 @@ const Navigation = () => {
                   key={item.label}
                   to={item.href.startsWith("#") ? `/${item.href}` : item.href}
                   onClick={(e) => handleNavClick(e, item.href)}
-                  className="bg-[var(--clube-yellow)] text-[var(--clube-blue)] px-7 py-3 rounded-full text-[10px] xl:text-[11px] font-[900] tracking-[0.2em] hover:scale-110 transition-all uppercase shadow-[0_10px_20px_rgba(0,0,0,0.2)] hover:shadow-yellow-400/40 whitespace-nowrap"
-                  style={{ backgroundColor: theme.textSecondary, color: theme.clubeBlue }}
+                  className="px-7 py-3 rounded-full text-[10px] xl:text-[11px] font-[900] tracking-[0.2em] hover:scale-110 transition-all uppercase shadow-[0_10px_20px_rgba(0,0,0,0.2)] whitespace-nowrap"
+                  style={{ 
+                    backgroundColor: 'var(--nav-item-active)', 
+                    color: 'var(--nav-item-active-text)' 
+                  }}
                 >
                   {item.label}
                 </Link>
@@ -120,11 +123,11 @@ const Navigation = () => {
                 key={item.label}
                 to={item.href.startsWith("#") ? `/${item.href}` : item.href}
                 onClick={(e) => handleNavClick(e, item.href)}
-                className="text-[10px] xl:text-[11px] font-black tracking-[0.15em] transition-all relative group py-2 whitespace-nowrap"
-                style={{ color: 'var(--header-text-color)' }}
+                className="text-[10px] xl:text-[11px] font-black tracking-[0.15em] transition-all relative group py-2 whitespace-nowrap hover:text-[var(--nav-item-hover)]"
+                style={{ color: 'var(--nav-item-color)' }}
               >
                 {item.label}
-                <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[var(--clube-yellow)] scale-x-0 group-hover:scale-x-100 transition-transform origin-left" style={{ backgroundColor: theme.textSecondary }} />
+                <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[var(--nav-item-active)] scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
               </Link>
             );
           })}
@@ -181,8 +184,8 @@ const Navigation = () => {
             <Link
               key={item.label}
               to={item.href.startsWith("#") ? `/${item.href}` : item.href}
-              className="font-black tracking-tighter text-3xl py-4 border-b border-white/5 flex justify-between items-center group active:text-[var(--clube-yellow)]"
-              style={{ color: 'var(--header-text-color)' }}
+              className="font-black tracking-tighter text-3xl py-4 border-b border-white/5 flex justify-between items-center group active:text-[var(--nav-item-active)] hover:text-[var(--nav-item-hover)]"
+              style={{ color: 'var(--nav-item-color)' }}
               onClick={(e) => {
                 handleNavClick(e, item.href);
                 setIsMenuOpen(false);
