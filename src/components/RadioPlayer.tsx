@@ -122,16 +122,18 @@ const RadioPlayer = () => {
         
         <div className="flex flex-col pt-2 md:pt-16 whitespace-nowrap overflow-hidden">
           <div className="flex items-center gap-2">
-            <div className={`w-1.5 h-1.5 rounded-full ${isPlaying ? 'bg-accent animate-pulse' : 'bg-gray-300'}`} />
-            <span className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-accent">{theme.labels.playerLive}</span>
+            <div className={`w-2 h-2 rounded-full ${programaAtual ? 'bg-red-500 animate-pulse' : 'bg-gray-400'}`} />
+            <span className={`text-[8px] md:text-[10px] font-black uppercase tracking-widest ${programaAtual ? 'text-red-500' : 'text-gray-400'}`}>
+              {programaAtual ? "No Ar Agora" : "Programação Automática"}
+            </span>
           </div>
           <span className="text-sm md:text-3xl font-[900] text-primary leading-none uppercase tracking-tighter">
             {siteConfig.radioFreq || theme.radioFreq || "87.9"} FM
           </span>
           {/* Programa Atual Subtitle */}
           <div className="flex flex-col mt-0.5">
-            <span className="text-[9px] md:text-[11px] font-black text-primary uppercase truncate max-w-[80px] md:max-w-none">
-               {programaAtual?.programa?.nome || "Impacto FM"}
+            <span className="text-[9px] md:text-[11px] font-black text-primary uppercase truncate max-w-[120px] md:max-w-none">
+               {programaAtual?.programa?.nome || "Música e Informação"}
             </span>
           </div>
         </div>

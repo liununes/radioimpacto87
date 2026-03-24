@@ -69,32 +69,39 @@ const AdminLayout = () => {
         <AdminSidebar />
         <div className="flex-1 flex flex-col">
           <header 
-            className="h-20 flex items-center justify-between border-b border-gray-100 backdrop-blur-md px-8 sticky top-0 z-50 transition-all duration-500"
+            className="h-20 flex items-center justify-between border-b border-gray-100 backdrop-blur-md px-8 sticky top-0 z-50 transition-all duration-500 glass-header"
             style={{ 
               background: `linear-gradient(to right, var(--admin-header-grad-start), var(--admin-header-grad-end))`
             }}
           >
             <div className="flex items-center gap-6">
-              <SidebarTrigger className="text-primary hover:bg-gray-100 p-2 rounded-none transition-all" />
-              <div className="h-6 w-px bg-gray-200 hidden md:block" />
+              <SidebarTrigger className="text-primary hover:bg-primary/5 p-2 transition-all" />
+              <div className="h-4 w-px bg-gray-200 hidden md:block" />
               <div className="hidden md:flex flex-col">
-                 <h1 className="text-sm font-black uppercase tracking-tight leading-none italic" style={{ color: 'var(--admin-content-title)' }}>Impacto FM</h1>
-                 <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Gerenciamento do Portal</span>
+                 <h1 className="text-sm font-black uppercase tracking-tight leading-none italic text-primary">Impacto FM — <span className="text-secondary italic">Admin</span></h1>
+                 <span className="text-[9px] font-bold text-gray-400 uppercase tracking-[0.2em] mt-1">SISTEMA INTEGRADO DE GESTÃO</span>
               </div>
             </div>
             
-            <div className="flex items-center gap-6">
-              <div className="hidden lg:flex flex-col items-end border-r border-gray-100 pr-6">
-                <span className="text-[11px] font-black text-primary uppercase">{user.email?.split('@')[0]}</span>
-                <span className="text-[9px] font-bold text-accent uppercase tracking-widest italic leading-none mt-1">ADMINISTRADOR</span>
+            <div className="flex items-center gap-8">
+              <div className="hidden lg:flex items-center gap-4 border-r border-gray-100 pr-8">
+                <div className="flex flex-col items-end">
+                  <span className="text-[11px] font-black text-primary uppercase tracking-tighter">{user.email?.split('@')[0]}</span>
+                  <span className="text-[8px] font-bold text-green-500 uppercase tracking-widest flex items-center gap-1.5">
+                    <div className="w-1.5 h-1.5 bg-green-500 rounded-none animate-pulse" /> SESSÃO ATIVA
+                  </span>
+                </div>
+                <div className="w-10 h-10 bg-primary/5 border border-primary/10 flex items-center justify-center font-black text-primary text-xs italic">
+                  {user.email?.[0].toUpperCase()}
+                </div>
               </div>
               <Button 
                 variant="ghost" 
                 size="sm" 
                 onClick={signOut} 
-                className="gap-3 h-12 px-6 rounded-none font-black uppercase text-[10px] tracking-widest text-red-500 hover:bg-red-50 hover:text-red-600 transition-all border border-transparent hover:border-red-100"
+                className="gap-3 h-12 px-6 font-black uppercase text-[10px] tracking-widest text-red-500 hover:bg-red-50 hover:text-red-600 transition-all border border-transparent hover:border-red-100"
               >
-                <LogOut className="w-4 h-4" /> Sair
+                <LogOut className="w-4 h-4" /> Finalizar
               </Button>
             </div>
           </header>

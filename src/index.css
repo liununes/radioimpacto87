@@ -72,6 +72,11 @@
     --primary: 211 100% 18% !important;
     --accent: 33 100% 50% !important;
   }
+
+  /* FORÇAR PADRÃO INDUSTRIAL (CANTOS RETOS) NO ADMIN */
+  .admin-view * {
+    border-radius: 0 !important;
+  }
 }
 
 @layer base {
@@ -146,5 +151,11 @@
   .text-gradient {
     @apply bg-clip-text text-transparent font-black;
     background-image: var(--primary-gradient);
+  }
+
+  .glass-header {
+    background: rgba(255, 255, 255, 0.8) !important;
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
   }
 }
