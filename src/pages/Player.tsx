@@ -32,7 +32,9 @@ const PlayerPage = () => {
         audioRef.current.pause();
       } else {
         let url = siteConfig.streamUrl;
-        if (!url.endsWith(';') && !url.includes('?')) {
+        const isProxied = url.includes('/radio/') || url.includes('/listen/');
+        
+        if (!isProxied && !url.endsWith(';') && !url.includes('?')) {
           url += ';';
         }
         

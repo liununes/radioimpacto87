@@ -37,8 +37,11 @@ const RadioPlayer = () => {
         audioRef.current.pause();
       } else {
         // Formatar URL do streaming: Adicionar ';' ao final se necessário para alguns navegadores/servidores
+        // Mas APENAS se não for uma URL de proxy do AzuraCast (/radio/ ou /listen/)
         let url = siteConfig.streamUrl;
-        if (!url.endsWith(';') && !url.includes('?')) {
+        const isProxied = url.includes('/radio/') || url.includes('/listen/');
+        
+        if (!isProxied && !url.endsWith(';') && !url.includes('?')) {
           url += ';';
         }
         
