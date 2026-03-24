@@ -106,31 +106,46 @@ const AdminAparencia = () => {
       </div>
 
       <Tabs defaultValue="visual" className="space-y-8" onValueChange={setActiveTab}>
-        <div className="flex justify-center">
-          <TabsList className="bg-white text-slate-900 p-1.5 h-auto rounded-3xl border border-gray-100 shadow-xl gap-2 flex-wrap justify-center text-slate-400">
-            <TabsTrigger value="visual" className="rounded-2xl px-6 py-4 data-[state=active]:bg-[var(--admin-blue)] data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
-              <Palette className="w-4 h-4 mr-2" /> Identidade Visual
-            </TabsTrigger>
-            <TabsTrigger value="textos" className="rounded-2xl px-6 py-4 data-[state=active]:bg-[var(--admin-blue)] data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
-              <Type className="w-4 h-4 mr-2" /> Textos e Rótulos
-            </TabsTrigger>
-            <TabsTrigger value="layout" className="rounded-2xl px-6 py-4 data-[state=active]:bg-[var(--admin-blue)] data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
-              <Layout className="w-4 h-4 mr-2" /> Estrutura
-            </TabsTrigger>
-            <TabsTrigger value="radio" className="rounded-2xl px-6 py-4 data-[state=active]:bg-[var(--admin-blue)] data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
-              <Radio className="w-4 h-4 mr-2" /> Rádio & Frequência
-            </TabsTrigger>
-            <TabsTrigger value="menus" className="rounded-2xl px-6 py-4 data-[state=active]:bg-[var(--admin-blue)] data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
-              <ExternalLink className="w-4 h-4 mr-2" /> Menus do Site
-            </TabsTrigger>
-            <TabsTrigger value="visibilidade" className="rounded-2xl px-6 py-4 data-[state=active]:bg-emerald-600 data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
-              <Eye className="w-4 h-4 mr-2" /> Visibilidade
-            </TabsTrigger>
-            {isSuperAdmin && (
-              <TabsTrigger value="whitelabel" className="rounded-2xl px-6 py-4 data-[state=active]:bg-purple-600 data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
-                <Settings className="w-4 h-4 mr-2" /> White Label (Painel)
+        <div className="flex flex-col items-center gap-6">
+          <div className="flex items-center gap-3 px-6 py-2 bg-slate-100 rounded-full text-[9px] font-black uppercase tracking-[0.3em] text-slate-400">
+            <Settings className="w-3 h-3" /> Configurações do Portal
+          </div>
+          
+          <TabsList className="bg-white/80 backdrop-blur-md text-slate-900 p-2 h-auto rounded-[2.5rem] border border-gray-100 shadow-2xl gap-3 flex-wrap justify-center text-slate-400 max-w-5xl">
+            {/* GRUPO: DESIGN E CORES */}
+            <div className="flex gap-2 p-1 bg-gray-50/50 rounded-3xl border border-gray-100">
+              <TabsTrigger value="visual" className="rounded-2xl px-6 py-4 data-[state=active]:bg-[var(--admin-blue)] data-[state=active]:text-white data-[state=active]:shadow-lg font-black text-[10px] uppercase tracking-widest transition-all">
+                <Palette className="w-4 h-4 mr-2" /> Identidade Visual
               </TabsTrigger>
-            )}
+              <TabsTrigger value="textos" className="rounded-2xl px-6 py-4 data-[state=active]:bg-[var(--admin-blue)] data-[state=active]:text-white data-[state=active]:shadow-lg font-black text-[10px] uppercase tracking-widest transition-all">
+                <Type className="w-4 h-4 mr-2" /> Textos & Cores
+              </TabsTrigger>
+            </div>
+
+            {/* GRUPO: CONTEÚDO E MENUS */}
+            <div className="flex gap-2 p-1 bg-gray-50/50 rounded-3xl border border-gray-100">
+              <TabsTrigger value="radio" className="rounded-2xl px-6 py-4 data-[state=active]:bg-[var(--admin-blue)] data-[state=active]:text-white data-[state=active]:shadow-lg font-black text-[10px] uppercase tracking-widest transition-all">
+                <Radio className="w-4 h-4 mr-2" /> Dados da Rádio
+              </TabsTrigger>
+              <TabsTrigger value="menus" className="rounded-2xl px-6 py-4 data-[state=active]:bg-[var(--admin-blue)] data-[state=active]:text-white data-[state=active]:shadow-lg font-black text-[10px] uppercase tracking-widest transition-all">
+                <ExternalLink className="w-4 h-4 mr-2" /> Menu de Links
+              </TabsTrigger>
+              <TabsTrigger value="layout" className="rounded-2xl px-6 py-4 data-[state=active]:bg-[var(--admin-blue)] data-[state=active]:text-white data-[state=active]:shadow-lg font-black text-[10px] uppercase tracking-widest transition-all">
+                <Layout className="w-4 h-4 mr-2" /> Posições (Layout)
+              </TabsTrigger>
+            </div>
+
+            {/* GRUPO: EXIBIÇÃO E SISTEMA */}
+            <div className="flex gap-2 p-1 bg-gray-50/50 rounded-3xl border border-gray-100">
+              <TabsTrigger value="visibilidade" className="rounded-2xl px-6 py-4 data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-lg font-black text-[10px] uppercase tracking-widest transition-all">
+                <Eye className="w-4 h-4 mr-2" /> Ocultar/Exibir
+              </TabsTrigger>
+              {isSuperAdmin && (
+                <TabsTrigger value="whitelabel" className="rounded-2xl px-6 py-4 data-[state=active]:bg-purple-600 data-[state=active]:text-white data-[state=active]:shadow-lg font-black text-[10px] uppercase tracking-widest transition-all">
+                  <Settings className="w-4 h-4 mr-2" /> White Label
+                </TabsTrigger>
+              )}
+            </div>
           </TabsList>
         </div>
 

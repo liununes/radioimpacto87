@@ -59,8 +59,8 @@ const ProgramacaoPage = () => {
             <ArrowLeft className="w-6 h-6 text-primary group-hover:-translate-x-1 transition-transform" />
           </Link>
           <div>
-            <span className="text-accent font-black uppercase tracking-[0.5em] text-[10px] mb-2 block">HORÁRIOS</span>
-            <h1 className="text-4xl md:text-5xl font-black text-primary tracking-tighter uppercase leading-none">Nossa <span className="text-accent underline decoration-yellow-400">Programação</span></h1>
+            <span className="font-black uppercase tracking-[0.5em] text-[10px] mb-2 block" style={{ color: 'var(--text-detail)' }}>HORÁRIOS</span>
+            <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase leading-none" style={{ color: 'var(--text-title)' }}>Nossa <span className="underline decoration-yellow-400" style={{ color: 'var(--text-detail)' }}>Programação</span></h1>
           </div>
         </div>
 
@@ -75,7 +75,7 @@ const ProgramacaoPage = () => {
               {Object.entries(programasPorDia).map(([dia, progs]) => (
                 <div key={dia} className="animate-in fade-in slide-in-from-bottom duration-700">
                   <div className="flex items-center gap-4 mb-10">
-                    <h2 className="text-2xl font-black text-primary uppercase tracking-tighter shrink-0">
+                    <h2 className="text-2xl font-black uppercase tracking-tighter shrink-0" style={{ color: 'var(--text-title)' }}>
                       {DIAS_COMPLETOS[Number(dia)]}
                     </h2>
                     <div className="h-0.5 w-full bg-gray-100" />

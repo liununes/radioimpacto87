@@ -11,8 +11,8 @@ const PromosSection = () => {
     <section id="promocoes" className="py-32 bg-white dark:bg-gray-950 border-y border-gray-50 dark:border-gray-900 transition-all duration-700">
       <div className="container mx-auto px-6">
         <div className="flex flex-col items-center text-center mb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-           <span className="text-[10px] font-black text-accent uppercase tracking-[0.5em] block mb-2">Participe</span>
-           <h2 className="text-4xl md:text-6xl font-black text-primary tracking-tighter uppercase italic leading-none mb-4">Promoções <span className="text-accent underline underline-offset-8">Ativas</span></h2>
+           <span className="text-[10px] font-black uppercase tracking-[0.5em] block mb-2" style={{ color: 'var(--text-detail)' }}>Participe</span>
+           <h2 className="text-4xl md:text-6xl font-black tracking-tighter uppercase italic leading-none mb-4" style={{ color: 'var(--text-title)' }}>Promoções <span className="underline underline-offset-8" style={{ color: 'var(--text-detail)' }}>Ativas</span></h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16">

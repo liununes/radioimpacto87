@@ -18,8 +18,8 @@ const NotFound = () => {
         </div>
         
         <div className="space-y-4">
-          <h2 className="text-3xl font-black text-white uppercase tracking-widest leading-none">Ops! Página Fora do Ar</h2>
-          <p className="text-gray-400 font-bold uppercase tracking-[0.2em] text-xs">A rádio continua, mas esse link sumiu das ondas.</p>
+          <h2 className="text-3xl font-black uppercase tracking-widest leading-none text-white" style={{ color: 'var(--text-title)' }}>Ops! Página Fora do Ar</h2>
+          <p className="font-bold uppercase tracking-[0.2em] text-xs" style={{ color: 'var(--text-content)' }}>A rádio continua, mas esse link sumiu das ondas.</p>
         </div>
 
         <Link to="/" className="clube-btn-yellow inline-flex items-center gap-3 px-12 py-4">
