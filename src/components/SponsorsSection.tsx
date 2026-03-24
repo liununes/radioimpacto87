@@ -11,8 +11,8 @@ const SponsorsSection = () => {
     <section className="py-20 bg-gray-50/50 dark:bg-gray-950/50">
       <div className="container mx-auto px-6">
         <div className="flex flex-col items-center text-center mb-12">
-          <span className="text-[10px] font-black text-accent uppercase tracking-[0.5em] block mb-2">Parceiros</span>
-          <h2 className="text-4xl md:text-5xl font-black text-primary tracking-tighter uppercase italic leading-none">Nossos Patrocinadores</h2>
+          <span className="text-[10px] font-black uppercase tracking-[0.5em] block mb-2" style={{ color: 'var(--text-detail)' }}>Parceiros</span>
+          <h2 className="text-4xl md:text-5xl font-black tracking-tighter uppercase italic leading-none" style={{ color: 'var(--text-title)' }}>Nossos Patrocinadores</h2>
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16">

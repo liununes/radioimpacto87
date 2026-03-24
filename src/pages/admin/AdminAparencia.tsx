@@ -378,6 +378,16 @@ const AdminAparencia = () => {
                       </div>
                     </div>
                   </div>
+                  <div className="space-y-3">
+                    <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Rótulos e Detalhes</Label>
+                    <div className="flex items-center gap-4">
+                      <input type="color" value={theme.textDetail} onChange={e => updateField("textDetail", e.target.value)} className="w-16 h-16 rounded-2xl cursor-pointer border-4 border-gray-50 shadow-inner" />
+                      <div>
+                        <p className="text-xs font-bold text-slate-700">Pequenos Textos</p>
+                        <p className="text-[10px] text-gray-400 italic">Destaques: 'PARCEIROS', 'TOP 3', etc.</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="space-y-6 bg-gray-50 p-6 rounded-3xl border border-gray-100">

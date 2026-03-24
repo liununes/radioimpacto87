@@ -27,9 +27,9 @@ const TopSongs = () => {
       <div className="container mx-auto px-6">
         <div className={`max-w-4xl flex flex-col ${alignClass}`}>
           <div className={`flex flex-col gap-2 mb-12 ${textClass}`}>
-             <span className="text-accent font-black uppercase tracking-[0.5em] text-[10px]">AS MAIS PEDIDAS</span>
-             <h2 className="text-4xl md:text-5xl font-black text-primary tracking-tighter uppercase leading-none">
-                {theme.labels.topSongsTitle} <span className="text-accent underline decoration-[var(--clube-yellow)]">{theme.labels.topSongsSubtitle}</span>
+             <span className="font-black uppercase tracking-[0.5em] text-[10px]" style={{ color: 'var(--text-detail)' }}>AS MAIS PEDIDAS</span>
+             <h2 className="text-4xl md:text-5xl font-black tracking-tighter uppercase leading-none" style={{ color: 'var(--text-title)' }}>
+                {theme.labels.topSongsTitle} <span className="underline decoration-[var(--clube-yellow)]" style={{ color: 'var(--text-detail)' }}>{theme.labels.topSongsSubtitle}</span>
               </h2>
           </div>
 
@@ -43,10 +43,10 @@ const TopSongs = () => {
                   {song.rank}°
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-xl md:text-2xl font-black text-primary group-hover:text-accent transition-colors line-clamp-1 uppercase tracking-tight">
+                  <p className="text-xl md:text-2xl font-black group-hover:text-accent transition-colors line-clamp-1 uppercase tracking-tight" style={{ color: 'var(--text-title)' }}>
                     {song.title}
                   </p>
-                  <p className="text-xs md:text-sm font-bold uppercase tracking-[0.1em] text-gray-400 mt-1">{song.artist}</p>
+                  <p className="text-xs md:text-sm font-bold uppercase tracking-[0.1em] mt-1" style={{ color: 'var(--text-content)' }}>{song.artist}</p>
                 </div>
                 <a 
                   href={song.url} 

@@ -34,6 +34,7 @@ export interface ThemeConfig {
   textAccent: string;
   textTitle: string;
   textContent: string;
+  textDetail: string;
   // Radio Config
   radioFreq: string;
   playerOpenUrl: string;
@@ -162,6 +163,7 @@ export const DEFAULT_THEME: ThemeConfig = {
   textAccent: "#ff8c00",
   textTitle: "#002e5d",
   textContent: "#475569",
+  textDetail: "#ff8c00",
   radioFreq: "87.9",
   playerOpenUrl: "/player",
   clubeBlue: "#002e5d",
@@ -286,6 +288,7 @@ export function applyTheme(config: ThemeConfig) {
   root.style.setProperty("--text-accent", config.textAccent);
   root.style.setProperty("--text-title", config.textTitle || config.textPrimary);
   root.style.setProperty("--text-content", config.textContent || "#475569");
+  root.style.setProperty("--text-detail", config.textDetail || config.textAccent);
   
   // Brand Colors (Hex)
   root.style.setProperty("--clube-blue", config.clubeBlue);

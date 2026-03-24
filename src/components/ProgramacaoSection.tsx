@@ -44,10 +44,10 @@ const ProgramacaoSection = () => {
     <section id="programacao" className="py-12">
       <div className="container px-4">
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground">
+          <h2 className="text-2xl md:text-3xl font-display font-bold" style={{ color: 'var(--text-title)' }}>
             Programação
           </h2>
-          <Link to="/programacao" className="text-sm text-primary hover:underline font-medium">
+          <Link to="/programacao" className="text-sm hover:underline font-medium" style={{ color: 'var(--text-title)' }}>
             Ver completa →
           </Link>
         </div>
@@ -102,7 +102,7 @@ const ProgramacaoSection = () => {
 
         {programas.length > 6 && (
           <div className="text-center mt-6">
-            <Link to="/programacao" className="text-sm text-primary hover:underline font-medium">
+            <Link to="/programacao" className="text-sm hover:underline font-medium" style={{ color: 'var(--text-title)' }}>
               Ver todos os {programas.length} programas →
             </Link>
           </div>

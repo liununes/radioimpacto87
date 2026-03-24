@@ -54,7 +54,7 @@ const AboutSection = () => {
               <Info className="w-48 h-48 text-primary shadow-2xl" />
             </div>
             
-            <h3 className="text-2xl font-black uppercase tracking-tighter text-primary flex items-center gap-4 relative z-10">
+            <h3 className="text-2xl font-black uppercase tracking-tighter flex items-center gap-4 relative z-10" style={{ color: 'var(--text-title)' }}>
               Central de Contato
             </h3>
             
@@ -65,8 +65,8 @@ const AboutSection = () => {
                     <MapPin className="w-6 h-6 text-accent" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-black uppercase text-accent mb-1 underline decoration-yellow-400">Localização</p>
-                    <p className="text-lg font-bold text-primary truncate max-w-xs">{data.endereco}</p>
+                    <p className="text-[10px] font-black uppercase mb-1 underline decoration-yellow-400" style={{ color: 'var(--text-detail)' }}>Localização</p>
+                    <p className="text-lg font-bold truncate max-w-xs" style={{ color: 'var(--text-title)' }}>{data.endereco}</p>
                   </div>
                 </div>
               )}
@@ -77,8 +77,8 @@ const AboutSection = () => {
                     <Phone className="w-6 h-6 text-accent" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-black uppercase text-accent mb-1 underline decoration-yellow-400">Atendimento Ouvinte</p>
-                    <p className="text-3xl font-black text-primary leading-none mt-1">{data.telefone}</p>
+                    <p className="text-[10px] font-black uppercase mb-1 underline decoration-yellow-400" style={{ color: 'var(--text-detail)' }}>Atendimento Ouvinte</p>
+                    <p className="text-3xl font-black leading-none mt-1" style={{ color: 'var(--text-title)' }}>{data.telefone}</p>
                   </div>
                 </div>
               )}
@@ -89,8 +89,8 @@ const AboutSection = () => {
                     <Mail className="w-6 h-6 text-accent" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-black uppercase text-accent mb-1 underline decoration-yellow-400">E-mail Comercial</p>
-                    <p className="text-lg font-bold text-primary truncate max-w-xs lowercase">{data.email}</p>
+                    <p className="text-[10px] font-black uppercase mb-1 underline decoration-yellow-400" style={{ color: 'var(--text-detail)' }}>E-mail Comercial</p>
+                    <p className="text-lg font-bold truncate max-w-xs lowercase" style={{ color: 'var(--text-title)' }}>{data.email}</p>
                   </div>
                 </div>
               )}
