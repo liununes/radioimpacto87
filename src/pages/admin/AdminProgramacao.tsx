@@ -140,15 +140,26 @@ const AdminProgramacao = () => {
 
                 <div className="space-y-3">
                   <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Capa do Programa</Label>
-                  <div className="flex items-center gap-6">
-                     <div className="w-20 h-20 rounded-none bg-gray-50 border border-gray-100 overflow-hidden flex items-center justify-center shrink-0">
-                        {foto ? <img src={foto} alt="Preview" className="w-full h-full object-cover" /> : <Upload className="w-6 h-6 text-gray-200" />}
-                     </div>
-                     <label className="flex-1 h-14 bg-white text-slate-900 border border-gray-100 rounded-none flex items-center justify-center gap-3 cursor-pointer hover:bg-gray-50 transition-all font-black uppercase text-[10px] tracking-widest text-primary shadow-sm">
-                        <Upload className="w-4 h-4" /> Importar Arte
-                        <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) setFoto(await fileToBase64(f)); }} />
-                     </label>
-                  </div>
+                    <div className="flex items-center gap-6">
+                       <div className="relative group w-20 h-20 rounded-none bg-gray-50 border border-gray-100 overflow-hidden flex items-center justify-center shrink-0">
+                          {foto ? (
+                            <>
+                              <img src={foto} alt="Preview" className="w-full h-full object-cover" />
+                              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                                <button type="button" onClick={() => setFoto("")} className="text-white hover:text-red-500 transition-colors" title="Remover Capa">
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </div>
+                            </>
+                          ) : (
+                            <Upload className="w-6 h-6 text-gray-200" />
+                          )}
+                       </div>
+                       <label className="flex-1 h-14 bg-white text-slate-900 border border-gray-100 rounded-none flex items-center justify-center gap-3 cursor-pointer hover:bg-gray-50 transition-all font-black uppercase text-[10px] tracking-widest text-primary shadow-sm">
+                          <Upload className="w-4 h-4" /> {foto ? "Alterar Arte" : "Importar Arte"}
+                          <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) setFoto(await fileToBase64(f)); }} />
+                       </label>
+                    </div>
                   <p className="text-[9px] text-gray-400 font-bold">600×600px · JPG ou PNG</p>
                 </div>
              </div>

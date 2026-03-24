@@ -96,15 +96,27 @@ const AdminLocutores = () => {
             </CardHeader>
             <CardContent className="p-8 space-y-8">
               <div className="flex flex-col items-center gap-6">
-                 <div className="relative group">
+                  <div className="relative group">
                     <div className="w-32 h-32 rounded-none bg-gray-50 border-4 border-white shadow-xl overflow-hidden flex items-center justify-center">
                        {foto ? <img src={foto} alt="Preview" className="w-full h-full object-cover" /> : <Users className="w-12 h-12 text-gray-200" />}
                     </div>
-                    <label className="absolute inset-0 cursor-pointer flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-none">
-                       <Upload className="text-white w-6 h-6" />
-                       <input type="file" accept="image/*" className="hidden" onChange={handleFoto} />
-                    </label>
-                 </div>
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-none gap-4">
+                       <label className="cursor-pointer flex items-center justify-center hover:scale-110 transition-transform" title="Alterar Foto">
+                          <Upload className="text-white w-6 h-6" />
+                          <input type="file" accept="image/*" className="hidden" onChange={handleFoto} />
+                       </label>
+                       {foto && (
+                         <button 
+                           type="button" 
+                           onClick={() => setFoto("")}
+                           className="flex items-center justify-center hover:scale-110 transition-transform text-white hover:text-red-500"
+                           title="Remover Foto"
+                         >
+                           <Trash2 className="w-6 h-6" />
+                         </button>
+                       )}
+                    </div>
+                  </div>
                  <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Foto do Perfil</Label>
                  <p className="text-[9px] text-gray-400 font-bold">400×400px · JPG ou PNG</p>
               </div>
