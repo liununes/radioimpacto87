@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Play, Pause, Volume2, Instagram, Facebook, Youtube, MessageCircle } from "lucide-react";
 import { getSiteConfig, getProgramaAtual, getRedesSociais, type Programa, type Locutor, type RedeSocial } from "@/lib/radioStore";
+import { toast } from "sonner";
 
 const PlayerPage = () => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -26,14 +27,33 @@ const PlayerPage = () => {
   }, []);
 
   const togglePlay = () => {
-    if (audioRef.current) {
+    if (audioRef.current && siteConfig.streamUrl) {
       if (isPlaying) {
         audioRef.current.pause();
       } else {
-        if (!audioRef.current.src) audioRef.current.src = siteConfig.streamUrl;
-        audioRef.current.play().catch(e => console.error(e));
+        let url = siteConfig.streamUrl;
+        if (!url.endsWith(';') && !url.includes('?')) {
+          url += ';';
+        }
+        
+        audioRef.current.src = url;
+        audioRef.current.load();
+        
+        const playPromise = audioRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(err => {
+             console.error("Erro ao tocar áudio:", err);
+             if (audioRef.current) {
+               audioRef.current.src = siteConfig.streamUrl;
+               audioRef.current.load();
+               audioRef.current.play().catch(e => console.error(e));
+             }
+          });
+        }
       }
       setIsPlaying(!isPlaying);
+    } else if (!siteConfig.streamUrl) {
+       toast.error("URL de streaming não configurada!");
     }
   };
 

@@ -50,7 +50,7 @@ const AdminStreaming = () => {
         getWhatsApp()
       ]);
       if (config) {
-        setStreamUrl(config.streamUrl || "http://streaming.liurecord.com.br:8005/stream");
+        setStreamUrl(config.streamUrl || "http://89.116.186.216:8005/stream");
         setRadioName(config.radioName || "Impacto FM");
         setRadioFreq(config.radioFreq || "87.9 FM");
         setLogo(config.logo || "/logo.png");
@@ -58,7 +58,7 @@ const AdminStreaming = () => {
         setWhatsappMessage(config.whatsappMessage || "");
       } else {
         // Caso não exista config no banco, já pré-carrega o padrão solicitado
-        setStreamUrl("http://streaming.liurecord.com.br:8005/stream");
+        setStreamUrl("http://89.116.186.216:8005/stream");
         setRadioName("Impacto FM");
         setRadioFreq("87.9 FM");
         setLogo("/logo.png");

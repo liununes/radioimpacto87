@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Play, Pause, ChevronDown, MapPin, ExternalLink, Volume2, Info, MessageCircle } from "lucide-react";
 import { getSiteConfig, getProgramaAtual, type Programa, type Locutor } from "@/lib/radioStore";
 import { useTheme } from "@/hooks/useTheme";
+import { toast } from "sonner";
 
 const RadioPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -31,17 +32,35 @@ const RadioPlayer = () => {
   }, []);
 
   const togglePlay = () => {
-    if (audioRef.current) {
+    if (audioRef.current && siteConfig.streamUrl) {
       if (isPlaying) {
         audioRef.current.pause();
       } else {
-        // Para fixar problema de áudio que não carrega, damos load() se o src mudou ou se estava parado
-        if (!audioRef.current.src) {
-           audioRef.current.src = siteConfig.streamUrl;
+        // Formatar URL do streaming: Adicionar ';' ao final se necessário para alguns navegadores/servidores
+        let url = siteConfig.streamUrl;
+        if (!url.endsWith(';') && !url.includes('?')) {
+          url += ';';
         }
-        audioRef.current.play().catch(err => console.error("Erro ao tocar áudio:", err));
+        
+        audioRef.current.src = url;
+        audioRef.current.load(); // Forçar carga limpa do streaming
+        
+        const playPromise = audioRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(err => {
+             console.error("Erro ao tocar áudio:", err);
+             // Tentar sem o ';' caso falhe
+             if (audioRef.current) {
+               audioRef.current.src = siteConfig.streamUrl;
+               audioRef.current.load();
+               audioRef.current.play().catch(e => console.error("Falha total no play:", e));
+             }
+          });
+        }
       }
       setIsPlaying(!isPlaying);
+    } else if (!siteConfig.streamUrl) {
+       toast.error("URL de streaming não configurada!");
     }
   };
 
