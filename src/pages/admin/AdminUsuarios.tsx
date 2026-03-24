@@ -295,22 +295,22 @@ GRANT EXECUTE ON FUNCTION public.deletar_usuario TO authenticated, anon;
 
   return (
     <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      <div className="flex justify-between items-center bg-white text-slate-900 p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+      <div className="flex justify-between items-center bg-white text-slate-900 p-8 rounded-none border border-gray-100 shadow-sm">
         <div>
           <h2 className="text-3xl font-black text-primary tracking-tighter uppercase italic leading-none">Equipe & <span className="text-secondary italic">Acessos</span></h2>
           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Gerencie quem pode editar cada seção da rádio</p>
         </div>
         {!isAdding && (
-          <Button onClick={() => setIsAdding(true)} className="rounded-xl font-black uppercase tracking-widest text-[10px] h-12 px-8 bg-primary text-white hover:bg-primary/90 transition-all shadow-lg active:scale-95">
+          <Button onClick={() => setIsAdding(true)} className="rounded-none font-black uppercase tracking-widest text-[10px] h-12 px-8 bg-primary text-white hover:bg-primary/90 transition-all shadow-lg active:scale-95">
              <Plus className="w-4 h-4 mr-2" /> Novo Colaborador
           </Button>
         )}
       </div>
 
       {error && (
-        <Card className="rounded-[2rem] border-none bg-red-50 p-6 flex items-center justify-between border border-red-100">
+        <Card className="rounded-none border-none bg-red-50 p-6 flex items-center justify-between border border-red-100">
            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-white text-slate-900 rounded-2xl flex items-center justify-center shadow-sm text-red-500">
+              <div className="w-12 h-12 bg-white text-slate-900 rounded-none flex items-center justify-center shadow-sm text-red-500">
                  <AlertCircle className="w-6 h-6" />
               </div>
               <div>
@@ -318,14 +318,14 @@ GRANT EXECUTE ON FUNCTION public.deletar_usuario TO authenticated, anon;
                  <p className="text-xs font-bold text-red-900 mt-1">{error}</p>
               </div>
            </div>
-           <Button variant="outline" size="sm" onClick={copyRepairSQL} className="rounded-xl border-red-200 text-red-600 font-black uppercase text-[9px] tracking-widest bg-white text-slate-900">
+           <Button variant="outline" size="sm" onClick={copyRepairSQL} className="rounded-none border-red-200 text-red-600 font-black uppercase text-[9px] tracking-widest bg-white text-slate-900">
               <Save className="w-3.5 h-3.5 mr-2" /> Copiar SQL Fix
            </Button>
         </Card>
       )}
 
       {(isAdding || editingUser) && (
-        <Card className="rounded-[2.5rem] border-none shadow-2xl bg-white text-slate-900 overflow-hidden animate-in zoom-in-95 duration-500">
+        <Card className="rounded-none border-none shadow-2xl bg-white text-slate-900 overflow-hidden animate-in zoom-in-95 duration-500">
           <CardHeader className="p-10 pb-4 flex flex-row items-center justify-between">
             <div>
                <CardTitle className="text-xl font-black uppercase tracking-tight text-primary italic">
@@ -333,7 +333,7 @@ GRANT EXECUTE ON FUNCTION public.deletar_usuario TO authenticated, anon;
                </CardTitle>
                <p className="text-[10px] font-bold text-gray-300 uppercase mt-2">Defina as credenciais e o nível de acesso</p>
             </div>
-            <Button variant="ghost" size="icon" className="rounded-2xl h-12 w-12" onClick={() => { setIsAdding(false); setEditingUser(null); }}>
+            <Button variant="ghost" size="icon" className="rounded-none h-12 w-12" onClick={() => { setIsAdding(false); setEditingUser(null); }}>
                <X className="w-6 h-6 text-gray-300" />
             </Button>
           </CardHeader>
@@ -346,7 +346,7 @@ GRANT EXECUTE ON FUNCTION public.deletar_usuario TO authenticated, anon;
                    value={editingUser ? editingUser.username : newUsername} 
                    onChange={e => editingUser ? setEditingUser({...editingUser, username: e.target.value}) : setNewUsername(e.target.value)} 
                    placeholder="Ex: joao_silva" 
-                   className="h-14 rounded-2xl border-gray-100 bg-gray-50 font-bold text-primary"
+                   className="h-14 rounded-none border-gray-100 bg-gray-50 font-bold text-primary"
                  />
                </div>
                <div className="space-y-3">
@@ -355,7 +355,7 @@ GRANT EXECUTE ON FUNCTION public.deletar_usuario TO authenticated, anon;
                    value={editingUser ? (editingUser.display_name || "") : newDisplayName} 
                    onChange={e => editingUser ? setEditingUser({...editingUser, display_name: e.target.value}) : setNewDisplayName(e.target.value)} 
                    placeholder="Ex: João da Silva" 
-                   className="h-14 rounded-2xl border-gray-100 bg-gray-50 font-bold text-primary"
+                   className="h-14 rounded-none border-gray-100 bg-gray-50 font-bold text-primary"
                  />
                </div>
                <div className="space-y-3">
@@ -367,7 +367,7 @@ GRANT EXECUTE ON FUNCTION public.deletar_usuario TO authenticated, anon;
                    value={editingUser ? (editingUser.new_password || "") : newPassword} 
                    onChange={e => editingUser ? setEditingUser({...editingUser, new_password: e.target.value}) : setNewPassword(e.target.value)} 
                    placeholder={editingUser ? "********" : "Mínimo 6 dígitos"}
-                   className="h-14 rounded-2xl border-gray-100 bg-gray-50 font-bold text-primary"
+                   className="h-14 rounded-none border-gray-100 bg-gray-50 font-bold text-primary"
                  />
                </div>
             </div>
@@ -382,13 +382,13 @@ GRANT EXECUTE ON FUNCTION public.deletar_usuario TO authenticated, anon;
                         key={perm.id} 
                         type="button"
                         onClick={() => editingUser ? toggleEditPermission(perm.id) : togglePermission(perm.id)}
-                        className={`flex items-center gap-3 p-4 rounded-xl border text-left transition-all ${
+                        className={`flex items-center gap-3 p-4 rounded-none border text-left transition-all ${
                           isChecked 
                             ? "bg-primary border-primary shadow-lg shadow-blue-900/10" 
                             : "bg-background border-gray-100 hover:border-primary/20"
                         }`}
                       >
-                         <div className={`w-5 h-5 rounded flex items-center justify-center transition-colors ${isChecked ? 'bg-secondary text-primary' : 'bg-gray-100'}`}>
+                         <div className={`w-5 h-5 rounded-none flex items-center justify-center transition-colors ${isChecked ? 'bg-secondary text-primary' : 'bg-gray-100'}`}>
                             {isChecked && <ShieldCheck className="w-3.5 h-3.5" />}
                          </div>
                          <span className={`text-[10px] font-black uppercase tracking-tight ${isChecked ? 'text-white' : 'text-gray-400'}`}>
@@ -401,7 +401,7 @@ GRANT EXECUTE ON FUNCTION public.deletar_usuario TO authenticated, anon;
             </div>
 
             <div className="pt-6 border-t border-gray-50">
-               <Button onClick={editingUser ? handleUpdateUser : handleAddUser} disabled={loading} className="h-16 px-12 rounded-2xl bg-primary text-white font-black uppercase text-xs tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all w-full md:w-auto">
+               <Button onClick={editingUser ? handleUpdateUser : handleAddUser} disabled={loading} className="h-16 px-12 rounded-none bg-primary text-white font-black uppercase text-xs tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all w-full md:w-auto">
                  {loading ? <Loader2 className="w-5 h-5 animate-spin mr-3" /> : (editingUser ? <Save className="w-5 h-5 mr-3" /> : <Plus className="w-5 h-5 mr-3" />)}
                  {loading ? "Processando..." : (editingUser ? "Atualizar Usuário" : "Finalizar Cadastro")}
                </Button>
@@ -412,15 +412,15 @@ GRANT EXECUTE ON FUNCTION public.deletar_usuario TO authenticated, anon;
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
         {users.map((u) => (
-          <Card key={u.user_id} className="group overflow-hidden rounded-[2.5rem] border-none shadow-xl hover:shadow-2xl transition-all duration-500 bg-white text-slate-900">
+          <Card key={u.user_id} className="group overflow-hidden rounded-none border-none shadow-xl hover:shadow-2xl transition-all duration-500 bg-white text-slate-900">
              <div className="p-8 space-y-6">
                 <div className="flex items-center justify-between">
-                   <div className="w-14 h-14 bg-primary/5 rounded-[1.5rem] flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-500">
+                   <div className="w-14 h-14 bg-primary/5 rounded-none flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-500">
                       <Shield className="w-6 h-6" />
                    </div>
                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Button size="icon" variant="ghost" className="h-10 w-10 bg-gray-50 rounded-xl" onClick={() => setEditingUser({ ...u })}><ShieldCheck className="w-4 h-4 text-primary" /></Button>
-                      <Button size="icon" variant="ghost" className="h-10 w-10 bg-red-50 rounded-xl text-red-400 hover:text-red-600" onClick={() => handleDeleteUser(u.user_id, u.email)}><Trash2 className="w-4 h-4" /></Button>
+                      <Button size="icon" variant="ghost" className="h-10 w-10 bg-gray-50 rounded-none" onClick={() => setEditingUser({ ...u })}><ShieldCheck className="w-4 h-4 text-primary" /></Button>
+                      <Button size="icon" variant="ghost" className="h-10 w-10 bg-red-50 rounded-none text-red-400 hover:text-red-600" onClick={() => handleDeleteUser(u.user_id, u.email)}><Trash2 className="w-4 h-4" /></Button>
                    </div>
                 </div>
 
@@ -433,7 +433,7 @@ GRANT EXECUTE ON FUNCTION public.deletar_usuario TO authenticated, anon;
                    <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-3 italic">Módulos Autorizados:</p>
                    <div className="flex flex-wrap gap-1.5">
                       {u.permissions?.map((p: string) => (
-                         <span key={p} className="text-[8px] font-black bg-gray-50 text-primary/70 px-2.5 py-1 rounded-lg uppercase tracking-tight border border-gray-100">
+                         <span key={p} className="text-[8px] font-black bg-gray-50 text-primary/70 px-2.5 py-1 rounded-none uppercase tracking-tight border border-gray-100">
                             {ALL_PERMISSIONS.find(a => a.id === p)?.label || p}
                          </span>
                       ))}
@@ -443,7 +443,7 @@ GRANT EXECUTE ON FUNCTION public.deletar_usuario TO authenticated, anon;
           </Card>
         ))}
         {users.length === 0 && (
-           <div className="col-span-full h-64 flex flex-col items-center justify-center bg-gray-50/50 rounded-[3rem] border-2 border-dashed border-gray-100">
+           <div className="col-span-full h-64 flex flex-col items-center justify-center bg-gray-50/50 rounded-none border-2 border-dashed border-gray-100">
               <Users className="w-12 h-12 text-gray-200 mb-4" />
               <p className="text-xs font-black text-gray-300 uppercase tracking-widest">Nenhum colaborador registrado.</p>
            </div>

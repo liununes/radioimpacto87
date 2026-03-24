@@ -91,20 +91,20 @@ const AdminProgramacao = () => {
 
   return (
     <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      <div className="flex justify-between items-center bg-white text-slate-900 p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+      <div className="flex justify-between items-center bg-white text-slate-900 p-8 rounded-none border border-gray-100 shadow-sm">
         <div>
           <h2 className="text-3xl font-black text-primary tracking-tighter uppercase italic leading-none">Grade de <span className="text-secondary italic">Programação</span></h2>
           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Organize os horários e locutores da rádio</p>
         </div>
         {!editId && (
-          <div className="flex items-center gap-3 px-6 py-3 bg-primary/5 rounded-2xl border border-primary/10">
+          <div className="flex items-center gap-3 px-6 py-3 bg-primary/5 rounded-none border border-primary/10">
             <Radio className="w-4 h-4 text-primary" />
             <span className="text-[10px] font-black uppercase text-primary tracking-widest">{programas.length} Horários Definidos</span>
           </div>
         )}
       </div>
 
-      <Card className="rounded-[2.5rem] border-none shadow-xl bg-white text-slate-900 overflow-hidden">
+      <Card className="rounded-none border-none shadow-xl bg-white text-slate-900 overflow-hidden">
         <CardHeader className="p-10 pb-4">
           <CardTitle className="text-xl font-black uppercase tracking-tight text-primary italic">{editId ? "Editar Programa Existente" : "Registrar Novo Programa"}</CardTitle>
         </CardHeader>
@@ -113,13 +113,13 @@ const AdminProgramacao = () => {
              <div className="space-y-6">
                 <div className="space-y-3">
                   <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Nome do Show / Programa</Label>
-                  <Input value={nome} onChange={e => setNome(e.target.value)} placeholder="Ex: Manhã Total Clube" className="h-14 rounded-2xl border-gray-100 bg-gray-50 text-lg font-bold text-primary" />
+                  <Input value={nome} onChange={e => setNome(e.target.value)} placeholder="Ex: Manhã Total Clube" className="h-14 rounded-none border-gray-100 bg-gray-50 text-lg font-bold text-primary" />
                 </div>
                 
                 <div className="space-y-3">
                   <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Locutor Responsável</Label>
                   <select value={locutorId} onChange={e => setLocutorId(e.target.value)}
-                    className="flex h-14 w-full rounded-2xl border border-gray-100 bg-gray-50 px-4 text-sm font-bold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+                    className="flex h-14 w-full rounded-none border border-gray-100 bg-gray-50 px-4 text-sm font-bold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
                     <option value="">Selecione um locutor</option>
                     {locutores.map(l => <option key={l.id} value={l.id}>{l.nome}</option>)}
                   </select>
@@ -130,21 +130,21 @@ const AdminProgramacao = () => {
                 <div className="grid grid-cols-2 gap-6">
                    <div className="space-y-3">
                      <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Horário de Início</Label>
-                     <Input type="time" value={inicio} onChange={e => setInicio(e.target.value)} className="h-14 rounded-2xl border-gray-100 bg-gray-50 font-bold" />
+                     <Input type="time" value={inicio} onChange={e => setInicio(e.target.value)} className="h-14 rounded-none border-gray-100 bg-gray-50 font-bold" />
                    </div>
                    <div className="space-y-3">
                      <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Horário de Término</Label>
-                     <Input type="time" value={fim} onChange={e => setFim(e.target.value)} className="h-14 rounded-2xl border-gray-100 bg-gray-50 font-bold" />
+                     <Input type="time" value={fim} onChange={e => setFim(e.target.value)} className="h-14 rounded-none border-gray-100 bg-gray-50 font-bold" />
                    </div>
                 </div>
 
                 <div className="space-y-3">
                   <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Capa do Programa</Label>
                   <div className="flex items-center gap-6">
-                     <div className="w-20 h-20 rounded-2xl bg-gray-50 border border-gray-100 overflow-hidden flex items-center justify-center shrink-0">
+                     <div className="w-20 h-20 rounded-none bg-gray-50 border border-gray-100 overflow-hidden flex items-center justify-center shrink-0">
                         {foto ? <img src={foto} alt="Preview" className="w-full h-full object-cover" /> : <Upload className="w-6 h-6 text-gray-200" />}
                      </div>
-                     <label className="flex-1 h-14 bg-white text-slate-900 border border-gray-100 rounded-2xl flex items-center justify-center gap-3 cursor-pointer hover:bg-gray-50 transition-all font-black uppercase text-[10px] tracking-widest text-primary shadow-sm">
+                     <label className="flex-1 h-14 bg-white text-slate-900 border border-gray-100 rounded-none flex items-center justify-center gap-3 cursor-pointer hover:bg-gray-50 transition-all font-black uppercase text-[10px] tracking-widest text-primary shadow-sm">
                         <Upload className="w-4 h-4" /> Importar Arte
                         <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) setFoto(await fileToBase64(f)); }} />
                      </label>
@@ -162,7 +162,7 @@ const AdminProgramacao = () => {
                   key={i} 
                   type="button"
                   onClick={() => toggleDia(i)}
-                  className={`px-6 py-3 rounded-xl border font-black text-[10px] uppercase tracking-widest transition-all ${
+                  className={`px-6 py-3 rounded-none border font-black text-[10px] uppercase tracking-widest transition-all ${
                     dias.includes(i) 
                       ? "bg-primary text-white border-primary shadow-lg shadow-blue-900/10" 
                       : "bg-white text-slate-900 text-gray-400 border-gray-100 hover:border-primary/20"
@@ -175,12 +175,12 @@ const AdminProgramacao = () => {
           </div>
 
           <div className="pt-8 border-t border-gray-50 flex gap-4">
-            <Button onClick={handleSave} className="h-16 px-12 rounded-2xl bg-primary text-white font-black uppercase text-xs tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all disabled:opacity-50" disabled={locutores.length === 0 || loading}>
+            <Button onClick={handleSave} className="h-16 px-12 rounded-none bg-primary text-white font-black uppercase text-xs tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all disabled:opacity-50" disabled={locutores.length === 0 || loading}>
                {loading ? <Loader2 className="w-5 h-5 animate-spin mr-3" /> : <Save className="w-5 h-5 mr-3" />}
                {editId ? "Salvar Alterações" : "Publicar Programa"}
             </Button>
             {editId && (
-              <Button variant="ghost" onClick={resetForm} className="h-16 px-8 rounded-2xl font-black uppercase text-[10px] tracking-widest text-gray-400 hover:text-red-500">
+              <Button variant="ghost" onClick={resetForm} className="h-16 px-8 rounded-none font-black uppercase text-[10px] tracking-widest text-gray-400 hover:text-red-500">
                 <X className="w-4 h-4 mr-2" /> Cancelar Edição
               </Button>
             )}
@@ -191,17 +191,17 @@ const AdminProgramacao = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {programas.map(prog => (
-          <Card key={prog.id} className="group overflow-hidden rounded-[2.5rem] border-none shadow-xl hover:shadow-2xl transition-all duration-500 bg-white text-slate-900">
+          <Card key={prog.id} className="group overflow-hidden rounded-none border-none shadow-xl hover:shadow-2xl transition-all duration-500 bg-white text-slate-900">
             <CardContent className="p-8 flex items-center gap-8">
               <div className="relative shrink-0">
-                 <div className="w-24 h-24 rounded-[2rem] overflow-hidden border-4 border-gray-50 group-hover:border-primary/5 transition-all duration-500">
+                 <div className="w-24 h-24 rounded-none overflow-hidden border-4 border-gray-50 group-hover:border-primary/5 transition-all duration-500">
                     {prog.foto ? (
                       <img src={prog.foto} alt={prog.nome} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                     ) : (
                       <div className="w-full h-full bg-primary/5 flex items-center justify-center"><Radio className="w-8 h-8 text-primary/20" /></div>
                     )}
                  </div>
-                 <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-secondary rounded-2xl flex items-center justify-center shadow-lg shadow-yellow-400/20 text-primary font-black text-xs">
+                 <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-secondary rounded-none flex items-center justify-center shadow-lg shadow-yellow-400/20 text-primary font-black text-xs">
                     <Radio className="w-5 h-5" />
                  </div>
               </div>
@@ -213,27 +213,27 @@ const AdminProgramacao = () => {
                 </div>
                 
                 <div className="flex items-center gap-4 text-xs font-black text-primary/50 uppercase">
-                   <div className="flex items-center gap-2 px-3 py-1 bg-gray-50 rounded-lg border border-gray-100">
+                   <div className="flex items-center gap-2 px-3 py-1 bg-gray-50 rounded-none border border-gray-100">
                       <span className="text-secondary">●</span> {prog.horaInicio} - {prog.horaFim}
                    </div>
                 </div>
 
                 <div className="flex gap-1.5 flex-wrap">
                   {prog.diasSemana.sort().map(d => (
-                    <span key={d} className="text-[8px] font-black bg-primary/5 text-primary px-2.5 py-1 rounded-full uppercase tracking-widest border border-primary/5">{DIAS[d]}</span>
+                    <span key={d} className="text-[8px] font-black bg-primary/5 text-primary px-2.5 py-1 rounded-none uppercase tracking-widest border border-primary/5">{DIAS[d]}</span>
                   ))}
                 </div>
               </div>
 
               <div className="flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                <Button size="icon" variant="ghost" className="h-10 w-10 bg-gray-50 rounded-xl" onClick={() => handleEdit(prog)}><Edit2 className="w-4 h-4 text-primary" /></Button>
-                <Button size="icon" variant="ghost" className="h-10 w-10 bg-red-50 rounded-xl text-red-400 hover:text-red-600" onClick={() => handleDelete(prog.id)}><Trash2 className="w-4 h-4" /></Button>
+                <Button size="icon" variant="ghost" className="h-10 w-10 bg-gray-50 rounded-none" onClick={() => handleEdit(prog)}><Edit2 className="w-4 h-4 text-primary" /></Button>
+                <Button size="icon" variant="ghost" className="h-10 w-10 bg-red-50 rounded-none text-red-400 hover:text-red-600" onClick={() => handleDelete(prog.id)}><Trash2 className="w-4 h-4" /></Button>
               </div>
             </CardContent>
           </Card>
         ))}
         {programas.length === 0 && (
-           <div className="col-span-full h-64 flex flex-col items-center justify-center bg-gray-50/50 rounded-[3rem] border-2 border-dashed border-gray-100">
+           <div className="col-span-full h-64 flex flex-col items-center justify-center bg-gray-50/50 rounded-none border-2 border-dashed border-gray-100">
               <Radio className="w-12 h-12 text-gray-200 mb-4" />
               <p className="text-xs font-black text-gray-300 uppercase tracking-widest">Nenhum programa na grade ainda.</p>
            </div>

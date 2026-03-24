@@ -78,17 +78,17 @@ const AdminLocutores = () => {
 
   return (
     <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <div className="flex justify-between items-center bg-white text-slate-900 p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+      <div className="flex justify-between items-center bg-white text-slate-900 p-8 rounded-none border border-gray-100 shadow-sm">
         <div>
           <h2 className="text-3xl font-black text-primary tracking-tighter uppercase italic leading-none">Time de <span className="text-secondary italic">Locutores</span></h2>
           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Gerencie as vozes que comandam a sua programação</p>
         </div>
-        <Button onClick={resetForm} className="rounded-xl font-black uppercase tracking-widest text-[10px] h-12 px-8 bg-gray-50 text-gray-400 border border-gray-100 hover:bg-primary hover:text-white transition-all">Limpar Tudo</Button>
+        <Button onClick={resetForm} className="rounded-none font-black uppercase tracking-widest text-[10px] h-12 px-8 bg-gray-50 text-gray-400 border border-gray-100 hover:bg-primary hover:text-white transition-all">Limpar Tudo</Button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
         <div className="lg:col-span-4 space-y-10">
-          <Card className="rounded-[2.5rem] border-none shadow-xl bg-white text-slate-900 overflow-hidden sticky top-32">
+          <Card className="rounded-none border-none shadow-xl bg-white text-slate-900 overflow-hidden sticky top-32">
             <CardHeader className="bg-primary/5 p-8 border-b border-gray-100/50 text-center">
               <CardTitle className="text-xl font-black uppercase tracking-tight text-primary italic">
                 {editId ? "Editar Cadastro" : "Novo Cadastro"}
@@ -97,10 +97,10 @@ const AdminLocutores = () => {
             <CardContent className="p-8 space-y-8">
               <div className="flex flex-col items-center gap-6">
                  <div className="relative group">
-                    <div className="w-32 h-32 rounded-[2.5rem] bg-gray-50 border-4 border-white shadow-xl overflow-hidden flex items-center justify-center">
+                    <div className="w-32 h-32 rounded-none bg-gray-50 border-4 border-white shadow-xl overflow-hidden flex items-center justify-center">
                        {foto ? <img src={foto} alt="Preview" className="w-full h-full object-cover" /> : <Users className="w-12 h-12 text-gray-200" />}
                     </div>
-                    <label className="absolute inset-0 cursor-pointer flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-[2.5rem]">
+                    <label className="absolute inset-0 cursor-pointer flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-none">
                        <Upload className="text-white w-6 h-6" />
                        <input type="file" accept="image/*" className="hidden" onChange={handleFoto} />
                     </label>
@@ -112,15 +112,15 @@ const AdminLocutores = () => {
               <div className="space-y-6">
                 <div className="space-y-2">
                   <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Nome Artístico</Label>
-                  <Input value={nome} onChange={e => setNome(e.target.value)} placeholder="Ex: Robson Silva" className="h-12 rounded-xl border-gray-100 font-bold" />
+                  <Input value={nome} onChange={e => setNome(e.target.value)} placeholder="Ex: Robson Silva" className="h-12 rounded-none border-gray-100 font-bold" />
                 </div>
                 <div className="space-y-2">
                   <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Bio / Descrição</Label>
-                  <Textarea value={bio} onChange={e => setBio(e.target.value)} placeholder="Fale um pouco sobre o locutor..." rows={3} className="rounded-xl border-gray-100 font-medium" />
+                  <Textarea value={bio} onChange={e => setBio(e.target.value)} placeholder="Fale um pouco sobre o locutor..." rows={3} className="rounded-none border-gray-100 font-medium" />
                 </div>
               </div>
 
-              <Button onClick={handleSave} className="w-full h-14 rounded-2xl bg-secondary hover:bg-secondary/90 text-primary font-black uppercase tracking-widest text-[10px] shadow-lg shadow-yellow-400/20" disabled={loading}>
+              <Button onClick={handleSave} className="w-full h-14 rounded-none bg-secondary hover:bg-secondary/90 text-primary font-black uppercase tracking-widest text-[10px] shadow-lg shadow-yellow-400/20" disabled={loading}>
                 {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
                 {editId ? "Atualizar Perfil" : "Cadastrar Agora"}
               </Button>
@@ -130,10 +130,10 @@ const AdminLocutores = () => {
 
         <div className="lg:col-span-8">
            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {locutores.map(loc => (
-                <Card key={loc.id} className="group rounded-[2.5rem] border-none shadow-md hover:shadow-2xl transition-all duration-500 bg-white text-slate-900 overflow-hidden p-8 flex flex-col items-center text-center">
+               {locutores.map(loc => (
+                <Card key={loc.id} className="group rounded-none border-none shadow-md hover:shadow-2xl transition-all duration-500 bg-white text-slate-900 overflow-hidden p-8 flex flex-col items-center text-center">
                    <div className="relative mb-6">
-                      <div className="w-24 h-24 rounded-[2rem] bg-gray-50 border-4 border-white shadow-lg overflow-hidden flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                      <div className="w-24 h-24 rounded-none bg-gray-50 border-4 border-white shadow-lg overflow-hidden flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
                          {loc.foto ? <img src={loc.foto} alt={loc.nome} className="w-full h-full object-cover" /> : <div className="text-3xl font-black text-primary/20">{loc.nome.charAt(0)}</div>}
                       </div>
                    </div>
@@ -148,7 +148,7 @@ const AdminLocutores = () => {
                 </Card>
               ))}
               {locutores.length === 0 && (
-                <div className="col-span-full py-20 bg-gray-50 rounded-[3rem] border-2 border-dashed border-gray-100 flex flex-col items-center justify-center text-gray-300">
+                <div className="col-span-full py-20 bg-gray-50 rounded-none border-2 border-dashed border-gray-100 flex flex-col items-center justify-center text-gray-300">
                    <Users className="w-16 h-16 mb-4 opacity-20" />
                    <p className="text-[10px] font-black uppercase tracking-[0.3em]">Nenhum locutor encontrado</p>
                 </div>

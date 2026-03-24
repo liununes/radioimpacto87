@@ -21,6 +21,7 @@ const ThemeLoader = () => {
       }
 
       if (radioConfig?.favicon) {
+        // Favicon principal
         let link: HTMLLinkElement | null = document.querySelector("link[rel*='icon']");
         if (!link) {
           link = document.createElement('link');
@@ -28,6 +29,15 @@ const ThemeLoader = () => {
           document.getElementsByTagName('head')[0].appendChild(link);
         }
         link.href = radioConfig.favicon;
+
+        // Apple Touch Icon
+        let appleLink: HTMLLinkElement | null = document.querySelector("link[rel='apple-touch-icon']");
+        if (!appleLink) {
+          appleLink = document.createElement('link');
+          appleLink.rel = 'apple-touch-icon';
+          document.getElementsByTagName('head')[0].appendChild(appleLink);
+        }
+        appleLink.href = radioConfig.favicon;
       }
     };
     syncTheme();

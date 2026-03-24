@@ -50,20 +50,20 @@ const AdminPromos = () => {
 
   return (
     <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      <div className="flex justify-between items-center bg-white text-slate-900 p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+      <div className="flex justify-between items-center bg-white text-slate-900 p-8 rounded-none border border-gray-100 shadow-sm">
         <div>
           <h2 className="text-3xl font-black text-primary tracking-tighter uppercase italic leading-none">Central de <span className="text-pink-500 italic">Promoções</span></h2>
           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Crie e gerencie os sorteios dinâmicos da rádio</p>
         </div>
-        <Button onClick={handleSave} className="rounded-xl font-black uppercase tracking-widest text-[10px] h-12 px-8 bg-pink-500 text-white hover:bg-pink-600 transition-all shadow-lg shadow-pink-500/10" disabled={loading}>
+        <Button onClick={handleSave} className="rounded-none font-black uppercase tracking-widest text-[10px] h-12 px-8 bg-pink-500 text-white hover:bg-pink-600 transition-all shadow-lg shadow-pink-500/10" disabled={loading}>
           {loading ? "Salvando..." : "Salvar Alterações"}
         </Button>
       </div>
 
-      <Card className="rounded-[3rem] border-none shadow-xl bg-white text-slate-900 overflow-hidden">
+      <Card className="rounded-none border-none shadow-xl bg-white text-slate-900 overflow-hidden">
         <div className="bg-pink-500 p-10 text-white">
           <div className="flex items-center gap-4">
-             <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-md">
+             <div className="p-3 bg-white/20 rounded-none backdrop-blur-md">
                 <Gift className="w-8 h-8 fill-white" />
              </div>
              <div>
@@ -75,16 +75,16 @@ const AdminPromos = () => {
         <CardContent className="p-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             {(theme.promos || []).map((p, idx) => (
-              <div key={p.id || idx} className="relative group bg-gray-50 rounded-[3rem] p-10 border border-gray-100 flex flex-col gap-8 transition-all hover:shadow-xl hover:bg-white" style={{ opacity: p.ativa ? 1 : 0.6 }}>
+              <div key={p.id || idx} className="relative group bg-gray-50 rounded-none p-10 border border-gray-100 flex flex-col gap-8 transition-all hover:shadow-xl hover:bg-white" style={{ opacity: p.ativa ? 1 : 0.6 }}>
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
                   <div className="lg:col-span-5 space-y-6">
-                    <div className="aspect-[4/5] bg-white rounded-[2rem] flex items-center justify-center p-2 border border-gray-50 shadow-sm relative overflow-hidden group-hover:border-pink-200 transition-all">
+                    <div className="aspect-[4/5] bg-white rounded-none flex items-center justify-center p-2 border border-gray-50 shadow-sm relative overflow-hidden group-hover:border-pink-200 transition-all">
                       {p.imagem ? (
-                        <img src={p.imagem} alt={p.titulo} className="w-full h-full object-cover rounded-2xl transition-transform group-hover:scale-110 duration-1000" />
+                        <img src={p.imagem} alt={p.titulo} className="w-full h-full object-cover rounded-none transition-transform group-hover:scale-110 duration-1000" />
                       ) : (
                         <Gift className="w-16 h-16 text-gray-100" />
                       )}
-                      <label className="absolute inset-0 cursor-pointer bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <label className="absolute inset-0 cursor-pointer bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-none">
                         <Upload className="text-white w-10 h-10" />
                         <input 
                           type="file" 
@@ -102,7 +102,7 @@ const AdminPromos = () => {
                       </label>
                     </div>
                     
-                    <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-pink-50 shadow-sm">
+                    <div className="flex items-center justify-between bg-white p-4 rounded-none border border-pink-50 shadow-sm">
                       <div className="flex flex-col ml-2">
                         <span className="text-[10px] font-black uppercase text-pink-500">Status</span>
                         <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">{p.ativa ? "Ativa no Site" : "Inativa"}</span>
@@ -129,7 +129,7 @@ const AdminPromos = () => {
                           updatePromos(newPromos);
                         }}
                         placeholder="Ex: Iphone 15 Pro Max"
-                        className="h-14 rounded-2xl bg-white font-black text-lg text-primary"
+                        className="h-14 rounded-none bg-white font-black text-lg text-primary"
                       />
                     </div>
                     
@@ -144,7 +144,7 @@ const AdminPromos = () => {
                             updatePromos(newPromos);
                           }}
                           placeholder="https://wa.me/..."
-                          className="h-14 rounded-2xl bg-white text-sm"
+                          className="h-14 rounded-none bg-white text-sm"
                         />
                         <ExternalLink className="absolute right-6 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
                       </div>
@@ -152,7 +152,7 @@ const AdminPromos = () => {
 
                     <Button 
                       variant="destructive" 
-                      className="w-full h-14 rounded-[1.25rem] font-black uppercase text-[10px] tracking-widest shadow-xl shadow-red-500/10 transition-all hover:scale-105 active:scale-95"
+                      className="w-full h-14 rounded-none font-black uppercase text-[10px] tracking-widest shadow-xl shadow-red-500/10 transition-all hover:scale-105 active:scale-95"
                       onClick={() => {
                         if (confirm("Deseja realmente excluir esta promoção?")) {
                           const newPromos = (theme.promos || []).filter((_, i) => i !== idx);
@@ -172,9 +172,9 @@ const AdminPromos = () => {
                 const newPromos = [...(theme.promos || []), { id: crypto.randomUUID(), titulo: "Nova Promoção", imagem: "", link: "", ativa: true }];
                 updatePromos(newPromos);
               }}
-              className="border-4 border-dashed border-gray-100 rounded-[3rem] flex flex-col items-center justify-center p-12 gap-6 hover:border-pink-200 hover:bg-pink-50/50 transition-all text-gray-300 hover:text-pink-400 group min-h-[400px]"
+              className="border-4 border-dashed border-gray-100 rounded-none flex flex-col items-center justify-center p-12 gap-6 hover:border-pink-200 hover:bg-pink-50/50 transition-all text-gray-300 hover:text-pink-400 group min-h-[400px]"
             >
-              <div className="w-24 h-24 rounded-full border-4 border-dashed border-current flex items-center justify-center group-hover:scale-110 transition-transform">
+              <div className="w-24 h-24 rounded-none border-4 border-dashed border-current flex items-center justify-center group-hover:scale-110 transition-transform">
                 <Plus className="w-12 h-12" />
               </div>
               <div className="text-center">
