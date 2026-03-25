@@ -57,7 +57,15 @@ export async function saveLocutor(locutor: Partial<Locutor>) {
 }
 
 export async function deleteLocutor(id: string) {
+  // First, find programs referencing this locutor and either delete them or null their locutor_id
+  await supabase.from("programas").update({ locutor_id: null } as any).eq("locutor_id", id);
   return await supabase.from("locutores").delete().eq("id", id);
+}
+
+export async function clearAllStationData() {
+  const { error: progError } = await supabase.from("programas").delete().neq("id", "00000000-0000-0000-0000-000000000000"); // Delete all
+  const { error: locError } = await supabase.from("locutores").delete().neq("id", "00000000-0000-0000-0000-000000000000"); // Delete all
+  return { error: progError || locError };
 }
 
 export async function getProgramas(): Promise<Programa[]> {

@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { Users, Calendar, Radio, Image, Music, FileText, Heart, BarChart3, Settings, HardDrive, Zap } from "lucide-react";
+import { Users, Calendar, Radio, Image, Music, FileText, BarChart3, Settings, HardDrive, Zap } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { getLocutores, getProgramas, getSlides } from "@/lib/radioStore";
+import { getLocutores, getProgramas, getSlides, clearAllStationData } from "@/lib/radioStore";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 const AdminHome = () => {
   const [onlineListeners, setOnlineListeners] = useState(0);
@@ -19,7 +20,6 @@ const AdminHome = () => {
   ]);
 
   useEffect(() => {
-    // Simulador de ouvintes online baseado no horário
     const updateListeners = () => {
       const hour = new Date().getHours();
       let base = 12;
@@ -45,8 +45,6 @@ const AdminHome = () => {
       const { count: noticiasCount } = await supabase.from("noticias").select("*", { count: 'exact', head: true });
       const { data: themeData } = await supabase.from("site_config" as any).select("value").eq("key", "theme").maybeSingle();
       
-      const sponsorsCount = (themeData as any)?.value?.sponsors?.length || 0;
-
       setStats([
         { label: "Locutores", value: String(locs.length), icon: Users, color: "text-primary" },
         { label: "Programas", value: String(progs.length), icon: Calendar, color: "text-secondary" },
@@ -59,6 +57,18 @@ const AdminHome = () => {
     };
     fetchStats();
   }, [onlineListeners]);
+
+  const handleClearAll = async () => {
+    if (!confirm("🚨 ATENÇÃO: Isso excluirá TODOS os locutores e a grade de programação permanentemente. Você tem certeza?")) return;
+    
+    const { error } = await clearAllStationData();
+    if (error) {
+      toast.error("Erro ao limpar dados: " + error.message);
+    } else {
+      toast.success("Todos os dados de locução e programação foram limpos!");
+      setTimeout(() => window.location.reload(), 1500);
+    }
+  };
 
   return (
     <div className="space-y-12 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
@@ -143,6 +153,18 @@ const AdminHome = () => {
             <Settings className="w-6 h-6 text-primary group-hover:scale-110 transition-transform" />
             <span className="text-[9px] font-black uppercase tracking-widest">Equipe</span>
          </Link>
+      </div>
+
+      <div className="pt-20 border-t border-red-50">
+         <div className="bg-red-50 p-10 rounded-none border border-red-100 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="space-y-2">
+               <h3 className="text-xl font-black uppercase text-red-600 italic tracking-tighter">Zona de Perigo</h3>
+               <p className="text-xs font-bold text-red-400 uppercase tracking-widest max-w-md leading-relaxed">Limpeza total de dados para reajuste manual. Use com cuidado extremo.</p>
+            </div>
+            <Button onClick={handleClearAll} variant="destructive" className="h-14 px-10 rounded-none font-black uppercase text-[10px] tracking-widest shadow-xl shadow-red-200 hover:scale-105 active:scale-95 transition-all">
+               Limpar Tudo (Locutores & Grade)
+            </Button>
+         </div>
       </div>
     </div>
   );

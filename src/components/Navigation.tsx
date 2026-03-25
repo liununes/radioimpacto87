@@ -33,10 +33,10 @@ const Navigation = () => {
   }, []);
 
   const defaultNavItems = [
-    { label: "Home", href: "#home" },
+    { label: "Home", href: "/" },
     { label: "Promoções", href: "#promocoes", visible: theme.showPromos !== false },
     { label: theme.labels.navMusic || "MÚSICA", href: "#musica", visible: theme.showTopSongs },
-    { label: "Programação", href: "#programacao", visible: theme.showProgramas },
+    { label: "Programação", href: "/programacao", visible: theme.showProgramas },
     { label: "Sobre", href: "#sobre", visible: theme.showAbout },
     { label: "Contato", href: "#contato" },
   ].filter(item => item.visible !== false);

@@ -46,9 +46,7 @@ const Index = () => {
   const topSongsPos = theme.topSongsPosition || 'hero';
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950 dark:text-white pb-32 md:pb-40 overflow-x-hidden transition-colors duration-500">
-      <Navigation />
-      
+    <>
       <main className="relative z-10">
         {/* Slide de fotos no topo, como solicitado - Padrão do site */}
         <section id="home" className="pt-0">
@@ -108,11 +106,7 @@ const Index = () => {
         
         {theme.showSponsors && <SponsorsSection />}
       </main>
-      
-      <BackToTop />
-      <Footer />
-      <RadioPlayer />
-    </div>
+    </>
   );
 };
 
