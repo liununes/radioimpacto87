@@ -4,7 +4,6 @@ import HeroCarousel from "@/components/HeroCarousel";
 import TopSongs from "@/components/TopSongs";
 import { FeaturedNews, RemainingNews, useNews } from "@/components/EnhancedNewsSection";
 import GaleriaSection from "@/components/GaleriaSection";
-import ProgramacaoSection from "@/components/ProgramacaoSection";
 import AboutSection from "@/components/AboutSection";
 import SponsorsSection from "@/components/SponsorsSection";
 import PromosSection from "@/components/PromosSection";
@@ -77,12 +76,6 @@ const Index = () => {
           <section id="musica" className="py-20">
             <TopSongs />
           </section>
-        )}
-
-        {theme.showProgramas && (
-          <div id="programacao" className="mt-32 py-20">
-             <ProgramacaoSection />
-          </div>
         )}
         
         {theme.showGallery && (
