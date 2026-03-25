@@ -1,35 +1,22 @@
-import { getSiteConfig, getRedesSociais, type RedeSocial } from "@/lib/radioStore";
 import { useState, useEffect } from "react";
-import { Menu, X, Search, Moon, Sun, Instagram, Facebook, Youtube, Twitter, Music2, Globe, MessageCircle } from "lucide-react";
-import { useTheme } from "@/hooks/useTheme";
 import { Link, useLocation } from "react-router-dom";
+import { Menu, X, Radio, ChevronDown } from "lucide-react";
+import { useTheme } from "@/hooks/useTheme";
 import WeatherWidget from "./WeatherWidget";
+import { Button } from "./ui/button";
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [siteConfig, setSiteConfig] = useState<any>({});
-  const [redes, setRedes] = useState<RedeSocial[]>([]);
-  const [darkMode, setDarkMode] = useState(() => localStorage.getItem('darkMode') === 'true');
+  const [isScrolled, setIsScrolled] = useState(false);
   const theme = useTheme();
   const location = useLocation();
 
   useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-    localStorage.setItem('darkMode', String(darkMode));
-  }, [darkMode]);
-
-  useEffect(() => {
-    const loadSiteConfig = async () => {
-      const site = await getSiteConfig("site");
-      const streaming = await getSiteConfig("streaming");
-      setSiteConfig({ ...(site || {}), ...(streaming || {}) });
-      setRedes(await getRedesSociais());
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
     };
-    loadSiteConfig();
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const defaultNavItems = [
@@ -42,15 +29,29 @@ const Navigation = () => {
   ].filter(item => item.visible !== false);
 
   const navItems = (theme.navMenus && theme.navMenus.length > 0 ? theme.navMenus : defaultNavItems).filter(item => {
-    if (item.href === "#entretenimento" && theme.showEntretenimento === false) return false;
+    if (item.label === "Promoções") return theme.showPromos !== false;
+    if (item.label === "Música" || item.label === "MÚSICA" || item.label === theme.labels.navMusic) return theme.showTopSongs !== false;
+    if (item.label === "Programação") return theme.showProgramas !== false;
+    if (item.label === "Sobre") return theme.showAbout !== false;
     return true;
   });
 
+  const getLinkTo = (href: string) => {
+    if (href === "#programacao" || href === "programacao") return "/programacao";
+    if (href === "/" || href === "home") return "/";
+    if (href.startsWith("#")) return `/${href}`;
+    return href;
+  };
+
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (href.startsWith("#") && location.pathname === "/") {
-      e.preventDefault();
-      const element = document.querySelector(href);
+    const target = getLinkTo(href);
+    
+    // Se for uma âncora na mesma página (Home)
+    if (target.startsWith("/#") && location.pathname === "/") {
+      const id = target.substring(2);
+      const element = document.getElementById(id);
       if (element) {
+        e.preventDefault();
         element.scrollIntoView({ behavior: "smooth" });
       }
     }
@@ -58,160 +59,100 @@ const Navigation = () => {
 
   return (
     <nav 
-      className="top-nav-clube sticky top-0 z-[100] border-b border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.3)] backdrop-blur-2xl transition-all duration-500"
-      style={{ 
-        background: `linear-gradient(to right, var(--header-grad-start), var(--header-grad-end))`,
-        color: 'var(--header-text-color)'
-      }}
+      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${isScrolled ? "py-4 bg-white/90 dark:bg-gray-950/90 backdrop-blur-xl shadow-2xl" : "py-8 bg-transparent"}`}
     >
-      <div className="container-fluid mx-auto px-6 md:px-12 flex items-center justify-between gap-4 md:gap-8">
-        {/* Logo & Weather */}
-        <div className="flex items-center gap-4 md:gap-8 shrink-0">
-          <Link to="/">
-            {siteConfig.logo ? (
-              <div className="relative group p-2">
-                <div 
-                  className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 flex items-center justify-center bg-white shadow-2xl transition-all duration-500 group-hover:scale-105"
-                  style={{ borderColor: 'var(--logo-circle-1)' }}
-                >
-                  <div 
-                     className="w-full h-full rounded-full border-4 flex items-center justify-center overflow-hidden p-5"
-                     style={{ borderColor: 'var(--logo-circle-2)' }}
-                  >
-                    <img 
-                      src={siteConfig.logo} 
-                      alt="Logo" 
-                      className="max-w-full max-h-full object-contain drop-shadow-[0_4px_6px_rgba(0,0,0,0.1)] group-hover:scale-110 transition-transform duration-500"
-                    />
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="h-14 md:h-18 flex items-center bg-white/5 px-4 rounded-xl border border-white/10 italic text-white font-black text-xs">
-                 IMPACTO
-              </div>
-            )}
+      <div className="container mx-auto px-6">
+        <div className="flex items-center justify-between gap-8">
+          {/* Logo Section */}
+          <Link to="/" className="flex items-center gap-3 shrink-0 group">
+            <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center text-white shadow-xl group-hover:rotate-12 transition-all duration-500">
+              {theme.logo ? (
+                <img src={theme.logo} alt="Logo" className="w-8 h-8 object-contain" />
+              ) : (
+                <Radio className="w-6 h-6" />
+              )}
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xl font-black tracking-tighter leading-none uppercase italic" style={{ color: 'var(--text-title)' }}>
+                {theme.radioName || "IMPACTO"}
+              </span>
+              <span className="text-[10px] font-bold tracking-[0.3em] text-accent uppercase">87.9 FM</span>
+            </div>
           </Link>
           
           <div className="flex shrink-0">
             <WeatherWidget showWeather={theme.showWeather} />
           </div>
-        </div>
 
-        {/* Desktop Menu - Improved Layout to avoid 'embolado' */}
-        <div className="hidden lg:flex items-center justify-center flex-1 gap-4 xl:gap-8">
-          {navItems.map((item, idx) => {
-            const isFirst = idx === 0;
-            if (isFirst) {
+          {/* Desktop Menu */}
+          <div className="hidden lg:flex items-center justify-center flex-1 gap-4 xl:gap-8">
+            {navItems.map((item, idx) => {
+              const toValue = getLinkTo(item.href);
+              const isActive = location.pathname === toValue;
+
               return (
                 <Link
                   key={item.label}
-                  to={item.href.startsWith("#") ? `/${item.href}` : item.href}
+                  to={toValue}
                   onClick={(e) => handleNavClick(e, item.href)}
-                  className="px-7 py-3 rounded-full text-[10px] xl:text-[11px] font-[900] tracking-[0.2em] hover:scale-110 transition-all uppercase shadow-[0_10px_20px_rgba(0,0,0,0.2)] whitespace-nowrap"
-                  style={{ 
-                    backgroundColor: 'var(--nav-item-active)', 
-                    color: 'var(--nav-item-active-text)' 
-                  }}
+                  className={`text-[10px] xl:text-[11px] font-black tracking-[0.15em] transition-all relative group py-2 whitespace-nowrap ${isActive ? "text-accent" : ""}`}
+                  style={{ color: isActive ? 'var(--nav-item-active)' : 'var(--nav-item-color)' }}
                 >
                   {item.label}
+                  <div className={`absolute -bottom-1 left-0 right-0 h-0.5 bg-[var(--nav-item-active)] transition-transform origin-left ${isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"}`} />
                 </Link>
               );
-            }
-            return (
-              <Link
-                key={item.label}
-                to={item.href.startsWith("#") ? `/${item.href}` : item.href}
-                onClick={(e) => handleNavClick(e, item.href)}
-                className="text-[10px] xl:text-[11px] font-black tracking-[0.15em] transition-all relative group py-2 whitespace-nowrap hover:text-[var(--nav-item-hover)]"
-                style={{ color: 'var(--nav-item-color)' }}
-              >
-                {item.label}
-                <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[var(--nav-item-active)] scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
-              </Link>
-            );
-          })}
-        </div>
-
-        {/* Right Actions */}
-        <div className="hidden lg:flex items-center gap-4 xl:gap-6 shrink-0">
-          {theme.showSocial && redes.length > 0 && (
-            <div className="flex items-center gap-3 border-r border-white/5 pr-4 xl:pr-6">
-              {redes.map(rede => (
-                <a key={rede.id} href={rede.url} target="_blank" rel="noopener noreferrer" className="text-white hover:text-[var(--clube-yellow)] transition-all drop-shadow-[0_0_8px_rgba(255,255,255,0.3)] hover:scale-110 active:scale-95">
-                  {rede.icone === 'instagram' && <Instagram size={18} strokeWidth={2.5} />}
-                  {rede.icone === 'facebook' && <Facebook size={18} strokeWidth={2.5} />}
-                  {rede.icone === 'youtube' && <Youtube size={18} strokeWidth={2.5} />}
-                  {rede.icone === 'twitter' && <Twitter size={18} strokeWidth={2.5} />}
-                  {rede.icone === 'tiktok' && <Music2 size={18} strokeWidth={2.5} />}
-                  {!['instagram', 'facebook', 'youtube', 'twitter', 'tiktok'].includes(rede.icone) && <Globe size={18} strokeWidth={2.5} />}
-                </a>
-              ))}
-            </div>
-          )}
-          <div className="flex items-center gap-3 text-[10px] font-black border-r border-white/5 pr-4 xl:pr-6" style={{ color: 'var(--header-text-color)' }}>
-             <button onClick={() => setDarkMode(!darkMode)} className="hover:text-[var(--clube-yellow)] transition-colors" title={darkMode ? "Modo Claro" : "Modo Escuro"}>
-               {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-             </button>
+            })}
           </div>
-          
-          <div className="relative group flex items-center">
-            <input 
-              type="text" 
-              placeholder="Buscar..." 
-              className="bg-white/5 border border-white/10 rounded-full px-4 xl:px-5 py-2 text-[10px] text-white placeholder:text-white/40 focus:outline-none focus:border-[var(--clube-yellow)]/50 w-24 xl:w-32 focus:w-48 transition-all"
-            />
-            <Search className="w-3.5 h-3.5 text-[var(--clube-yellow)]/60 absolute right-4 pointer-events-none" />
-          </div>
-        </div>
 
-        {/* Mobile Toggle */}
-        <button className="lg:hidden p-2 bg-white/5 rounded-lg border border-white/10" style={{ color: 'var(--header-text-color)' }} onClick={() => setIsMenuOpen(!isMenuOpen)}>
-          {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
-        </button>
+          {/* Mobile Menu Trigger */}
+          <button 
+            className="lg:hidden w-12 h-12 rounded-xl bg-primary/5 dark:bg-white/5 flex items-center justify-center text-primary dark:text-white"
+            onClick={() => setIsMenuOpen(true)}
+          >
+            <Menu className="w-6 h-6" />
+          </button>
+        </div>
       </div>
 
-      {/* Mobile Menu - Higher z-index to be above player */}
-      {isMenuOpen && (
-        <div 
-          className="lg:hidden fixed inset-0 top-[80px] md:top-[100px] z-[150] p-8 flex flex-col gap-4 shadow-2xl animate-in slide-in-from-top duration-300 overflow-y-auto pb-32"
-          style={{ 
-            background: `linear-gradient(to bottom, var(--header-grad-end), var(--clube-blue))`,
-            color: 'var(--header-text-color)'
-          }}
-        >
-          {navItems.map((item) => (
-            <Link
-              key={item.label}
-              to={item.href.startsWith("#") ? `/${item.href}` : item.href}
-              className="font-black tracking-tighter text-3xl py-4 border-b border-white/5 flex justify-between items-center group active:text-[var(--nav-item-active)] hover:text-[var(--nav-item-hover)]"
-              style={{ color: 'var(--nav-item-color)' }}
-              onClick={(e) => {
-                handleNavClick(e, item.href);
-                setIsMenuOpen(false);
-              }}
+      {/* Mobile Fullscreen Menu */}
+      <div className={`fixed inset-0 z-[200] bg-primary transition-all duration-700 ${isMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}>
+        <div className="container h-full mx-auto px-8 py-12 flex flex-col">
+          <div className="flex items-center justify-between mb-20">
+            <span className="text-white text-2xl font-black italic tracking-tighter">MENU</span>
+            <button 
+              className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white"
+              onClick={() => setIsMenuOpen(false)}
             >
-              {item.label}
-              <span className="text-[var(--clube-yellow)] opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-            </Link>
-          ))}
+              <X className="w-6 h-6" />
+            </button>
+          </div>
 
-          {theme.showSocial && redes.length > 0 && (
-            <div className="flex items-center gap-6 pt-8 mt-4 border-t border-white/5">
-              {redes.map(rede => (
-                <a key={rede.id} href={rede.url} target="_blank" rel="noopener noreferrer" className="text-white opacity-70 hover:opacity-100 hover:text-[var(--clube-yellow)] transition-all">
-                  {rede.icone === 'instagram' && <Instagram size={24} />}
-                  {rede.icone === 'facebook' && <Facebook size={24} />}
-                  {rede.icone === 'youtube' && <Youtube size={24} />}
-                  {rede.icone === 'twitter' && <Twitter size={24} />}
-                  {rede.icone === 'tiktok' && <Music2 size={24} />}
-                  {!['instagram', 'facebook', 'youtube', 'twitter', 'tiktok'].includes(rede.icone) && <Globe size={24} />}
-                </a>
-              ))}
-            </div>
-          )}
+          <div className="flex flex-col space-y-2">
+            {navItems.map((item) => (
+              <Link
+                key={item.label}
+                to={getLinkTo(item.href)}
+                className="font-black tracking-tighter text-4xl py-4 border-b border-white/5 text-white/40 hover:text-white transition-all flex justify-between items-center group"
+                onClick={(e) => {
+                  handleNavClick(e, item.href);
+                  setIsMenuOpen(false);
+                }}
+              >
+                {item.label}
+                <span className="opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+              </Link>
+            ))}
+          </div>
+          
+          <div className="mt-auto pt-10 border-t border-white/5 text-white/30">
+             <p className="text-[10px] font-black uppercase tracking-widest leading-loose">
+                Impacto FM 87.9<br/>
+                A Rádio que toca o seu coração.
+             </p>
+          </div>
         </div>
-      )}
+      </div>
     </nav>
   );
 };
