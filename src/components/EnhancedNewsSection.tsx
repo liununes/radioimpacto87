@@ -43,7 +43,10 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[], loading: boo
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
         {featured && (
-          <div className="lg:col-span-8 group">
+          <div 
+            className="lg:col-span-8 group cursor-pointer"
+            onClick={() => featured.url && window.open(featured.url, '_blank')}
+          >
             <Card className="h-full relative overflow-hidden rounded-3xl border-none shadow-2xl hover:shadow-primary/10 transition-all duration-500">
               <div className="flex flex-col h-full">
                 <div className="aspect-[16/9] overflow-hidden relative">
@@ -67,15 +70,15 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[], loading: boo
                       {featured.titulo}
                     </h3>
                   </div>
+                  {featured.resumo && (
+                    <p className="text-gray-500 mb-8 line-clamp-3 text-lg leading-relaxed font-medium">
+                      {featured.resumo}
+                    </p>
+                  )}
                   {featured.url && (
-                    <a
-                      href={featured.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="clube-btn-yellow w-fit"
-                    >
+                    <div className="clube-btn-yellow w-fit">
                       LER NOTÍCIA
-                    </a>
+                    </div>
                   )}
                 </CardContent>
               </div>
@@ -90,7 +93,12 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[], loading: boo
             VÍDEOS E MAIS
           </h4>
           {sidebar.map((item) => (
-            <Card key={item.id} className="h-32 group cursor-pointer border-none shadow-lg rounded-2xl overflow-hidden hover:scale-[1.02] transition-all" style={{ backgroundColor: 'var(--plantao-card-bg)' }}>
+            <Card 
+              key={item.id} 
+              className="h-32 group cursor-pointer border-none shadow-lg rounded-2xl overflow-hidden hover:scale-[1.02] transition-all" 
+              style={{ backgroundColor: 'var(--plantao-card-bg)' }}
+              onClick={() => item.url && window.open(item.url, '_blank')}
+            >
               <div className="flex h-full">
                 <div className="w-32 shrink-0 overflow-hidden relative">
                   <img 
@@ -128,7 +136,11 @@ export const RemainingNews = ({ news, loading }: { news: NewsItem[], loading: bo
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {remaining.map((item) => (
-          <Card key={item.id} className="group hover:-translate-y-2 transition-all duration-500 border-none shadow-xl rounded-2xl overflow-hidden bg-white">
+          <Card 
+            key={item.id} 
+            className="group hover:-translate-y-2 cursor-pointer transition-all duration-500 border-none shadow-xl rounded-2xl overflow-hidden bg-white"
+            onClick={() => item.url && window.open(item.url, '_blank')}
+          >
             {item.imagem && (
               <div className="aspect-video overflow-hidden">
                 <img 
@@ -142,7 +154,7 @@ export const RemainingNews = ({ news, loading }: { news: NewsItem[], loading: bo
               <span className="text-[10px] font-black text-accent uppercase tracking-widest mb-3 block">
                 {item.categoria || "LOCAL"}
               </span>
-              <CardTitle className="text-base font-black line-clamp-2 hover:underline cursor-pointer uppercase tracking-tight leading-tight" style={{ color: 'var(--text-title)' }}>
+              <CardTitle className="text-base font-black line-clamp-2 hover:underline uppercase tracking-tight leading-tight" style={{ color: 'var(--text-title)' }}>
                 {item.titulo}
               </CardTitle>
             </CardHeader>
