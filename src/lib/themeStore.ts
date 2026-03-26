@@ -72,6 +72,8 @@ export interface ThemeConfig {
   showBackToTop: boolean;
   showEntretenimento: boolean;
   showSocial: boolean;
+  showMaintenance: boolean;
+  maintenanceMessage: string;
   // Weather settings
   weatherCity: string;
   // Sponsor settings
@@ -195,6 +197,8 @@ export const DEFAULT_THEME: ThemeConfig = {
   showBackToTop: true,
   showEntretenimento: true,
   showSocial: true,
+  showMaintenance: false,
+  maintenanceMessage: "Estamos realizando manutenções em nosso portal para melhor atendê-los. Voltaremos em breve com muitas novidades!",
   weatherCity: 'Brasília',
   sponsorsPosition: 'center',
   topSongsAlignment: 'center',

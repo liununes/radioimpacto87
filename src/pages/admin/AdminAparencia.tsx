@@ -432,6 +432,35 @@ const AdminAparencia = () => {
                  })}
               </CardContent>
            </Card>
+
+           {/* SEÇÃO MANUTENÇÃO */}
+           <Card className="rounded-none border-none shadow-xl bg-white text-slate-900 overflow-hidden border border-gray-100 mt-8">
+              <div className="bg-red-600 p-8 text-white">
+                 <h3 className="text-xl font-black uppercase italic tracking-tighter flex items-center gap-3">
+                   <Settings className="w-6 h-6 animate-spin" /> Modo Manutenção
+                 </h3>
+                 <p className="text-white/60 text-xs font-medium mt-1 uppercase tracking-widest">Tire o site do ar para os ouvintes, mantendo apenas o admin acessível</p>
+              </div>
+              <CardContent className="p-8 space-y-8">
+                 <div className="flex items-center justify-between p-8 bg-black/5 rounded-none border border-black/5">
+                   <div className="space-y-1">
+                     <p className="text-sm font-black text-slate-900 uppercase italic">Ativar Modo Manutenção?</p>
+                     <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Os ouvintes verão apenas a página de manutenção.</p>
+                   </div>
+                   <Switch checked={theme.showMaintenance} onCheckedChange={v => updateField("showMaintenance", v)} className="data-[state=checked]:bg-red-600" />
+                 </div>
+
+                 <div className="space-y-3">
+                   <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Mensagem de Manutenção</Label>
+                   <textarea 
+                     value={theme.maintenanceMessage} 
+                     onChange={e => updateField("maintenanceMessage", e.target.value)} 
+                     placeholder="Ex: Estamos em manutenção..."
+                     className="w-full h-32 rounded-none border-gray-100 bg-gray-50 p-6 text-sm font-medium focus:ring-2 focus:ring-red-600/20 transition-all outline-none"
+                   />
+                 </div>
+              </CardContent>
+           </Card>
         </TabsContent>
 
         {/* --- WHITE LABEL TAB --- */}

@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import ThemeLoader from "@/components/ThemeLoader";
 import ClientLayout from "./components/ClientLayout";
+import MaintenanceGuard from "./components/MaintenanceGuard";
 import Index from "./pages/Index";
 import ProgramacaoPage from "./pages/ProgramacaoPage";
 import PlayerPage from "./pages/Player";
@@ -37,31 +38,33 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <Routes>
-            <Route element={<ClientLayout />}>
-              <Route path="/" element={<Index />} />
-              <Route path="/programacao" element={<ProgramacaoPage />} />
-              <Route path="/player" element={<PlayerPage />} />
-            </Route>
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/admin" element={<AdminLayout />}>
-              <Route index element={<AdminHome />} />
-              <Route path="media" element={<AdminMedia />} />
-              <Route path="streaming" element={<AdminStreaming />} />
-              <Route path="aparencia" element={<AdminAparencia />} />
-              <Route path="locutores" element={<AdminLocutores />} />
-              <Route path="programacao" element={<AdminProgramacao />} />
-              <Route path="slides" element={<AdminSlides />} />
-              <Route path="fotos" element={<AdminFotos />} />
-              <Route path="noticias" element={<AdminNoticias />} />
-              <Route path="sobre" element={<AdminSobre />} />
-              <Route path="patrocinadores" element={<AdminSponsors />} />
-              <Route path="promocoes" element={<AdminPromos />} />
-              <Route path="estatisticas" element={<AdminEstatisticas />} />
-              <Route path="usuarios" element={<AdminUsuarios />} />
-            </Route>
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <MaintenanceGuard>
+            <Routes>
+              <Route element={<ClientLayout />}>
+                <Route path="/" element={<Index />} />
+                <Route path="/programacao" element={<ProgramacaoPage />} />
+                <Route path="/player" element={<PlayerPage />} />
+              </Route>
+              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/admin" element={<AdminLayout />}>
+                <Route index element={<AdminHome />} />
+                <Route path="media" element={<AdminMedia />} />
+                <Route path="streaming" element={<AdminStreaming />} />
+                <Route path="aparencia" element={<AdminAparencia />} />
+                <Route path="locutores" element={<AdminLocutores />} />
+                <Route path="programacao" element={<AdminProgramacao />} />
+                <Route path="slides" element={<AdminSlides />} />
+                <Route path="fotos" element={<AdminFotos />} />
+                <Route path="noticias" element={<AdminNoticias />} />
+                <Route path="sobre" element={<AdminSobre />} />
+                <Route path="patrocinadores" element={<AdminSponsors />} />
+                <Route path="promocoes" element={<AdminPromos />} />
+                <Route path="estatisticas" element={<AdminEstatisticas />} />
+                <Route path="usuarios" element={<AdminUsuarios />} />
+              </Route>
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </MaintenanceGuard>
         </BrowserRouter>
       </AuthProvider>
     </TooltipProvider>
