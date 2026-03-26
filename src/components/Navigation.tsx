@@ -59,24 +59,36 @@ const Navigation = () => {
 
   return (
     <nav 
-      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${isScrolled ? "py-4 bg-white/90 dark:bg-gray-950/90 backdrop-blur-xl shadow-2xl" : "py-8 bg-transparent"}`}
+      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-700 ${isScrolled ? "py-3 shadow-2xl backdrop-blur-xl" : "py-8 bg-transparent"}`}
+      style={{
+        background: isScrolled 
+          ? `linear-gradient(to right, var(--header-grad-start), var(--header-grad-end))` 
+          : 'transparent',
+        opacity: isScrolled ? 0.95 : 1
+      }}
     >
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between gap-8">
-          {/* Logo Section */}
-          <Link to="/" className="flex items-center gap-3 shrink-0 group">
-            <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center text-white shadow-xl group-hover:rotate-12 transition-all duration-500">
+          {/* Logo Section - BIGGER and MORE VISIBLE */}
+          <Link to="/" className="flex items-center gap-5 shrink-0 group">
+            <div 
+              className="w-16 h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center text-white shadow-2xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 relative overflow-hidden p-3"
+              style={{
+                background: `linear-gradient(135deg, var(--logo-circle-1), var(--logo-circle-2))`
+              }}
+            >
+              <div className="absolute inset-0 bg-black/10 mix-blend-overlay" />
               {theme.logo ? (
-                <img src={theme.logo} alt="Logo" className="w-8 h-8 object-contain" />
+                <img src={theme.logo} alt="Logo" className="w-full h-full object-contain relative z-10" />
               ) : (
-                <Radio className="w-6 h-6" />
+                <Radio className="w-8 h-8 md:w-10 md:h-10 relative z-10" />
               )}
             </div>
             <div className="flex flex-col">
-              <span className="text-xl font-black tracking-tighter leading-none uppercase italic" style={{ color: 'var(--text-title)' }}>
+              <span className="text-2xl md:text-3xl font-black tracking-tighter leading-none uppercase italic drop-shadow-md" style={{ color: isScrolled ? 'white' : 'var(--text-title)' }}>
                 {theme.radioName || "IMPACTO"}
               </span>
-              <span className="text-[10px] font-bold tracking-[0.3em] text-accent uppercase">87.9 FM</span>
+              <span className="text-[11px] font-black tracking-[0.4em] text-accent uppercase drop-shadow-sm">{theme.radioFreq || "87.9"} FM</span>
             </div>
           </Link>
           
