@@ -35,7 +35,10 @@ export interface ThemeConfig {
   textTitle: string;
   textContent: string;
   textDetail: string;
-  // Radio Config
+  // Branding
+  logo?: string;
+  radioName?: string;
+  favicon?: string;
   radioFreq: string;
   playerOpenUrl: string;
   // Brand Colors (Hex)
@@ -165,6 +168,9 @@ export const DEFAULT_THEME: ThemeConfig = {
   textContent: "#475569",
   textDetail: "#ff8c00",
   radioFreq: "87.9",
+  radioName: "IMPACTO",
+  logo: "",
+  favicon: "",
   playerOpenUrl: "/player",
   clubeBlue: "#002e5d",
   clubeYellow: "#ffed32",
@@ -196,11 +202,11 @@ export const DEFAULT_THEME: ThemeConfig = {
   sponsors: [],
   promos: [],
   navMenus: [
-    { label: "AO VIVO", href: "#home" },
+    { label: "AO VIVO", href: "/" },
     { label: "PROMOÇÕES", href: "#promocoes" },
     { label: "ENTRETENIMENTO", href: "#entretenimento" },
     { label: "MÚSICA", href: "#musica" },
-    { label: "PROGRAMAÇÃO", href: "#programacao" },
+    { label: "PROGRAMAÇÃO", href: "/programacao" },
     { label: "A RÁDIO", href: "#sobre" },
     { label: "CONTATO", href: "#contato" },
   ],

@@ -7,13 +7,23 @@ export function useTheme() {
 
   useEffect(() => {
     const fetchTheme = async () => {
-      const savedTheme = await getSiteConfig("theme");
+      const [savedTheme, streaming] = await Promise.all([
+        getSiteConfig("theme"),
+        getSiteConfig("streaming")
+      ]);
+
+      setTheme(prev => ({ 
+        ...prev, 
+        ...savedTheme,
+        // Branding from streaming/radioConfig
+        logo: streaming?.logo || savedTheme?.logo || "",
+        radioName: streaming?.radioName || savedTheme?.radioName || "IMPACTO",
+        favicon: streaming?.favicon || savedTheme?.favicon || "",
+        radioFreq: streaming?.radioFreq || savedTheme?.radioFreq || prev.radioFreq,
+        labels: { ...prev.labels, ...(savedTheme?.labels || {}) }
+      }));
+
       if (savedTheme) {
-        setTheme(prev => ({ 
-          ...prev, 
-          ...savedTheme,
-          labels: { ...prev.labels, ...(savedTheme.labels || {}) }
-        }));
         applyTheme({ ...getThemeConfig(), ...savedTheme });
       }
     };
