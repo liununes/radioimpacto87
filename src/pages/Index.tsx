@@ -7,6 +7,7 @@ import GaleriaSection from "@/components/GaleriaSection";
 import AboutSection from "@/components/AboutSection";
 import SponsorsSection from "@/components/SponsorsSection";
 import PromosSection from "@/components/PromosSection";
+import PedidoSection from "@/components/PedidoSection";
 import BackToTop from "@/components/BackToTop";
 import Footer from "@/components/Footer";
 import { useTheme } from "@/hooks/useTheme";
@@ -58,6 +59,14 @@ const Index = () => {
           {theme.showNews && (
             <>
               <FeaturedNews news={regularNews} loading={loading} />
+              
+              {/* Pedidos musicais integrados */}
+              {theme.showPedidos && (
+                 <div className="container mx-auto px-6 mt-12 mb-20">
+                    <PedidoSection position={theme.pedidoPosition} />
+                 </div>
+              )}
+
               {theme.showEntretenimento !== false && (
                 <div id="entretenimento" className="mt-20 py-20 bg-gray-50/30 dark:bg-gray-900/50 rounded-[3rem]">
                   <div className="container mx-auto px-6 mb-12">
