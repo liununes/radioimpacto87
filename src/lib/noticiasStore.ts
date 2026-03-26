@@ -7,6 +7,7 @@ export interface Noticia {
   conteudo: string;
   categoria: string;
   data: string;
+  destaque?: boolean;
   imagem?: string;
   fonte?: string;
   url?: string;
@@ -19,6 +20,7 @@ export async function getNoticias(): Promise<Noticia[]> {
   const { data, error } = await supabase
     .from("noticias")
     .select("*")
+    .order("destaque", { ascending: false })
     .order("data_postagem", { ascending: false });
   
   if (error) { console.error("Erro ao buscar noticias:", error); return []; }
@@ -29,6 +31,7 @@ export async function getNoticias(): Promise<Noticia[]> {
     resumo: n.resumo || "",
     conteudo: n.conteudo || "",
     categoria: n.categoria || "Geral",
+    destaque: n.destaque || false,
     data: n.data_postagem,
     imagem: n.imagem || undefined,
     fonte: n.fonte || undefined,
@@ -37,7 +40,7 @@ export async function getNoticias(): Promise<Noticia[]> {
 }
 
 export async function saveNoticia(n: Partial<Noticia>) {
-  const dbData = {
+  const dbData: any = {
     titulo: n.titulo,
     resumo: n.resumo,
     conteudo: n.conteudo,
@@ -45,6 +48,7 @@ export async function saveNoticia(n: Partial<Noticia>) {
     imagem: n.imagem,
     fonte: n.fonte,
     url: n.url,
+    destaque: n.destaque === undefined ? false : n.destaque
   };
 
   if (n.id) {

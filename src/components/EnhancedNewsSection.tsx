@@ -177,6 +177,7 @@ export const useNews = () => {
     const { data, error } = await supabase
       .from("noticias")
       .select("*")
+      .order("destaque", { ascending: false })
       .order("data_postagem", { ascending: false })
       .limit(24);
     
