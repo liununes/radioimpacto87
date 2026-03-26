@@ -59,12 +59,10 @@ const Navigation = () => {
 
   return (
     <nav 
-      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-700 ${isScrolled ? "py-3 shadow-2xl backdrop-blur-xl" : "py-8 bg-transparent"}`}
+      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-700 ${isScrolled ? "py-3 shadow-2xl backdrop-blur-xl" : "py-6 shadow-lg backdrop-blur-md"}`}
       style={{
-        background: isScrolled 
-          ? `linear-gradient(to right, var(--header-grad-start), var(--header-grad-end))` 
-          : 'transparent',
-        opacity: isScrolled ? 0.95 : 1
+        background: `linear-gradient(to right, var(--header-grad-start), var(--header-grad-end))`,
+        opacity: isScrolled ? 0.95 : 0.9
       }}
     >
       <div className="container mx-auto px-6">
@@ -85,7 +83,7 @@ const Navigation = () => {
               )}
             </div>
             <div className="flex flex-col">
-              <span className="text-2xl md:text-3xl font-black tracking-tighter leading-none uppercase italic drop-shadow-md" style={{ color: isScrolled ? 'white' : 'var(--text-title)' }}>
+              <span className="text-2xl md:text-3xl font-black tracking-tighter leading-none uppercase italic drop-shadow-md text-white">
                 {theme.radioName || "IMPACTO"}
               </span>
               <span className="text-[11px] font-black tracking-[0.4em] text-accent uppercase drop-shadow-sm">{theme.radioFreq || "87.9"} FM</span>
