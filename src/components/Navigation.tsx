@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Radio, ChevronDown } from "lucide-react";
+import { Menu, X, Radio, ChevronDown, Instagram, Facebook, Youtube, Twitter, Music2, Globe, MessageCircle } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 import WeatherWidget from "./WeatherWidget";
 import { Button } from "./ui/button";
+import { getRedesSociais, type RedeSocial, getWhatsApp } from "@/lib/radioStore";
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [redes, setRedes] = useState<RedeSocial[]>([]);
+  const [whatsapp, setWhatsapp] = useState("");
   const theme = useTheme();
   const location = useLocation();
 
@@ -16,6 +19,14 @@ const Navigation = () => {
       setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener("scroll", handleScroll);
+    
+    const fetchData = async () => {
+       const [redesData, wa] = await Promise.all([getRedesSociais(), getWhatsApp()]);
+       setRedes(redesData);
+       setWhatsapp(wa);
+    };
+    fetchData();
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -57,6 +68,17 @@ const Navigation = () => {
     }
   };
 
+  const getIcon = (icone: string) => {
+    switch (icone) {
+      case 'instagram': return <Instagram className="w-4 h-4" />;
+      case 'facebook': return <Facebook className="w-4 h-4" />;
+      case 'youtube': return <Youtube className="w-4 h-4" />;
+      case 'twitter': return <Twitter className="w-4 h-4" />;
+      case 'tiktok': return <Music2 className="w-4 h-4" />;
+      default: return <Globe className="w-4 h-4" />;
+    }
+  };
+
   return (
     <nav 
       className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-700 ${isScrolled ? "py-3 shadow-2xl backdrop-blur-xl" : "py-6 shadow-lg backdrop-blur-md"}`}
@@ -90,7 +112,22 @@ const Navigation = () => {
             </div>
           </Link>
           
-          <div className="flex shrink-0">
+          <div className="flex items-center gap-6 shrink-0">
+            {/* Social Icons in Nav */}
+            {theme.showSocial && redes.length > 0 && (
+              <div className="hidden sm:flex items-center gap-3 mr-4 border-r border-white/10 pr-6">
+                {redes.map(rede => (
+                  <a key={rede.id} href={rede.url} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white transition-colors">
+                    {getIcon(rede.icone)}
+                  </a>
+                ))}
+                {whatsapp && (
+                  <a href={`https://wa.me/${whatsapp.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-[#25D366] transition-colors">
+                    <MessageCircle className="w-4 h-4" />
+                  </a>
+                )}
+              </div>
+            )}
             <WeatherWidget showWeather={theme.showWeather} />
           </div>
 
@@ -127,7 +164,7 @@ const Navigation = () => {
 
       {/* Mobile Fullscreen Menu */}
       <div className={`fixed inset-0 z-[200] bg-primary transition-all duration-700 ${isMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}>
-        <div className="container h-full mx-auto px-8 py-12 flex flex-col">
+        <div className="container h-full mx-auto px-8 py-12 flex flex-col overflow-y-auto">
           <div className="flex items-center justify-between mb-20">
             <span className="text-white text-2xl font-black italic tracking-tighter">MENU</span>
             <button 
@@ -155,6 +192,17 @@ const Navigation = () => {
             ))}
           </div>
           
+          {/* Social icons in mobile menu too */}
+          {theme.showSocial && redes.length > 0 && (
+             <div className="flex items-center gap-6 mt-12 py-8 border-t border-white/5">
+                {redes.map(rede => (
+                  <a key={rede.id} href={rede.url} target="_blank" rel="noopener noreferrer" className="text-white/60 hover:text-white text-3xl transition-colors">
+                    {getIcon(rede.icone)}
+                  </a>
+                ))}
+             </div>
+          )}
+
           <div className="mt-auto pt-10 border-t border-white/5 text-white/30">
              <p className="text-[10px] font-black uppercase tracking-widest leading-loose">
                 Impacto FM 87.9<br/>
