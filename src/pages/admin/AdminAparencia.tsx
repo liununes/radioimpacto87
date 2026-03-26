@@ -137,7 +137,18 @@ const AdminAparencia = () => {
                   <CardDescription className="text-xs font-medium text-slate-700">Upload de logotipo e favicon</CardDescription>
                 </CardHeader>
                 <CardContent className="p-8 pt-4">
-                  <div className="flex flex-col gap-6">
+                  <div className="flex flex-col gap-8">
+                    <div className="grid grid-cols-2 gap-6">
+                      <div className="space-y-3">
+                        <Label className="text-[10px] font-black uppercase tracking-widest opacity-50 block">Início do Círculo Logo</Label>
+                        <input type="color" value={theme.logoCircleColor1 || "#ffed32"} onChange={e => updateField("logoCircleColor1", e.target.value)} className="w-full h-12 rounded-none cursor-pointer border-4 border-gray-50 shadow-inner" />
+                      </div>
+                      <div className="space-y-3">
+                        <Label className="text-[10px] font-black uppercase tracking-widest opacity-50 block">Fim do Círculo Logo</Label>
+                        <input type="color" value={theme.logoCircleColor2 || "#ff8c00"} onChange={e => updateField("logoCircleColor2", e.target.value)} className="w-full h-12 rounded-none cursor-pointer border-4 border-gray-50 shadow-inner" />
+                      </div>
+                    </div>
+                    
                     <div className="space-y-3">
                       <Label className="text-[10px] font-black uppercase tracking-widest opacity-50 block">Logotipo do Site</Label>
                       <div className="relative group">
