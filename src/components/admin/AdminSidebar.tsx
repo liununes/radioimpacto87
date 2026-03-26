@@ -1,5 +1,5 @@
 import {
-  Radio, Users, Calendar, Image, FileText, Info, LayoutDashboard, Music, Settings, Palette, BarChart3, ChevronLeft, ChevronRight, ExternalLink, Heart, Gift, Sun, Moon, HardDrive
+  Radio, Users, Calendar, Image, FileText, Info, LayoutDashboard, Settings, Palette, BarChart3, ExternalLink, Heart, Gift, Sun, Moon, HardDrive, Eye, Layers
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -17,26 +17,55 @@ import {
   SidebarHeader,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { Separator } from "@/components/ui/separator";
-
-const menuItems = [
-  { title: "Painel Geral", url: "/admin", icon: LayoutDashboard, permission: "base" },
-  { title: "Mídias / Arquivos", url: "/admin/media", icon: HardDrive, permission: "base" },
-  { title: "Player / Redes", url: "/admin/streaming", icon: Radio, permission: "streaming" },
-  { title: "Personalização", url: "/admin/aparencia", icon: Palette, permission: "aparencia" },
-  { title: "Locutores", url: "/admin/locutores", icon: Users, permission: "locutores" },
-  { title: "Programação", url: "/admin/programacao", icon: Calendar, permission: "programacao" },
-  { title: "Banners / Slides", url: "/admin/slides", icon: Image, permission: "slides" },
-  { title: "Patrocinadores", url: "/admin/patrocinadores", icon: Heart, permission: "aparencia" },
-  { title: "Promoções", url: "/admin/promocoes", icon: Gift, permission: "aparencia" },
-  { title: "Galeria de Fotos", url: "/admin/fotos", icon: Image, permission: "fotos" },
-  { title: "Portal de Notícias", url: "/admin/noticias", icon: FileText, permission: "noticias" },
-  { title: "Sobre a Rádio", url: "/admin/sobre", icon: Info, permission: "sobre" },
-  { title: "Estatísticas", url: "/admin/estatisticas", icon: BarChart3, permission: "estatisticas" },
-  { title: "Configurações", url: "/admin/usuarios", icon: Settings, permission: "usuarios" },
-];
-
 import { useTheme } from "@/hooks/useTheme";
+
+const menuGroups = [
+  {
+    label: "Geral",
+    items: [
+      { title: "Dashboard", url: "/admin", icon: LayoutDashboard, permission: "base" },
+      { title: "Estatísticas", url: "/admin/estatisticas", icon: BarChart3, permission: "estatisticas" },
+      { title: "Arquivos / Mídia", url: "/admin/media", icon: HardDrive, permission: "base" },
+    ]
+  },
+  {
+    label: "Identidade & Cores",
+    items: [
+      { title: "Cores & Logo", url: "/admin/aparencia", icon: Palette, permission: "aparencia" },
+      { title: "Streaming / Redes", url: "/admin/streaming", icon: Radio, permission: "streaming" },
+    ]
+  },
+  {
+    label: "Estrutura & Visibilidade",
+    items: [
+      { title: "Seções do Site", url: "/admin/aparencia?tab=visibilidade", icon: Eye, permission: "aparencia" },
+      { title: "Locutores", url: "/admin/locutores", icon: Users, permission: "locutores" },
+      { title: "Programação", url: "/admin/programacao", icon: Calendar, permission: "programacao" },
+    ]
+  },
+  {
+    label: "Conteúdo Dinâmico",
+    items: [
+      { title: "Notícias / Blog", url: "/admin/noticias", icon: FileText, permission: "noticias" },
+      { title: "Banners / Slides", url: "/admin/slides", icon: Image, permission: "slides" },
+      { title: "Galeria de Fotos", url: "/admin/fotos", icon: Image, permission: "fotos" },
+      { title: "Sobre a Rádio", url: "/admin/sobre", icon: Info, permission: "sobre" },
+    ]
+  },
+  {
+    label: "Marketing & Engajamento",
+    items: [
+      { title: "Patrocinadores", url: "/admin/patrocinadores", icon: Heart, permission: "aparencia" },
+      { title: "Promoções", url: "/admin/promocoes", icon: Gift, permission: "aparencia" },
+    ]
+  },
+  {
+    label: "Sistema",
+    items: [
+      { title: "Usuários / Acessos", url: "/admin/usuarios", icon: Settings, permission: "usuarios" },
+    ]
+  }
+];
 
 interface AdminSidebarProps {
   isDark: boolean;
@@ -49,7 +78,6 @@ export function AdminSidebar({ isDark, onToggleDark }: AdminSidebarProps) {
   const collapsed = state === "collapsed";
   const location = useLocation();
   const theme = useTheme();
-  const filteredItems = menuItems.filter(item => item.permission === "base" || hasPermission(item.permission));
 
   return (
     <Sidebar collapsible="icon" className="border-r border-white/5 shadow-2xl">
@@ -71,49 +99,62 @@ export function AdminSidebar({ isDark, onToggleDark }: AdminSidebarProps) {
         </div>
       </SidebarHeader>
 
-      <SidebarContent className="bg-[var(--admin-blue)] px-3 pt-6" style={{ backgroundColor: 'var(--admin-blue)' }}>
-        <SidebarGroup>
-          <SidebarGroupLabel className="text-[9px] font-black text-white/30 uppercase tracking-[0.3em] mb-4">
-            {!collapsed && "Navegação Principal"}
-          </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu className="gap-1.5">
-              {filteredItems.map((item) => {
-                const isActive = location.pathname === item.url ||
-                  (item.url !== "/admin" && location.pathname.startsWith(item.url));
-                
-                return (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild isActive={isActive} className={`
-                      h-12 rounded-none transition-all duration-300
-                      ${isActive ? "bg-[var(--admin-yellow)] text-[var(--admin-blue)] shadow-lg" : "hover:text-white hover:bg-white/5"}
-                    `} style={{ 
-                      backgroundColor: isActive ? 'var(--admin-yellow)' : 'transparent',
-                      color: isActive ? 'var(--admin-blue)' : 'var(--admin-sidebar-text)'
-                    }}>
-                      <NavLink
-                        to={item.url}
-                        end={item.url === "/admin"}
-                        className="flex items-center gap-4 px-3"
-                      >
-                        <item.icon className="h-4.5 w-4.5 shrink-0" style={{ color: isActive ? 'var(--admin-blue)' : 'var(--admin-sidebar-text)' }} />
-                        {!collapsed && <span className="text-[11px] font-black uppercase tracking-wider" style={{ color: isActive ? 'var(--admin-blue)' : 'var(--admin-sidebar-text)' }}>{item.title}</span>}
-                      </NavLink>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                );
-              })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+      <SidebarContent className="bg-[var(--admin-blue)] px-3 pt-6 overflow-y-auto custom-scrollbar" style={{ backgroundColor: 'var(--admin-blue)' }}>
+        {menuGroups.map((group, gIdx) => {
+          const filteredItems = group.items.filter(item => item.permission === "base" || hasPermission(item.permission));
+          if (filteredItems.length === 0) return null;
+
+          return (
+            <SidebarGroup key={gIdx} className={gIdx > 0 ? "mt-4" : ""}>
+              {!collapsed && (
+                <SidebarGroupLabel className="text-[9px] font-black text-white/30 uppercase tracking-[0.2em] mb-2 px-3">
+                  {group.label}
+                </SidebarGroupLabel>
+              )}
+              <SidebarGroupContent>
+                <SidebarMenu className="gap-1">
+                  {filteredItems.map((item) => {
+                    const isActive = location.pathname === item.url ||
+                      (item.url !== "/admin" && location.pathname.startsWith(item.url.split('?')[0]));
+                    
+                    return (
+                      <SidebarMenuItem key={item.title}>
+                        <SidebarMenuButton asChild isActive={isActive} className={`
+                          h-11 rounded-none transition-all duration-300
+                          ${isActive ? "bg-[var(--admin-yellow)] text-[var(--admin-blue)] shadow-md" : "hover:text-white hover:bg-white/5"}
+                        `} style={{ 
+                          backgroundColor: isActive ? 'var(--admin-yellow)' : 'transparent',
+                          color: isActive ? 'var(--admin-blue)' : 'var(--admin-sidebar-text)'
+                        }}>
+                          <NavLink
+                            to={item.url}
+                            end={item.url === "/admin"}
+                            className="flex items-center gap-4 px-3"
+                          >
+                            <item.icon className={`h-4 w-4 shrink-0 transition-transform duration-500 ${isActive ? "scale-110" : ""}`} style={{ color: isActive ? 'var(--admin-blue)' : 'var(--admin-sidebar-text)' }} />
+                            {!collapsed && (
+                              <span className="text-[10px] font-black uppercase tracking-wider overflow-hidden text-ellipsis whitespace-nowrap" style={{ color: isActive ? 'var(--admin-blue)' : 'var(--admin-sidebar-text)' }}>
+                                {item.title}
+                              </span>
+                            )}
+                          </NavLink>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    );
+                  })}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          );
+        })}
       </SidebarContent>
 
       <SidebarFooter className="bg-black/20 p-6 border-t border-white/5" style={{ backgroundColor: 'rgba(0,0,0,0.2)' }}>
-        <SidebarMenu>
+        <SidebarMenu className="gap-2">
            <SidebarMenuItem>
               <SidebarMenuButton 
                 onClick={onToggleDark} 
-                className="h-12 w-full flex items-center gap-4 px-3 text-white/40 hover:text-[var(--admin-yellow)] transition-all group"
+                className="h-10 w-full flex items-center gap-4 px-3 text-white/40 hover:text-[var(--admin-yellow)] transition-all group"
               >
                 {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
                 {!collapsed && <span className="text-[10px] font-black uppercase tracking-widest">{isDark ? "Modo Claro" : "Modo Escuro"}</span>}
@@ -121,9 +162,9 @@ export function AdminSidebar({ isDark, onToggleDark }: AdminSidebarProps) {
            </SidebarMenuItem>
            <SidebarMenuItem>
               <SidebarMenuButton asChild className="h-10 text-white/40 hover:text-[#ffed32] transition-colors">
-                <NavLink to="/" className="flex items-center gap-4 px-3 italic">
+                <NavLink to="/" className="flex items-center gap-4 px-3 italic border border-white/5 bg-white/5">
                   <ExternalLink className="h-4 w-4" />
-                  {!collapsed && <span className="text-[10px] font-black uppercase tracking-widest">Abrir Site Público</span>}
+                  {!collapsed && <span className="text-[10px] font-black uppercase tracking-widest">Ver Site</span>}
                 </NavLink>
               </SidebarMenuButton>
            </SidebarMenuItem>

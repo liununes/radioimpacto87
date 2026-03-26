@@ -10,6 +10,7 @@ import { getThemeConfig, applyTheme, DEFAULT_THEME, type ThemeConfig, type Spons
 import { getSiteConfig, saveSiteConfig } from "@/lib/radioStore";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
+import { useSearchParams } from "react-router-dom";
 
 const fileToBase64 = (file: File): Promise<string> => {
   return new Promise((resolve, reject) => {
@@ -21,11 +22,13 @@ const fileToBase64 = (file: File): Promise<string> => {
 };
 
 const AdminAparencia = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialTab = searchParams.get("tab") || "visual";
   const [theme, setTheme] = useState<ThemeConfig>(getThemeConfig());
   const [logo, setLogo] = useState("");
   const [favicon, setFavicon] = useState("");
   const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState("visual");
+  const [activeTab, setActiveTab] = useState(initialTab);
   const { user, hasPermission } = useAuth();
   const isSuperAdmin = hasPermission("*");
 
@@ -49,6 +52,18 @@ const AdminAparencia = () => {
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const tabFromUrl = searchParams.get("tab");
+    if (tabFromUrl && tabFromUrl !== activeTab) {
+      setActiveTab(tabFromUrl);
+    }
+  }, [searchParams]);
+
+  const onTabChange = (value: string) => {
+    setActiveTab(value);
+    setSearchParams({ tab: value });
+  };
 
   const updateField = (field: keyof ThemeConfig, value: any) => {
     setTheme(prev => ({ ...prev, [field]: value }));
@@ -101,7 +116,7 @@ const AdminAparencia = () => {
         </div>
       </div>
 
-      <Tabs defaultValue="visual" className="space-y-8" onValueChange={setActiveTab}>
+      <Tabs value={activeTab} onValueChange={onTabChange} className="space-y-8">
         <div className="flex flex-col items-center gap-6">
           <TabsList className="bg-white text-slate-900 p-1.5 h-auto rounded-none border border-gray-100 shadow-xl gap-1 flex-wrap justify-center text-slate-400 max-w-7xl">
             <TabsTrigger value="visual" className="rounded-none px-6 py-4 data-[state=active]:bg-[var(--admin-blue)] data-[state=active]:text-white data-[state=active]:shadow-lg font-black text-[10px] uppercase tracking-widest transition-all">
@@ -172,19 +187,6 @@ const AdminAparencia = () => {
                         </label>
                       </div>
                       <p className="text-[9px] text-gray-400 font-bold text-center">Recomendado: 500×500px · PNG Transparente</p>
-                    </div>
-                    <div className="space-y-3">
-                      <Label className="text-[10px] font-black uppercase tracking-widest opacity-50 block">Favicon (Ícone de Aba)</Label>
-                      <div className="relative group">
-                        <div className="h-40 bg-gray-50 rounded-none flex items-center justify-center p-6 border-2 border-dashed border-gray-100 group-hover:border-primary/20 transition-all">
-                          {favicon ? <img src={favicon} alt="Fav" className="w-10 h-10 object-contain" /> : <Globe className="w-8 h-8 text-gray-200" />}
-                        </div>
-                        <label className="absolute inset-0 cursor-pointer flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
-                           <Upload className="text-white w-5 h-5" />
-                           <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) setFavicon(await fileToBase64(f)); }} />
-                        </label>
-                      </div>
-                      <p className="text-[9px] text-gray-400 font-bold text-center">64×64px · ICO ou PNG</p>
                     </div>
                   </div>
                 </CardContent>
@@ -476,7 +478,7 @@ const AdminAparencia = () => {
                    <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Mensagem de Manutenção</Label>
                    <textarea 
                      value={theme.maintenanceMessage} 
-                     onChange={e => updateField("maintenanceMessage", e.target.value)} 
+                     onChange={e => updateLabel("maintenanceMessage", e.target.value)} 
                      placeholder="Ex: Estamos em manutenção..."
                      className="w-full h-32 rounded-none border-gray-100 bg-gray-50 p-6 text-sm font-medium focus:ring-2 focus:ring-red-600/20 transition-all outline-none"
                    />
