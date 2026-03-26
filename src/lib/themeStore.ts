@@ -126,6 +126,8 @@ export interface ThemeConfig {
   adminLogo?: string;
   logoCircleColor1?: string;
   logoCircleColor2?: string;
+  footerLogoColor1?: string;
+  footerLogoColor2?: string;
   // Navigation Granular Colors
   navItemColor?: string;
   navItemHoverColor?: string;
@@ -253,6 +255,8 @@ export const DEFAULT_THEME: ThemeConfig = {
   adminHeaderGradEnd: "#f1f5f9",
   logoCircleColor1: "#ffed32",
   logoCircleColor2: "#ff8c00",
+  footerLogoColor1: "#ffffff",
+  footerLogoColor2: "#f3f4f6",
   // New Granular Defaults
   navItemColor: "#ffffff",
   navItemHoverColor: "#ffed32",
@@ -318,7 +322,9 @@ export function applyTheme(config: ThemeConfig) {
   root.style.setProperty("--admin-header-grad-start", config.adminHeaderGradStart || "#ffffff");
   root.style.setProperty("--admin-header-grad-end", config.adminHeaderGradEnd || "#f8fafc");
   root.style.setProperty("--logo-circle-1", config.logoCircleColor1 || "#ffed32");
-  root.style.setProperty("--logo-circle-2", config.logoCircleColor2 || "#ec2027");
+  root.style.setProperty("--logo-circle-2", config.logoCircleColor2 || "#ff8c00");
+  root.style.setProperty("--footer-logo-1", config.footerLogoColor1 || "#ffffff");
+  root.style.setProperty("--footer-logo-2", config.footerLogoColor2 || "#f3f4f6");
 
   // New Granular Variables
   root.style.setProperty("--nav-item-color", config.navItemColor || config.headerTextColor || "#ffffff");

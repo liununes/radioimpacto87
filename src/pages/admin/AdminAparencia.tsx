@@ -144,8 +144,19 @@ const AdminAparencia = () => {
                         <input type="color" value={theme.logoCircleColor1 || "#ffed32"} onChange={e => updateField("logoCircleColor1", e.target.value)} className="w-full h-12 rounded-none cursor-pointer border-4 border-gray-50 shadow-inner" />
                       </div>
                       <div className="space-y-3">
-                        <Label className="text-[10px] font-black uppercase tracking-widest opacity-50 block">Fim do Círculo Logo</Label>
+                        <Label className="text-[10px] font-black uppercase tracking-widest opacity-50 block">Fim do Círculo Logo (Topo)</Label>
                         <input type="color" value={theme.logoCircleColor2 || "#ff8c00"} onChange={e => updateField("logoCircleColor2", e.target.value)} className="w-full h-12 rounded-none cursor-pointer border-4 border-gray-50 shadow-inner" />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-6">
+                      <div className="space-y-3">
+                        <Label className="text-[10px] font-black uppercase tracking-widest opacity-50 block">Cor Logo Abaixo (1)</Label>
+                        <input type="color" value={theme.footerLogoColor1 || "#ffffff"} onChange={e => updateField("footerLogoColor1", e.target.value)} className="w-full h-12 rounded-none cursor-pointer border-4 border-gray-50 shadow-inner" />
+                      </div>
+                      <div className="space-y-3">
+                        <Label className="text-[10px] font-black uppercase tracking-widest opacity-50 block">Cor Logo Abaixo (2)</Label>
+                        <input type="color" value={theme.footerLogoColor2 || "#f3f4f6"} onChange={e => updateField("footerLogoColor2", e.target.value)} className="w-full h-12 rounded-none cursor-pointer border-4 border-gray-50 shadow-inner" />
                       </div>
                     </div>
                     

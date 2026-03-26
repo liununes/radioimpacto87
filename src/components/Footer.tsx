@@ -37,11 +37,11 @@ const Footer = () => {
             {siteConfig.logo ? (
               <div 
                 className="w-20 h-20 md:w-24 md:h-24 rounded-full border-4 flex items-center justify-center bg-white shadow-xl hover:scale-105 transition-all duration-500"
-                style={{ borderColor: 'var(--logo-circle-1)' }}
+                style={{ borderColor: 'var(--footer-logo-1)' }}
               >
                 <div 
                   className="w-full h-full rounded-full border-4 flex items-center justify-center overflow-hidden p-3"
-                  style={{ borderColor: 'var(--logo-circle-2)' }}
+                  style={{ borderColor: 'var(--footer-logo-2)' }}
                 >
                   <img 
                     src={siteConfig.logo} 
