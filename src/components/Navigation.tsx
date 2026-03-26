@@ -70,12 +70,12 @@ const Navigation = () => {
 
   const getIcon = (icone: string) => {
     switch (icone) {
-      case 'instagram': return <Instagram className="w-4 h-4" />;
-      case 'facebook': return <Facebook className="w-4 h-4" />;
-      case 'youtube': return <Youtube className="w-4 h-4" />;
-      case 'twitter': return <Twitter className="w-4 h-4" />;
-      case 'tiktok': return <Music2 className="w-4 h-4" />;
-      default: return <Globe className="w-4 h-4" />;
+      case 'instagram': return <Instagram className="w-6 h-6" />;
+      case 'facebook': return <Facebook className="w-6 h-6" />;
+      case 'youtube': return <Youtube className="w-6 h-6" />;
+      case 'twitter': return <Twitter className="w-6 h-6" />;
+      case 'tiktok': return <Music2 className="w-6 h-6" />;
+      default: return <Globe className="w-6 h-6" />;
     }
   };
 
@@ -112,23 +112,24 @@ const Navigation = () => {
             </div>
           </Link>
           
-          <div className="flex items-center gap-6 shrink-0">
-            {/* Social Icons in Nav */}
+          <div className="flex items-center gap-8 shrink-0">
+            <WeatherWidget showWeather={theme.showWeather} />
+            
+            {/* Social Icons in Nav - Larger and more visible */}
             {theme.showSocial && redes.length > 0 && (
-              <div className="hidden sm:flex items-center gap-3 mr-4 border-r border-white/10 pr-6">
+              <div className="hidden md:flex items-center gap-5 ml-6 pl-6 border-l border-white/20">
                 {redes.map(rede => (
-                  <a key={rede.id} href={rede.url} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white transition-colors">
+                  <a key={rede.id} href={rede.url} target="_blank" rel="noopener noreferrer" className="text-white hover:text-accent hover:scale-125 transition-all duration-300 transform">
                     {getIcon(rede.icone)}
                   </a>
                 ))}
                 {whatsapp && (
-                  <a href={`https://wa.me/${whatsapp.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-[#25D366] transition-colors">
-                    <MessageCircle className="w-4 h-4" />
+                  <a href={`https://wa.me/${whatsapp.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-white hover:text-[#25D366] hover:scale-125 transition-all duration-300 transform">
+                    <MessageCircle className="w-6 h-6" />
                   </a>
                 )}
               </div>
             )}
-            <WeatherWidget showWeather={theme.showWeather} />
           </div>
 
           {/* Desktop Menu */}
