@@ -32,7 +32,6 @@ const menuGroups = [
     label: "Identidade & Cores",
     items: [
       { title: "Cores & Logo", url: "/admin/aparencia", icon: Palette, permission: "aparencia" },
-      { title: "Streaming / Redes", url: "/admin/streaming", icon: Radio, permission: "streaming" },
     ]
   },
   {
@@ -57,6 +56,7 @@ const menuGroups = [
   {
     label: "Marketing & Engajamento",
     items: [
+      { title: "Vídeos & Redes Sociais", url: "/admin/streaming", icon: Radio, permission: "streaming" },
       { title: "Patrocinadores", url: "/admin/patrocinadores", icon: Heart, permission: "aparencia" },
       { title: "Promoções", url: "/admin/promocoes", icon: Gift, permission: "aparencia" },
     ]
