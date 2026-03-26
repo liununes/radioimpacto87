@@ -47,6 +47,7 @@ const menuGroups = [
     label: "Conteúdo Dinâmico",
     items: [
       { title: "Notícias / Blog", url: "/admin/noticias", icon: FileText, permission: "noticias" },
+      { title: "Entretenimento", url: "/admin/entretenimento", icon: Radio, permission: "noticias" },
       { title: "Banners / Slides", url: "/admin/slides", icon: Image, permission: "slides" },
       { title: "Galeria de Fotos", url: "/admin/fotos", icon: Image, permission: "fotos" },
       { title: "Sobre a Rádio", url: "/admin/sobre", icon: Info, permission: "sobre" },

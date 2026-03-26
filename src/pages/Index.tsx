@@ -10,13 +10,14 @@ import PromosSection from "@/components/PromosSection";
 import BackToTop from "@/components/BackToTop";
 import Footer from "@/components/Footer";
 import { useTheme } from "@/hooks/useTheme";
-import { getSiteConfig } from "@/lib/radioStore";
 import { supabase } from "@/integrations/supabase/client";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const Index = () => {
   const theme = useTheme();
   const { news, loading } = useNews();
+  const regularNews = news.filter(n => n.categoria !== "Entretenimento");
+  const entertainmentNews = news.filter(n => n.categoria === "Entretenimento");
 
   useEffect(() => {
     // Rastreador de Acessos
@@ -47,7 +48,7 @@ const Index = () => {
   return (
     <>
       <main className="relative z-10">
-        {/* Slide de fotos no topo, como solicitado - Padrão do site */}
+        {/* Slide de fotos no topo */}
         <section id="home" className="pt-0">
           {theme.showSlides && <HeroCarousel />}
         </section>
@@ -56,14 +57,14 @@ const Index = () => {
         <section id="noticias" className="pt-0 md:pt-10 bg-white dark:bg-gray-950">
           {theme.showNews && (
             <>
-              <FeaturedNews news={news} loading={loading} />
+              <FeaturedNews news={regularNews} loading={loading} />
               {theme.showEntretenimento !== false && (
                 <div id="entretenimento" className="mt-20 py-20 bg-gray-50/30 dark:bg-gray-900/50 rounded-[3rem]">
                   <div className="container mx-auto px-6 mb-12">
                      <span className="text-[10px] font-black text-accent uppercase tracking-[0.5em] block mb-2">Editoria</span>
                      <h2 className="text-4xl md:text-5xl font-black tracking-tighter uppercase italic leading-none" style={{ color: 'var(--text-title)' }}>Entretenimento</h2>
                   </div>
-                  <RemainingNews news={news} loading={loading} />
+                  <RemainingNews news={entertainmentNews} loading={loading} />
                 </div>
               )}
             </>
