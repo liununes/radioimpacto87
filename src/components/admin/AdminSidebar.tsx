@@ -1,5 +1,5 @@
 import {
-  Radio, Users, Calendar, Image, FileText, Info, LayoutDashboard, Music, Settings, Palette, BarChart3, ExternalLink, Heart, Gift, Sun, Moon, HardDrive, Eye, Layers
+  Radio, Users, Calendar, Image, FileText, Info, LayoutDashboard, Music, Settings, Palette, BarChart3, ExternalLink, Heart, Gift, Sun, Moon, HardDrive, Eye, Layers, LifeBuoy
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -75,11 +75,13 @@ interface AdminSidebarProps {
 }
 
 export function AdminSidebar({ isDark, onToggleDark }: AdminSidebarProps) {
-  const { hasPermission } = useAuth();
+  const { user, hasPermission } = useAuth();
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const location = useLocation();
   const theme = useTheme();
+
+  const isMainAdmin = user?.email === 'liununes06@gmail.com';
 
   return (
     <Sidebar collapsible="icon" className="border-r border-white/5 shadow-2xl">
@@ -153,6 +155,25 @@ export function AdminSidebar({ isDark, onToggleDark }: AdminSidebarProps) {
 
       <SidebarFooter className="bg-black/20 p-6 border-t border-white/5" style={{ backgroundColor: 'rgba(0,0,0,0.2)' }}>
         <SidebarMenu className="gap-2">
+           {!isMainAdmin && (
+             <SidebarMenuItem>
+                <SidebarMenuButton 
+                  asChild
+                  className="h-14 w-full flex items-center gap-4 px-3 bg-green-500/10 border border-green-500/20 text-green-400 hover:bg-green-500 hover:text-white transition-all shadow-lg animate-pulse hover:animate-none"
+                >
+                  <a href="https://wa.me/5533999837414" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 px-3">
+                    <LifeBuoy className="h-5 w-5" />
+                    {!collapsed && (
+                      <div className="flex flex-col text-left">
+                        <span className="text-[10px] font-black uppercase tracking-widest leading-none">Suporte Liu Record</span>
+                        <span className="text-[8px] font-bold uppercase opacity-60">(33) 99983-7414</span>
+                      </div>
+                    )}
+                  </a>
+                </SidebarMenuButton>
+             </SidebarMenuItem>
+           )}
+
            <SidebarMenuItem>
               <SidebarMenuButton 
                 onClick={onToggleDark} 

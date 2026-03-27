@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
-import { Users, Calendar, Radio, Image, Music, FileText, BarChart3, Settings, HardDrive, Zap } from "lucide-react";
+import { Users, Calendar, Radio, Image, Music, FileText, BarChart3, Settings, HardDrive, Zap, LifeBuoy } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { getLocutores, getProgramas, getSlides, clearAllStationData } from "@/lib/radioStore";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
 
 const AdminHome = () => {
+  const { user } = useAuth();
+  const isMainAdmin = user?.email === 'liununes06@gmail.com';
   const [onlineListeners, setOnlineListeners] = useState(0);
   const [stats, setStats] = useState([
     { label: "Locutores", value: "...", icon: Users, color: "text-primary" },
@@ -153,6 +156,21 @@ const AdminHome = () => {
             <Settings className="w-6 h-6 text-primary group-hover:scale-110 transition-transform" />
             <span className="text-[9px] font-black uppercase tracking-widest">Equipe</span>
          </Link>
+
+         {!isMainAdmin && (
+           <a 
+             href="https://wa.me/5533999837414" 
+             target="_blank" 
+             rel="noopener noreferrer" 
+             className="p-6 bg-green-50 text-green-600 border border-green-100 rounded-none shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col items-center gap-3 text-center group animate-pulse hover:animate-none"
+           >
+              <LifeBuoy className="w-6 h-6 group-hover:rotate-12 transition-transform" />
+              <div className="flex flex-col">
+                <span className="text-[9px] font-black uppercase tracking-widest">Suporte Liu Record</span>
+                <span className="text-[8px] font-bold opacity-70">(33) 99983-7414</span>
+              </div>
+           </a>
+         )}
       </div>
 
       <div className="pt-20 border-t border-red-50">
