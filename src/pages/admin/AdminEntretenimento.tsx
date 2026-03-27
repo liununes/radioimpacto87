@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Trash2, Edit2, Save, X, Plus, Link, Loader2, ExternalLink, Star, Radio } from "lucide-react";
+import { Trash2, Edit2, Save, X, Plus, Link, Loader2, ExternalLink, Star, Radio, Upload, ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -8,6 +8,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { type Noticia, getNoticias, saveNoticia, deleteNoticia } from "@/lib/noticiasStore";
 import { toast } from "sonner";
+
+const fileToBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = error => reject(error);
+  });
+};
 
 const AdminEntretenimento = () => {
   const CATEGORIA_FIXA = "Entretenimento";
@@ -91,28 +100,20 @@ const AdminEntretenimento = () => {
     const examples = [
       {
         titulo: "Os segredos por trás do sucesso das rádio novelas modernas",
-        resumo: "Entenda por que o formato de áudio está voltando com tudo nas plataformas digitais e como a rádio se adapta.",
-        conteudo: "Conteúdo completo sobre a evolução do áudio...",
-        imagem: "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=800&q=80",
+        resumo: "Entenda por que o formato de áudio está voltando com tudo nas plataformas digitais...",
+        conteudo: "Conteúdo completo...",
+        imagem: "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=400&q=80",
         categoria: CATEGORIA_FIXA,
         fonte: "Cultura Pop",
         destaque: true
       },
       {
-        titulo: "Top 10 curiosidades sobre os maiores locutores do Brasil",
-        resumo: "De onde vieram as vozes que embalam as manhãs de milhões de brasileiros todos os dias?",
-        conteudo: "Histórias incríveis de superação...",
-        imagem: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=800&q=80",
+        titulo: "Lançamento da Semana: Hit que não sai da cabeça!",
+        resumo: "Conheça o novo sucesso que já é o mais pedido na programação da FM.",
+        conteudo: "Análise completa...",
+        imagem: "https://images.unsplash.com/photo-1514525253361-b83f8b91272d?auto=format&fit=crop&w=400&q=80",
         categoria: CATEGORIA_FIXA,
-        fonte: "Rádio Brasil"
-      },
-      {
-        titulo: "Lançamento: Nova música do momento promete quebrar recordes",
-        resumo: "Conheça o novo hit que já está na nossa programação e que não sai da cabeça dos ouvintes.",
-        conteudo: "Análise completa do novo álbum...",
-        imagem: "https://images.unsplash.com/photo-1514525253361-b83f8b91272d?auto=format&fit=crop&w=800&q=80",
-        categoria: CATEGORIA_FIXA,
-        fonte: "Billboard"
+        fonte: "Billboard Brasil"
       }
     ];
 
@@ -120,7 +121,7 @@ const AdminEntretenimento = () => {
       await saveNoticia(ex);
     }
     
-    toast.success("Exemplos de entretenimento gerados com sucesso!");
+    toast.success("Exemplos gerados com sucesso!");
     await fetchData();
     setLoading(false);
   };
@@ -134,6 +135,8 @@ const AdminEntretenimento = () => {
     setFonte(n.fonte || "");
     setUrlOriginal(n.url || "");
     setDestaque(n.destaque || false);
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleDelete = async (id: string) => {
@@ -180,7 +183,7 @@ const AdminEntretenimento = () => {
              </CardHeader>
              <CardContent className="p-8 space-y-6">
                <div className="flex gap-4">
-                 <Input value={scrapeUrl} onChange={e => setScrapeUrl(e.target.value)} placeholder="Link de vídeo ou matéria de fofoca/entretenimento..." className="flex-1 h-14 rounded-none border-gray-100 bg-gray-50" />
+                 <Input value={scrapeUrl} onChange={e => setScrapeUrl(e.target.value)} placeholder="Link de vídeo ou matéria..." className="flex-1 h-14 rounded-none border-gray-100 bg-gray-50" />
                  <Button onClick={handleScrape} disabled={isScraping || !scrapeUrl.trim()} className="h-14 px-10 rounded-none bg-accent hover:bg-accent/90 text-white font-black uppercase text-[10px]">
                    {isScraping ? <Loader2 className="w-5 h-5 animate-spin" /> : "Capturar"}
                  </Button>
@@ -191,12 +194,11 @@ const AdminEntretenimento = () => {
            <Card className="rounded-none border-none shadow-xl bg-white text-slate-900 overflow-hidden">
              <CardHeader className="p-8 border-b border-gray-50 flex flex-row items-center justify-between">
                <CardTitle className="text-xl font-black uppercase tracking-tight text-primary italic">
-                 {editId ? "Editar Conteúdo" : "Nova Publicação de Entretenimento"}
+                 {editId ? "Editar Conteúdo" : "Nova Publicação"}
                </CardTitle>
-               <div className="flex items-center gap-3 bg-gray-50 px-4 py-2 border border-gray-100">
-                  <span className="text-[10px] font-black uppercase text-gray-400 italic">Editoria Fixa:</span>
-                  <span className="text-[10px] font-black uppercase text-accent">{CATEGORIA_FIXA}</span>
-               </div>
+               <Button onClick={resetForm} variant="ghost" className="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-red-500">
+                  <Plus className="w-4 h-4 mr-2" /> Novo Post
+               </Button>
              </CardHeader>
              <CardContent className="p-8 space-y-8">
                 <div className="flex items-center justify-between p-6 bg-yellow-50/50 border border-yellow-100 rounded-none">
@@ -223,7 +225,7 @@ const AdminEntretenimento = () => {
 
                 <div className="space-y-4">
                    <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Conteúdo / Curiosidades</Label>
-                   <Textarea value={conteudo} onChange={e => setConteudo(e.target.value)} rows={8} className="rounded-none border-gray-100 p-6 font-medium leading-relaxed resize-y" />
+                   <Textarea value={conteudo} onChange={e => setConteudo(e.target.value)} rows={6} className="rounded-none border-gray-100 p-6 font-medium leading-relaxed resize-y" />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -231,42 +233,59 @@ const AdminEntretenimento = () => {
                     <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Fonte Original</Label>
                     <Input value={fonte} onChange={e => setFonte(e.target.value)} className="h-12 rounded-none border-gray-100" />
                   </div>
+                  
                   <div className="space-y-3">
-                    <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">URL da Imagem / Vídeo Thumb</Label>
-                    <Input value={imagem} onChange={e => setImagem(e.target.value)} className="h-12 rounded-none border-gray-100" />
+                    <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Imagem do Post</Label>
+                    <div className="flex items-center gap-2">
+                       <Input value={imagem} onChange={e => setImagem(e.target.value)} placeholder="URL ou Suba uma foto..." className="h-12 rounded-none border-gray-100 flex-1" />
+                       <label className="h-12 w-12 flex items-center justify-center bg-gray-50 border border-gray-100 cursor-pointer hover:bg-accent hover:text-white transition-all">
+                          <Upload className="w-5 h-5" />
+                          <input type="file" className="hidden" accept="image/*" onChange={async e => {
+                            const f = e.target.files?.[0];
+                            if (f) setImagem(await fileToBase64(f));
+                          }} />
+                       </label>
+                    </div>
                   </div>
                 </div>
+
+                {imagem && (
+                  <div className="p-4 bg-gray-50 border border-gray-100 rounded-none relative">
+                     <p className="text-[9px] font-black uppercase text-gray-400 mb-2">Prévia da imagem:</p>
+                     <img src={imagem} alt="Preview" className="h-32 w-auto object-cover border border-white shadow-md mx-auto" />
+                     <button onClick={() => setImagem("")} className="absolute top-2 right-2 text-red-500"><X className="w-4 h-4" /></button>
+                  </div>
+                )}
 
                 <div className="flex gap-4 pt-4">
                   <Button onClick={handleSave} className="h-14 px-12 rounded-none bg-primary hover:bg-primary/95 text-white font-black uppercase text-[10px] tracking-widest flex items-center gap-3" disabled={loading}>
                     {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
-                    Confirmar Publicação
+                    {editId ? "Salvar Alterações" : "Publicar Conteúdo"}
                   </Button>
-                  {editId && (
-                    <Button variant="ghost" onClick={resetForm} className="h-14 px-8 rounded-none font-black uppercase text-[10px] text-gray-400">
-                      Cancelar
-                    </Button>
-                  )}
                 </div>
               </CardContent>
            </Card>
         </div>
 
         <div className="lg:col-span-4 space-y-6">
-           <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-2">Conteúdos Publicados ({noticias.length})</h4>
-           <div className="space-y-4">
+           <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-2">Publicações Ativas ({noticias.length})</h4>
+           <div className="space-y-4 max-h-[1000px] overflow-y-auto pr-2 custom-scrollbar">
              {noticias.map(n => (
                <Card key={n.id} className="rounded-none border-none shadow-md overflow-hidden bg-white text-slate-900 group">
                  <CardContent className="p-4 flex gap-4">
-                   <div className="w-20 h-20 rounded-none overflow-hidden bg-gray-100 shrink-0 relative">
-                     <img src={n.imagem || ""} alt={n.titulo} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" />
-                     {n.destaque && <div className="absolute top-1 right-1"><Star className="w-3 h-3 text-yellow-500 fill-current" /></div>}
+                   <div className="w-24 h-24 rounded-none overflow-hidden bg-gray-100 shrink-0 relative">
+                     {n.imagem ? (
+                        <img src={n.imagem} alt={n.titulo} className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700" />
+                     ) : (
+                        <div className="w-full h-full flex items-center justify-center"><ImageIcon className="w-8 h-8 text-gray-200" /></div>
+                     )}
+                     {n.destaque && <div className="absolute top-1 right-1 bg-yellow-400 p-1"><Star className="w-3 h-3 text-white fill-current" /></div>}
                    </div>
-                   <div className="flex-1 min-w-0 flex flex-col justify-center">
+                   <div className="flex-1 min-w-0 flex flex-col justify-between">
                      <h5 className="font-black text-[11px] text-primary uppercase line-clamp-2 leading-tight">{n.titulo}</h5>
-                     <div className="flex items-center gap-3 mt-3">
-                        <button onClick={() => handleEdit(n)} className="text-[9px] font-black uppercase text-blue-500 hover:underline">Editar</button>
-                        <button onClick={() => handleDelete(n.id)} className="text-[9px] font-black uppercase text-red-500 hover:underline">Excluir</button>
+                     <div className="flex items-center gap-4 mt-3">
+                        <button onClick={() => handleEdit(n)} className="text-[10px] font-black uppercase text-blue-600 hover:underline flex items-center gap-1"><Edit2 className="w-3 h-3" /> Editar</button>
+                        <button onClick={() => handleDelete(n.id)} className="text-[10px] font-black uppercase text-red-500 hover:underline flex items-center gap-1"><Trash2 className="w-3 h-3" /> Excluir</button>
                      </div>
                    </div>
                  </CardContent>
