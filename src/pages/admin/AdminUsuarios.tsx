@@ -151,6 +151,14 @@ const AdminUsuarios = () => {
     );
   };
 
+  const toggleEditPermission = (id: string) => {
+    if (!editingUser) return;
+    const newPerms = editingUser.permissions.includes(id)
+      ? editingUser.permissions.filter((p: string) => p !== id)
+      : [...editingUser.permissions, id];
+    setEditingUser({ ...editingUser, permissions: newPerms });
+  };
+
   const selectAllPermissions = () => {
     const allIds = ALL_PERMISSIONS.map(p => p.id);
     if (editingUser) setEditingUser({ ...editingUser, permissions: allIds });
@@ -354,19 +362,6 @@ $$;
           </CardContent>
         </Card>
       )}
-
-      <Card className="rounded-none border-none bg-orange-50 p-6 flex items-center justify-between border-l-4 border-l-orange-500">
-         <div className="flex items-center gap-4">
-            <AlertCircle className="w-6 h-6 text-orange-500" />
-            <div>
-               <p className="text-[10px] font-black uppercase text-orange-600">Configuração da VPS (Importante)</p>
-               <p className="text-[11px] font-bold text-orange-400 mt-1 uppercase">Clique no botão para atualizar as funções do banco de dados para suportar e-mails reais.</p>
-            </div>
-         </div>
-         <Button variant="outline" onClick={repairDatabase} className="h-10 rounded-none border-orange-200 text-orange-600 font-black uppercase text-[9px] tracking-widest bg-white">
-            <Save className="w-3.5 h-3.5 mr-2" /> Atualizar DB (SQL)
-         </Button>
-      </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {users.map((u) => (
