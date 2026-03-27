@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useTheme } from "@/hooks/useTheme";
 
-// ... previous interfaces
 export interface NewsItem {
   id: string;
   titulo: string;
@@ -159,7 +158,7 @@ export const RemainingNews = ({ news, loading, showAll = false }: { news: NewsIt
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6 pt-0">
-               <div className="text-[10px] font-bold text-gray-300 uppercase">{new Date(item.data_postagem).toLocaleDateString('pt-BR')}</div>
+               <div className="text-[10px] font-bold text-gray-300 uppercase">{new Date(item.data_postagem || new Date()).toLocaleDateString('pt-BR')}</div>
             </CardContent>
           </Card>
         ))}
@@ -201,12 +200,6 @@ const EnhancedNewsSection = ({ showNews = true }: EnhancedNewsSectionProps) => {
   return (
     <section className="bg-transparent">
       <FeaturedNews news={news} loading={loading} />
-      {loading && (
-        <div className="container mx-auto px-4 text-center py-20">
-          <div className="animate-spin w-12 h-12 border-4 border-accent border-t-transparent rounded-full mx-auto mb-6"></div>
-          <p className="text-xs font-black uppercase text-accent">CARREGANDO...</p>
-        </div>
-      )}
       <RemainingNews news={news} loading={loading} />
     </section>
   );
