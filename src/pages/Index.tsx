@@ -73,7 +73,7 @@ const Index = () => {
                      <span className="text-[10px] font-black text-accent uppercase tracking-[0.5em] block mb-2">Editoria</span>
                      <h2 className="text-4xl md:text-5xl font-black tracking-tighter uppercase italic leading-none" style={{ color: 'var(--text-title)' }}>Entretenimento</h2>
                   </div>
-                  <RemainingNews news={entertainmentNews} loading={loading} />
+                  <RemainingNews news={entertainmentNews} loading={loading} showAll={true} />
                 </div>
               )}
             </>

@@ -122,15 +122,15 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[], loading: boo
   );
 };
 
-export const RemainingNews = ({ news, loading }: { news: NewsItem[], loading: boolean }) => {
-  const remaining = news.slice(4);
+export const RemainingNews = ({ news, loading, showAll = false }: { news: NewsItem[], loading: boolean, showAll?: boolean }) => {
+  const remaining = showAll ? news : news.slice(4);
 
   if (remaining.length === 0 && !loading) return null;
 
   return (
     <div className="container mx-auto px-4 py-20 bg-gray-50/50 rounded-[3rem] my-12 shadow-inner">
       <div className="flex items-center gap-4 mb-16">
-        <h2 className="text-2xl font-black uppercase tracking-tighter shrink-0" style={{ color: 'var(--text-title)' }}>MAIS NOTÍCIAS</h2>
+        <h2 className="text-2xl font-black uppercase tracking-tighter shrink-0" style={{ color: 'var(--text-title)' }}>CONTEÚDOS</h2>
         <div className="h-0.5 w-full bg-gray-200" />
       </div>
       
