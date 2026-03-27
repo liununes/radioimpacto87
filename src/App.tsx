@@ -12,6 +12,7 @@ import ProgramacaoPage from "./pages/ProgramacaoPage";
 import PlayerPage from "./pages/Player";
 import NotFound from "./pages/NotFound";
 import AdminLogin from "./pages/AdminLogin";
+import AdminResetPassword from "./pages/AdminResetPassword";
 import AdminLayout from "./pages/AdminLayout";
 import AdminHome from "./pages/admin/AdminHome";
 import AdminStreaming from "./pages/admin/AdminStreaming";
@@ -48,6 +49,7 @@ const App = () => (
                 <Route path="/player" element={<PlayerPage />} />
               </Route>
               <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/admin/reset-password" element={<AdminResetPassword />} />
               <Route path="/admin" element={<AdminLayout />}>
                 <Route index element={<AdminHome />} />
                 <Route path="media" element={<AdminMedia />} />
