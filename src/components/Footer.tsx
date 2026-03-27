@@ -30,7 +30,7 @@ const Footer = () => {
   };
 
   return (
-    <footer id="redes-sociais" className="bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-white/10 py-16 transition-colors duration-500">
+    <footer id="redes-sociais" className="bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-white/10 py-16 pb-40 md:pb-32 transition-colors duration-500">
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-12">
           <div className="flex items-center gap-6">
