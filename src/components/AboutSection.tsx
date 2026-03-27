@@ -2,6 +2,7 @@ import { MapPin, Phone, Mail, Info, Send } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getSiteConfig } from "@/lib/radioStore";
 import { useTheme } from "@/hooks/useTheme";
+import { Link } from "react-router-dom";
 
 const AboutSection = () => {
   const [data, setData] = useState<any>({
@@ -44,8 +45,8 @@ const AboutSection = () => {
             </p>
 
             <div className="flex flex-wrap gap-4">
-               <button className="clube-btn-yellow shadow-lg shadow-yellow-400/20">Saiba Mais</button>
-               <button className="px-10 py-3 rounded-full border-2 border-primary text-primary font-black uppercase tracking-widest text-[10px] hover:bg-primary hover:text-white transition-all">Programação</button>
+               <Link to="/player" className="clube-btn-yellow shadow-lg shadow-yellow-400/20 flex items-center justify-center">Saiba Mais</Link>
+               <Link to="/programacao" className="px-10 py-3 rounded-full border-2 border-primary text-primary font-black uppercase tracking-widest text-[10px] hover:bg-primary hover:text-white transition-all flex items-center justify-center">Programação</Link>
             </div>
           </div>
 
