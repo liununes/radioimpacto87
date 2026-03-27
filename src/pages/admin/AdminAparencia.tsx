@@ -318,6 +318,18 @@ const AdminAparencia = () => {
                              <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-slate-700 uppercase">Top 1</Label> <Input value={theme.labels.topSongsTitle} onChange={e => updateLabel("topSongsTitle", e.target.value)} className="rounded-none border-gray-100 h-12" /> </div>
                              <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-slate-700 uppercase">Top 2</Label> <Input value={theme.labels.topSongsSubtitle} onChange={e => updateLabel("topSongsSubtitle", e.target.value)} className="rounded-none border-gray-100 h-12" /> </div>
                           </div>
+                          <div className="grid grid-cols-2 gap-4">
+                             <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-slate-700 uppercase">Patrocinadores 1</Label> <Input value={theme.labels.sponsorsTitle} onChange={e => updateLabel("sponsorsTitle", e.target.value)} className="rounded-none border-gray-100 h-12" /> </div>
+                             <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-slate-700 uppercase">Patrocinadores 2</Label> <Input value={theme.labels.sponsorsSubtitle} onChange={e => updateLabel("sponsorsSubtitle", e.target.value)} className="rounded-none border-gray-100 h-12" /> </div>
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                             <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-slate-700 uppercase">Entretenimento 1</Label> <Input value={theme.labels.entertainmentTitle} onChange={e => updateLabel("entertainmentTitle", e.target.value)} className="rounded-none border-gray-100 h-12" /> </div>
+                             <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-slate-700 uppercase">Entretenimento 2</Label> <Input value={theme.labels.entertainmentSubtitle} onChange={e => updateLabel("entertainmentSubtitle", e.target.value)} className="rounded-none border-gray-100 h-12" /> </div>
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                             <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-slate-700 uppercase">Promoções 1</Label> <Input value={theme.labels.promosTitle} onChange={e => updateLabel("promosTitle", e.target.value)} className="rounded-none border-gray-100 h-12" /> </div>
+                             <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-slate-700 uppercase">Promoções 2</Label> <Input value={theme.labels.promosSubtitle} onChange={e => updateLabel("promosSubtitle", e.target.value)} className="rounded-none border-gray-100 h-12" /> </div>
+                          </div>
                        </div>
                     </div>
                  </div>
@@ -478,7 +490,7 @@ const AdminAparencia = () => {
                    <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Mensagem de Manutenção</Label>
                    <textarea 
                      value={theme.maintenanceMessage} 
-                     onChange={e => updateLabel("maintenanceMessage", e.target.value)} 
+                     onChange={e => updateField("maintenanceMessage", e.target.value)} 
                      placeholder="Ex: Estamos em manutenção..."
                      className="w-full h-32 rounded-none border-gray-100 bg-gray-50 p-6 text-sm font-medium focus:ring-2 focus:ring-red-600/20 transition-all outline-none"
                    />

@@ -95,6 +95,12 @@ export interface ThemeConfig {
     gallerySubtitle: string;
     aboutTitle: string;
     aboutSubtitle: string;
+    sponsorsTitle: string;
+    sponsorsSubtitle: string;
+    entertainmentTitle: string;
+    entertainmentSubtitle: string;
+    promosTitle: string;
+    promosSubtitle: string;
     playerLocation: string;
     playerLive: string;
     playerSchedule: string;
@@ -227,6 +233,12 @@ export const DEFAULT_THEME: ThemeConfig = {
     gallerySubtitle: "Vips",
     aboutTitle: "Sobre a",
     aboutSubtitle: "Impacto",
+    sponsorsTitle: "Nossos",
+    sponsorsSubtitle: "Patrocinadores",
+    entertainmentTitle: "Canal",
+    entertainmentSubtitle: "Entretenimento",
+    promosTitle: "Fique por",
+    promosSubtitle: "Dentro!",
     playerLocation: "Você está em:",
     playerLive: "AO VIVO",
     playerSchedule: "Ver Programação",
