@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Users, Shield, ShieldCheck, Trash2, Plus, Save, AlertCircle, X, Loader2 } from "lucide-react";
+import { Users, Shield, ShieldCheck, Trash2, Plus, Save, AlertCircle, X, Loader2, CheckSquare, Square } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,13 +10,13 @@ import { toast } from "sonner";
 
 const ALL_PERMISSIONS = [
   { id: "*", label: "Acesso Total (Master)" },
+  { id: "media", label: "Arquivos / Mídia" },
+  { id: "entretenimento", label: "Canal Entretenimento" },
+  { id: "noticias", label: "Notícias / Blog" },
   { id: "streaming", label: "Vídeos & Redes Sociais" },
   { id: "aparencia", label: "Personalizar Site & Cores" },
-  { id: "media", label: "Arquivos / Mídia" },
   { id: "locutores", label: "Equipe Locutores" },
   { id: "programacao", label: "Grade de Horários" },
-  { id: "noticias", label: "Notícias / Blog" },
-  { id: "entretenimento", label: "Canal Entretenimento" },
   { id: "pedidos", label: "Mural de Pedidos" },
   { id: "promocoes", label: "Promoções & Sorteios" },
   { id: "patrocinadores", label: "Patrocinadores / Apoio" },
@@ -89,8 +89,6 @@ const AdminUsuarios = () => {
 
       if (authError) throw new Error(authError.message || "Erro ao criar usuário.");
       
-      if (authError) throw new Error(authError.message || "Erro ao criar usuário.");
-      
       if (!userId) {
         throw new Error("O banco não retornou um ID. Tente outro nome de usuário.");
       }
@@ -121,8 +119,6 @@ const AdminUsuarios = () => {
         p_password: editingUser.new_password || null,
         p_metadata: { permissions: editingUser.permissions }
       });
-
-      if (authError) throw authError;
 
       if (authError) throw authError;
 
@@ -163,6 +159,25 @@ const AdminUsuarios = () => {
       ? editingUser.permissions.filter((p: string) => p !== id)
       : [...editingUser.permissions, id];
     setEditingUser({ ...editingUser, permissions: newPerms });
+  };
+
+  const selectAllPermissions = () => {
+    const allIds = ALL_PERMISSIONS.map(p => p.id);
+    if (editingUser) {
+      setEditingUser({ ...editingUser, permissions: allIds });
+    } else {
+      setNewPermissions(allIds);
+    }
+    toast.success("Todos os módulos selecionados!");
+  };
+
+  const clearAllPermissions = () => {
+    if (editingUser) {
+      setEditingUser({ ...editingUser, permissions: ["base"] });
+    } else {
+      setNewPermissions(["base"]);
+    }
+    toast.info("Seleções limpas (Permissão básica mantida)");
   };
 
   const copyRepairSQL = () => {
@@ -294,29 +309,12 @@ GRANT EXECUTE ON FUNCTION public.deletar_usuario TO authenticated, anon;
           <h2 className="text-3xl font-black text-primary tracking-tighter uppercase italic leading-none">Equipe & <span className="text-secondary italic">Acessos</span></h2>
           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Gerencie quem pode editar cada seção da rádio</p>
         </div>
-        {!isAdding && (
+        {!isAdding && !editingUser && (
           <Button onClick={() => setIsAdding(true)} className="rounded-none font-black uppercase tracking-widest text-[10px] h-12 px-8 bg-primary text-white hover:bg-primary/90 transition-all shadow-lg active:scale-95">
              <Plus className="w-4 h-4 mr-2" /> Novo Colaborador
           </Button>
         )}
       </div>
-
-      {error && (
-        <Card className="rounded-none border-none bg-red-50 p-6 flex items-center justify-between border border-red-100">
-           <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-white text-slate-900 rounded-none flex items-center justify-center shadow-sm text-red-500">
-                 <AlertCircle className="w-6 h-6" />
-              </div>
-              <div>
-                 <p className="text-[10px] font-black uppercase tracking-widest text-red-400">Erro de Configuração</p>
-                 <p className="text-xs font-bold text-red-900 mt-1">{error}</p>
-              </div>
-           </div>
-           <Button variant="outline" size="sm" onClick={copyRepairSQL} className="rounded-none border-red-200 text-red-600 font-black uppercase text-[9px] tracking-widest bg-white text-slate-900">
-              <Save className="w-3.5 h-3.5 mr-2" /> Copiar SQL Fix
-           </Button>
-        </Card>
-      )}
 
       {(isAdding || editingUser) && (
         <Card className="rounded-none border-none shadow-2xl bg-white text-slate-900 overflow-hidden animate-in zoom-in-95 duration-500">
@@ -367,7 +365,28 @@ GRANT EXECUTE ON FUNCTION public.deletar_usuario TO authenticated, anon;
             </div>
 
             <div className="space-y-6">
-               <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Módulos que este usuário pode gerenciar</Label>
+               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Módulos que este usuário pode gerenciar</Label>
+                  <div className="flex gap-2">
+                     <Button 
+                       type="button" 
+                       variant="outline" 
+                       onClick={selectAllPermissions}
+                       className="h-8 rounded-none border-primary/20 text-primary font-black uppercase text-[9px] tracking-widest bg-primary/5 hover:bg-primary hover:text-white transition-all"
+                     >
+                        <CheckSquare className="w-3.5 h-3.5 mr-2" /> Selecionar Tudo
+                     </Button>
+                     <Button 
+                       type="button" 
+                       variant="outline" 
+                       onClick={clearAllPermissions}
+                       className="h-8 rounded-none border-red-100 text-red-400 font-black uppercase text-[9px] tracking-widest bg-red-50/50 hover:bg-red-500 hover:text-white transition-all"
+                     >
+                        <Square className="w-3.5 h-3.5 mr-2" /> Limpar Seleção
+                     </Button>
+                  </div>
+               </div>
+               
                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                   {ALL_PERMISSIONS.map((perm) => {
                     const isChecked = editingUser ? editingUser.permissions.includes(perm.id) : newPermissions.includes(perm.id);
@@ -401,6 +420,23 @@ GRANT EXECUTE ON FUNCTION public.deletar_usuario TO authenticated, anon;
                </Button>
             </div>
           </CardContent>
+        </Card>
+      )}
+
+      {error && (
+        <Card className="rounded-none border-none bg-red-50 p-6 flex items-center justify-between border border-red-100">
+           <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-white text-slate-900 rounded-none flex items-center justify-center shadow-sm text-red-500">
+                 <AlertCircle className="w-6 h-6" />
+              </div>
+              <div>
+                 <p className="text-[10px] font-black uppercase tracking-widest text-red-400">Erro de Configuração</p>
+                 <p className="text-xs font-bold text-red-900 mt-1">{error}</p>
+              </div>
+           </div>
+           <Button variant="outline" size="sm" onClick={copyRepairSQL} className="rounded-none border-red-200 text-red-600 font-black uppercase text-[9px] tracking-widest bg-white text-slate-900">
+              <Save className="w-3.5 h-3.5 mr-2" /> Copiar SQL Fix
+           </Button>
         </Card>
       )}
 
