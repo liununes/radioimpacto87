@@ -25,7 +25,7 @@ const menuGroups = [
     items: [
       { title: "Dashboard", url: "/admin", icon: LayoutDashboard, permission: "base" },
       { title: "Estatísticas", url: "/admin/estatisticas", icon: BarChart3, permission: "estatisticas" },
-      { title: "Arquivos / Mídia", url: "/admin/media", icon: HardDrive, permission: "base" },
+      { title: "Arquivos / Mídia", url: "/admin/media", icon: HardDrive, permission: "media" },
     ]
   },
   {
@@ -46,9 +46,9 @@ const menuGroups = [
     label: "Conteúdo Dinâmico",
     items: [
       { title: "Notícias / Blog", url: "/admin/noticias", icon: FileText, permission: "noticias" },
-      { title: "Entretenimento", url: "/admin/entretenimento", icon: Radio, permission: "noticias" },
+      { title: "Entretenimento", url: "/admin/entretenimento", icon: Radio, permission: "entretenimento" },
       { title: "Banners / Slides", url: "/admin/slides", icon: Image, permission: "slides" },
-      { title: "Mural de Pedidos", url: "/admin/pedidos", icon: Music, permission: "aparencia" },
+      { title: "Mural de Pedidos", url: "/admin/pedidos", icon: Music, permission: "pedidos" },
       { title: "Galeria de Fotos", url: "/admin/fotos", icon: Image, permission: "fotos" },
       { title: "Sobre a Rádio", url: "/admin/sobre", icon: Info, permission: "sobre" },
     ]
@@ -57,8 +57,8 @@ const menuGroups = [
     label: "Marketing & Engajamento",
     items: [
       { title: "Vídeos & Redes Sociais", url: "/admin/streaming", icon: Radio, permission: "streaming" },
-      { title: "Patrocinadores", url: "/admin/patrocinadores", icon: Heart, permission: "aparencia" },
-      { title: "Promoções", url: "/admin/promocoes", icon: Gift, permission: "aparencia" },
+      { title: "Patrocinadores", url: "/admin/patrocinadores", icon: Heart, permission: "patrocinadores" },
+      { title: "Promoções", url: "/admin/promocoes", icon: Gift, permission: "promocoes" },
     ]
   },
   {
