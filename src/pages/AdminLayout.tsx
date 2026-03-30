@@ -1,11 +1,14 @@
 import { Navigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Outlet } from "react-router-dom";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
+import { toast } from "sonner";
+
+const INACTIVITY_TIMEOUT = 15 * 60 * 1000; // 15 minutos
 
 const AdminLayout = () => {
   const { user, isAdmin, hasPermission, loading, signOut } = useAuth();
@@ -15,6 +18,41 @@ const AdminLayout = () => {
   useEffect(() => {
     localStorage.setItem('adminDarkMode', String(isDark));
   }, [isDark]);
+
+  // Sistema de Logout Automático por Inatividade
+  useEffect(() => {
+    if (!user) return;
+    
+    let timeoutId: string | number | NodeJS.Timeout | undefined;
+    
+    const resetTimer = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        toast.info("Sessão finalizada por inatividade.", { duration: 5000 });
+        signOut();
+      }, INACTIVITY_TIMEOUT);
+    };
+
+    resetTimer(); // Timer inicial
+
+    const activityEvents = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart'];
+    
+    // Trottler para melhorar performance: só reseta a cada segundo mesmo com múltiplos mousemoves
+    let isThrottled = false;
+    const handleActivity = () => {
+      if (isThrottled) return;
+      isThrottled = true;
+      resetTimer();
+      setTimeout(() => { isThrottled = false; }, 1000);
+    };
+
+    activityEvents.forEach(e => window.addEventListener(e, handleActivity));
+
+    return () => {
+      clearTimeout(timeoutId);
+      activityEvents.forEach(e => window.removeEventListener(e, handleActivity));
+    };
+  }, [user, signOut]);
 
   // Map sub-paths to permission keys
   const getRequiredPermission = (path: string) => {
