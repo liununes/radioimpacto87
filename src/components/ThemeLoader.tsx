@@ -52,18 +52,34 @@ const ThemeLoader = () => {
     
     // Don't track admin pages to show clean audience data
     if (!isInternalUser) {
+        const sessionId = localStorage.getItem('siteSessionId') || crypto.randomUUID();
+        if (!localStorage.getItem('siteSessionId')) localStorage.setItem('siteSessionId', sessionId);
+
+        const trackStatus = async (listening = false) => {
+            await channel.track({ 
+                id: sessionId,
+                is_listening: listening,
+                online_at: new Date().toISOString()
+            });
+        };
+
         channel
           .subscribe(async (status) => {
             if (status === 'SUBSCRIBED') {
-              const sessionId = localStorage.getItem('siteSessionId') || crypto.randomUUID();
-              if (!localStorage.getItem('siteSessionId')) localStorage.setItem('siteSessionId', sessionId);
-              
-              await channel.track({ 
-                  id: sessionId,
-                  online_at: new Date().toISOString()
-              });
+              await trackStatus(false);
             }
           });
+
+        // Event listener to react to play/pause from any component
+        const handlePlayState = (e: any) => {
+            trackStatus(e.detail?.isPlaying || false);
+        };
+        window.addEventListener('radio-play-state', handlePlayState as any);
+        
+        return () => {
+            window.removeEventListener('radio-play-state', handlePlayState as any);
+            channel.unsubscribe();
+        };
     }
 
     return () => {

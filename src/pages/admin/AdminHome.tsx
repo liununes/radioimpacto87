@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Users, Calendar, Radio, Image, Music, FileText, BarChart3, Settings, HardDrive, Zap, LifeBuoy } from "lucide-react";
+import { Users, Calendar, Radio, Image, Music, FileText, BarChart3, Settings, HardDrive, Zap, LifeBuoy, Clock } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { getLocutores, getProgramas, getSlides, clearAllStationData } from "@/lib/radioStore";
@@ -12,6 +12,8 @@ const AdminHome = () => {
   const { user } = useAuth();
   const isMainAdmin = user?.email === 'liununes06@gmail.com';
   const [onlineListeners, setOnlineListeners] = useState(0);
+  const [activeListeners, setActiveListeners] = useState(0);
+  const [loginTime, setLoginTime] = useState<string>("...");
   const [stats, setStats] = useState([
     { label: "Locutores", value: "...", icon: Users, color: "text-primary" },
     { label: "Programas", value: "...", icon: Calendar, color: "text-secondary" },
@@ -37,11 +39,33 @@ const AdminHome = () => {
         // Filtrar apenas sessões que possuem um ID (público) e usar Set para contar IDs ÚNICOS
         const uniqueSessions = new Set(allSessions.filter(s => s.id).map(s => s.id));
         setOnlineListeners(uniqueSessions.size);
+
+        // Contar quantos desses IDs únicos estão com is_listening: true em pelo menos uma de suas presenças
+        const listeningIds = new Set(allSessions.filter(s => s.id && s.is_listening === true).map(s => s.id));
+        setActiveListeners(listeningIds.size);
       })
       .subscribe();
 
+    // Timer de Login
+    const loginTimestamp = sessionStorage.getItem('adminLoginTime') || new Date().toISOString();
+    if (!sessionStorage.getItem('adminLoginTime')) sessionStorage.setItem('adminLoginTime', loginTimestamp);
+
+    const updateTimer = () => {
+        const start = new Date(loginTimestamp);
+        const now = new Date();
+        const diff = Math.floor((now.getTime() - start.getTime()) / 60000); // minutos
+        if (diff < 60) {
+            setLoginTime(`${diff}m`);
+        } else {
+            setLoginTime(`${Math.floor(diff/60)}h ${diff%60}m`);
+        }
+    };
+    updateTimer();
+    const timer = setInterval(updateTimer, 60000);
+
     return () => {
       channel.unsubscribe();
+      clearInterval(timer);
     };
   }, []);
 
@@ -74,13 +98,13 @@ const AdminHome = () => {
     setStats([
         { label: "Locutores", value: otherStats.locutores || "...", icon: Users, color: "text-primary" },
         { label: "Programas", value: otherStats.programas || "...", icon: Calendar, color: "text-secondary" },
-        { label: "Ouvintes On", value: String(onlineListeners), icon: Zap, color: "text-yellow-400" },
-        { label: "Streaming", value: "Ativo", icon: Radio, color: "text-green-400" },
-        { label: "Slides", value: otherStats.slides || "...", icon: Image, color: "text-purple-400" },
+        { label: "Ouvindo Agora", value: String(activeListeners), icon: Music, color: "text-red-500" },
+        { label: "Hits Site (On)", value: String(onlineListeners), icon: Zap, color: "text-yellow-400" },
+        { label: "Seu Login", value: loginTime, icon: Clock, color: "text-blue-500" },
+        { label: "Sinal", value: "Ativo", icon: Radio, color: "text-green-400" },
         { label: "Pedidos", value: otherStats.pedidos || "...", icon: Music, color: "text-pink-400" },
-        { label: "Notícias", value: otherStats.noticias || "...", icon: FileText, color: "text-blue-400" },
       ]);
-  }, [onlineListeners, otherStats]);
+  }, [onlineListeners, activeListeners, otherStats, loginTime]);
 
   const handleClearAll = async () => {
     if (!confirm("🚨 ATENÇÃO: Isso excluirá TODOS os locutores e a grade de programação permanentemente. Você tem certeza?")) return;

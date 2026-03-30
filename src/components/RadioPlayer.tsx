@@ -96,6 +96,8 @@ const RadioPlayer = () => {
         }
       }
       setIsPlaying(!isPlaying);
+      // Notificar o ThemeLoader para atualizar a presença
+      window.dispatchEvent(new CustomEvent('radio-play-state', { detail: { isPlaying: !isPlaying } }));
     } else if (!siteConfig.streamUrl) {
        toast.error("URL de streaming não configurada!");
     }

@@ -11,7 +11,7 @@ const AdminLogin = () => {
   const { signIn } = useAuth();
   const { supabase } = useAuth(); // Need to expose supabase if not already
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(() => localStorage.getItem('last_admin_login') || "");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -23,6 +23,9 @@ const AdminLogin = () => {
     setError("");
     setSuccessMsg("");
     if (!email.trim()) { setError("Preencha o e-mail."); return; }
+
+    // Salvar para facilitar próximo acesso
+    localStorage.setItem('last_admin_login', email.trim());
 
     setLoading(true);
     
