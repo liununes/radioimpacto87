@@ -18,7 +18,9 @@ const AdminLayout = () => {
 
   // Map sub-paths to permission keys
   const getRequiredPermission = (path: string) => {
-    if (path === "/admin") return null; // Todos os colaboradores autenticados podem ver a tela inicial (Dashboard)
+    const normalizedPath = path.replace(/\/$/, "");
+    if (normalizedPath === "/admin" || normalizedPath === "") return null; // Todos os colaboradores autenticados podem ver a tela inicial (Dashboard)
+    
     const segment = path.split("/")[2];
     if (!segment) return null;
     // Map specific paths if they differ from the segment name
@@ -86,7 +88,7 @@ const AdminLayout = () => {
     <SidebarProvider>
       <div className={`min-h-screen flex w-full admin-view ${isDark ? 'dark bg-slate-950 text-white' : 'bg-gray-50/50'}`}>
         <AdminSidebar isDark={isDark} onToggleDark={() => setIsDark(!isDark)} />
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col min-h-screen">
           <header 
             className="h-20 flex items-center justify-between border-b border-gray-100 backdrop-blur-md px-8 sticky top-0 z-50 transition-all duration-500 glass-header"
             style={{ 
@@ -106,8 +108,8 @@ const AdminLayout = () => {
               <div className="hidden lg:flex items-center gap-4 border-r border-gray-100 pr-8">
                 <div className="flex flex-col items-end">
                   <span className="text-[11px] font-black text-primary uppercase tracking-tighter">{user.email?.split('@')[0]}</span>
-                  <span className="text-[8px] font-bold text-green-500 uppercase tracking-widest flex items-center gap-1.5">
-                    <div className="w-1.5 h-1.5 bg-green-500 rounded-none animate-pulse" /> SESSÃO ATIVA
+                  <span className="text-[8px] font-bold text-emerald-500 uppercase tracking-widest flex items-center gap-1.5">
+                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-none animate-pulse" /> SESSÃO ATIVA
                   </span>
                 </div>
                 <div className="w-10 h-10 bg-primary/5 border border-primary/10 flex items-center justify-center font-black text-primary text-xs italic">
@@ -124,19 +126,19 @@ const AdminLayout = () => {
               </Button>
             </div>
           </header>
-          <main className="flex-1 overflow-auto p-12">
-            <div className="max-w-7xl mx-auto space-y-10">
+          <main key={location.pathname} className="flex-1 overflow-auto p-12 bg-transparent h-full">
+            <div className="max-w-7xl mx-auto space-y-10 h-full">
               {forbidden ? (
-                <div className="bg-white p-20 text-center space-y-6 border border-red-50 shadow-sm animate-in fade-in zoom-in-95 duration-500">
+                <div className="bg-card text-card-foreground p-20 text-center space-y-6 border border-border shadow-sm animate-in fade-in zoom-in-95 duration-500">
                    <div className="w-24 h-24 bg-red-50 text-red-500 rounded-none flex items-center justify-center mx-auto mb-8">
                       <LogOut className="w-10 h-10 -rotate-90" />
                    </div>
                    <h2 className="text-3xl font-black italic uppercase tracking-tighter text-red-600 leading-none">Acesso Bloqueado</h2>
-                   <p className="text-sm font-bold text-gray-400 uppercase tracking-widest leading-relaxed max-w-sm mx-auto">
-                      Você não tem permissão para acessar o módulo <span className="text-primary">({requiredPerm})</span>. 
+                   <p className="text-sm font-bold text-muted-foreground uppercase tracking-widest leading-relaxed max-w-md mx-auto">
+                      Você não tem permissão para acessar o módulo <span className="text-primary font-black">({requiredPerm})</span>. 
                       Entre em contato com o administrador para solicitar acesso.
                    </p>
-                   <Button asChild className="rounded-none bg-primary text-white h-14 px-12 font-black uppercase tracking-widest text-[10px]">
+                   <Button asChild className="rounded-none bg-primary hover:bg-primary/90 text-primary-foreground h-14 px-12 font-black uppercase tracking-widest text-[10px] mt-6">
                       <Link to="/admin">Voltar ao Painel Inicial</Link>
                    </Button>
                 </div>
