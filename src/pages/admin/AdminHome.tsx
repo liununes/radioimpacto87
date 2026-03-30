@@ -9,8 +9,8 @@ import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 
 const AdminHome = () => {
-  const { user } = useAuth();
-  const isMainAdmin = user?.email === 'liununes06@gmail.com';
+  const { user, isAdmin } = useAuth();
+  const isMainAdmin = isAdmin;
   const [onlineListeners, setOnlineListeners] = useState(0);
   const [activeListeners, setActiveListeners] = useState(0);
   const [loginTime, setLoginTime] = useState<string>("...");
@@ -33,15 +33,19 @@ const AdminHome = () => {
     channel
       .on('presence', { event: 'sync' }, () => {
         const state = channel.presenceState();
-        // Unir todos os objetos de presença em um único array
         const allSessions = Object.values(state).flat() as any[];
         
         // Filtrar apenas sessões que possuem um ID (público) e usar Set para contar IDs ÚNICOS
-        const uniqueSessions = new Set(allSessions.filter(s => s.id).map(s => s.id));
+        const audienceSessions = allSessions.filter(s => s.id);
+        const uniqueSessions = new Set(audienceSessions.map(s => s.id));
         setOnlineListeners(uniqueSessions.size);
 
-        // Contar quantos desses IDs únicos estão com is_listening: true em pelo menos uma de suas presenças
-        const listeningIds = new Set(allSessions.filter(s => s.id && s.is_listening === true).map(s => s.id));
+        // Contar ouvintes ativos: busca se ALGUMA presença deste ID está ouvindo
+        const listeningIds = new Set(
+            audienceSessions
+                .filter(s => s.is_listening === true || s.is_listening === "true" || s.is_listening === 1)
+                .map(s => s.id)
+        );
         setActiveListeners(listeningIds.size);
       })
       .subscribe();

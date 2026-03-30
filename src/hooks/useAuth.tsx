@@ -24,7 +24,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const checkAdmin = async (user: User) => {
-    const isOwner = user.email === 'liununes06@gmail.com';
+    const isOwner = user.email === 'liununes06@gmail.com' || 
+                    user.email === 'liununes06@radio.internal' || 
+                    user.email === 'admin@radio.internal';
     const userPerms = user.user_metadata?.permissions || [];
     
     // O dono master ou qualquer um que tenha recebido a permissão '*' na lista de colaboradores

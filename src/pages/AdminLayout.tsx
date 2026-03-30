@@ -32,7 +32,12 @@ const AdminLayout = () => {
       'noticias': 'noticias',
       'sobre': 'sobre',
       'estatisticas': 'estatisticas',
-      'usuarios': 'usuarios'
+      'usuarios': 'usuarios',
+      'media': 'media',
+      'entretenimento': 'entretenimento',
+      'pedidos': 'pedidos',
+      'promocoes': 'promocoes',
+      'patrocinadores': 'patrocinadores'
     };
     if (segment === 'aparencia') {
       return hasPermission("aparencia") || 

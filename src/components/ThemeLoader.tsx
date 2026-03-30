@@ -55,25 +55,34 @@ const ThemeLoader = () => {
         const sessionId = localStorage.getItem('siteSessionId') || crypto.randomUUID();
         if (!localStorage.getItem('siteSessionId')) localStorage.setItem('siteSessionId', sessionId);
 
-        const trackStatus = async (listening = false) => {
-            await channel.track({ 
-                id: sessionId,
-                is_listening: listening,
-                online_at: new Date().toISOString()
-            });
+        let currentListening = false;
+
+        const trackStatus = async (listening: boolean) => {
+            currentListening = listening;
+            try {
+                await channel.track({ 
+                    id: sessionId,
+                    is_listening: listening,
+                    online_at: new Date().toISOString()
+                });
+            } catch (err) {
+                console.error("Presence error:", err);
+            }
         };
 
         channel
           .subscribe(async (status) => {
             if (status === 'SUBSCRIBED') {
-              await trackStatus(false);
+              await trackStatus(currentListening);
             }
           });
 
         // Event listener to react to play/pause from any component
         const handlePlayState = (e: any) => {
-            trackStatus(e.detail?.isPlaying || false);
+            const isPlaying = !!e.detail?.isPlaying;
+            trackStatus(isPlaying);
         };
+
         window.addEventListener('radio-play-state', handlePlayState as any);
         
         return () => {

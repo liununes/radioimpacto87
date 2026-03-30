@@ -75,13 +75,13 @@ interface AdminSidebarProps {
 }
 
 export function AdminSidebar({ isDark, onToggleDark }: AdminSidebarProps) {
-  const { user, hasPermission } = useAuth();
+  const { user, hasPermission, isAdmin } = useAuth();
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const location = useLocation();
   const theme = useTheme();
 
-  const isMainAdmin = user?.email === 'liununes06@gmail.com';
+  const isMainAdmin = isAdmin;
 
   return (
     <Sidebar collapsible="icon" className="border-r border-white/5 shadow-2xl">
