@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { applyTheme, getThemeConfig, saveThemeConfig } from "@/lib/themeStore";
 import { getSiteConfig } from "@/lib/radioStore";
+import { supabase } from "@/integrations/supabase/client";
 
 /** Loads and applies saved theme on mount */
 const ThemeLoader = () => {
@@ -41,6 +42,33 @@ const ThemeLoader = () => {
       }
     };
     syncTheme();
+
+    /** REAL TIME Presence for Online Statistics. Track each unique device. */
+    const channel = supabase.channel('online_presence', {
+        config: { presence: { key: 'user' } }
+    });
+
+    const isInternalUser = window.location.pathname.startsWith('/admin');
+    
+    // Don't track admin pages to show clean audience data
+    if (!isInternalUser) {
+        channel
+          .subscribe(async (status) => {
+            if (status === 'SUBSCRIBED') {
+              const sessionId = localStorage.getItem('siteSessionId') || crypto.randomUUID();
+              if (!localStorage.getItem('siteSessionId')) localStorage.setItem('siteSessionId', sessionId);
+              
+              await channel.track({ 
+                  id: sessionId,
+                  online_at: new Date().toISOString()
+              });
+            }
+          });
+    }
+
+    return () => {
+      channel.unsubscribe();
+    };
   }, []);
   return null;
 };

@@ -23,21 +23,32 @@ const AdminHome = () => {
   ]);
 
   useEffect(() => {
-    const updateListeners = () => {
-      const hour = new Date().getHours();
-      let base = 12;
-      if (hour >= 8 && hour <= 12) base = 42;
-      if (hour >= 18 && hour <= 22) base = 58;
-      setOnlineListeners(Math.floor(base + Math.random() * 15));
-    };
+    // REAL TIME LISTENERS WITH SUPABASE PRESENCE
+    const channel = supabase.channel('online_presence', {
+      config: { presence: { key: 'admin' } }
+    });
 
-    updateListeners();
-    const interval = setInterval(updateListeners, 30000);
-    return () => clearInterval(interval);
+    channel
+      .on('presence', { event: 'sync' }, () => {
+        const state = channel.presenceState();
+        // Unir todos os objetos de presença em um único array
+        const allSessions = Object.values(state).flat() as any[];
+        
+        // Filtrar apenas sessões que possuem um ID (público) e usar Set para contar IDs ÚNICOS
+        const uniqueSessions = new Set(allSessions.filter(s => s.id).map(s => s.id));
+        setOnlineListeners(uniqueSessions.size);
+      })
+      .subscribe();
+
+    return () => {
+      channel.unsubscribe();
+    };
   }, []);
 
+  const [otherStats, setOtherStats] = useState<any>({});
+
   useEffect(() => {
-    const fetchStats = async () => {
+    const fetchOtherStats = async () => {
       const [locs, progs, slides] = await Promise.all([
         getLocutores(),
         getProgramas(),
@@ -46,20 +57,30 @@ const AdminHome = () => {
 
       const { count: pedidosCount } = await supabase.from("pedidos").select("*", { count: 'exact', head: true });
       const { count: noticiasCount } = await supabase.from("noticias").select("*", { count: 'exact', head: true });
-      const { data: themeData } = await supabase.from("site_config" as any).select("value").eq("key", "theme").maybeSingle();
       
-      setStats([
-        { label: "Locutores", value: String(locs.length), icon: Users, color: "text-primary" },
-        { label: "Programas", value: String(progs.length), icon: Calendar, color: "text-secondary" },
+      setOtherStats({
+        locutores: String(locs.length),
+        programas: String(progs.length),
+        slides: String(slides.length),
+        pedidos: String(pedidosCount || 0),
+        noticias: String(noticiasCount || 0),
+      });
+    };
+    fetchOtherStats();
+  }, []);
+
+  // Update fixed stats array on demand
+  useEffect(() => {
+    setStats([
+        { label: "Locutores", value: otherStats.locutores || "...", icon: Users, color: "text-primary" },
+        { label: "Programas", value: otherStats.programas || "...", icon: Calendar, color: "text-secondary" },
         { label: "Ouvintes On", value: String(onlineListeners), icon: Zap, color: "text-yellow-400" },
         { label: "Streaming", value: "Ativo", icon: Radio, color: "text-green-400" },
-        { label: "Slides", value: String(slides.length), icon: Image, color: "text-purple-400" },
-        { label: "Pedidos", value: String(pedidosCount || 0), icon: Music, color: "text-pink-400" },
-        { label: "Notícias", value: String(noticiasCount || 0), icon: FileText, color: "text-blue-400" },
+        { label: "Slides", value: otherStats.slides || "...", icon: Image, color: "text-purple-400" },
+        { label: "Pedidos", value: otherStats.pedidos || "...", icon: Music, color: "text-pink-400" },
+        { label: "Notícias", value: otherStats.noticias || "...", icon: FileText, color: "text-blue-400" },
       ]);
-    };
-    fetchStats();
-  }, [onlineListeners]);
+  }, [onlineListeners, otherStats]);
 
   const handleClearAll = async () => {
     if (!confirm("🚨 ATENÇÃO: Isso excluirá TODOS os locutores e a grade de programação permanentemente. Você tem certeza?")) return;
