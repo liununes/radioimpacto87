@@ -60,19 +60,7 @@ const AdminLayout = () => {
   if (!user) return <Navigate to="/admin/login" replace />;
   
   const requiredPerm = getRequiredPermission(location.pathname);
-  if (requiredPerm && !hasPermission(requiredPerm)) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4 text-center">
-        <div>
-          <p className="text-lg font-semibold text-foreground mb-2">Acesso Negado</p>
-          <p className="text-sm text-muted-foreground mb-4">
-            Você não tem permissão para acessar esta seção ({requiredPerm}).
-          </p>
-          <Button variant="outline" onClick={signOut} className="gap-2"><LogOut className="w-4 h-4" /> Sair</Button>
-        </div>
-      </div>
-    );
-  }
+  const forbidden = requiredPerm && !hasPermission(requiredPerm);
 
   return (
     <SidebarProvider>
@@ -118,7 +106,23 @@ const AdminLayout = () => {
           </header>
           <main className="flex-1 overflow-auto p-12">
             <div className="max-w-7xl mx-auto space-y-10">
-              <Outlet />
+              {forbidden ? (
+                <div className="bg-white p-20 text-center space-y-6 border border-red-50 shadow-sm animate-in fade-in zoom-in-95 duration-500">
+                   <div className="w-24 h-24 bg-red-50 text-red-500 rounded-none flex items-center justify-center mx-auto mb-8">
+                      <LogOut className="w-10 h-10 -rotate-90" />
+                   </div>
+                   <h2 className="text-3xl font-black italic uppercase tracking-tighter text-red-600 leading-none">Acesso Bloqueado</h2>
+                   <p className="text-sm font-bold text-gray-400 uppercase tracking-widest leading-relaxed max-w-sm mx-auto">
+                      Você não tem permissão para acessar o módulo <span className="text-primary">({requiredPerm})</span>. 
+                      Entre em contato com o administrador para solicitar acesso.
+                   </p>
+                   <Button asChild className="rounded-none bg-primary text-white h-14 px-12 font-black uppercase tracking-widest text-[10px]">
+                      <a href="/admin">Voltar ao Painel Initial</a>
+                   </Button>
+                </div>
+              ) : (
+                <Outlet />
+              )}
             </div>
           </main>
         </div>

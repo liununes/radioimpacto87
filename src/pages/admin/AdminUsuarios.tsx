@@ -13,6 +13,7 @@ const ALL_PERMISSIONS = [
   { id: "estatisticas", label: "Estatísticas (Histórico)" },
   { id: "media", label: "Arquivos / Mídia (Biblioteca)" },
   { id: "aparencia", label: "Cores, Logo & Seções" },
+  { id: "vis_top3", label: "Gerenciar Top 3" },
   { id: "locutores", label: "Equipe Locutores" },
   { id: "programacao", label: "Grade de Programação" },
   { id: "noticias", label: "Notícias / Blog" },
