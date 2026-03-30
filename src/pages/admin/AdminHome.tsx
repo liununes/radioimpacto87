@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Users, Calendar, Radio, Image, Music, FileText, BarChart3, Settings, HardDrive, Zap, LifeBuoy, Clock } from "lucide-react";
+import { Users, Calendar, Radio, Image, Music, FileText, BarChart3, Settings, HardDrive, Zap, LifeBuoy, Clock, Plus } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { getLocutores, getProgramas, getSlides } from "@/lib/radioStore";
