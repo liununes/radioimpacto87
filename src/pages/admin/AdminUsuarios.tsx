@@ -25,6 +25,7 @@ const ALL_PERMISSIONS = [
   { id: "sobre", label: "Sobre a Rádio" },
   { id: "estatisticas", label: "Relatórios de Acesso" },
   { id: "usuarios", label: "Gerenciar Usuários" },
+  { id: "danger_zone", label: "Zona de Perigo (Reset total)" },
 ];
 
 const AdminUsuarios = () => {

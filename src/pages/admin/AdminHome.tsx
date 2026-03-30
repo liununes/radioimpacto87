@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 
 const AdminHome = () => {
-  const { user, isAdmin } = useAuth();
+  const { user, isAdmin, hasPermission } = useAuth();
   const isMainAdmin = isAdmin;
   const [onlineListeners, setOnlineListeners] = useState(0);
   const [activeListeners, setActiveListeners] = useState(0);
@@ -222,7 +222,7 @@ const AdminHome = () => {
          )}
       </div>
 
-      {isMainAdmin && (
+      { (isMainAdmin || hasPermission('danger_zone')) && (
         <div className="pt-20 border-t border-red-50">
            <div className="bg-red-50 p-10 rounded-none border border-red-100 flex flex-col md:flex-row items-center justify-between gap-8">
               <div className="space-y-2">
