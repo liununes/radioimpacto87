@@ -27,7 +27,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const isOwner = user.email === 'liununes06@gmail.com' || 
                     user.email === 'liununes06@radio.internal' || 
                     user.email === 'admin@radio.internal';
-    const userPerms = user.user_metadata?.permissions || [];
+    
+    // Tentar buscar permissões atualizadas da tabela para evitar cache/metadata desatualizado
+    const { data: permsData } = await supabase
+        .from('user_permissions')
+        .select('permissions')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+    const userPerms = permsData?.permissions || user.user_metadata?.permissions || [];
     
     // O dono master ou qualquer um que tenha recebido a permissão '*' na lista de colaboradores
     if (isOwner || userPerms.includes("*")) {
