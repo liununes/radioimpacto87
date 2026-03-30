@@ -1,4 +1,4 @@
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
@@ -137,7 +137,7 @@ const AdminLayout = () => {
                       Entre em contato com o administrador para solicitar acesso.
                    </p>
                    <Button asChild className="rounded-none bg-primary text-white h-14 px-12 font-black uppercase tracking-widest text-[10px]">
-                      <a href="/admin">Voltar ao Painel Initial</a>
+                      <Link to="/admin">Voltar ao Painel Inicial</Link>
                    </Button>
                 </div>
               ) : (
