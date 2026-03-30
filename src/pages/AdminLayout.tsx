@@ -40,11 +40,11 @@ const AdminLayout = () => {
       'patrocinadores': 'patrocinadores'
     };
     if (segment === 'aparencia') {
-      return hasPermission("aparencia") || 
-             hasPermission("vis_noticias") || 
-             hasPermission("vis_galeria") || 
-             hasPermission("vis_top3") || 
-             hasPermission("vis_sobre") ? null : "aparencia";
+      const searchParams = new URLSearchParams(location.search);
+      if (searchParams.get('tab') === 'visibilidade') {
+        return "visibilidade";
+      }
+      return "aparencia";
     }
     return map[segment] || "*";
   };
