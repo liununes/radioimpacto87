@@ -1,5 +1,5 @@
 import {
-  Radio, Users, Calendar, Image, FileText, Info, LayoutDashboard, Music, Settings, Palette, BarChart3, ExternalLink, Heart, Gift, Sun, Moon, HardDrive, Eye, Layers, LifeBuoy
+  Radio, Users, Calendar, Image, FileText, Info, LayoutDashboard, Music, Settings, Palette, BarChart3, ExternalLink, Heart, Gift, Sun, Moon, HardDrive, Eye, Layers, LifeBuoy, Type, Layout, AlertTriangle, Globe, MessageCircle, Plus
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -23,20 +23,40 @@ const menuItems = [
   { title: "Dashboard", url: "/admin", icon: LayoutDashboard, permission: "base" },
   { title: "Estatísticas", url: "/admin/estatisticas", icon: BarChart3, permission: "estatisticas" },
   { title: "Arquivos / Mídia", url: "/admin/media", icon: HardDrive, permission: "media" },
-  { title: "Cores & Logo", url: "/admin/aparencia", icon: Palette, permission: "aparencia" },
-  { title: "Seções do Site", url: "/admin/aparencia?tab=visibilidade", icon: Eye, permission: "visibilidade" },
+  
+  // Aparencia
+  { title: "Identidade Visual", url: "/admin/aparencia?tab=visual", icon: Palette, permission: "aparencia_visual" },
+  { title: "Texto & Cores", url: "/admin/aparencia?tab=textos", icon: Type, permission: "aparencia_textos" },
+  { title: "Menu do Site", url: "/admin/aparencia?tab=menus", icon: ExternalLink, permission: "aparencia_menus" },
+  { title: "Design do Site", url: "/admin/aparencia?tab=layout", icon: Layout, permission: "aparencia_layout" },
+  { title: "Visibilidade do Site", url: "/admin/aparencia?tab=visibilidade", icon: Eye, permission: "visibilidade" },
+  
+  // Locutores & Programacao
   { title: "Locutores", url: "/admin/locutores", icon: Users, permission: "locutores" },
   { title: "Programação", url: "/admin/programacao", icon: Calendar, permission: "programacao" },
-  { title: "Notícias / Blog", url: "/admin/noticias", icon: FileText, permission: "noticias" },
+  
+  // Noticias Dismantled
+  { title: "Lista de Notícias", url: "/admin/noticias?tab=lista", icon: FileText, permission: "noticias_lista" },
+  { title: "Publicar Noticia", url: "/admin/noticias?tab=nova", icon: Plus, permission: "noticias_nova" },
+  { title: "Categorias News", url: "/admin/noticias?tab=categorias", icon: Layers, permission: "noticias_categorias" },
+  
+  // Conteudo
   { title: "Entretenimento", url: "/admin/entretenimento", icon: Radio, permission: "entretenimento" },
   { title: "Banners / Slides", url: "/admin/slides", icon: Image, permission: "slides" },
   { title: "Mural de Pedidos", url: "/admin/pedidos", icon: Music, permission: "pedidos" },
   { title: "Galeria de Fotos", url: "/admin/fotos", icon: Image, permission: "fotos" },
   { title: "Sobre a Rádio", url: "/admin/sobre", icon: Info, permission: "sobre" },
-  { title: "Vídeos & Redes", url: "/admin/streaming", icon: Radio, permission: "streaming" },
+  
+  // Conexoes Dismantled
+  { title: "Sinal do Player", url: "/admin/streaming?tab=sinal", icon: Radio, permission: "streaming_sinal" },
+  { title: "Redes Sociais", url: "/admin/streaming?tab=redes", icon: Globe, permission: "streaming_redes" },
+  { title: "WhatsApp & Ouvintes", url: "/admin/streaming?tab=whatsapp", icon: MessageCircle, permission: "streaming_whatsapp" },
+  
+  // Admin
   { title: "Patrocinadores", url: "/admin/patrocinadores", icon: Heart, permission: "patrocinadores" },
   { title: "Promoções", url: "/admin/promocoes", icon: Gift, permission: "promocoes" },
   { title: "Usuários / Acessos", url: "/admin/usuarios", icon: Settings, permission: "usuarios" },
+  { title: "Zona de Perigo", url: "/admin/danger-zone", icon: AlertTriangle, permission: "danger_zone" },
 ];
 
 interface AdminSidebarProps {

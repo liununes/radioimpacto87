@@ -30,6 +30,7 @@ import AdminEstatisticas from "./pages/admin/AdminEstatisticas";
 import AdminUsuarios from "./pages/admin/AdminUsuarios";
 import AdminSponsors from "./pages/admin/AdminSponsors";
 import AdminPromos from "./pages/admin/AdminPromos";
+import AdminDangerZone from "./pages/admin/AdminDangerZone";
 
 const queryClient = new QueryClient();
 
@@ -67,6 +68,7 @@ const App = () => (
                 <Route path="promocoes" element={<AdminPromos />} />
                 <Route path="estatisticas" element={<AdminEstatisticas />} />
                 <Route path="usuarios" element={<AdminUsuarios />} />
+                <Route path="danger-zone" element={<AdminDangerZone />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>

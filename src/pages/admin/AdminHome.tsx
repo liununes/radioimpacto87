@@ -2,10 +2,9 @@ import { useState, useEffect } from "react";
 import { Users, Calendar, Radio, Image, Music, FileText, BarChart3, Settings, HardDrive, Zap, LifeBuoy, Clock } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { getLocutores, getProgramas, getSlides, clearAllStationData } from "@/lib/radioStore";
+import { getLocutores, getProgramas, getSlides } from "@/lib/radioStore";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
-import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 
 const AdminHome = () => {
@@ -25,7 +24,6 @@ const AdminHome = () => {
   ]);
 
   useEffect(() => {
-    // REAL TIME LISTENERS WITH SUPABASE PRESENCE
     const channel = supabase.channel('online_presence', {
       config: { presence: { key: 'admin' } }
     });
@@ -33,19 +31,13 @@ const AdminHome = () => {
     channel
       .on('presence', { event: 'sync' }, () => {
         const state = channel.presenceState();
-        // Cada chave no estado agora é um sessionId único do ThemeLoader
         const allSessions = Object.values(state).map((v: any) => v[0]).filter(s => s.id);
-        
-        // Contar quantos sessões únicas temos hoje
         setOnlineListeners(allSessions.length);
-
-        // Contar ouvintes ativos (quem está ouvindo)
         const activeCount = allSessions.filter(s => s.is_listening === true || s.is_listening === "true").length;
         setActiveListeners(activeCount);
       })
       .subscribe();
 
-    // Timer de Login
     const loginTimestamp = sessionStorage.getItem('adminLoginTime') || new Date().toISOString();
     if (!sessionStorage.getItem('adminLoginTime')) sessionStorage.setItem('adminLoginTime', loginTimestamp);
 
@@ -92,7 +84,6 @@ const AdminHome = () => {
     fetchOtherStats();
   }, []);
 
-  // Update fixed stats array on demand
   useEffect(() => {
     setStats([
         { label: "Locutores", value: otherStats.locutores || "...", icon: Users, color: "text-primary" },
@@ -104,18 +95,6 @@ const AdminHome = () => {
         { label: "Pedidos", value: otherStats.pedidos || "...", icon: Music, color: "text-pink-400" },
       ]);
   }, [onlineListeners, activeListeners, otherStats, loginTime]);
-
-  const handleClearAll = async () => {
-    if (!confirm("🚨 ATENÇÃO: Isso excluirá TODOS os locutores e a grade de programação permanentemente. Você tem certeza?")) return;
-    
-    const { error } = await clearAllStationData();
-    if (error) {
-      toast.error("Erro ao limpar dados: " + error.message);
-    } else {
-      toast.success("Todos os dados de locução e programação foram limpos!");
-      setTimeout(() => window.location.reload(), 1500);
-    }
-  };
 
   return (
     <div className="space-y-12 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
@@ -176,9 +155,9 @@ const AdminHome = () => {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-         <Link to="/admin/noticias" className="p-6 bg-white text-slate-900 border border-gray-100 rounded-none shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col items-center gap-3 text-center group">
-            <FileText className="w-6 h-6 text-primary group-hover:scale-110 transition-transform" />
-            <span className="text-[9px] font-black uppercase tracking-widest">Nova Notícia</span>
+         <Link to="/admin/noticias?tab=nova" className="p-6 bg-white text-slate-900 border border-gray-100 rounded-none shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col items-center gap-3 text-center group">
+            <Plus className="w-6 h-6 text-primary group-hover:scale-110 transition-transform" />
+            <span className="text-[9px] font-black uppercase tracking-widest">Publicar News</span>
          </Link>
          <Link to="/admin/media" className="p-6 bg-white text-slate-900 border border-gray-100 rounded-none shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col items-center gap-3 text-center group">
             <HardDrive className="w-6 h-6 text-primary group-hover:scale-110 transition-transform" />
@@ -188,7 +167,7 @@ const AdminHome = () => {
             <Calendar className="w-6 h-6 text-primary group-hover:scale-110 transition-transform" />
             <span className="text-[9px] font-black uppercase tracking-widest">Agenda</span>
          </Link>
-         <Link to="/admin/streaming" className="p-6 bg-white text-slate-900 border border-gray-100 rounded-none shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col items-center gap-3 text-center group">
+         <Link to="/admin/streaming?tab=sinal" className="p-6 bg-white text-slate-900 border border-gray-100 rounded-none shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col items-center gap-3 text-center group">
             <Radio className="w-6 h-6 text-primary group-hover:scale-110 transition-transform" />
             <span className="text-[9px] font-black uppercase tracking-widest">Sinal On</span>
          </Link>
@@ -219,13 +198,15 @@ const AdminHome = () => {
 
       { (isMainAdmin || hasPermission('danger_zone')) && (
         <div className="pt-20 border-t border-red-50">
-           <div className="bg-red-50 p-10 rounded-none border border-red-100 flex flex-col md:flex-row items-center justify-between gap-8">
+           <div className="bg-red-50 p-10 rounded-none border border-red-100 flex flex-col md:flex-row items-center justify-between gap-8 group hover:bg-red-100/50 transition-all">
               <div className="space-y-2">
-                 <h3 className="text-xl font-black uppercase text-red-600 italic tracking-tighter">Zona de Perigo</h3>
-                 <p className="text-xs font-bold text-red-400 uppercase tracking-widest max-w-md leading-relaxed">Limpeza total de dados para reajuste manual. Use com cuidado extremo.</p>
+                 <h3 className="text-xl font-black uppercase text-red-600 italic tracking-tighter flex items-center gap-2">
+                    <LifeBuoy className="w-6 h-6 animate-pulse" /> Zona de Perigo
+                 </h3>
+                 <p className="text-xs font-bold text-red-400 uppercase tracking-widest max-w-sm leading-relaxed">Gerenciamento de dados críticos e limpeza total do sistema em uma área isolada.</p>
               </div>
-              <Button onClick={handleClearAll} variant="destructive" className="h-14 px-10 rounded-none font-black uppercase text-[10px] tracking-widest shadow-xl shadow-red-200 hover:scale-105 active:scale-95 transition-all">
-                 Limpar Tudo (Locutores & Grade)
+              <Button asChild variant="destructive" className="h-14 px-10 rounded-none font-black uppercase text-[10px] tracking-widest shadow-xl shadow-red-200 hover:scale-105 active:scale-95 transition-all">
+                 <Link to="/admin/danger-zone">Acessar Área Restrita</Link>
               </Button>
            </div>
         </div>

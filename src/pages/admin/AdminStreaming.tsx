@@ -25,14 +25,20 @@ function fileToBase64(file: File): Promise<string> {
   });
 }
 
+import { useSearchParams } from "react-router-dom";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 const AdminStreaming = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialTab = searchParams.get("tab") || "sinal";
+  const [activeTab, setActiveTab] = useState(initialTab);
+  
   const [streamUrl, setStreamUrl] = useState("");
   const [radioName, setRadioName] = useState("");
   const [radioFreq, setRadioFreq] = useState("");
   const [logo, setLogo] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
   const [whatsappMessage, setWhatsappMessage] = useState("");
-
   const [favicon, setFavicon] = useState("");
 
   const [redes, setRedes] = useState<RedeSocial[]>([]);
@@ -41,6 +47,18 @@ const AdminStreaming = () => {
   const [novaRedeIcone, setNovaRedeIcone] = useState("instagram");
   const [editIdRede, setEditIdRede] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const tabFromUrl = searchParams.get("tab");
+    if (tabFromUrl && tabFromUrl !== activeTab) {
+      setActiveTab(tabFromUrl);
+    }
+  }, [searchParams]);
+
+  const onTabChange = (value: string) => {
+    setActiveTab(value);
+    setSearchParams({ tab: value });
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,7 +75,6 @@ const AdminStreaming = () => {
         setFavicon(config.favicon || "/favicon.ico");
         setWhatsappMessage(config.whatsappMessage || "");
       } else {
-        // Caso não exista config no banco, já pré-carrega o padrão solicitado com HTTPS
         setStreamUrl("https://streaming.liurecord.com.br/radio/8005/stream");
         setRadioName("Impacto FM");
         setRadioFreq("87.9 FM");
@@ -130,9 +147,9 @@ const AdminStreaming = () => {
     setNovaRedeUrl("");
     setNovaRedeIcone("instagram");
   };
-;
 
-  return (    <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+  return (
+    <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
       <div className="flex justify-between items-center bg-white text-slate-900 p-8 rounded-none border border-gray-100 shadow-sm">
         <div>
           <h2 className="text-3xl font-black text-primary tracking-tighter uppercase italic leading-none">Player & <span className="text-secondary italic">Conexões</span></h2>
@@ -146,20 +163,33 @@ const AdminStreaming = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-        <div className="lg:col-span-8 space-y-10">
+      <Tabs value={activeTab} onValueChange={onTabChange} className="space-y-8">
+        <div className="flex justify-center">
+          <TabsList className="bg-white p-1.5 h-auto rounded-none border border-gray-100 shadow-xl gap-1">
+            <TabsTrigger value="sinal" className="rounded-none px-6 py-4 data-[state=active]:bg-primary data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
+              <Radio className="w-4 h-4 mr-2" /> Sinal Online
+            </TabsTrigger>
+            <TabsTrigger value="redes" className="rounded-none px-6 py-4 data-[state=active]:bg-primary data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
+              <Globe className="w-4 h-4 mr-2" /> Redes Sociais
+            </TabsTrigger>
+            <TabsTrigger value="whatsapp" className="rounded-none px-6 py-4 data-[state=active]:bg-emerald-600 data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
+              <MessageCircle className="w-4 h-4 mr-2" /> WhatsApp
+            </TabsTrigger>
+          </TabsList>
+        </div>
+
+        <TabsContent value="sinal" className="animate-in fade-in zoom-in-95 duration-500">
            <Card className="rounded-none border-none shadow-xl bg-white text-slate-900 overflow-hidden">
              <CardHeader className="bg-primary/5 p-8 border-b border-gray-100/50">
-               <CardTitle className="text-lg font-black uppercase tracking-tight text-primary flex items-center gap-3">
+               <CardTitle className="text-lg font-black uppercase tracking-tight text-primary flex items-center gap-3 italic">
                  <Radio className="w-5 h-5 text-secondary" /> Transmissão Principal
                </CardTitle>
              </CardHeader>
              <CardContent className="p-8 space-y-8">
                <div className="space-y-3">
                  <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">URL do Fluxo (Stream URL)</Label>
-                 <Input value={streamUrl} onChange={e => setStreamUrl(e.target.value)} placeholder="https://streaming.liurecord.com.br/radio/8005/stream" className="h-14 rounded-none border-gray-100 bg-gray-50 font-bold text-primary" />
+                 <Input value={streamUrl} onChange={e => setStreamUrl(e.target.value)} placeholder="https://..." className="h-14 rounded-none border-gray-100 bg-gray-50 font-bold text-primary" />
                </div>
-               
                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                  <div className="space-y-3">
                    <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Nome Oficial da Estação</Label>
@@ -170,115 +200,100 @@ const AdminStreaming = () => {
                    <Input value={radioFreq} onChange={e => setRadioFreq(e.target.value)} className="h-12 rounded-none border-gray-100" />
                  </div>
                </div>
+             </CardContent>
+           </Card>
+        </TabsContent>
 
-                <div className="pt-6 border-t border-gray-50 p-6 bg-secondary/5 rounded-none space-y-6">
-                   <div className="flex items-center justify-between">
-                     <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-none bg-secondary flex items-center justify-center shadow-lg shadow-yellow-400/20">
-                           <MessageCircle className="w-6 h-6 text-primary" />
-                        </div>
-                        <div>
-                           <h4 className="text-xs font-black text-primary uppercase leading-none">Canal do Ouvinte</h4>
-                           <p className="text-[10px] font-bold text-gray-400 uppercase mt-1">WhatsApp para sorteios e pedidos</p>
-                        </div>
-                     </div>
-                     <Input value={whatsapp} onChange={e => setWhatsapp(e.target.value)} placeholder="55..." className="max-w-[180px] h-12 rounded-none border-gray-100 font-black text-center" />
+        <TabsContent value="whatsapp" className="animate-in fade-in zoom-in-95 duration-500">
+           <Card className="rounded-none border-none shadow-xl bg-white text-slate-900 overflow-hidden">
+             <CardHeader className="bg-emerald-600 p-8 text-white">
+                <CardTitle className="text-lg font-black uppercase tracking-tight italic flex items-center gap-3">
+                  <MessageCircle className="w-6 h-6" /> WhatsApp & Ouvintes
+                </CardTitle>
+             </CardHeader>
+             <CardContent className="p-8 space-y-8">
+                <div className="flex items-center justify-between p-8 bg-emerald-50/50 border border-emerald-100">
+                   <div className="flex items-center gap-6">
+                      <div className="w-16 h-16 bg-emerald-600 text-white rounded-none flex items-center justify-center shadow-xl shadow-emerald-900/20">
+                         <MessageCircle className="w-8 h-8" />
+                      </div>
+                      <div>
+                         <h4 className="text-sm font-black text-emerald-900 uppercase italic leading-none">Número de Contato</h4>
+                         <p className="text-[10px] font-bold text-emerald-600/60 uppercase mt-2">DDI + DDD + NÚMERO (Sem espaços ou traços)</p>
+                      </div>
                    </div>
-                   
-                   <div className="space-y-3">
-                     <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Texto Padrão para Pedidos (Auto-preenchimento)</Label>
-                     <Input 
-                        value={whatsappMessage} 
-                        onChange={e => setWhatsappMessage(e.target.value)} 
-                        placeholder="Ex: Olá Impacto! Gostaria de pedir a música..." 
-                        className="h-12 rounded-none border-gray-100 bg-white text-slate-900" 
-                     />
-                   </div>
+                   <Input value={whatsapp} onChange={e => setWhatsapp(e.target.value)} placeholder="5511999999999" className="max-w-[240px] h-16 rounded-none border-emerald-100 bg-white font-black text-center text-xl text-emerald-600" />
+                </div>
+                <div className="space-y-3 bg-gray-50 p-8 border border-gray-100">
+                   <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400 italic">Mensagem Padrão (Auto-preenchimento)</Label>
+                   <Input 
+                      value={whatsappMessage} 
+                      onChange={e => setWhatsappMessage(e.target.value)} 
+                      placeholder="Ex: Olá Impacto! Gostaria de pedir a música..." 
+                      className="h-14 rounded-none border-gray-100 bg-white text-slate-900 font-medium" 
+                   />
+                   <p className="text-[9px] text-gray-400 font-bold uppercase tracking-tighter">* Esta mensagem aparecerá para o ouvinte ao clicar no botão de WhatsApp.</p>
                 </div>
              </CardContent>
            </Card>
+        </TabsContent>
 
+        <TabsContent value="redes" className="animate-in fade-in zoom-in-95 duration-500">
            <Card className="rounded-none border-none shadow-xl bg-white text-slate-900 overflow-hidden">
-             <CardHeader className="p-8 pb-4">
-               <CardTitle className="text-xl font-black uppercase tracking-tight text-primary italic">Redes Sociais</CardTitle>
-             </CardHeader>
-             <CardContent className="p-8 pt-4 space-y-8">
-               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                 <div className="space-y-2">
-                   <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Plataforma</Label>
-                   <Input value={novaRedeNome} onChange={e => setNovaRedeNome(e.target.value)} placeholder="Ex: Instagram" className="h-12 rounded-none border-gray-100" />
-                 </div>
-                 <div className="space-y-2">
-                   <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Endereço (Link)</Label>
-                   <Input value={novaRedeUrl} onChange={e => setNovaRedeUrl(e.target.value)} placeholder="https://..." className="h-12 rounded-none border-gray-100" />
-                 </div>
-                 <div className="space-y-2">
-                   <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Ícone</Label>
-                   <select value={novaRedeIcone} onChange={e => setNovaRedeIcone(e.target.value)}
-                     className="flex h-12 w-full rounded-none border border-gray-100 bg-background px-4 text-sm font-bold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
-                     {ICONE_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-                   </select>
-                 </div>
-               </div>
-               
-               <div className="flex gap-4">
-                 <Button onClick={handleSaveRede} className="h-12 px-10 rounded-none bg-gray-100 text-primary hover:bg-primary hover:text-white font-black uppercase text-[10px] tracking-widest transition-all">
-                   {editIdRede ? "Salvar Alteração" : "Adicionar Nova Rede"}
-                 </Button>
-                 {editIdRede && (
-                   <Button variant="ghost" onClick={resetRedeForm} className="h-12 px-6 rounded-none font-bold uppercase text-[10px]">Cancelar</Button>
-                 )}
-               </div>
+              <CardHeader className="p-10 pb-4">
+                 <CardTitle className="text-2xl font-black uppercase tracking-tight text-primary italic">Central de Redes Sociais</CardTitle>
+              </CardHeader>
+              <CardContent className="p-10 pt-4 space-y-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  <div className="space-y-3">
+                    <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400 italic">Nome da Rede</Label>
+                    <Input value={novaRedeNome} onChange={e => setNovaRedeNome(e.target.value)} placeholder="Ex: Instagram" className="h-14 rounded-none border-gray-100 bg-gray-50" />
+                  </div>
+                  <div className="space-y-3">
+                    <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400 italic">Link Completo</Label>
+                    <Input value={novaRedeUrl} onChange={e => setNovaRedeUrl(e.target.value)} placeholder="https://..." className="h-14 rounded-none border-gray-100 bg-gray-50" />
+                  </div>
+                  <div className="space-y-3">
+                    <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400 italic">Escolha o Ícone</Label>
+                    <select value={novaRedeIcone} onChange={e => setNovaRedeIcone(e.target.value)}
+                      className="flex h-14 w-full rounded-none border border-gray-100 bg-gray-50 px-4 text-sm font-bold text-primary focus-visible:outline-none focus:ring-2 focus:ring-primary">
+                      {ICONE_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+                    </select>
+                  </div>
+                </div>
+                
+                <Button onClick={handleSaveRede} className="h-14 px-12 rounded-none bg-primary text-white font-black uppercase text-[10px] tracking-widest shadow-xl transition-all">
+                  {editIdRede ? "Atualizar Rede Social" : "Adicionar à Lista"}
+                </Button>
 
-               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6 mt-6 border-t border-gray-50">
-                 {redes.map(rede => (
-                   <div key={rede.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-none border border-gray-100 group hover:bg-white text-slate-900 hover:shadow-lg transition-all">
-                      <div className="flex items-center gap-4">
-                         <div className="w-10 h-10 rounded-none bg-white text-slate-900 border border-gray-100 flex items-center justify-center text-primary">
-                               {rede.icone === 'instagram' && <Instagram className="w-5 h-5" />}
-                               {rede.icone === 'facebook' && <Facebook className="w-5 h-5" />}
-                               {rede.icone === 'youtube' && <Youtube className="w-5 h-5" />}
-                               {rede.icone === 'twitter' && <Twitter className="w-5 h-5" />}
-                               {rede.icone === 'tiktok' && <Music2 className="w-5 h-5" />}
-                               {rede.icone === 'other' && <Globe className="w-5 h-5" />}
-                               {!['instagram', 'facebook', 'youtube', 'twitter', 'tiktok', 'other'].includes(rede.icone) && <Globe className="w-5 h-5" />}
-                            </div>
-                            <div>
-                               <h5 className="text-[11px] font-black text-primary uppercase leading-none">{rede.nome}</h5>
-                               <p className="text-[9px] font-bold text-gray-300 uppercase mt-1 truncate max-w-[120px]">{rede.url}</p>
-                            </div>
-                         </div>
-                         <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <Button size="icon" variant="ghost" className="h-8 w-8 rounded-none" onClick={() => handleEditRede(rede)}><Edit2 className="w-3.5 h-3.5" /></Button>
-                            <Button size="icon" variant="ghost" className="h-8 w-8 rounded-none text-red-400 hover:text-red-500 hover:bg-red-50" onClick={() => handleDeleteRede(rede.id)}><Trash2 className="w-3.5 h-3.5" /></Button>
-                         </div>
-                      </div>
-                 ))}
-               </div>
-             </CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-10 border-t border-gray-50">
+                  {redes.map(rede => (
+                    <div key={rede.id} className="flex items-center justify-between p-6 bg-gray-50 rounded-none border border-gray-100 group hover:bg-white hover:shadow-2xl transition-all duration-300">
+                       <div className="flex items-center gap-5">
+                          <div className="w-14 h-14 rounded-none bg-white text-slate-900 border border-gray-100 flex items-center justify-center text-primary shadow-sm group-hover:rotate-6 transition-all">
+                                {rede.icone === 'instagram' && <Instagram className="w-6 h-6" />}
+                                {rede.icone === 'facebook' && <Facebook className="w-6 h-6" />}
+                                {rede.icone === 'youtube' && <Youtube className="w-6 h-6" />}
+                                {rede.icone === 'twitter' && <Twitter className="w-6 h-6" />}
+                                {rede.icone === 'tiktok' && <Music2 className="w-6 h-6" />}
+                                {rede.icone === 'other' && <Globe className="w-6 h-6" />}
+                             </div>
+                             <div>
+                                <h5 className="text-sm font-black text-primary uppercase italic leading-none">{rede.nome}</h5>
+                                <p className="text-[10px] font-bold text-gray-300 uppercase mt-2 truncate max-w-[150px]">{rede.url}</p>
+                             </div>
+                          </div>
+                          <div className="flex gap-2">
+                             <Button size="icon" variant="ghost" className="h-10 w-10 rounded-none bg-white border border-gray-100 shadow-sm" onClick={() => handleEditRede(rede)}><Edit2 className="w-4 h-4" /></Button>
+                             <Button size="icon" variant="ghost" className="h-10 w-10 rounded-none bg-red-50 text-red-400 hover:text-red-600 border border-red-100" onClick={() => handleDeleteRede(rede.id)}><Trash2 className="w-4 h-4" /></Button>
+                          </div>
+                       </div>
+                  ))}
+                </div>
+              </CardContent>
            </Card>
-        </div>
-
-        <div className="lg:col-span-4 space-y-10">
-           <Card className="rounded-none border-none shadow-xl bg-[#002e5d] text-white p-8 relative overflow-hidden">
-              <div className="relative z-10 space-y-6">
-                 <h3 className="text-xl font-black uppercase tracking-tight italic">Identidade Visual</h3>
-                 <p className="text-xs text-white/50 font-medium leading-relaxed">As logos e favicons agora são gerenciados na central de Personalização.</p>
-                 <Button asChild className="w-full h-12 rounded-none bg-[#ffed32] text-[#002e5d] font-black uppercase text-[10px] tracking-widest hover:bg-white text-slate-900 transition-all shadow-lg shadow-yellow-400/10">
-                    <a href="/admin/aparencia">Ir para Personalização</a>
-                 </Button>
-              </div>
-           </Card>
-
-           <div className="p-8 bg-gray-50 rounded-none border border-gray-100 flex flex-col items-center text-center space-y-4">
-              <div className="w-16 h-16 rounded-none bg-white text-slate-900 border border-gray-100 flex items-center justify-center shadow-sm">
-                 <Info className="w-8 h-8 text-primary/20" />
-              </div>
-              <h4 className="text-[10px] font-black text-primary uppercase tracking-[0.2em]">Dica do Admin</h4>
-              <p className="text-[11px] text-gray-400 font-medium leading-relaxed px-4">Utilize URLs seguras (HTTPS) para garantir que o player funcione em todos os navegadores modernos.</p>
-           </div>
-        </div>
-      </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

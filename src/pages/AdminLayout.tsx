@@ -41,11 +41,31 @@ const AdminLayout = () => {
     };
     if (segment === 'aparencia') {
       const searchParams = new URLSearchParams(location.search);
-      if (searchParams.get('tab') === 'visibilidade') {
-        return "visibilidade";
-      }
-      return "aparencia";
+      const tab = searchParams.get('tab') || 'visual';
+      if (tab === 'visibilidade') return 'visibilidade';
+      if (tab === 'visual') return 'aparencia_visual';
+      if (tab === 'textos') return 'aparencia_textos';
+      if (tab === 'menus') return 'aparencia_menus';
+      if (tab === 'layout') return 'aparencia_layout';
+      return "aparencia_visual";
     }
+    if (segment === 'noticias') {
+      const searchParams = new URLSearchParams(location.search);
+      const tab = searchParams.get('tab') || 'lista';
+      if (tab === 'lista') return 'noticias_lista';
+      if (tab === 'nova') return 'noticias_nova';
+      if (tab === 'categorias') return 'noticias_categorias';
+      return "noticias_lista";
+    }
+    if (segment === 'streaming') {
+      const searchParams = new URLSearchParams(location.search);
+      const tab = searchParams.get('tab') || 'sinal';
+      if (tab === 'sinal') return 'streaming_sinal';
+      if (tab === 'redes') return 'streaming_redes';
+      if (tab === 'whatsapp') return 'streaming_whatsapp';
+      return "streaming_sinal";
+    }
+    if (segment === 'danger-zone') return 'danger_zone';
     return map[segment] || "*";
   };
 
