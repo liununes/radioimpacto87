@@ -44,16 +44,17 @@ const ThemeLoader = () => {
     syncTheme();
 
     /** REAL TIME Presence for Online Statistics. Track each unique device. */
-    const channel = supabase.channel('online_presence', {
-        config: { presence: { key: 'user' } }
-    });
-
     const isInternalUser = window.location.pathname.startsWith('/admin');
     
     // Don't track admin pages to show clean audience data
     if (!isInternalUser) {
         const sessionId = localStorage.getItem('siteSessionId') || crypto.randomUUID();
         if (!localStorage.getItem('siteSessionId')) localStorage.setItem('siteSessionId', sessionId);
+
+        /** USAR SESSION ID COMO CHAVE ÚNICA DE PRESENÇA */
+        const channel = supabase.channel('online_presence', {
+            config: { presence: { key: sessionId } }
+        });
 
         let currentListening = false;
 
@@ -92,7 +93,7 @@ const ThemeLoader = () => {
     }
 
     return () => {
-      channel.unsubscribe();
+      // Nenhum cleanup global necessário além do que já está nos ifs
     };
   }, []);
   return null;

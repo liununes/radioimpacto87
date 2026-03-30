@@ -33,20 +33,15 @@ const AdminHome = () => {
     channel
       .on('presence', { event: 'sync' }, () => {
         const state = channel.presenceState();
-        const allSessions = Object.values(state).flat() as any[];
+        // Cada chave no estado agora é um sessionId único do ThemeLoader
+        const allSessions = Object.values(state).map((v: any) => v[0]).filter(s => s.id);
         
-        // Filtrar apenas sessões que possuem um ID (público) e usar Set para contar IDs ÚNICOS
-        const audienceSessions = allSessions.filter(s => s.id);
-        const uniqueSessions = new Set(audienceSessions.map(s => s.id));
-        setOnlineListeners(uniqueSessions.size);
+        // Contar quantos sessões únicas temos hoje
+        setOnlineListeners(allSessions.length);
 
-        // Contar ouvintes ativos: busca se ALGUMA presença deste ID está ouvindo
-        const listeningIds = new Set(
-            audienceSessions
-                .filter(s => s.is_listening === true || s.is_listening === "true" || s.is_listening === 1)
-                .map(s => s.id)
-        );
-        setActiveListeners(listeningIds.size);
+        // Contar ouvintes ativos (quem está ouvindo)
+        const activeCount = allSessions.filter(s => s.is_listening === true || s.is_listening === "true").length;
+        setActiveListeners(activeCount);
       })
       .subscribe();
 
