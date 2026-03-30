@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Play, Pause, Volume2, Instagram, Facebook, Youtube, MessageCircle } from "lucide-react";
+import { Play, Pause, Volume2, VolumeX, Instagram, Facebook, Youtube, MessageCircle } from "lucide-react";
 import { getSiteConfig, getProgramaAtual, getRedesSociais, type Programa, type Locutor, type RedeSocial } from "@/lib/radioStore";
 import { toast } from "sonner";
 
@@ -8,6 +8,8 @@ const PlayerPage = () => {
   const [siteConfig, setSiteConfig] = useState<any>({});
   const [programaAtual, setProgramaAtual] = useState<{ programa: Programa; locutor: Locutor } | null>(null);
   const [redes, setRedes] = useState<RedeSocial[]>([]);
+  const [volume, setVolume] = useState(1);
+  const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const loadData = async () => {
@@ -23,8 +25,39 @@ const PlayerPage = () => {
     const interval = setInterval(async () => {
       setProgramaAtual(await getProgramaAtual());
     }, 60000);
+
+    // Recuperar volume salvo
+    const savedVolume = localStorage.getItem('radio-player-volume');
+    if (savedVolume) {
+      const v = parseFloat(savedVolume);
+      setVolume(v);
+      if (audioRef.current) audioRef.current.volume = v;
+    }
+
     return () => clearInterval(interval);
   }, []);
+
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseFloat(e.target.value) / 100;
+    setVolume(value);
+    if (audioRef.current) {
+      audioRef.current.volume = value;
+    }
+    localStorage.setItem('radio-player-volume', value.toString());
+    if (value > 0) setIsMuted(false);
+  };
+
+  const toggleMute = () => {
+    if (audioRef.current) {
+      if (isMuted) {
+        audioRef.current.volume = volume;
+        setIsMuted(false);
+      } else {
+        audioRef.current.volume = 0;
+        setIsMuted(true);
+      }
+    }
+  };
 
   const togglePlay = () => {
     if (audioRef.current && siteConfig.streamUrl) {
@@ -40,6 +73,7 @@ const PlayerPage = () => {
         
         audioRef.current.src = url;
         audioRef.current.load();
+        audioRef.current.volume = isMuted ? 0 : volume;
         
         const playPromise = audioRef.current.play();
         if (playPromise !== undefined) {
@@ -112,12 +146,16 @@ const PlayerPage = () => {
 
       {/* Controles de Volume */}
       <div className="w-full max-w-xs flex items-center gap-4 mb-12 px-6 py-4 bg-white/5 rounded-3xl border border-white/5">
-         <Volume2 className="w-5 h-5 text-white/40" />
+         <button onClick={toggleMute} className="text-white/40 hover:text-secondary transition-colors">
+            {isMuted || volume === 0 ? <VolumeX className="w-5 h-5 text-red-500" /> : <Volume2 className="w-5 h-5" />}
+         </button>
          <input 
            type="range" 
            className="flex-1 accent-secondary h-1.5"
-           onChange={(e) => { if(audioRef.current) audioRef.current.volume = parseInt(e.target.value)/100 }}
-           defaultValue={100}
+           min="0"
+           max="100"
+           value={isMuted ? 0 : volume * 100}
+           onChange={handleVolumeChange}
          />
       </div>
 

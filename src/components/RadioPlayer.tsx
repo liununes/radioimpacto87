@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Play, Pause, ChevronDown, MapPin, ExternalLink, Volume2, Info, MessageCircle } from "lucide-react";
+import { Play, Pause, ChevronDown, MapPin, ExternalLink, Volume2, VolumeX, Info, MessageCircle } from "lucide-react";
 import { getSiteConfig, getProgramaAtual, type Programa, type Locutor } from "@/lib/radioStore";
 import { useTheme } from "@/hooks/useTheme";
 import { toast } from "sonner";
@@ -12,6 +12,8 @@ const RadioPlayer = () => {
   const [showPhotoBig, setShowPhotoBig] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
   const theme = useTheme();
+  const [volume, setVolume] = useState(1);
+  const [isMuted, setIsMuted] = useState(false);
 
   const loadConfigs = async () => {
     const site = (await getSiteConfig("site")) || {};
@@ -28,8 +30,39 @@ const RadioPlayer = () => {
     loadConfigs();
     updatePrograma();
     const interval = setInterval(updatePrograma, 60000);
+    
+    // Recuperar volume salvo
+    const savedVolume = localStorage.getItem('radio-player-volume');
+    if (savedVolume) {
+      const v = parseFloat(savedVolume);
+      setVolume(v);
+      if (audioRef.current) audioRef.current.volume = v;
+    }
+
     return () => clearInterval(interval);
   }, []);
+
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseFloat(e.target.value);
+    setVolume(value);
+    if (audioRef.current) {
+      audioRef.current.volume = value;
+    }
+    localStorage.setItem('radio-player-volume', value.toString());
+    if (value > 0) setIsMuted(false);
+  };
+
+  const toggleMute = () => {
+    if (audioRef.current) {
+      if (isMuted) {
+        audioRef.current.volume = volume;
+        setIsMuted(false);
+      } else {
+        audioRef.current.volume = 0;
+        setIsMuted(true);
+      }
+    }
+  };
 
   const togglePlay = () => {
     if (audioRef.current && siteConfig.streamUrl) {
@@ -47,6 +80,7 @@ const RadioPlayer = () => {
         
         audioRef.current.src = url;
         audioRef.current.load(); // Forçar carga limpa do streaming
+        audioRef.current.volume = isMuted ? 0 : volume;
         
         const playPromise = audioRef.current.play();
         if (playPromise !== undefined) {
@@ -182,7 +216,27 @@ const RadioPlayer = () => {
       )}
 
       {/* Direita: Botões de Ação - Ultra Compact on mobile */}
-      <div className="flex items-center gap-1.5 md:gap-4 shrink-0 pr-2">
+    <div className="flex items-center gap-1.5 md:gap-4 shrink-0 pr-2">
+        {/* Controle de Volume - Visível em telas maiores */}
+        <div className="hidden lg:flex items-center gap-3 mr-2 px-4 py-2 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-100 dark:border-gray-700 transition-all">
+            <button 
+              onClick={toggleMute} 
+              className="text-primary dark:text-secondary hover:scale-110 transition-transform"
+              title={isMuted ? "Ativar Áudio" : "Mudar para Mudo"}
+            >
+                {isMuted || volume === 0 ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+            </button>
+            <input 
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value={isMuted ? 0 : volume}
+                onChange={handleVolumeChange}
+                className="w-20 h-1.5 accent-primary dark:accent-secondary cursor-pointer appearance-none bg-gray-200 dark:bg-gray-700 rounded-lg"
+            />
+        </div>
+
         {theme.showPedidos !== false && (
            <a 
             href={`https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(siteConfig.whatsappMessage || "Olá! Gostaria de pedir uma música.")}`}
