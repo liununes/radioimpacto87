@@ -65,10 +65,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signIn = async (loginIdentifier: string, password: string) => {
-    // Se não tiver @, trata como Nome de Usuário interno
-    const loginEmail = loginIdentifier.includes("@") 
-      ? loginIdentifier.trim().toLowerCase() 
-      : `${loginIdentifier.trim().toLowerCase()}@radio.internal`;
+    const identifier = loginIdentifier.trim().toLowerCase();
+    let loginEmail = identifier;
+
+    if (!identifier.includes("@")) {
+      // Caso especial para o Admin Master acessar por nome mesmo usando o Gmail
+      if (identifier === 'liununes06' || identifier === 'admin') {
+        const { error: gmailError } = await supabase.auth.signInWithPassword({ 
+          email: 'liununes06@gmail.com', 
+          password 
+        });
+        if (!gmailError) return { error: null };
+        
+        // Se falhar com gmail, tenta o padrão interno (caso a conta tenha sido migrada)
+        loginEmail = `${identifier}@radio.internal`;
+      } else {
+        loginEmail = `${identifier}@radio.internal`;
+      }
+    }
 
     const { error } = await supabase.auth.signInWithPassword({ 
       email: loginEmail, 

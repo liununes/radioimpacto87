@@ -109,6 +109,7 @@ const AdminUsuarios = () => {
     try {
       const { error: authError } = await (supabase as any).rpc('atualizar_usuario', {
         p_user_id: editingUser.user_id,
+        p_username: editingUser.username.trim().toLowerCase(),
         p_display_name: editingUser.display_name,
         p_password: editingUser.new_password || null,
         p_email: editingUser.email_real || null,
@@ -225,6 +226,7 @@ $$;
 
 CREATE OR REPLACE FUNCTION public.atualizar_usuario(
   p_user_id UUID,
+  p_username TEXT DEFAULT NULL, -- NOVO
   p_display_name TEXT DEFAULT NULL,
   p_password TEXT DEFAULT NULL,
   p_email TEXT DEFAULT NULL,
@@ -235,16 +237,32 @@ LANGUAGE plpgsql
 SECURITY DEFINER
 SET search_path = auth, public, extensions
 AS $$
+DECLARE
+  old_email TEXT;
+  new_email TEXT;
 BEGIN
+  SELECT email INTO old_email FROM auth.users WHERE id = p_user_id;
+  
+  -- Se o username mudar e não houver um e-mail real, atualizamos o e-mail interno
+  IF p_username IS NOT NULL AND old_email LIKE '%@radio.internal' AND p_email IS NULL THEN
+      new_email := LOWER(TRIM(p_username)) || '@radio.internal';
+  ELSE
+      new_email := COALESCE(p_email, old_email);
+  END IF;
+
   UPDATE auth.users
   SET 
-    email = COALESCE(p_email, email),
+    email = new_email,
     raw_user_meta_data = raw_user_meta_data || 
+                         CASE WHEN p_username IS NOT NULL THEN jsonb_build_object('username', p_username) ELSE '{}'::jsonb END ||
                          CASE WHEN p_display_name IS NOT NULL THEN jsonb_build_object('display_name', p_display_name) ELSE '{}'::jsonb END ||
                          CASE WHEN p_email IS NOT NULL THEN jsonb_build_object('real_email', p_email) ELSE '{}'::jsonb END ||
                          p_metadata,
     updated_at = now()
   WHERE id = p_user_id;
+
+  -- Atualizar identities também para o login funcionar com novo e-mail
+  UPDATE auth.identities SET identity_data = jsonb_build_object('sub', p_user_id::text, 'email', new_email, 'email_verified', true) WHERE user_id = p_user_id;
 
   IF p_password IS NOT NULL AND p_password <> '' THEN
     UPDATE auth.users SET encrypted_password = extensions.crypt(p_password, extensions.gen_salt('bf')) WHERE id = p_user_id;
@@ -252,12 +270,25 @@ BEGIN
 
   UPDATE public.user_permissions
   SET
+    username = COALESCE(p_username, username),
     display_name = COALESCE(p_display_name, display_name),
     email_real = COALESCE(p_email, email_real),
     permissions = CASE WHEN p_metadata ? 'permissions' THEN ARRAY(SELECT jsonb_array_elements_text(p_metadata->'permissions')) ELSE permissions END
   WHERE user_id = p_user_id;
 END;
 $$;
+
+-- REGISTRAR ADMIN MASTER SE NÃO EXISTIR NA TABELA DE PERMISSÕES
+DO $$
+DECLARE
+  master_uid UUID;
+BEGIN
+  SELECT id INTO master_uid FROM auth.users WHERE email = 'liununes06@gmail.com';
+  IF master_uid IS NOT NULL AND NOT EXISTS (SELECT 1 FROM public.user_permissions WHERE user_id = master_uid) THEN
+    INSERT INTO public.user_permissions (user_id, username, display_name, email_real, permissions)
+    VALUES (master_uid, 'liununes06', 'Liu Nunes (Master)', 'liununes06@gmail.com', '{"*"}');
+  END IF;
+END $$;
 `;
     navigator.clipboard.writeText(sql);
     toast.success("SQL de Reparo copiado!");
@@ -294,12 +325,11 @@ $$;
                <div className="space-y-3">
                  <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Login (Username)</Label>
                  <Input 
-                   disabled={!!editingUser}
-                   value={editingUser ? editingUser.username : newUsername} 
-                   onChange={e => editingUser ? setEditingUser({...editingUser, username: e.target.value}) : setNewUsername(e.target.value)} 
-                   placeholder="Ex: joao_silvain" 
-                   className="h-14 rounded-none border-gray-100 bg-gray-50"
-                 />
+                    value={editingUser ? editingUser.username : newUsername} 
+                    onChange={e => editingUser ? setEditingUser({...editingUser, username: e.target.value}) : setNewUsername(e.target.value)} 
+                    placeholder="Ex: joao_silvain" 
+                    className="h-14 rounded-none border-gray-100 bg-gray-50"
+                  />
                </div>
                <div className="space-y-3">
                  <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400 flex items-center gap-2">
