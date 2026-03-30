@@ -222,17 +222,19 @@ const AdminHome = () => {
          )}
       </div>
 
-      <div className="pt-20 border-t border-red-50">
-         <div className="bg-red-50 p-10 rounded-none border border-red-100 flex flex-col md:flex-row items-center justify-between gap-8">
-            <div className="space-y-2">
-               <h3 className="text-xl font-black uppercase text-red-600 italic tracking-tighter">Zona de Perigo</h3>
-               <p className="text-xs font-bold text-red-400 uppercase tracking-widest max-w-md leading-relaxed">Limpeza total de dados para reajuste manual. Use com cuidado extremo.</p>
-            </div>
-            <Button onClick={handleClearAll} variant="destructive" className="h-14 px-10 rounded-none font-black uppercase text-[10px] tracking-widest shadow-xl shadow-red-200 hover:scale-105 active:scale-95 transition-all">
-               Limpar Tudo (Locutores & Grade)
-            </Button>
-         </div>
-      </div>
+      {isMainAdmin && (
+        <div className="pt-20 border-t border-red-50">
+           <div className="bg-red-50 p-10 rounded-none border border-red-100 flex flex-col md:flex-row items-center justify-between gap-8">
+              <div className="space-y-2">
+                 <h3 className="text-xl font-black uppercase text-red-600 italic tracking-tighter">Zona de Perigo</h3>
+                 <p className="text-xs font-bold text-red-400 uppercase tracking-widest max-w-md leading-relaxed">Limpeza total de dados para reajuste manual. Use com cuidado extremo.</p>
+              </div>
+              <Button onClick={handleClearAll} variant="destructive" className="h-14 px-10 rounded-none font-black uppercase text-[10px] tracking-widest shadow-xl shadow-red-200 hover:scale-105 active:scale-95 transition-all">
+                 Limpar Tudo (Locutores & Grade)
+              </Button>
+           </div>
+        </div>
+      )}
     </div>
   );
 };
