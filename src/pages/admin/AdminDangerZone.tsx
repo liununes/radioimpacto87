@@ -2,13 +2,14 @@ import { useState } from "react";
 import { AlertTriangle, Trash2, RotateCcw, ShieldAlert, Zap, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { clearAllStationData } from "@/lib/radioStore";
+import { clearAllStationData, cleanupUnusedImages } from "@/lib/radioStore";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 
 const AdminDangerZone = () => {
   const { isAdmin, hasPermission } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [cleaningImages, setCleaningImages] = useState(false);
 
   const handleClearAll = async () => {
     if (!confirm("🚨 ATENÇÃO: Isso excluirá TODOS os locutores e a grade de programação permanentemente. Você tem certeza?")) return;
@@ -24,6 +25,20 @@ const AdminDangerZone = () => {
     setLoading(false);
   };
 
+  const handleCleanImages = async () => {
+    if (!confirm("Isso removerá da galeria todas as imagens que não estão atualmente em uso. Deseja prosseguir?")) return;
+    
+    setCleaningImages(true);
+    const result = await cleanupUnusedImages();
+    if (result.error) {
+      toast.error("Erro ao limpar imagens: " + result.error.message);
+    } else {
+      toast.success(result.count === 0 
+        ? "Nenhuma imagem ociosa encontrada. A galeria já está otimizada!" 
+        : `${result.count} imagens removidas com sucesso!`);
+    }
+    setCleaningImages(false);
+  };
   if (!isAdmin && !hasPermission('danger_zone')) {
     return <div className="p-12 text-center font-black uppercase text-red-500">Acesso Restrito</div>;
   }
@@ -85,19 +100,20 @@ const AdminDangerZone = () => {
            <CardContent className="p-8 pt-4 space-y-8">
                <p className="text-[11px] font-black uppercase text-gray-500 tracking-widest">
                    Esta função removerá imagens não utilizadas do Storage para otimizar espaço em disco e banco de dados. 
-                   Estará disponível na próxima atualização majoritária do sistema.
+                   Esta ação limpará sua biblioteca de mídia mantendo apenas as imagens que estão publicadas ativamente.
                </p>
                
                <div className="bg-orange-50 p-6 border border-orange-100 flex flex-col md:flex-row items-center justify-between gap-6">
                    <div className="flex items-center gap-4">
                         <Zap className="w-6 h-6 text-orange-400" />
-                        <p className="text-[10px] font-black uppercase text-orange-400 tracking-widest">Função em desenvolvimento</p>
+                        <p className="text-[10px] font-black uppercase text-orange-400 tracking-widest">Execução segura: não afeta conteúdos visíveis</p>
                    </div>
                    <Button 
-                      disabled
-                      className="h-16 px-12 rounded-none font-black uppercase text-xs tracking-widest shadow-xl bg-orange-500 hover:bg-orange-600 transition-all opacity-50 cursor-not-allowed"
+                      onClick={handleCleanImages}
+                      disabled={cleaningImages}
+                      className="h-16 px-12 rounded-none font-black uppercase text-xs tracking-widest shadow-xl bg-orange-500 hover:bg-orange-600 transition-all text-white"
                    >
-                      Em Breve
+                      {cleaningImages ? <Loader2 className="w-5 h-5 animate-spin" /> : "Iniciar Limpeza"}
                    </Button>
                </div>
            </CardContent>

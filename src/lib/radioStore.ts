@@ -196,3 +196,38 @@ export async function saveWhatsApp(numero: string) {
   const current = await getSiteConfig("streaming") || {};
   return await saveSiteConfig("streaming", { ...current, whatsapp: numero });
 }
+
+export async function cleanupUnusedImages() {
+  try {
+    const { data: fotos, error: fotosErr } = await supabase.from("fotos").select("id, imagem");
+    if (fotosErr) throw fotosErr;
+
+    const [locutores, programas, slides, noticias, redes] = await Promise.all([
+      supabase.from("locutores").select("foto"),
+      supabase.from("programas").select("foto"),
+      supabase.from("slides").select("imagem"),
+      supabase.from("noticias").select("imagem"),
+      supabase.from("redes_sociais").select("icone")
+    ]);
+
+    const usedUrls = new Set<string>();
+
+    locutores.data?.forEach(l => l.foto && usedUrls.add(l.foto));
+    programas.data?.forEach(p => p.foto && usedUrls.add(p.foto));
+    slides.data?.forEach(s => s.imagem && usedUrls.add(s.imagem));
+    noticias.data?.forEach(n => n.imagem && usedUrls.add(n.imagem));
+    redes.data?.forEach(r => r.icone && usedUrls.add(r.icone));
+
+    const unusedFotosIds = fotos?.filter(f => !usedUrls.has(f.imagem)).map(f => f.id) || [];
+
+    if (unusedFotosIds.length > 0) {
+      const { error: delErr } = await supabase.from("fotos").delete().in("id", unusedFotosIds);
+      if (delErr) throw delErr;
+    }
+
+    return { error: null, count: unusedFotosIds.length };
+  } catch (error: any) {
+    console.error("Erro ao limpar cache de imagens:", error);
+    return { error, count: 0 };
+  }
+}
