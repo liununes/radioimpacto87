@@ -75,15 +75,31 @@ const AdminDangerZone = () => {
           </CardContent>
         </Card>
 
-        <Card className="rounded-none border-none shadow-xl overflow-hidden bg-white text-slate-900 border-l-4 border-l-orange-500 opacity-60">
+        <Card className="rounded-none border-none shadow-xl overflow-hidden bg-white text-slate-900 border-l-4 border-l-orange-500">
            <CardHeader className="p-8 pb-4">
                <div className="flex items-center gap-4 text-orange-500 mb-2">
                    <RotateCcw className="w-8 h-8" />
                    <CardTitle className="text-2xl font-black uppercase tracking-tight italic">Limpar Cache de Imagens</CardTitle>
                </div>
            </CardHeader>
-           <CardContent className="p-8 pt-0">
-               <p className="text-[10px] font-black uppercase text-gray-300 tracking-widest">Função disponível em breve para otimização de banco de dados.</p>
+           <CardContent className="p-8 pt-4 space-y-8">
+               <p className="text-[11px] font-black uppercase text-gray-500 tracking-widest">
+                   Esta função removerá imagens não utilizadas do Storage para otimizar espaço em disco e banco de dados. 
+                   Estará disponível na próxima atualização majoritária do sistema.
+               </p>
+               
+               <div className="bg-orange-50 p-6 border border-orange-100 flex flex-col md:flex-row items-center justify-between gap-6">
+                   <div className="flex items-center gap-4">
+                        <Zap className="w-6 h-6 text-orange-400" />
+                        <p className="text-[10px] font-black uppercase text-orange-400 tracking-widest">Função em desenvolvimento</p>
+                   </div>
+                   <Button 
+                      disabled
+                      className="h-16 px-12 rounded-none font-black uppercase text-xs tracking-widest shadow-xl bg-orange-500 hover:bg-orange-600 transition-all opacity-50 cursor-not-allowed"
+                   >
+                      Em Breve
+                   </Button>
+               </div>
            </CardContent>
         </Card>
       </div>
