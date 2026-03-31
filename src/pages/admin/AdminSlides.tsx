@@ -80,7 +80,6 @@ const AdminSlides = () => {
   };
 
   return (
-  return (
     <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-card text-card-foreground p-6 rounded-xl border border-border shadow-sm">
         <div>
@@ -183,7 +182,6 @@ const AdminSlides = () => {
         )}
       </div>
     </div>
-  );
   );
 };
 
