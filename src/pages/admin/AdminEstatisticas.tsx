@@ -61,64 +61,64 @@ const AdminEstatisticas = () => {
 
   return (
     <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      <div className="flex justify-between items-center bg-white text-slate-900 p-8 rounded-none border border-gray-100 shadow-sm">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-card text-card-foreground p-6 rounded-xl border border-border shadow-sm">
         <div>
-          <h2 className="text-3xl font-black text-primary tracking-tighter uppercase italic leading-none">Métricas de <span className="text-secondary italic">Audiência</span></h2>
-          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Monitore o tráfego do site em tempo real</p>
+          <h2 className="text-2xl font-bold tracking-tight">Estatísticas</h2>
+          <p className="text-sm font-medium text-muted-foreground mt-1">Visão geral do tráfego e interações no site da rádio.</p>
         </div>
         {!loading && (
-          <div className="flex items-center gap-3 px-6 py-3 bg-primary/5 rounded-none border border-primary/10">
-            <Activity className="w-4 h-4 text-primary animate-pulse" />
-            <span className="text-[10px] font-black uppercase text-primary tracking-widest">Sistema de Monitoramento Ativo</span>
+          <div className="flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-lg text-primary text-sm font-semibold">
+            <Activity className="w-4 h-4 animate-pulse" />
+            Em Tempo Real
           </div>
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        <Card className="rounded-none border-none shadow-xl bg-primary text-white overflow-hidden p-8 relative">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <Card className="rounded-xl border border-border shadow-sm bg-primary text-primary-foreground overflow-hidden p-6 relative">
            <div className="relative z-10">
-              <p className="text-[10px] font-black uppercase tracking-widest text-white/50 mb-2">Últimas 24 Horas</p>
-              <h3 className="text-5xl font-black italic">{loading ? "..." : inLast24h}</h3>
-              <p className="text-[9px] font-bold text-white/30 uppercase mt-4">Acessos únicos registrados</p>
+              <p className="text-sm font-semibold opacity-80 mb-1">Últimas 24 Horas</p>
+              <h3 className="text-4xl font-bold">{loading ? "..." : inLast24h}</h3>
+              <p className="text-xs font-medium opacity-70 mt-3">Acessos únicos</p>
            </div>
-           <Clock className="absolute top-8 right-8 w-12 h-12 text-white/5" />
+           <Clock className="absolute top-6 right-6 w-12 h-12 opacity-10" />
         </Card>
 
-        <Card className="rounded-none border-none shadow-xl bg-white text-slate-900 overflow-hidden p-8">
-           <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">Pico (1h / 12h)</p>
+        <Card className="rounded-xl border border-border shadow-sm bg-card text-card-foreground p-6">
+           <p className="text-sm font-semibold text-muted-foreground mb-1">Pico (1h / 12h)</p>
            <div className="flex items-baseline gap-2">
-              <h3 className="text-4xl font-black text-primary italic">{loading ? "..." : inLast1h}</h3>
-              <span className="text-xl font-bold text-gray-200">/ {inLast12h}</span>
+              <h3 className="text-4xl font-bold">{loading ? "..." : inLast1h}</h3>
+              <span className="text-xl font-medium text-muted-foreground">/ {inLast12h}</span>
            </div>
-           <p className="text-[9px] font-bold text-gray-300 uppercase mt-4">Visitantes ativos hoje</p>
+           <p className="text-xs font-medium text-muted-foreground mt-3">Visitantes ativos hoje</p>
         </Card>
 
-        <Card className="rounded-none border-none shadow-xl bg-white text-slate-900 overflow-hidden p-8">
-           <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">{format(now, "MMMM", { locale: ptBR })}</p>
-           <h3 className="text-4xl font-black text-primary italic">{loading ? "..." : inMonth}</h3>
-           <p className="text-[9px] font-bold text-gray-300 uppercase mt-4">Total acumulado no mês</p>
+        <Card className="rounded-xl border border-border shadow-sm bg-card text-card-foreground p-6">
+           <p className="text-sm font-semibold text-muted-foreground mb-1 capitalize">{format(now, "MMMM", { locale: ptBR })}</p>
+           <h3 className="text-4xl font-bold">{loading ? "..." : inMonth}</h3>
+           <p className="text-xs font-medium text-muted-foreground mt-3">Acessos registrados</p>
         </Card>
 
-        <Card className="rounded-none border-none shadow-xl bg-[#002e5d] text-white overflow-hidden p-8 relative">
+        <Card className="rounded-xl border border-border shadow-sm bg-card text-card-foreground overflow-hidden p-6 relative">
            <div className="relative z-10">
-              <p className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-2">Volume Anual</p>
-              <h3 className="text-4xl font-black italic">{loading ? "..." : inYear}</h3>
-              <p className="text-[9px] font-bold text-white/20 uppercase mt-4">Métricas de alcance total</p>
+              <p className="text-sm font-semibold text-muted-foreground mb-1">Ano Atual</p>
+              <h3 className="text-4xl font-bold">{loading ? "..." : inYear}</h3>
+              <p className="text-xs font-medium text-muted-foreground mt-3">Visitantes acumulados</p>
            </div>
-           <Users className="absolute top-8 right-8 w-12 h-12 text-white/5" />
+           <Users className="absolute top-6 right-6 w-12 h-12 text-muted-foreground/10" />
         </Card>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        <Card className="lg:col-span-8 rounded-none border-none shadow-xl bg-white text-slate-900 overflow-hidden">
-          <CardHeader className="p-10 pb-0">
-            <CardTitle className="text-xl font-black uppercase tracking-tight text-primary italic">Fluxo de Acesso (24H)</CardTitle>
-            <CardDescription className="text-[10px] font-bold uppercase tracking-widest text-gray-300 mt-2">Oscilação de audiência por hora</CardDescription>
+        <Card className="lg:col-span-8 rounded-xl border border-border shadow-sm bg-card text-card-foreground overflow-hidden">
+          <CardHeader className="p-6 pb-2 border-b border-border/50">
+            <CardTitle className="text-lg font-bold">Fluxo de Acesso (24H)</CardTitle>
+            <CardDescription className="text-sm">Oscilação de audiência por hora</CardDescription>
           </CardHeader>
-          <CardContent className="p-10">
+          <CardContent className="p-6">
             <div className="h-[350px] w-full">
               {loading ? (
-                <div className="flex h-full items-center justify-center text-gray-200">
+                <div className="flex h-full items-center justify-center text-muted-foreground">
                    <Loader2 className="w-8 h-8 animate-spin" />
                 </div>
               ) : (
@@ -126,18 +126,18 @@ const AdminEstatisticas = () => {
                   <AreaChart data={hourlyData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                     <defs>
                       <linearGradient id="colorAcessos" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#002e5d" stopOpacity={0.1}/>
-                        <stop offset="95%" stopColor="#002e5d" stopOpacity={0}/>
+                        <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.2}/>
+                        <stop offset="95%" stopColor="var(--primary)" stopOpacity={0}/>
                       </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-                    <XAxis dataKey="name" fontSize={9} fontWeight="900" tickLine={false} axisLine={false} tick={{fill: '#94a3b8'}} />
-                    <YAxis fontSize={9} fontWeight="900" tickLine={false} axisLine={false} tick={{fill: '#94a3b8'}} />
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
+                    <XAxis dataKey="name" fontSize={12} fontWeight="500" tickLine={false} axisLine={false} tick={{fill: 'var(--muted-foreground)'}} />
+                    <YAxis fontSize={12} fontWeight="500" tickLine={false} axisLine={false} tick={{fill: 'var(--muted-foreground)'}} />
                     <Tooltip 
-                      contentStyle={{ backgroundColor: '#ffffff', borderRadius: '0', border: 'none', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)', padding: '1.5rem' }}
-                      itemStyle={{ color: '#002e5d', fontWeight: '900', fontSize: '12px' }}
+                      contentStyle={{ backgroundColor: 'var(--card)', borderRadius: '0.5rem', border: '1px solid var(--border)', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', padding: '1rem' }}
+                      itemStyle={{ color: 'var(--foreground)', fontWeight: '600', fontSize: '14px' }}
                     />
-                    <Area type="monotone" dataKey="acessos" stroke="#002e5d" strokeWidth={4} fillOpacity={1} fill="url(#colorAcessos)" />
+                    <Area type="monotone" dataKey="acessos" stroke="var(--primary)" strokeWidth={3} fillOpacity={1} fill="url(#colorAcessos)" />
                   </AreaChart>
                 </ResponsiveContainer>
               )}
@@ -145,26 +145,26 @@ const AdminEstatisticas = () => {
           </CardContent>
         </Card>
 
-        <Card className="lg:col-span-4 rounded-none border-none shadow-xl bg-gray-50 overflow-hidden flex flex-col justify-between">
-          <CardHeader className="p-10">
-            <CardTitle className="text-xl font-black uppercase tracking-tight text-primary italic">Arquivo Histórico</CardTitle>
-            <CardDescription className="text-[10px] font-bold uppercase tracking-widest text-gray-300 mt-2">Consulte tráfego de datas específicas</CardDescription>
+        <Card className="lg:col-span-4 rounded-xl border border-border shadow-sm bg-card text-card-foreground overflow-hidden flex flex-col justify-between">
+          <CardHeader className="p-6 border-b border-border/50">
+            <CardTitle className="text-lg font-bold">Consulta Histórica</CardTitle>
+            <CardDescription className="text-sm">Consulte tráfego de datas específicas</CardDescription>
           </CardHeader>
-          <CardContent className="p-10 pt-0 flex-1 flex flex-col items-center justify-center gap-10">
+          <CardContent className="p-6 flex-1 flex flex-col gap-6">
             <div className="w-full">
               <Input 
                 type="date" 
                 value={customDate}
                 onChange={(e) => setCustomDate(e.target.value)}
-                className="h-14 rounded-none border-none bg-white text-slate-900 font-black text-primary text-center shadow-sm"
+                className="h-11 rounded-lg bg-background text-foreground font-semibold shadow-sm w-full"
               />
             </div>
-            <div className="text-center bg-white text-slate-900 border border-gray-100 rounded-none px-8 py-10 w-full shadow-lg">
-              <p className="text-[9px] font-black text-gray-300 uppercase tracking-widest mb-4">Acessos no dia</p>
-              <h3 className="text-6xl font-black text-primary italic">{customDateAccesses}</h3>
-              <div className="mt-6 flex justify-center">
-                 <div className="px-4 py-1.5 bg-secondary/10 rounded-none border border-secondary/20">
-                    <span className="text-[8px] font-black text-secondary uppercase tracking-[0.2em]">Registros Verificados</span>
+            <div className="text-center bg-muted/30 border border-border rounded-xl p-8 flex-1 flex flex-col items-center justify-center">
+              <p className="text-sm font-semibold text-muted-foreground mb-2">Acessos no dia</p>
+              <h3 className="text-5xl font-bold text-primary">{customDateAccesses}</h3>
+              <div className="mt-4">
+                 <div className="px-3 py-1 bg-secondary/10 rounded-md border border-secondary/20">
+                    <span className="text-xs font-semibold text-secondary">Registros Verificados</span>
                  </div>
               </div>
             </div>

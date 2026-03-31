@@ -76,33 +76,34 @@ const AdminLocutores = () => {
     if (file) setFoto(await fileToBase64(file));
   };
 
-  return (
-    <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <div className="flex justify-between items-center bg-white text-slate-900 p-8 rounded-none border border-gray-100 shadow-sm">
+  return (    <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-card text-card-foreground p-6 rounded-xl border border-border shadow-sm">
         <div>
-          <h2 className="text-3xl font-black text-primary tracking-tighter uppercase italic leading-none">Time de <span className="text-secondary italic">Locutores</span></h2>
-          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Gerencie as vozes que comandam a sua programação</p>
+          <h2 className="text-2xl font-bold tracking-tight">Time de Locutores</h2>
+          <p className="text-sm font-medium text-muted-foreground mt-1">Gerencie as vozes que comandam a sua programação.</p>
         </div>
-        <Button onClick={resetForm} className="rounded-none font-black uppercase tracking-widest text-[10px] h-12 px-8 bg-gray-50 text-gray-400 border border-gray-100 hover:bg-primary hover:text-white transition-all">Limpar Tudo</Button>
+        <Button onClick={resetForm} variant="outline" className="rounded-lg font-semibold shadow-sm text-sm h-11 px-6">
+           Limpar Tudo
+        </Button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-        <div className="lg:col-span-4 space-y-10">
-          <Card className="rounded-none border-none shadow-xl bg-white text-slate-900 overflow-hidden sticky top-32">
-            <CardHeader className="bg-primary/5 p-8 border-b border-gray-100/50 text-center">
-              <CardTitle className="text-xl font-black uppercase tracking-tight text-primary italic">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="lg:col-span-4 space-y-8">
+          <Card className="rounded-xl border border-border shadow-sm bg-card text-card-foreground overflow-hidden sticky top-32">
+            <CardHeader className="p-6 pb-4 border-b border-border/50">
+              <CardTitle className="text-lg font-bold">
                 {editId ? "Editar Cadastro" : "Novo Cadastro"}
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-8 space-y-8">
-              <div className="flex flex-col items-center gap-6">
+            <CardContent className="p-6 space-y-6">
+              <div className="flex flex-col items-center gap-4">
                   <div className="relative group">
-                    <div className="w-32 h-32 rounded-none bg-gray-50 border-4 border-white shadow-xl overflow-hidden flex items-center justify-center">
-                       {foto ? <img src={foto} alt="Preview" className="w-full h-full object-cover" /> : <Users className="w-12 h-12 text-gray-200" />}
+                    <div className="w-24 h-24 rounded-full bg-muted border-4 border-background shadow-sm overflow-hidden flex items-center justify-center">
+                       {foto ? <img src={foto} alt="Preview" className="w-full h-full object-cover" /> : <Users className="w-8 h-8 text-muted-foreground" />}
                     </div>
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-none gap-4">
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-full gap-2">
                        <label className="cursor-pointer flex items-center justify-center hover:scale-110 transition-transform" title="Alterar Foto">
-                          <Upload className="text-white w-6 h-6" />
+                          <Upload className="text-white w-5 h-5" />
                           <input type="file" accept="image/*" className="hidden" onChange={handleFoto} />
                        </label>
                        {foto && (
@@ -112,28 +113,30 @@ const AdminLocutores = () => {
                            className="flex items-center justify-center hover:scale-110 transition-transform text-white hover:text-red-500"
                            title="Remover Foto"
                          >
-                           <Trash2 className="w-6 h-6" />
+                           <Trash2 className="w-5 h-5" />
                          </button>
                        )}
                     </div>
                   </div>
-                 <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Foto do Perfil</Label>
-                 <p className="text-[9px] text-gray-400 font-bold">400×400px · JPG ou PNG</p>
+                 <div className="text-center">
+                   <Label className="text-sm font-semibold">Foto do Perfil</Label>
+                   <p className="text-xs text-muted-foreground mt-1">JPG ou PNG (Min. 400x400px)</p>
+                 </div>
               </div>
 
-              <div className="space-y-6">
+              <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Nome Artístico</Label>
-                  <Input value={nome} onChange={e => setNome(e.target.value)} placeholder="Ex: Robson Silva" className="h-12 rounded-none border-gray-100 font-bold" />
+                  <Label className="text-sm font-semibold">Nome Artístico</Label>
+                  <Input value={nome} onChange={e => setNome(e.target.value)} placeholder="Ex: Robson Silva" className="h-11 rounded-lg" />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Bio / Descrição</Label>
-                  <Textarea value={bio} onChange={e => setBio(e.target.value)} placeholder="Fale um pouco sobre o locutor..." rows={3} className="rounded-none border-gray-100 font-medium" />
+                  <Label className="text-sm font-semibold">Bio / Descrição</Label>
+                  <Textarea value={bio} onChange={e => setBio(e.target.value)} placeholder="Fale um pouco sobre o locutor..." rows={4} className="rounded-lg resize-none" />
                 </div>
               </div>
 
-              <Button onClick={handleSave} className="w-full h-14 rounded-none bg-secondary hover:bg-secondary/90 text-primary font-black uppercase tracking-widest text-[10px] shadow-lg shadow-yellow-400/20" disabled={loading}>
-                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
+              <Button onClick={handleSave} className="w-full h-11 rounded-lg bg-primary text-primary-foreground font-semibold shadow-sm" disabled={loading}>
+                {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
                 {editId ? "Atualizar Perfil" : "Cadastrar Agora"}
               </Button>
             </CardContent>
@@ -141,28 +144,28 @@ const AdminLocutores = () => {
         </div>
 
         <div className="lg:col-span-8">
-           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                {locutores.map(loc => (
-                <Card key={loc.id} className="group rounded-none border-none shadow-md hover:shadow-2xl transition-all duration-500 bg-white text-slate-900 overflow-hidden p-8 flex flex-col items-center text-center">
-                   <div className="relative mb-6">
-                      <div className="w-24 h-24 rounded-none bg-gray-50 border-4 border-white shadow-lg overflow-hidden flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-                         {loc.foto ? <img src={loc.foto} alt={loc.nome} className="w-full h-full object-cover" /> : <div className="text-3xl font-black text-primary/20">{loc.nome.charAt(0)}</div>}
+                <Card key={loc.id} className="group overflow-hidden rounded-xl border border-border shadow-sm bg-card hover:shadow-md transition-shadow flex flex-col items-center text-center p-6">
+                   <div className="relative mb-4">
+                      <div className="w-20 h-20 rounded-full bg-primary/10 text-primary border-4 border-background shadow-sm overflow-hidden flex items-center justify-center">
+                         {loc.foto ? <img src={loc.foto} alt={loc.nome} className="w-full h-full object-cover" /> : <div className="text-2xl font-bold">{loc.nome.charAt(0)}</div>}
                       </div>
                    </div>
-                   <div className="flex-1 space-y-2 mb-8">
-                      <h3 className="text-lg font-black text-primary uppercase tracking-tight italic">{loc.nome}</h3>
-                      <p className="text-[11px] text-gray-400 font-medium line-clamp-2 leading-relaxed h-10">{loc.bio || "Este locutor ainda não possui uma biografia cadastrada."}</p>
+                   <div className="flex-1 space-y-1 mb-6">
+                      <h3 className="text-base font-bold text-foreground line-clamp-1">{loc.nome}</h3>
+                      <p className="text-xs font-medium text-muted-foreground line-clamp-2 leading-relaxed">{loc.bio || "Nenhuma biografia disponível."}</p>
                    </div>
-                   <div className="flex gap-2 w-full pt-6 border-t border-gray-50">
-                      <Button variant="ghost" className="flex-1 h-10 border border-transparent hover:bg-gray-50 hover:text-primary font-black uppercase text-[9px]" onClick={() => handleEdit(loc)}>Editar</Button>
-                      <Button variant="ghost" className="flex-1 h-10 text-red-400 hover:text-red-500 hover:bg-red-50 font-black uppercase text-[9px]" onClick={() => handleDelete(loc.id)}>Excluir</Button>
+                   <div className="flex gap-2 w-full pt-4 border-t border-border">
+                      <Button variant="ghost" className="flex-1 h-9 hover:bg-muted text-muted-foreground hover:text-foreground text-xs font-semibold rounded-md" onClick={() => handleEdit(loc)}>Editar</Button>
+                      <Button variant="ghost" className="flex-1 h-9 text-muted-foreground hover:text-red-500 hover:bg-red-50 text-xs font-semibold rounded-md" onClick={() => handleDelete(loc.id)}>Excluir</Button>
                    </div>
                 </Card>
               ))}
               {locutores.length === 0 && (
-                <div className="col-span-full py-20 bg-gray-50 rounded-none border-2 border-dashed border-gray-100 flex flex-col items-center justify-center text-gray-300">
-                   <Users className="w-16 h-16 mb-4 opacity-20" />
-                   <p className="text-[10px] font-black uppercase tracking-[0.3em]">Nenhum locutor encontrado</p>
+                <div className="col-span-full py-16 bg-muted/30 rounded-xl border-2 border-dashed border-border flex flex-col items-center justify-center text-muted-foreground">
+                   <Users className="w-12 h-12 mb-3 opacity-20" />
+                   <p className="text-sm font-medium">Nenhum locutor encontrado</p>
                 </div>
               )}
            </div>
