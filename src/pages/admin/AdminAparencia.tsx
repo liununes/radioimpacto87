@@ -118,28 +118,38 @@ const AdminAparencia = () => {
 
       <Tabs value={activeTab} onValueChange={onTabChange} className="space-y-8">
         <div className="flex flex-col items-center gap-6">
-          <TabsList className="bg-white text-slate-900 p-1.5 h-auto rounded-none border border-gray-100 shadow-xl gap-1 flex-wrap justify-center text-slate-400 max-w-7xl">
-            <TabsTrigger value="visual" className="rounded-none px-6 py-4 data-[state=active]:bg-[var(--admin-blue)] data-[state=active]:text-white data-[state=active]:shadow-lg font-black text-[10px] uppercase tracking-widest transition-all">
-              <Palette className="w-4 h-4 mr-2" /> Identidade Visual
-            </TabsTrigger>
-            <TabsTrigger value="textos" className="rounded-none px-6 py-4 data-[state=active]:bg-[var(--admin-blue)] data-[state=active]:text-white data-[state=active]:shadow-lg font-black text-[10px] uppercase tracking-widest transition-all">
-              <Type className="w-4 h-4 mr-2" /> Texto & Cores
-            </TabsTrigger>
-            <TabsTrigger value="menus" className="rounded-none px-6 py-4 data-[state=active]:bg-[var(--admin-blue)] data-[state=active]:text-white data-[state=active]:shadow-lg font-black text-[10px] uppercase tracking-widest transition-all">
-              <ExternalLink className="w-4 h-4 mr-2" /> Menu do Site
-            </TabsTrigger>
-            <TabsTrigger value="layout" className="rounded-none px-6 py-4 data-[state=active]:bg-[var(--admin-blue)] data-[state=active]:text-white data-[state=active]:shadow-lg font-black text-[10px] uppercase tracking-widest transition-all">
-              <Layout className="w-4 h-4 mr-2" /> Design do Site
-            </TabsTrigger>
-            <TabsTrigger value="visibilidade" className="rounded-none px-6 py-4 data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-lg font-black text-[10px] uppercase tracking-widest transition-all">
-              <Eye className="w-4 h-4 mr-2" /> Visibilidade
-            </TabsTrigger>
-            {isSuperAdmin && (
-              <TabsTrigger value="whitelabel" className="rounded-none px-6 py-4 data-[state=active]:bg-purple-600 data-[state=active]:text-white data-[state=active]:shadow-lg font-black text-[10px] uppercase tracking-widest transition-all">
-                <Settings className="w-4 h-4 mr-2" /> White Label
-              </TabsTrigger>
+           <TabsList className="bg-white text-slate-900 p-1.5 h-auto rounded-none border border-gray-100 shadow-xl gap-1 flex-wrap justify-center text-slate-400 max-w-7xl">
+            {(isSuperAdmin || hasPermission('aparencia_visual')) && (
+                <TabsTrigger value="visual" className="rounded-none px-6 py-4 data-[state=active]:bg-[var(--admin-blue)] data-[state=active]:text-white data-[state=active]:shadow-lg font-black text-[10px] uppercase tracking-widest transition-all">
+                  <Palette className="w-4 h-4 mr-2" /> Identidade Visual
+                </TabsTrigger>
             )}
-          </TabsList>
+            {(isSuperAdmin || hasPermission('aparencia_textos')) && (
+                <TabsTrigger value="textos" className="rounded-none px-6 py-4 data-[state=active]:bg-[var(--admin-blue)] data-[state=active]:text-white data-[state=active]:shadow-lg font-black text-[10px] uppercase tracking-widest transition-all">
+                  <Type className="w-4 h-4 mr-2" /> Texto & Cores
+                </TabsTrigger>
+            )}
+            {(isSuperAdmin || hasPermission('aparencia_menus')) && (
+                <TabsTrigger value="menus" className="rounded-none px-6 py-4 data-[state=active]:bg-[var(--admin-blue)] data-[state=active]:text-white data-[state=active]:shadow-lg font-black text-[10px] uppercase tracking-widest transition-all">
+                  <ExternalLink className="w-4 h-4 mr-2" /> Menu do Site
+                </TabsTrigger>
+            )}
+            {(isSuperAdmin || hasPermission('aparencia_layout')) && (
+                <TabsTrigger value="layout" className="rounded-none px-6 py-4 data-[state=active]:bg-[var(--admin-blue)] data-[state=active]:text-white data-[state=active]:shadow-lg font-black text-[10px] uppercase tracking-widest transition-all">
+                  <Layout className="w-4 h-4 mr-2" /> Design do Site
+                </TabsTrigger>
+            )}
+            {(isSuperAdmin || hasPermission('visibilidade')) && (
+                <TabsTrigger value="visibilidade" className="rounded-none px-6 py-4 data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-lg font-black text-[10px] uppercase tracking-widest transition-all">
+                  <Eye className="w-4 h-4 mr-2" /> Visibilidade
+                </TabsTrigger>
+            )}
+            {isSuperAdmin && (
+                <TabsTrigger value="whitelabel" className="rounded-none px-6 py-4 data-[state=active]:bg-purple-600 data-[state=active]:text-white data-[state=active]:shadow-lg font-black text-[10px] uppercase tracking-widest transition-all">
+                  <Settings className="w-4 h-4 mr-2" /> White Label
+                </TabsTrigger>
+            )}
+           </TabsList>
         </div>
 
         {/* --- IDENTIDADE VISUAL TAB --- */}

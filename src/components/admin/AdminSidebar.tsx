@@ -98,8 +98,12 @@ export function AdminSidebar({ isDark, onToggleDark }: AdminSidebarProps) {
       <SidebarContent className="bg-[var(--admin-blue)] px-3 pt-6 overflow-y-auto custom-scrollbar" style={{ backgroundColor: 'var(--admin-blue)' }}>
         <SidebarMenu className="gap-1">
           {filteredItems.map((item) => {
-            const isActive = location.pathname === item.url ||
-              (item.url !== "/admin" && location.pathname.startsWith(item.url.split('?')[0]));
+            let isActive = false;
+            if (item.url.includes("?")) {
+              isActive = location.pathname + location.search === item.url;
+            } else {
+              isActive = location.pathname === item.url || (item.url !== "/admin" && location.pathname.startsWith(item.url));
+            }
             
             return (
               <SidebarMenuItem key={item.title}>
