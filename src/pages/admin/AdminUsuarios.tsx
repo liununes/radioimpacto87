@@ -419,7 +419,7 @@ END $$;
                    <h3 className="text-lg font-bold text-foreground truncate">{u.display_name || u.username}</h3>
                    <div className="flex items-center gap-2 mt-1">
                      <span className="text-xs font-medium text-muted-foreground">@{u.username}</span>
-                     {u.email_real && <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full flex items-center gap-1"><Mail className="w-3 h-3" /> E-mail</span>}
+                     {u.email_real && <span className="text-[10px] font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded-full flex items-center gap-1"><Mail className="w-3 h-3" /> E-mail</span>}
                    </div>
                 </div>
                 <div className="pt-4 border-t border-border flex flex-wrap gap-1.5">

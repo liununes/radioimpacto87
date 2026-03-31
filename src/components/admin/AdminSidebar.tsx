@@ -139,14 +139,14 @@ export function AdminSidebar({ isDark, onToggleDark }: AdminSidebarProps) {
              <SidebarMenuItem>
                 <SidebarMenuButton 
                   asChild
-                  className="h-12 w-full flex items-center gap-3 px-3 bg-green-500/10 rounded-lg text-green-400 hover:bg-green-500 hover:text-white transition-colors"
+                  className="h-12 w-full flex items-center gap-3 px-3 rounded-lg hover:bg-white/10 transition-colors group"
                 >
                   <a href="https://wa.me/5533999837414" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-3">
-                    <LifeBuoy className="h-5 w-5" />
+                    <LifeBuoy className="h-5 w-5 text-white/50 group-hover:text-[var(--admin-yellow)] transition-colors" />
                     {!collapsed && (
                       <div className="flex flex-col text-left">
-                        <span className="text-xs font-semibold leading-tight">Suporte Técnico</span>
-                        <span className="text-[10px] opacity-80">(33) 99983-7414</span>
+                        <span className="text-xs font-semibold leading-tight text-white/80 group-hover:text-white transition-colors">Suporte Técnico</span>
+                        <span className="text-[10px] text-white/40 group-hover:text-[var(--admin-yellow)] opacity-80 transition-colors">(33) 99983-7414</span>
                       </div>
                     )}
                   </a>
@@ -164,7 +164,7 @@ export function AdminSidebar({ isDark, onToggleDark }: AdminSidebarProps) {
               </SidebarMenuButton>
            </SidebarMenuItem>
            <SidebarMenuItem>
-              <SidebarMenuButton asChild className="h-10 rounded-lg text-white/60 hover:text-[#ffed32] hover:bg-white/5 transition-colors">
+              <SidebarMenuButton asChild className="h-10 rounded-lg text-white/60 hover:text-[var(--admin-yellow)] hover:bg-white/5 transition-colors">
                 <NavLink to="/" className="flex items-center gap-3 px-3">
                   <ExternalLink className="h-4 w-4" />
                   {!collapsed && <span className="text-sm font-medium">Visualizar Site</span>}

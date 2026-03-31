@@ -145,9 +145,9 @@ const AdminLayout = () => {
             <div className="flex items-center gap-8">
               <div className="hidden lg:flex items-center gap-4 border-r border-gray-100 pr-8">
                 <div className="flex flex-col items-end">
-                  <span className="text-sm font-semibold text-primary">{user.email?.split('@')[0]}</span>
-                  <span className="text-[10px] font-medium text-emerald-500 flex items-center gap-1.5 mt-0.5">
-                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" /> Sessão Ativa
+                  <span className="text-sm font-semibold text-foreground">{user.email?.split('@')[0]}</span>
+                  <span className="text-[10px] font-medium text-primary flex items-center gap-1.5 mt-0.5">
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" /> Sessão Ativa
                   </span>
                 </div>
                 <div className="w-10 h-10 bg-primary/5 rounded-full border border-primary/10 flex items-center justify-center font-bold text-primary text-sm">
