@@ -97,87 +97,87 @@ const AdminHome = () => {
   }, [onlineListeners, activeListeners, otherStats, loginTime]);
 
   return (
-    <div className="space-y-12 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-gray-100 pb-10">
-        <div className="space-y-2">
-           <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/5 text-primary rounded-none text-[10px] font-black uppercase tracking-widest">Acesso Autorizado</div>
-           <h2 className="text-4xl md:text-5xl font-black text-primary tracking-tighter uppercase italic leading-none">Dashboard <span className="text-secondary italic">Impacto</span></h2>
-           <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">Controle total da sua estação de rádio</p>
+    <div className="space-y-8 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-border pb-6">
+        <div className="space-y-1">
+           <div className="inline-flex items-center gap-2 px-2.5 py-0.5 bg-primary/10 text-primary rounded-full text-xs font-semibold">Acesso Autorizado</div>
+           <h2 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight">Dashboard <span className="text-primary">Impacto</span></h2>
+           <p className="text-sm text-muted-foreground font-medium">Controle total da sua estação de rádio</p>
         </div>
         <div className="flex gap-3">
-           <div className="px-6 py-4 bg-white text-slate-900 rounded-none border border-gray-100 shadow-sm flex flex-col">
-              <span className="text-[10px] font-black text-gray-300 uppercase tracking-widest">Status Stream</span>
-              <span className="text-sm font-black text-green-500 uppercase flex items-center gap-2">
-                 <div className="w-2 h-2 bg-green-500 rounded-none animate-pulse" /> ONLINE
+           <div className="px-5 py-3 bg-card text-card-foreground rounded-xl border border-border flex flex-col items-end">
+              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Status Stream</span>
+              <span className="text-sm font-bold text-emerald-500 flex items-center gap-2 mt-0.5">
+                 <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" /> ONLINE
               </span>
            </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4">
         {stats.map((s, idx) => (
-          <Card key={s.label} className="group overflow-hidden rounded-none border-none shadow-xl hover:shadow-2xl transition-all duration-500 cursor-default bg-white text-slate-900">
-            <CardContent className="p-6 flex flex-col items-center justify-center text-center gap-4">
-              <div className={`p-3 rounded-none ${idx % 2 === 0 ? 'bg-primary/5' : 'bg-accent/5'} group-hover:rotate-12 transition-all duration-500`}>
-                <s.icon className={`w-6 h-6 ${s.color}`} />
+          <Card key={s.label} className="group overflow-hidden rounded-xl border border-border shadow-sm hover:shadow-md transition-all duration-300 bg-card text-card-foreground">
+            <CardContent className="p-5 flex flex-col items-center justify-center text-center gap-3">
+              <div className={`p-2.5 rounded-lg ${idx % 2 === 0 ? 'bg-primary/10' : 'bg-secondary/10'} group-hover:scale-110 transition-transform duration-300`}>
+                <s.icon className={`w-5 h-5 ${s.color}`} />
               </div>
-              <div className="space-y-1">
-                <p className="text-[8px] font-black text-gray-300 uppercase tracking-[0.2em]">{s.label}</p>
-                <p className="text-2xl font-black text-primary tracking-tighter transition-all group-hover:scale-110">{s.value}</p>
+              <div className="space-y-0.5">
+                <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">{s.label}</p>
+                <p className="text-2xl font-bold text-foreground">{s.value}</p>
               </div>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="bg-primary rounded-none p-10 text-white relative overflow-hidden shadow-2xl flex flex-col justify-between min-h-[300px]">
-           <div className="relative z-10 space-y-4">
-              <h3 className="text-3xl font-black uppercase italic tracking-tighter">Otimize o Layout</h3>
-              <p className="opacity-60 text-xs font-medium max-w-md leading-relaxed">Ajuste as cores, logos e visibilidade das seções do portal para criar uma identidade única.</p>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-primary rounded-2xl p-8 text-white relative overflow-hidden shadow-sm flex flex-col justify-between min-h-[250px] border border-primary/20">
+           <div className="relative z-10 space-y-3">
+              <h3 className="text-2xl font-bold tracking-tight">Otimize o Layout</h3>
+              <p className="text-primary-foreground/80 text-sm font-medium max-w-sm leading-relaxed">Ajuste cores, logos e visibilidade das seções do portal para criar uma identidade única.</p>
            </div>
-           <Button asChild className="relative z-10 bg-white text-slate-900 text-primary h-14 w-full md:w-max px-10 rounded-none font-black uppercase text-[10px] tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all">
-              <Link to="/admin/aparencia">Personalizar Agora</Link>
+           <Button asChild className="relative z-10 bg-white text-slate-900 border border-white h-11 w-full md:w-max px-6 rounded-lg font-semibold shadow-sm hover:scale-105 active:scale-95 transition-transform mt-6">
+              <Link to="/admin/aparencia">Personalizar</Link>
            </Button>
-           <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 -mr-20 -mt-20 rounded-full blur-3xl pointer-events-none" />
+           <div className="absolute -top-10 -right-10 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none" />
         </div>
 
-        <div className="bg-secondary rounded-none p-10 text-primary relative overflow-hidden shadow-2xl flex flex-col justify-between min-h-[300px]">
-           <div className="relative z-10 space-y-4">
-              <h3 className="text-3xl font-black uppercase italic tracking-tighter">Últimos Pedidos</h3>
-              <p className="opacity-60 text-xs font-medium max-w-md leading-relaxed">Veja as músicas que seus ouvintes estão pedindo em tempo real e interaja pelo WhatsApp.</p>
+        <div className="bg-secondary/10 rounded-2xl p-8 text-foreground relative overflow-hidden shadow-sm flex flex-col justify-between min-h-[250px] border border-border">
+           <div className="relative z-10 space-y-3">
+              <h3 className="text-2xl font-bold tracking-tight">Últimos Pedidos</h3>
+              <p className="text-muted-foreground text-sm font-medium max-w-sm leading-relaxed">Veja as músicas que seus ouvintes estão pedindo em tempo real e interaja.</p>
            </div>
-           <Button asChild className="relative z-10 bg-primary text-white h-14 w-full md:w-max px-10 rounded-none font-black uppercase text-[10px] tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all">
+           <Button asChild className="relative z-10 bg-primary text-primary-foreground h-11 w-full md:w-max px-6 rounded-lg font-semibold shadow-sm hover:scale-105 active:scale-95 transition-transform mt-6">
               <Link to="/admin/pedidos">Atender Pedidos</Link>
            </Button>
-           <div className="absolute bottom-0 right-0 w-64 h-64 bg-primary/5 -mr-20 -mb-20 rounded-full blur-3xl pointer-events-none" />
+           <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-         <Link to="/admin/noticias?tab=nova" className="p-6 bg-white text-slate-900 border border-gray-100 rounded-none shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col items-center gap-3 text-center group">
-            <Plus className="w-6 h-6 text-primary group-hover:scale-110 transition-transform" />
-            <span className="text-[9px] font-black uppercase tracking-widest">Publicar News</span>
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+         <Link to="/admin/noticias?tab=nova" className="p-5 bg-card text-card-foreground border border-border rounded-xl shadow-sm hover:shadow-md hover:border-primary/20 transition-all flex flex-col items-center gap-3 text-center group">
+            <Plus className="w-5 h-5 text-primary group-hover:scale-110 transition-transform" />
+            <span className="text-xs font-semibold">Publicar News</span>
          </Link>
-         <Link to="/admin/media" className="p-6 bg-white text-slate-900 border border-gray-100 rounded-none shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col items-center gap-3 text-center group">
-            <HardDrive className="w-6 h-6 text-primary group-hover:scale-110 transition-transform" />
-            <span className="text-[9px] font-black uppercase tracking-widest">Biblioteca</span>
+         <Link to="/admin/media" className="p-5 bg-card text-card-foreground border border-border rounded-xl shadow-sm hover:shadow-md hover:border-primary/20 transition-all flex flex-col items-center gap-3 text-center group">
+            <HardDrive className="w-5 h-5 text-primary group-hover:scale-110 transition-transform" />
+            <span className="text-xs font-semibold">Biblioteca</span>
          </Link>
-         <Link to="/admin/programacao" className="p-6 bg-white text-slate-900 border border-gray-100 rounded-none shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col items-center gap-3 text-center group">
-            <Calendar className="w-6 h-6 text-primary group-hover:scale-110 transition-transform" />
-            <span className="text-[9px] font-black uppercase tracking-widest">Agenda</span>
+         <Link to="/admin/programacao" className="p-5 bg-card text-card-foreground border border-border rounded-xl shadow-sm hover:shadow-md hover:border-primary/20 transition-all flex flex-col items-center gap-3 text-center group">
+            <Calendar className="w-5 h-5 text-primary group-hover:scale-110 transition-transform" />
+            <span className="text-xs font-semibold">Agenda</span>
          </Link>
-         <Link to="/admin/streaming?tab=sinal" className="p-6 bg-white text-slate-900 border border-gray-100 rounded-none shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col items-center gap-3 text-center group">
-            <Radio className="w-6 h-6 text-primary group-hover:scale-110 transition-transform" />
-            <span className="text-[9px] font-black uppercase tracking-widest">Sinal On</span>
+         <Link to="/admin/streaming?tab=sinal" className="p-5 bg-card text-card-foreground border border-border rounded-xl shadow-sm hover:shadow-md hover:border-primary/20 transition-all flex flex-col items-center gap-3 text-center group">
+            <Radio className="w-5 h-5 text-primary group-hover:scale-110 transition-transform" />
+            <span className="text-xs font-semibold">Sinal On</span>
          </Link>
-         <Link to="/admin/estatisticas" className="p-6 bg-white text-slate-900 border border-gray-100 rounded-none shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col items-center gap-3 text-center group">
-            <BarChart3 className="w-6 h-6 text-primary group-hover:scale-110 transition-transform" />
-            <span className="text-[9px] font-black uppercase tracking-widest">Histórico</span>
+         <Link to="/admin/estatisticas" className="p-5 bg-card text-card-foreground border border-border rounded-xl shadow-sm hover:shadow-md hover:border-primary/20 transition-all flex flex-col items-center gap-3 text-center group">
+            <BarChart3 className="w-5 h-5 text-primary group-hover:scale-110 transition-transform" />
+            <span className="text-xs font-semibold">Estatísticas</span>
          </Link>
-         <Link to="/admin/usuarios" className="p-6 bg-white text-slate-900 border border-gray-100 rounded-none shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col items-center gap-3 text-center group">
-            <Settings className="w-6 h-6 text-primary group-hover:scale-110 transition-transform" />
-            <span className="text-[9px] font-black uppercase tracking-widest">Equipe</span>
+         <Link to="/admin/usuarios" className="p-5 bg-card text-card-foreground border border-border rounded-xl shadow-sm hover:shadow-md hover:border-primary/20 transition-all flex flex-col items-center gap-3 text-center group">
+            <Settings className="w-5 h-5 text-primary group-hover:scale-110 transition-transform" />
+            <span className="text-xs font-semibold">Equipe</span>
          </Link>
 
          {!isMainAdmin && (
@@ -185,28 +185,25 @@ const AdminHome = () => {
              href="https://wa.me/5533999837414" 
              target="_blank" 
              rel="noopener noreferrer" 
-             className="p-6 bg-green-50 text-green-600 border border-green-100 rounded-none shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col items-center gap-3 text-center group animate-pulse hover:animate-none"
+             className="col-span-2 md:col-span-3 lg:col-span-6 p-5 py-4 bg-green-50 text-green-700 border border-green-200 rounded-xl shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-3 group"
            >
-              <LifeBuoy className="w-6 h-6 group-hover:rotate-12 transition-transform" />
-              <div className="flex flex-col">
-                <span className="text-[9px] font-black uppercase tracking-widest">Suporte Liu Record</span>
-                <span className="text-[8px] font-bold opacity-70">(33) 99983-7414</span>
-              </div>
+              <LifeBuoy className="w-5 h-5" />
+              <span className="text-sm font-semibold">Suporte Técnico — (33) 99983-7414</span>
            </a>
          )}
       </div>
 
       { (isMainAdmin || hasPermission('danger_zone')) && (
-        <div className="pt-20 border-t border-red-50">
-           <div className="bg-red-50 p-10 rounded-none border border-red-100 flex flex-col md:flex-row items-center justify-between gap-8 group hover:bg-red-100/50 transition-all">
-              <div className="space-y-2">
-                 <h3 className="text-xl font-black uppercase text-red-600 italic tracking-tighter flex items-center gap-2">
-                    <LifeBuoy className="w-6 h-6 animate-pulse" /> Zona de Perigo
+        <div className="pt-10">
+           <div className="bg-red-50 p-6 rounded-2xl border border-red-100 flex flex-col md:flex-row items-center justify-between gap-6 group hover:bg-red-50/50 transition-colors">
+              <div className="space-y-1 text-center md:text-left">
+                 <h3 className="text-lg font-bold text-red-600 flex items-center justify-center md:justify-start gap-2">
+                    <LifeBuoy className="w-5 h-5" /> Zona de Perigo
                  </h3>
-                 <p className="text-xs font-bold text-red-400 uppercase tracking-widest max-w-sm leading-relaxed">Gerenciamento de dados críticos e limpeza total do sistema em uma área isolada.</p>
+                 <p className="text-sm font-medium text-red-500">Área restrita. Gerenciamento de dados críticos e sistema.</p>
               </div>
-              <Button asChild variant="destructive" className="h-14 px-10 rounded-none font-black uppercase text-[10px] tracking-widest shadow-xl shadow-red-200 hover:scale-105 active:scale-95 transition-all">
-                 <Link to="/admin/danger-zone">Acessar Área Restrita</Link>
+              <Button asChild variant="destructive" className="h-10 px-8 rounded-lg font-semibold shadow-sm hover:bg-red-700 w-full md:w-auto">
+                 <Link to="/admin/danger-zone">Acessar</Link>
               </Button>
            </div>
         </div>

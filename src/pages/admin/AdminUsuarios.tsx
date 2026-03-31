@@ -307,126 +307,126 @@ END $$;
 
   return (
     <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      <div className="flex justify-between items-center bg-white text-slate-900 p-8 rounded-none border border-gray-100 shadow-sm">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-card text-card-foreground p-6 rounded-xl border border-border shadow-sm">
         <div>
-          <h2 className="text-3xl font-black text-primary tracking-tighter uppercase italic leading-none">Equipe & <span className="text-secondary italic">Acessos</span></h2>
-          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Novidade: Agora com suporte a e-mail real!</p>
+          <h2 className="text-2xl font-bold tracking-tight">Equipe & Acessos</h2>
+          <p className="text-sm font-medium text-muted-foreground mt-1">Gerencie colaboradores e níveis de permissão da rádio.</p>
         </div>
         {!isAdding && !editingUser && (
-          <Button onClick={() => setIsAdding(true)} className="rounded-none font-black uppercase tracking-widest text-[10px] h-12 px-8 bg-primary text-white">
+          <Button onClick={() => setIsAdding(true)} className="rounded-lg font-semibold shadow-sm text-sm h-11 px-6 bg-primary text-primary-foreground">
              <Plus className="w-4 h-4 mr-2" /> Novo Colaborador
           </Button>
         )}
       </div>
 
       {(isAdding || editingUser) && (
-        <Card className="rounded-none border-none shadow-2xl bg-white text-slate-900 overflow-hidden">
-          <CardHeader className="p-10 pb-4 flex flex-row items-center justify-between">
-            <CardTitle className="text-xl font-black uppercase tracking-tight text-primary italic">
+        <Card className="rounded-xl border border-border shadow-sm bg-card text-card-foreground overflow-hidden">
+          <CardHeader className="p-6 pb-2 flex flex-row items-center justify-between">
+            <CardTitle className="text-lg font-bold">
               {editingUser ? `Editar: ${editingUser.username}` : "Dados do Novo Colaborador"}
             </CardTitle>
-            <Button variant="ghost" size="icon" onClick={() => { setIsAdding(false); setEditingUser(null); }}>
-              <X className="w-6 h-6 text-gray-300" />
+            <Button variant="ghost" size="icon" onClick={() => { setIsAdding(false); setEditingUser(null); }} className="rounded-lg hover:bg-muted">
+              <X className="w-5 h-5 text-muted-foreground" />
             </Button>
           </CardHeader>
-          <CardContent className="p-10 pt-4 space-y-10">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-               <div className="space-y-3">
-                 <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Login (Username)</Label>
+          <CardContent className="p-6 pt-2 space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+               <div className="space-y-2">
+                 <Label className="text-sm font-semibold">Login (Username)</Label>
                  <Input 
                     value={editingUser ? editingUser.username : newUsername} 
                     onChange={e => editingUser ? setEditingUser({...editingUser, username: e.target.value}) : setNewUsername(e.target.value)} 
-                    placeholder="Ex: joao_silvain" 
-                    className="h-14 rounded-none border-gray-100 bg-gray-50"
+                    placeholder="Ex: joao_silva" 
+                    className="h-11 rounded-lg"
                   />
                </div>
-               <div className="space-y-3">
-                 <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400 flex items-center gap-2">
-                    <Mail className="w-3 h-3 text-secondary" /> E-mail Real (Opcional)
+               <div className="space-y-2">
+                 <Label className="text-sm font-semibold flex items-center gap-2">
+                    <Mail className="w-4 h-4 text-muted-foreground" /> E-mail Real (Opcional)
                  </Label>
                  <Input 
                    value={editingUser ? (editingUser.email_real || "") : newRealEmail} 
                    onChange={e => editingUser ? setEditingUser({...editingUser, email_real: e.target.value}) : setNewRealEmail(e.target.value)} 
                    placeholder="Ex: joao@gmail.com" 
-                   className="h-14 rounded-none border-gray-100 bg-gray-50"
+                   className="h-11 rounded-lg"
                  />
-                 <p className="text-[8px] font-bold text-gray-300 uppercase tracking-tighter">* Necessário para recuperação de senha por e-mail.</p>
+                 <p className="text-xs text-muted-foreground">* P/ recuperação de senha</p>
                </div>
-               <div className="space-y-3">
-                 <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Nome de Exibição</Label>
+               <div className="space-y-2">
+                 <Label className="text-sm font-semibold">Nome de Exibição</Label>
                  <Input 
                    value={editingUser ? (editingUser.display_name || "") : newDisplayName} 
                    onChange={e => editingUser ? setEditingUser({...editingUser, display_name: e.target.value}) : setNewDisplayName(e.target.value)} 
                    placeholder="Ex: João Silva" 
-                   className="h-14 rounded-none border-gray-100 bg-gray-50"
+                   className="h-11 rounded-lg"
                  />
                </div>
-               <div className="space-y-3">
-                 <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">
+               <div className="space-y-2">
+                 <Label className="text-sm font-semibold">
                     {editingUser ? "Nova Senha (Opcional)" : "Senha do Colaborador"}
                  </Label>
                  <Input 
                    type="password" 
                    value={editingUser ? (editingUser.new_password || "") : newPassword} 
                    onChange={e => editingUser ? setEditingUser({...editingUser, new_password: e.target.value}) : setNewPassword(e.target.value)} 
-                   className="h-14 rounded-none border-gray-100 bg-gray-50"
+                   className="h-11 rounded-lg"
                  />
                </div>
             </div>
 
-            <div className="space-y-6">
-               <div className="flex justify-between items-center">
-                  <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Permissões de Acesso</Label>
+            <div className="space-y-4">
+               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                  <Label className="text-sm font-semibold">Permissões de Acesso</Label>
                   <div className="flex gap-2">
-                     <Button type="button" variant="outline" size="sm" onClick={selectAllPermissions} className="h-8 rounded-none text-[9px] uppercase"><CheckSquare className="w-3 h-3 mr-2" /> Tudo</Button>
-                     <Button type="button" variant="outline" size="sm" onClick={clearAllPermissions} className="h-8 rounded-none text-[9px] uppercase"><Square className="w-3 h-3 mr-2" /> Limpar</Button>
+                     <Button type="button" variant="outline" size="sm" onClick={selectAllPermissions} className="h-8 rounded-md text-xs font-medium"><CheckSquare className="w-3 h-3 mr-2" /> Tudo</Button>
+                     <Button type="button" variant="outline" size="sm" onClick={clearAllPermissions} className="h-8 rounded-md text-xs font-medium"><Square className="w-3 h-3 mr-2" /> Limpar</Button>
                   </div>
                </div>
-               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
                   {ALL_PERMISSIONS.map((perm) => {
                     const isChecked = editingUser ? editingUser.permissions.includes(perm.id) : newPermissions.includes(perm.id);
                     return (
-                      <button key={perm.id} type="button" onClick={() => editingUser ? toggleEditPermission(perm.id) : togglePermission(perm.id)} className={`flex items-center gap-3 p-4 border rounded-none transition-all ${isChecked ? "bg-primary border-primary text-white" : "bg-gray-50 text-gray-400"}`}>
-                         <ShieldCheck className={`w-4 h-4 ${isChecked ? 'text-secondary' : 'text-gray-300'}`} />
-                         <span className="text-[10px] font-black uppercase tracking-tighter">{perm.label}</span>
+                      <button key={perm.id} type="button" onClick={() => editingUser ? toggleEditPermission(perm.id) : togglePermission(perm.id)} className={`flex items-center gap-2.5 p-3 border rounded-lg transition-colors text-left ${isChecked ? "bg-primary border-primary text-primary-foreground shadow-sm" : "bg-muted/50 border-border text-muted-foreground hover:bg-muted"}`}>
+                         <ShieldCheck className={`w-4 h-4 shrink-0 ${isChecked ? 'text-primary-foreground/80' : 'text-muted-foreground/50'}`} />
+                         <span className="text-xs font-semibold leading-tight">{perm.label}</span>
                       </button>
                     )
                   })}
                </div>
             </div>
 
-            <Button onClick={editingUser ? handleUpdateUser : handleAddUser} disabled={loading} className="w-full md:w-max h-16 px-12 bg-primary text-white font-black uppercase text-xs tracking-widest rounded-none shadow-xl">
-               {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Salvar Alterações"}
+            <Button onClick={editingUser ? handleUpdateUser : handleAddUser} disabled={loading} className="w-full sm:w-min h-11 px-8 bg-primary text-primary-foreground font-semibold text-sm rounded-lg shadow-sm">
+               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Salvar Alterações"}
             </Button>
           </CardContent>
         </Card>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {users.map((u) => (
-          <Card key={u.user_id} className="group overflow-hidden rounded-none border-none shadow-xl bg-white text-slate-900 border-t-4 border-t-primary/20">
-             <div className="p-8 space-y-6 transition-all group-hover:bg-primary/5">
-                <div className="flex items-center justify-between">
-                   <div className="w-12 h-12 bg-gray-50 text-primary rounded-none flex items-center justify-center">
+          <Card key={u.user_id} className="group overflow-hidden rounded-xl border border-border shadow-sm bg-card hover:shadow-md transition-shadow">
+             <div className="p-6 space-y-4">
+                <div className="flex items-start justify-between">
+                   <div className="w-10 h-10 bg-primary/10 text-primary rounded-full flex items-center justify-center">
                       <Users className="w-5 h-5" />
                    </div>
-                   <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Button size="icon" variant="ghost" className="h-10 w-10 bg-white" onClick={() => setEditingUser({ ...u })}><ShieldCheck className="w-4 h-4 text-primary" /></Button>
-                      <Button size="icon" variant="ghost" className="h-10 w-10 bg-red-50 text-red-400" onClick={() => handleDeleteUser(u.user_id)}><Trash2 className="w-4 h-4" /></Button>
+                   <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-full" onClick={() => setEditingUser({ ...u })}><ShieldCheck className="w-4 h-4" /></Button>
+                      <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:text-red-500 hover:bg-red-50 rounded-full" onClick={() => handleDeleteUser(u.user_id)}><Trash2 className="w-4 h-4" /></Button>
                    </div>
                 </div>
                 <div>
-                   <h3 className="text-xl font-black text-primary uppercase italic tracking-tight">{u.display_name || u.username}</h3>
-                   <div className="flex items-center gap-2 mt-2">
-                     <span className="text-[10px] font-bold text-gray-300 uppercase">@{u.username}</span>
-                     {u.email_real && <span className="text-[10px] font-bold text-secondary uppercase bg-secondary/10 px-2 py-0.5 rounded-none flex items-center gap-1"><Mail className="w-2.5 h-2.5" /> Ativo</span>}
+                   <h3 className="text-lg font-bold text-foreground truncate">{u.display_name || u.username}</h3>
+                   <div className="flex items-center gap-2 mt-1">
+                     <span className="text-xs font-medium text-muted-foreground">@{u.username}</span>
+                     {u.email_real && <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full flex items-center gap-1"><Mail className="w-3 h-3" /> E-mail</span>}
                    </div>
                 </div>
-                <div className="pt-4 border-t border-gray-100 flex flex-wrap gap-1">
-                   {u.permissions?.slice(0, 4).map((p: string) => (
-                      <span key={p} className="text-[8px] font-black bg-gray-100 text-primary/70 px-2 py-0.5 rounded-none uppercase">{p}</span>
+                <div className="pt-4 border-t border-border flex flex-wrap gap-1.5">
+                   {u.permissions?.slice(0, 3).map((p: string) => (
+                      <span key={p} className="text-[10px] font-bold bg-muted text-muted-foreground px-2 py-0.5 rounded-md uppercase">{p.split('_')[0]}</span>
                    ))}
-                   {u.permissions?.length > 4 && <span className="text-[8px] font-black bg-gray-100 text-primary/70 px-2 py-0.5 rounded-none uppercase">+{u.permissions.length - 4}</span>}
+                   {u.permissions?.length > 3 && <span className="text-[10px] font-bold bg-primary/10 text-primary px-2 py-0.5 rounded-md uppercase">+{u.permissions.length - 3}</span>}
                 </div>
              </div>
           </Card>

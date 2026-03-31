@@ -136,21 +136,21 @@ const AdminLayout = () => {
             <div className="flex items-center gap-6">
               <SidebarTrigger className="text-primary hover:bg-primary/5 p-2 transition-all" />
               <div className="h-4 w-px bg-gray-200 hidden md:block" />
-              <div className="hidden md:flex flex-col">
-                 <h1 className="text-sm font-black uppercase tracking-tight leading-none italic text-primary">Impacto FM — <span className="text-secondary italic">Admin</span></h1>
-                 <span className="text-[9px] font-bold text-gray-400 uppercase tracking-[0.2em] mt-1">SISTEMA INTEGRADO DE GESTÃO</span>
+                <div className="flex flex-col">
+                 <h1 className="text-xl font-bold tracking-tight text-primary">Impacto FM <span className="opacity-70 font-medium">Admin</span></h1>
+                 <span className="text-xs font-medium text-muted-foreground mt-0.5">Sistema de Gestão</span>
               </div>
             </div>
             
             <div className="flex items-center gap-8">
               <div className="hidden lg:flex items-center gap-4 border-r border-gray-100 pr-8">
                 <div className="flex flex-col items-end">
-                  <span className="text-[11px] font-black text-primary uppercase tracking-tighter">{user.email?.split('@')[0]}</span>
-                  <span className="text-[8px] font-bold text-emerald-500 uppercase tracking-widest flex items-center gap-1.5">
-                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-none animate-pulse" /> SESSÃO ATIVA
+                  <span className="text-sm font-semibold text-primary">{user.email?.split('@')[0]}</span>
+                  <span className="text-[10px] font-medium text-emerald-500 flex items-center gap-1.5 mt-0.5">
+                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" /> Sessão Ativa
                   </span>
                 </div>
-                <div className="w-10 h-10 bg-primary/5 border border-primary/10 flex items-center justify-center font-black text-primary text-xs italic">
+                <div className="w-10 h-10 bg-primary/5 rounded-full border border-primary/10 flex items-center justify-center font-bold text-primary text-sm">
                   {user.email?.[0].toUpperCase()}
                 </div>
               </div>
@@ -158,26 +158,26 @@ const AdminLayout = () => {
                 variant="ghost" 
                 size="sm" 
                 onClick={signOut} 
-                className="gap-3 h-12 px-6 font-black uppercase text-[10px] tracking-widest text-red-500 hover:bg-red-50 hover:text-red-600 transition-all border border-transparent hover:border-red-100"
+                className="gap-2 h-10 px-4 font-medium text-sm text-red-500 hover:bg-red-50 hover:text-red-600 transition-all rounded-lg"
               >
-                <LogOut className="w-4 h-4" /> Finalizar
+                <LogOut className="w-4 h-4" /> Sair
               </Button>
             </div>
           </header>
           <main key={location.pathname} className="flex-1 overflow-auto p-12 bg-transparent h-full">
             <div className="max-w-7xl mx-auto space-y-10 h-full">
               {forbidden ? (
-                <div className="bg-card text-card-foreground p-20 text-center space-y-6 border border-border shadow-sm animate-in fade-in zoom-in-95 duration-500">
-                   <div className="w-24 h-24 bg-red-50 text-red-500 rounded-none flex items-center justify-center mx-auto mb-8">
-                      <LogOut className="w-10 h-10 -rotate-90" />
+                  <div className="bg-card text-card-foreground p-12 text-center space-y-4 border border-border shadow-sm rounded-xl max-w-lg w-full">
+                   <div className="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <LogOut className="w-8 h-8 -rotate-90" />
                    </div>
-                   <h2 className="text-3xl font-black italic uppercase tracking-tighter text-red-600 leading-none">Acesso Bloqueado</h2>
-                   <p className="text-sm font-bold text-muted-foreground uppercase tracking-widest leading-relaxed max-w-md mx-auto">
-                      Você não tem permissão para acessar o módulo <span className="text-primary font-black">({requiredPerm})</span>. 
-                      Entre em contato com o administrador para solicitar acesso.
+                   <h2 className="text-2xl font-bold text-red-600">Acesso Restrito</h2>
+                   <p className="text-sm text-muted-foreground leading-relaxed">
+                      Você não tem permissão para acessar o módulo <span className="font-semibold text-primary">({requiredPerm})</span>.<br/> 
+                      Entre em contato com o administrador.
                    </p>
-                   <Button asChild className="rounded-none bg-primary hover:bg-primary/90 text-primary-foreground h-14 px-12 font-black uppercase tracking-widest text-[10px] mt-6">
-                      <Link to="/admin">Voltar ao Painel Inicial</Link>
+                   <Button asChild className="mt-6 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground">
+                      <Link to="/admin">Voltar ao Painel</Link>
                    </Button>
                 </div>
               ) : (

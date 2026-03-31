@@ -77,25 +77,25 @@ export function AdminSidebar({ isDark, onToggleDark }: AdminSidebarProps) {
 
   return (
     <Sidebar collapsible="icon" className="border-r border-white/5 shadow-2xl">
-      <SidebarHeader className="bg-[var(--admin-blue)] p-6 pb-2" style={{ backgroundColor: 'var(--admin-blue)' }}>
-        <div className={`flex items-center gap-3 ${collapsed ? "justify-center" : ""}`}>
-          <div className="w-10 h-10 rounded-none bg-[var(--admin-yellow)] flex items-center justify-center shrink-0 shadow-lg shadow-yellow-400/20" style={{ backgroundColor: 'var(--admin-yellow)' }}>
+      <SidebarHeader className="bg-[var(--admin-blue)] p-6 pb-4" style={{ backgroundColor: 'var(--admin-blue)' }}>
+        <div className={`flex items-center gap-4 ${collapsed ? "justify-center" : ""}`}>
+          <div className="w-10 h-10 rounded-xl bg-[var(--admin-yellow)] flex items-center justify-center shrink-0 shadow-sm" style={{ backgroundColor: 'var(--admin-yellow)' }}>
             {theme.adminLogo ? (
               <img src={theme.adminLogo} alt="Admin Logo" className="w-8 h-8 object-contain" />
             ) : (
-              <Radio className="w-6 h-6 text-[var(--admin-blue)]" style={{ color: 'var(--admin-blue)' }} />
+              <Radio className="w-5 h-5 text-[var(--admin-blue)]" style={{ color: 'var(--admin-blue)' }} />
             )}
           </div>
           {!collapsed && (
-            <div className="flex flex-col leading-none">
-              <span className="text-sm font-black tracking-widest uppercase" style={{ color: 'var(--admin-text)' }}>Admin</span>
-              <span className="text-[10px] font-bold text-[var(--admin-yellow)] uppercase tracking-tighter opacity-80" style={{ color: 'var(--admin-yellow)' }}>Gestão de Rádio</span>
+            <div className="flex flex-col leading-tight">
+              <span className="text-base font-bold" style={{ color: 'var(--admin-text)' }}>Admin Panel</span>
+              <span className="text-xs font-medium opacity-90" style={{ color: 'var(--admin-yellow)' }}>Gestão Integrada</span>
             </div>
           )}
         </div>
       </SidebarHeader>
 
-      <SidebarContent className="bg-[var(--admin-blue)] px-3 pt-6 overflow-y-auto custom-scrollbar" style={{ backgroundColor: 'var(--admin-blue)' }}>
+      <SidebarContent className="bg-[var(--admin-blue)] px-4 pt-4 overflow-y-auto custom-scrollbar" style={{ backgroundColor: 'var(--admin-blue)' }}>
         <SidebarMenu className="gap-1">
           {filteredItems.map((item) => {
             let isActive = false;
@@ -108,8 +108,8 @@ export function AdminSidebar({ isDark, onToggleDark }: AdminSidebarProps) {
             return (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild isActive={isActive} className={`
-                  h-11 rounded-none transition-all duration-300
-                  ${isActive ? "bg-[var(--admin-yellow)] text-[var(--admin-blue)] shadow-md" : "hover:text-white hover:bg-white/5"}
+                  h-10 rounded-lg transition-all duration-200
+                  ${isActive ? "bg-[var(--admin-yellow)] text-[var(--admin-blue)] font-semibold shadow-sm" : "hover:bg-white/10 hover:text-white font-medium"}
                 `} style={{ 
                   backgroundColor: isActive ? 'var(--admin-yellow)' : 'transparent',
                   color: isActive ? 'var(--admin-blue)' : 'var(--admin-sidebar-text)'
@@ -117,11 +117,11 @@ export function AdminSidebar({ isDark, onToggleDark }: AdminSidebarProps) {
                   <NavLink
                     to={item.url}
                     end={item.url === "/admin"}
-                    className="flex items-center gap-4 px-3"
+                    className="flex items-center gap-3 px-3"
                   >
-                    <item.icon className={`h-4 w-4 shrink-0 transition-transform duration-500 ${isActive ? "scale-110" : ""}`} style={{ color: isActive ? 'var(--admin-blue)' : 'var(--admin-sidebar-text)' }} />
+                    <item.icon className="h-4 w-4 shrink-0 transition-transform duration-300" style={{ color: isActive ? 'var(--admin-blue)' : 'var(--admin-sidebar-text)', opacity: isActive ? 1 : 0.8 }} />
                     {!collapsed && (
-                      <span className="text-[10px] font-black uppercase tracking-wider overflow-hidden text-ellipsis whitespace-nowrap" style={{ color: isActive ? 'var(--admin-blue)' : 'var(--admin-sidebar-text)' }}>
+                      <span className="text-sm truncate" style={{ color: isActive ? 'var(--admin-blue)' : 'var(--admin-sidebar-text)' }}>
                         {item.title}
                       </span>
                     )}
@@ -133,20 +133,20 @@ export function AdminSidebar({ isDark, onToggleDark }: AdminSidebarProps) {
         </SidebarMenu>
       </SidebarContent>
 
-      <SidebarFooter className="bg-black/20 p-6 border-t border-white/5" style={{ backgroundColor: 'rgba(0,0,0,0.2)' }}>
+      <SidebarFooter className="bg-black/10 p-4 border-t border-white/5" style={{ backgroundColor: 'rgba(0,0,0,0.1)' }}>
         <SidebarMenu className="gap-2">
            {!isMainAdmin && (
              <SidebarMenuItem>
                 <SidebarMenuButton 
                   asChild
-                  className="h-14 w-full flex items-center gap-4 px-3 bg-green-500/10 border border-green-500/20 text-green-400 hover:bg-green-500 hover:text-white transition-all shadow-lg animate-pulse hover:animate-none"
+                  className="h-12 w-full flex items-center gap-3 px-3 bg-green-500/10 rounded-lg text-green-400 hover:bg-green-500 hover:text-white transition-colors"
                 >
-                  <a href="https://wa.me/5533999837414" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 px-3">
+                  <a href="https://wa.me/5533999837414" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-3">
                     <LifeBuoy className="h-5 w-5" />
                     {!collapsed && (
                       <div className="flex flex-col text-left">
-                        <span className="text-[10px] font-black uppercase tracking-widest leading-none">Suporte Liu Record</span>
-                        <span className="text-[8px] font-bold uppercase opacity-60">(33) 99983-7414</span>
+                        <span className="text-xs font-semibold leading-tight">Suporte Técnico</span>
+                        <span className="text-[10px] opacity-80">(33) 99983-7414</span>
                       </div>
                     )}
                   </a>
@@ -157,17 +157,17 @@ export function AdminSidebar({ isDark, onToggleDark }: AdminSidebarProps) {
            <SidebarMenuItem>
               <SidebarMenuButton 
                 onClick={onToggleDark} 
-                className="h-10 w-full flex items-center gap-4 px-3 text-white/40 hover:text-[var(--admin-yellow)] transition-all group"
+                className="h-10 w-full flex items-center gap-3 px-3 rounded-lg text-white/60 hover:text-[var(--admin-yellow)] hover:bg-white/5 transition-colors group"
               >
                 {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                {!collapsed && <span className="text-[10px] font-black uppercase tracking-widest">{isDark ? "Modo Claro" : "Modo Escuro"}</span>}
+                {!collapsed && <span className="text-sm font-medium">{isDark ? "Modo Claro" : "Modo Escuro"}</span>}
               </SidebarMenuButton>
            </SidebarMenuItem>
            <SidebarMenuItem>
-              <SidebarMenuButton asChild className="h-10 text-white/40 hover:text-[#ffed32] transition-colors">
-                <NavLink to="/" className="flex items-center gap-4 px-3 italic border border-white/5 bg-white/5">
+              <SidebarMenuButton asChild className="h-10 rounded-lg text-white/60 hover:text-[#ffed32] hover:bg-white/5 transition-colors">
+                <NavLink to="/" className="flex items-center gap-3 px-3">
                   <ExternalLink className="h-4 w-4" />
-                  {!collapsed && <span className="text-[10px] font-black uppercase tracking-widest">Ver Site</span>}
+                  {!collapsed && <span className="text-sm font-medium">Visualizar Site</span>}
                 </NavLink>
               </SidebarMenuButton>
            </SidebarMenuItem>
