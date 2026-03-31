@@ -91,35 +91,35 @@ const AdminProgramacao = () => {
 
   return (
     <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      <div className="flex justify-between items-center bg-white text-slate-900 p-8 rounded-none border border-gray-100 shadow-sm">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-card text-card-foreground p-6 rounded-xl border border-border shadow-sm">
         <div>
-          <h2 className="text-3xl font-black text-primary tracking-tighter uppercase italic leading-none">Grade de <span className="text-secondary italic">Programação</span></h2>
-          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Organize os horários e locutores da rádio</p>
+          <h2 className="text-2xl font-bold tracking-tight">Grade de Programação</h2>
+          <p className="text-sm font-medium text-muted-foreground mt-1">Organize os horários e locutores da rádio.</p>
         </div>
         {!editId && (
-          <div className="flex items-center gap-3 px-6 py-3 bg-primary/5 rounded-none border border-primary/10">
-            <Radio className="w-4 h-4 text-primary" />
-            <span className="text-[10px] font-black uppercase text-primary tracking-widest">{programas.length} Horários Definidos</span>
+          <div className="flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-lg text-primary text-sm font-semibold">
+            <Radio className="w-5 h-5" />
+            <span>{programas.length} Horários Definidos</span>
           </div>
         )}
       </div>
 
-      <Card className="rounded-none border-none shadow-xl bg-white text-slate-900 overflow-hidden">
-        <CardHeader className="p-10 pb-4">
-          <CardTitle className="text-xl font-black uppercase tracking-tight text-primary italic">{editId ? "Editar Programa Existente" : "Registrar Novo Programa"}</CardTitle>
-        </CardHeader>
-        <CardContent className="p-10 pt-4 space-y-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+      <Card className="rounded-xl border border-border shadow-sm bg-card text-card-foreground overflow-hidden">
+         <CardHeader className="p-6 pb-4 border-b border-border/50">
+           <CardTitle className="text-lg font-bold">{editId ? "Editar Programa Existente" : "Registrar Novo Programa"}</CardTitle>
+         </CardHeader>
+         <CardContent className="p-6 space-y-8">
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
              <div className="space-y-6">
-                <div className="space-y-3">
-                  <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Nome do Show / Programa</Label>
-                  <Input value={nome} onChange={e => setNome(e.target.value)} placeholder="Ex: Manhã Total Clube" className="h-14 rounded-none border-gray-100 bg-gray-50 text-lg font-bold text-primary" />
+                <div className="space-y-2">
+                  <Label className="text-sm font-semibold">Nome do Show / Programa</Label>
+                  <Input value={nome} onChange={e => setNome(e.target.value)} placeholder="Ex: Manhã Total Clube" className="h-11 rounded-lg text-base" />
                 </div>
                 
-                <div className="space-y-3">
-                  <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Locutor Responsável</Label>
+                <div className="space-y-2">
+                  <Label className="text-sm font-semibold">Locutor Responsável</Label>
                   <select value={locutorId} onChange={e => setLocutorId(e.target.value)}
-                    className="flex h-14 w-full rounded-none border border-gray-100 bg-gray-50 px-4 text-sm font-bold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+                    className="flex h-11 w-full rounded-lg border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
                     <option value="">Selecione um locutor</option>
                     {locutores.map(l => <option key={l.id} value={l.id}>{l.nome}</option>)}
                   </select>
@@ -127,126 +127,126 @@ const AdminProgramacao = () => {
              </div>
 
              <div className="space-y-6">
-                <div className="grid grid-cols-2 gap-6">
-                   <div className="space-y-3">
-                     <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Horário de Início</Label>
-                     <Input type="time" value={inicio} onChange={e => setInicio(e.target.value)} className="h-14 rounded-none border-gray-100 bg-gray-50 font-bold" />
+                <div className="grid grid-cols-2 gap-4">
+                   <div className="space-y-2">
+                     <Label className="text-sm font-semibold">Horário de Início</Label>
+                     <Input type="time" value={inicio} onChange={e => setInicio(e.target.value)} className="h-11 rounded-lg" />
                    </div>
-                   <div className="space-y-3">
-                     <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Horário de Término</Label>
-                     <Input type="time" value={fim} onChange={e => setFim(e.target.value)} className="h-14 rounded-none border-gray-100 bg-gray-50 font-bold" />
+                   <div className="space-y-2">
+                     <Label className="text-sm font-semibold">Horário de Término</Label>
+                     <Input type="time" value={fim} onChange={e => setFim(e.target.value)} className="h-11 rounded-lg" />
                    </div>
                 </div>
 
-                <div className="space-y-3">
-                  <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Capa do Programa</Label>
-                    <div className="flex items-center gap-6">
-                       <div className="relative group w-20 h-20 rounded-none bg-gray-50 border border-gray-100 overflow-hidden flex items-center justify-center shrink-0">
+                <div className="space-y-2">
+                  <Label className="text-sm font-semibold">Capa do Programa</Label>
+                    <div className="flex items-center gap-4">
+                       <div className="relative group w-16 h-16 rounded-xl bg-muted border border-border overflow-hidden flex items-center justify-center shrink-0">
                           {foto ? (
                             <>
                               <img src={foto} alt="Preview" className="w-full h-full object-cover" />
-                              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                 <button type="button" onClick={() => setFoto("")} className="text-white hover:text-red-500 transition-colors" title="Remover Capa">
                                   <Trash2 className="w-4 h-4" />
                                 </button>
                               </div>
                             </>
                           ) : (
-                            <Upload className="w-6 h-6 text-gray-200" />
+                            <Upload className="w-6 h-6 text-muted-foreground/50" />
                           )}
                        </div>
-                       <label className="flex-1 h-14 bg-white text-slate-900 border border-gray-100 rounded-none flex items-center justify-center gap-3 cursor-pointer hover:bg-gray-50 transition-all font-black uppercase text-[10px] tracking-widest text-primary shadow-sm">
+                       <label className="flex-1 h-11 bg-background text-foreground border border-border rounded-lg flex items-center justify-center gap-2 cursor-pointer hover:bg-muted/50 transition-colors font-semibold text-sm shadow-sm">
                           <Upload className="w-4 h-4" /> {foto ? "Alterar Arte" : "Importar Arte"}
                           <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) setFoto(await fileToBase64(f)); }} />
                        </label>
                     </div>
-                  <p className="text-[9px] text-gray-400 font-bold">600×600px · JPG ou PNG</p>
+                  <p className="text-xs text-muted-foreground font-medium mt-1">Recomendado: 600×600px (JPG ou PNG)</p>
                 </div>
              </div>
-          </div>
+           </div>
 
-          <div className="space-y-4 pt-6 mt-6 border-t border-gray-50">
-            <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Dias de Exibição</Label>
-            <div className="flex flex-wrap gap-4">
-              {DIAS.map((dia, i) => (
-                <button 
-                  key={i} 
-                  type="button"
-                  onClick={() => toggleDia(i)}
-                  className={`px-6 py-3 rounded-none border font-black text-[10px] uppercase tracking-widest transition-all ${
-                    dias.includes(i) 
-                      ? "bg-primary text-white border-primary shadow-lg shadow-blue-900/10" 
-                      : "bg-white text-slate-900 text-gray-400 border-gray-100 hover:border-primary/20"
-                  }`}
-                >
-                  {dia}
-                </button>
-              ))}
-            </div>
-          </div>
+           <div className="space-y-3 pt-6 border-t border-border/50">
+             <Label className="text-sm font-semibold">Dias de Exibição</Label>
+             <div className="flex flex-wrap gap-2">
+               {DIAS.map((dia, i) => (
+                 <button 
+                   key={i} 
+                   type="button"
+                   onClick={() => toggleDia(i)}
+                   className={`px-4 py-2 rounded-lg border font-semibold text-sm transition-colors ${
+                     dias.includes(i) 
+                       ? "bg-primary text-primary-foreground border-primary shadow-sm" 
+                       : "bg-background text-foreground border-border hover:bg-muted"
+                   }`}
+                 >
+                   {dia}
+                 </button>
+               ))}
+             </div>
+           </div>
 
-          <div className="pt-8 border-t border-gray-50 flex gap-4">
-            <Button onClick={handleSave} className="h-16 px-12 rounded-none bg-primary text-white font-black uppercase text-xs tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all disabled:opacity-50" disabled={locutores.length === 0 || loading}>
-               {loading ? <Loader2 className="w-5 h-5 animate-spin mr-3" /> : <Save className="w-5 h-5 mr-3" />}
-               {editId ? "Salvar Alterações" : "Publicar Programa"}
-            </Button>
-            {editId && (
-              <Button variant="ghost" onClick={resetForm} className="h-16 px-8 rounded-none font-black uppercase text-[10px] tracking-widest text-gray-400 hover:text-red-500">
-                <X className="w-4 h-4 mr-2" /> Cancelar Edição
-              </Button>
-            )}
-          </div>
-          {locutores.length === 0 && <p className="text-[10px] font-black text-red-500 uppercase tracking-widest italic pt-4">⚠ Cadastre um locutor antes de criar programas.</p>}
-        </CardContent>
+           <div className="pt-6 border-t border-border/50 flex flex-wrap gap-3">
+             <Button onClick={handleSave} className="h-11 px-8 rounded-lg bg-primary text-primary-foreground font-semibold shadow-sm w-full sm:w-auto" disabled={locutores.length === 0 || loading}>
+                {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Save className="w-4 h-4 mr-2" />}
+                {editId ? "Salvar Alterações" : "Publicar Programa"}
+             </Button>
+             {editId && (
+               <Button variant="outline" onClick={resetForm} className="h-11 px-6 rounded-lg font-semibold w-full sm:w-auto">
+                 <X className="w-4 h-4 mr-2" /> Cancelar Edição
+               </Button>
+             )}
+           </div>
+           {locutores.length === 0 && <p className="text-sm font-medium text-destructive mt-3">⚠ Cadastre um locutor antes de criar programas.</p>}
+         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {programas.map(prog => (
-          <Card key={prog.id} className="group overflow-hidden rounded-none border-none shadow-xl hover:shadow-2xl transition-all duration-500 bg-white text-slate-900">
-            <CardContent className="p-8 flex items-center gap-8">
+          <Card key={prog.id} className="group overflow-hidden rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow bg-card text-card-foreground">
+            <CardContent className="p-5 flex items-center gap-5">
               <div className="relative shrink-0">
-                 <div className="w-24 h-24 rounded-none overflow-hidden border-4 border-gray-50 group-hover:border-primary/5 transition-all duration-500">
+                 <div className="w-20 h-20 rounded-lg overflow-hidden border-2 border-muted group-hover:border-primary/20 transition-colors">
                     {prog.foto ? (
-                      <img src={prog.foto} alt={prog.nome} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                      <img src={prog.foto} alt={prog.nome} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     ) : (
-                      <div className="w-full h-full bg-primary/5 flex items-center justify-center"><Radio className="w-8 h-8 text-primary/20" /></div>
+                      <div className="w-full h-full bg-muted flex items-center justify-center"><Radio className="w-6 h-6 text-muted-foreground/40" /></div>
                     )}
                  </div>
-                 <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-secondary rounded-none flex items-center justify-center shadow-lg shadow-yellow-400/20 text-primary font-black text-xs">
-                    <Radio className="w-5 h-5" />
+                 <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-secondary rounded-full flex items-center justify-center shadow-sm text-secondary-foreground font-bold">
+                    <Radio className="w-4 h-4" />
                  </div>
               </div>
 
-              <div className="flex-1 min-w-0 space-y-3">
-                <div className="flex flex-col">
-                   <h3 className="text-lg font-black text-primary uppercase italic tracking-tight truncate leading-none">{prog.nome}</h3>
-                   <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest mt-2">{getLocutorNome(prog.locutorId)}</span>
-                </div>
+              <div className="flex-1 min-w-0 space-y-2">
+                 <div>
+                   <h3 className="text-base font-bold text-foreground truncate">{prog.nome}</h3>
+                   <span className="text-sm font-medium text-muted-foreground">{getLocutorNome(prog.locutorId)}</span>
+                 </div>
                 
-                <div className="flex items-center gap-4 text-xs font-black text-primary/50 uppercase">
-                   <div className="flex items-center gap-2 px-3 py-1 bg-gray-50 rounded-none border border-gray-100">
-                      <span className="text-secondary">●</span> {prog.horaInicio} - {prog.horaFim}
-                   </div>
-                </div>
+                 <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground">
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 bg-muted rounded-md border border-border/50">
+                       <span className="text-secondary text-[10px]">●</span> {prog.horaInicio} - {prog.horaFim}
+                    </div>
+                 </div>
 
-                <div className="flex gap-1.5 flex-wrap">
-                  {prog.diasSemana.sort().map(d => (
-                    <span key={d} className="text-[8px] font-black bg-primary/5 text-primary px-2.5 py-1 rounded-none uppercase tracking-widest border border-primary/5">{DIAS[d]}</span>
-                  ))}
-                </div>
+                 <div className="flex gap-1 flex-wrap mt-1">
+                   {prog.diasSemana.sort().map(d => (
+                     <span key={d} className="text-[10px] font-semibold bg-primary/10 text-primary px-2 py-0.5 rounded-md border border-primary/20">{DIAS[d]}</span>
+                   ))}
+                 </div>
               </div>
 
-              <div className="flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                <Button size="icon" variant="ghost" className="h-10 w-10 bg-gray-50 rounded-none" onClick={() => handleEdit(prog)}><Edit2 className="w-4 h-4 text-primary" /></Button>
-                <Button size="icon" variant="ghost" className="h-10 w-10 bg-red-50 rounded-none text-red-400 hover:text-red-600" onClick={() => handleDelete(prog.id)}><Trash2 className="w-4 h-4" /></Button>
+              <div className="flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity ml-2">
+                <Button size="icon" variant="ghost" className="h-8 w-8 rounded-full hover:bg-muted" onClick={() => handleEdit(prog)}><Edit2 className="w-4 h-4 text-foreground" /></Button>
+                <Button size="icon" variant="ghost" className="h-8 w-8 rounded-full text-destructive hover:text-destructive hover:bg-destructive/10" onClick={() => handleDelete(prog.id)}><Trash2 className="w-4 h-4" /></Button>
               </div>
             </CardContent>
           </Card>
         ))}
         {programas.length === 0 && (
-           <div className="col-span-full h-64 flex flex-col items-center justify-center bg-gray-50/50 rounded-none border-2 border-dashed border-gray-100">
-              <Radio className="w-12 h-12 text-gray-200 mb-4" />
-              <p className="text-xs font-black text-gray-300 uppercase tracking-widest">Nenhum programa na grade ainda.</p>
+           <div className="col-span-full h-48 flex flex-col items-center justify-center bg-muted/30 rounded-xl border-2 border-dashed border-border">
+              <Radio className="w-10 h-10 text-muted-foreground/30 mb-3" />
+              <p className="text-sm font-medium text-muted-foreground">Nenhum programa na grade ainda.</p>
            </div>
         )}
       </div>

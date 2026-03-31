@@ -49,40 +49,38 @@ const AdminSponsors = () => {
 
   return (
     <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      <div className="flex justify-between items-center bg-white text-slate-900 p-8 rounded-none border border-gray-100 shadow-sm">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-card text-card-foreground p-6 rounded-xl border border-border shadow-sm">
         <div>
-          <h2 className="text-3xl font-black text-primary tracking-tighter uppercase italic leading-none">Nossos <span className="text-secondary italic">Patrocinadores</span></h2>
-          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Gerencie os parceiros e logotipos exibidos no site</p>
+          <h2 className="text-2xl font-bold tracking-tight">Nossos Patrocinadores</h2>
+          <p className="text-sm font-medium text-muted-foreground mt-1">Gerencie os logotipos dos parceiros exibidos no site.</p>
         </div>
-        <Button onClick={handleSave} className="rounded-none font-black uppercase tracking-widest text-[10px] h-12 px-8 bg-primary text-white hover:bg-primary/90 transition-all shadow-lg" disabled={loading}>
+        <Button onClick={handleSave} className="rounded-lg font-semibold text-sm h-11 px-8 bg-primary text-primary-foreground shadow-sm w-full sm:w-auto" disabled={loading}>
           {loading ? "Salvando..." : "Salvar Alterações"}
         </Button>
       </div>
 
-      <Card className="rounded-none border-none shadow-xl bg-white text-slate-900 overflow-hidden">
-        <div className="bg-orange-500 p-10 text-white">
-          <div className="flex items-center gap-4">
-             <div className="p-3 bg-white/20 rounded-none backdrop-blur-md">
-                <Heart className="w-8 h-8 fill-white" />
-             </div>
-             <div>
-                <h3 className="text-2xl font-black uppercase italic tracking-tighter">Grade de Parceiros</h3>
-                <p className="text-white/60 text-xs font-medium">Estes logotipos aparecem no carrossel de patrocinadores.</p>
-             </div>
-          </div>
+      <Card className="rounded-xl border border-border shadow-sm bg-card overflow-hidden">
+        <div className="bg-gradient-to-r from-orange-500 to-amber-500 p-8 text-white flex flex-col sm:flex-row items-center sm:justify-start gap-4">
+           <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm shrink-0">
+              <Heart className="w-8 h-8 fill-white" />
+           </div>
+           <div className="text-center sm:text-left">
+              <h3 className="text-xl font-bold">Grade de Parceiros</h3>
+              <p className="text-white/80 text-sm font-medium mt-1">Estes logotipos aparecerão no carrossel de patrocinadores do site.</p>
+           </div>
         </div>
-        <CardContent className="p-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <CardContent className="p-6 sm:p-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {(theme.sponsors || []).map((s, idx) => (
-              <div key={s.id || idx} className="relative group bg-gray-50 rounded-none p-8 border border-gray-100 flex flex-col items-center gap-6 transition-all hover:shadow-xl hover:bg-white">
-                <div className="w-full aspect-square bg-white rounded-none flex items-center justify-center p-6 border border-gray-50 shadow-sm relative overflow-hidden group-hover:border-orange-200 transition-all">
+              <div key={s.id || idx} className="relative group bg-muted/40 rounded-xl p-5 border border-border flex flex-col gap-5 transition-shadow hover:shadow-md hover:bg-muted/60">
+                <div className="w-full aspect-square bg-background rounded-lg flex items-center justify-center p-4 border border-border shadow-sm relative overflow-hidden group-hover:border-primary/40 transition-colors">
                   {s.logo ? (
-                    <img src={s.logo} alt={s.nome} className="max-h-full object-contain transition-transform group-hover:scale-110 duration-500" />
+                    <img src={s.logo} alt={s.nome} className="max-h-full object-contain transition-transform group-hover:scale-105 duration-500" />
                   ) : (
-                    <ImageIcon className="w-12 h-12 text-gray-100" />
+                    <ImageIcon className="w-10 h-10 text-muted-foreground/30" />
                   )}
-                  <label className="absolute inset-0 cursor-pointer bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-none">
-                    <Upload className="text-white w-8 h-8" />
+                  <label className="absolute inset-0 cursor-pointer bg-background/60 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-lg">
+                    <Upload className="text-foreground w-6 h-6" />
                     <input 
                       type="file" 
                       accept="image/*" 
@@ -99,9 +97,9 @@ const AdminSponsors = () => {
                   </label>
                 </div>
                 
-                <div className="w-full space-y-4">
-                  <div className="space-y-1">
-                    <Label className="text-[9px] font-black uppercase tracking-widest text-gray-400 ml-2">Nome do Parceiro</Label>
+                <div className="w-full space-y-3">
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-semibold text-muted-foreground ml-1">Nome do Parceiro</Label>
                     <Input 
                       value={s.nome} 
                       onChange={e => {
@@ -110,11 +108,11 @@ const AdminSponsors = () => {
                         updateSponsors(newSponsors);
                       }}
                       placeholder="Ex: Supermercado"
-                      className="h-10 rounded-none bg-white font-bold"
+                      className="h-10 rounded-lg text-sm font-semibold"
                     />
                   </div>
-                  <div className="space-y-1">
-                    <Label className="text-[9px] font-black uppercase tracking-widest text-gray-400 ml-2">Link do Site (Opcional)</Label>
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-semibold text-muted-foreground ml-1">Link do Site (Opcional)</Label>
                     <Input 
                       value={s.url || ""} 
                       onChange={e => {
@@ -123,21 +121,21 @@ const AdminSponsors = () => {
                         updateSponsors(newSponsors);
                       }}
                       placeholder="https://..."
-                      className="h-10 rounded-none bg-white text-xs"
+                      className="h-10 rounded-lg text-sm"
                     />
                   </div>
                 </div>
 
                 <Button 
-                  variant="ghost" 
+                  variant="destructive" 
                   size="icon" 
-                  className="absolute -top-3 -right-3 h-10 w-10 bg-white shadow-xl text-red-500 rounded-none opacity-0 group-hover:opacity-100 transition-all hover:bg-red-50"
+                  className="absolute -top-3 -right-3 h-8 w-8 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-all scale-90 group-hover:scale-100"
                   onClick={() => {
                     const newSponsors = (theme.sponsors || []).filter((_, i) => i !== idx);
                     updateSponsors(newSponsors);
                   }}
                 >
-                  <Trash2 className="w-5 h-5" />
+                  <Trash2 className="w-4 h-4" />
                 </Button>
               </div>
             ))}
@@ -147,12 +145,12 @@ const AdminSponsors = () => {
                 const newSponsors = [...(theme.sponsors || []), { id: crypto.randomUUID(), nome: "Novo Parceiro", logo: "", url: "" }];
                 updateSponsors(newSponsors);
               }}
-              className="border-4 border-dashed border-gray-100 rounded-none flex flex-col items-center justify-center p-12 gap-4 hover:border-orange-200 hover:bg-orange-50/50 transition-all text-gray-300 hover:text-orange-400 group min-h-[300px]"
+              className="border-2 border-dashed border-border rounded-xl flex flex-col items-center justify-center p-8 gap-4 hover:border-primary/50 hover:bg-primary/5 transition-all text-muted-foreground hover:text-primary min-h-[250px] group"
             >
-              <div className="w-16 h-16 rounded-none border-4 border-dashed border-current flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Plus className="w-8 h-8" />
+              <div className="w-12 h-12 rounded-full bg-muted group-hover:bg-primary/10 flex items-center justify-center transition-colors">
+                <Plus className="w-6 h-6" />
               </div>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em]">Adicionar Novo Parceiro</span>
+              <span className="text-sm font-semibold">Adicionar Parceiro</span>
             </button>
           </div>
         </CardContent>
