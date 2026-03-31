@@ -80,68 +80,73 @@ const AdminSlides = () => {
   };
 
   return (
+  return (
     <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      <div className="flex justify-between items-center bg-white text-slate-900 p-8 rounded-none border border-gray-100 shadow-sm">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-card text-card-foreground p-6 rounded-xl border border-border shadow-sm">
         <div>
-          <h2 className="text-3xl font-black text-primary tracking-tighter uppercase italic leading-none">Banners & <span className="text-secondary italic">Slides</span></h2>
-          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Destaques visuais que aparecem no topo do site</p>
+          <h2 className="text-2xl font-bold tracking-tight">Banners & Slides</h2>
+          <p className="text-sm font-medium text-muted-foreground mt-1">Gerencie os destaques visuais que aparecem no topo do site.</p>
         </div>
         {!editId && (
-          <div className="flex items-center gap-3 px-6 py-3 bg-primary/5 rounded-none border border-primary/10">
-            <Plus className="w-4 h-4 text-primary" />
-            <span className="text-[10px] font-black uppercase text-primary tracking-widest">Novo Slide Ativo</span>
+          <div className="flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-lg text-primary text-sm font-semibold">
+            <Plus className="w-4 h-4" />
+            <span>Novo Cadastro Ativo</span>
           </div>
         )}
       </div>
 
-      <Card className="rounded-none border-none shadow-xl bg-white text-slate-900 overflow-hidden">
-        <CardHeader className="p-10 pb-4">
-          <CardTitle className="text-xl font-black uppercase tracking-tight text-primary italic">{editId ? "Editar Slide em Destaque" : "Cadastrar Novo Destaque"}</CardTitle>
+      <Card className="rounded-xl border border-border shadow-sm bg-card text-card-foreground overflow-hidden">
+        <CardHeader className="p-6 pb-4 border-b border-border/50">
+          <CardTitle className="text-lg font-bold">{editId ? "Editar Slide em Destaque" : "Cadastrar Novo Destaque"}</CardTitle>
         </CardHeader>
-        <CardContent className="p-10 pt-4 space-y-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-            <div className="lg:col-span-8 space-y-4">
-              <Label className="text-[10px] font-black uppercase tracking-widest text-slate-700">Título / Chamada Curta</Label>
-              <Input value={titulo} onChange={e => setTitulo(e.target.value)} placeholder="Ex: Grande Show de Prêmios Clube" className="h-14 rounded-none border-gray-100 bg-gray-50 text-xl font-bold text-primary" />
+        <CardContent className="p-6 space-y-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div className="lg:col-span-8 space-y-2">
+              <Label className="text-sm font-semibold">Título / Chamada Curta</Label>
+              <Input value={titulo} onChange={e => setTitulo(e.target.value)} placeholder="Ex: Grande Show de Prêmios Clube" className="h-11 rounded-lg text-base" />
             </div>
 
-            <div className="lg:col-span-4 space-y-4">
-              <Label className="text-[10px] font-black uppercase tracking-widest text-slate-700">Link de Destino (Opcional)</Label>
-              <Input value={link} onChange={e => setLink(e.target.value)} placeholder="https://..." className="h-14 rounded-none border-gray-100 bg-gray-50 font-bold text-primary" />
+            <div className="lg:col-span-4 space-y-2">
+              <Label className="text-sm font-semibold">Link de Destino (Opcional)</Label>
+              <Input value={link} onChange={e => setLink(e.target.value)} placeholder="https://..." className="h-11 rounded-lg" />
             </div>
             
-            <div className="lg:col-span-8">
-              <Label className="text-[10px] font-black uppercase tracking-widest text-slate-700 block mb-4">Escolha a Imagem (Mínimo 1920x600 recomendado)</Label>
-              <div className="relative group">
-                <div className={`h-[300px] rounded-none overflow-hidden border-2 border-dashed ${imagem ? 'border-transparent' : 'border-gray-100'} bg-gray-50 flex items-center justify-center p-4 transition-all group-hover:bg-gray-100`}>
-                   {imagem ? (
-                     <img src={imagem} alt="Preview" className="w-full h-full object-cover rounded-none" />
-                   ) : (
-                     <div className="flex flex-col items-center gap-4">
-                        <div className="p-6 bg-white text-slate-900 rounded-none shadow-sm text-gray-200">
-                           <Upload className="w-8 h-8" />
-                        </div>
-                        <p className="text-xs font-bold text-gray-300 uppercase tracking-widest">Nenhuma imagem selecionada</p>
-                     </div>
-                   )}
-                </div>
-                <label className="absolute inset-0 cursor-pointer flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-none">
-                   <div className="h-12 px-8 bg-white text-slate-900 text-primary rounded-none flex items-center gap-3 font-black uppercase text-[10px] tracking-widest border-none shadow-xl">
-                      <Upload className="w-4 h-4" /> Importar Foto
-                   </div>
-                   <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) setImagem(await fileToBase64(f)); }} />
-                </label>
+            <div className="lg:col-span-8 space-y-3">
+              <div>
+                <Label className="text-sm font-semibold block">Escolha a Imagem</Label>
+                <p className="text-xs text-muted-foreground font-medium mt-1 mb-3">Recomendado: 1920x600 pixels (JPG, PNG ou WebP)</p>
               </div>
-              <p className="text-[9px] text-gray-400 font-bold text-center mt-2">1920×600px · JPG, PNG ou WebP</p>
+              
+              <div className="relative group rounded-xl overflow-hidden border-2 border-dashed bg-muted border-border hover:border-primary/50 hover:bg-muted/80 transition-colors flex flex-col items-center justify-center p-4 min-h-[220px]">
+                 {imagem ? (
+                   <div className="relative w-full h-[200px] rounded-lg overflow-hidden border border-border shadow-sm">
+                     <img src={imagem} alt="Preview" className="w-full h-full object-cover" />
+                     <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <label className="cursor-pointer bg-background text-foreground hover:bg-muted font-bold text-sm px-4 py-2 rounded-lg flex items-center gap-2 shadow-sm transition-colors">
+                           <Upload className="w-4 h-4" /> Trocar Imagem
+                           <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) setImagem(await fileToBase64(f)); }} />
+                        </label>
+                     </div>
+                   </div>
+                 ) : (
+                   <label className="cursor-pointer flex flex-col items-center justify-center w-full h-full min-h-[180px] text-muted-foreground">
+                      <div className="p-4 bg-background border border-border rounded-full shadow-sm mb-3">
+                         <Upload className="w-6 h-6" />
+                      </div>
+                      <span className="text-sm font-semibold">Clique para importar foto</span>
+                      <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) setImagem(await fileToBase64(f)); }} />
+                   </label>
+                 )}
+              </div>
             </div>
 
-            <div className="lg:col-span-4 flex flex-col justify-end space-y-4">
-               <Button onClick={handleSave} className="h-16 rounded-none bg-primary text-white font-black uppercase text-xs tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all w-full" disabled={loading}>
-                 {loading ? <Loader2 className="w-5 h-5 animate-spin mr-3" /> : <Save className="w-5 h-5 mr-3" />}
+            <div className="lg:col-span-4 flex flex-col justify-end gap-3">
+               <Button onClick={handleSave} className="h-11 rounded-lg bg-primary text-primary-foreground font-semibold shadow-sm w-full transition-all" disabled={loading}>
+                 {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Save className="w-4 h-4 mr-2" />}
                  {editId ? "Confirmar Edição" : "Publicar Slide"}
                </Button>
                {editId && (
-                 <Button variant="ghost" onClick={resetForm} className="h-14 rounded-none font-black uppercase text-[10px] text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all">
+                 <Button variant="outline" onClick={resetForm} className="h-11 rounded-lg font-semibold text-muted-foreground transition-all">
                     <X className="w-4 h-4 mr-2" /> Cancelar Edição
                  </Button>
                )}
@@ -150,36 +155,35 @@ const AdminSlides = () => {
         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
          {slides.map(slide => (
-          <Card key={slide.id} className="group overflow-hidden rounded-none border-none shadow-xl hover:shadow-2xl transition-all duration-500 bg-white text-slate-900">
-            <div className="aspect-[16/9] relative overflow-hidden">
-               <img src={slide.imagem} alt={slide.titulo} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-8 gap-4">
-                  <div className="flex gap-2">
-                     <Button size="sm" className="flex-1 bg-white text-slate-900 text-primary font-black uppercase text-[9px] tracking-widest h-10 rounded-none" onClick={() => handleEdit(slide)}>
-                        <Edit2 className="w-3 h-3 mr-2" /> Editar
-                     </Button>
-                     <Button size="icon" className="bg-red-500 text-white hover:bg-red-600 h-10 w-10 rounded-none" onClick={() => handleDelete(slide.id)}>
-                        <Trash2 className="w-3.5 h-3.5" />
-                     </Button>
-                  </div>
+          <Card key={slide.id} className="group overflow-hidden rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow bg-card">
+            <div className="aspect-[21/9] relative overflow-hidden bg-muted">
+               <img src={slide.imagem} alt={slide.titulo} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+               <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
+                  <Button size="icon" variant="secondary" className="h-9 w-9 rounded-full shadow-sm" onClick={() => handleEdit(slide)}>
+                     <Edit2 className="w-4 h-4" />
+                  </Button>
+                  <Button size="icon" variant="destructive" className="h-9 w-9 rounded-full shadow-sm" onClick={() => handleDelete(slide.id)}>
+                     <Trash2 className="w-4 h-4" />
+                  </Button>
                </div>
             </div>
-            <CardContent className="p-6">
-               <h5 className="text-[11px] font-black text-primary uppercase tracking-widest truncate italic">{slide.titulo}</h5>
-               <p className="text-[9px] font-bold text-gray-300 uppercase mt-1">Snapshot do Banner Ativo</p>
+            <CardContent className="p-4">
+               <h5 className="text-sm font-bold text-foreground truncate">{slide.titulo}</h5>
+               <p className="text-xs font-semibold text-muted-foreground mt-1">Snapshot banner ativo</p>
             </CardContent>
           </Card>
         ))}
         {slides.length === 0 && (
-          <div className="col-span-full h-64 flex flex-col items-center justify-center bg-gray-50/50 rounded-none border-2 border-dashed border-gray-100">
-             <ImageIcon className="w-12 h-12 text-gray-200 mb-4" />
-             <p className="text-xs font-black text-gray-300 uppercase tracking-widest">Nenhum slide cadastrado no momento.</p>
+          <div className="col-span-full h-48 flex flex-col items-center justify-center bg-muted/30 rounded-xl border-2 border-dashed border-border">
+             <ImageIcon className="w-10 h-10 text-muted-foreground/30 mb-3" />
+             <p className="text-sm font-medium text-muted-foreground">Nenhum slide cadastrado no momento.</p>
           </div>
         )}
       </div>
     </div>
+  );
   );
 };
 
