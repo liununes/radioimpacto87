@@ -46,17 +46,16 @@ const ThemeLoader = () => {
     /** REAL TIME Presence for Online Statistics. Track each unique device. */
     const isInternalUser = window.location.pathname.startsWith('/admin');
     
-    // Don't track admin pages to show clean audience data
-    if (!isInternalUser) {
-        const sessionId = localStorage.getItem('siteSessionId') || crypto.randomUUID();
-        if (!localStorage.getItem('siteSessionId')) localStorage.setItem('siteSessionId', sessionId);
+    // Agora rastreamos todos os usuários, incluindo admins, para que seus cliques no player reflitam
+    const sessionId = localStorage.getItem('siteSessionId') || crypto.randomUUID();
+    if (!localStorage.getItem('siteSessionId')) localStorage.setItem('siteSessionId', sessionId);
 
-        /** USAR SESSION ID COMO CHAVE ÚNICA DE PRESENÇA */
-        const channel = supabase.channel('online_presence', {
-            config: { presence: { key: sessionId } }
-        });
+    /** USAR SESSION ID COMO CHAVE ÚNICA DE PRESENÇA */
+    const channel = supabase.channel('online_presence', {
+        config: { presence: { key: sessionId } }
+    });
 
-        let currentListening = false;
+    let currentListening = false;
 
         const trackStatus = async (listening: boolean) => {
             currentListening = listening;
@@ -90,11 +89,7 @@ const ThemeLoader = () => {
             window.removeEventListener('radio-play-state', handlePlayState as any);
             channel.unsubscribe();
         };
-    }
 
-    return () => {
-      // Nenhum cleanup global necessário além do que já está nos ifs
-    };
   }, []);
   return null;
 };
