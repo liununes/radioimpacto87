@@ -153,93 +153,95 @@ const AdminEntretenimento = () => {
   };
 
   return (
-    <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <div className="flex justify-between items-center bg-white text-slate-900 p-8 rounded-none border border-gray-100 shadow-sm">
-        <div className="flex items-center gap-6">
-           <div className="w-16 h-16 bg-accent text-white flex items-center justify-center rounded-none shadow-lg">
-              <Radio className="w-8 h-8" />
+    <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-card text-card-foreground p-6 rounded-xl border border-border shadow-sm">
+        <div className="flex items-center gap-4">
+           <div className="w-12 h-12 bg-primary/10 text-primary flex items-center justify-center rounded-lg">
+              <Radio className="w-6 h-6" />
            </div>
            <div>
-              <h2 className="text-3xl font-black text-primary tracking-tighter uppercase italic leading-none">Canal de <span className="text-secondary italic">Entretenimento</span></h2>
-              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Vídeos, Curiosidades e Estilo de Vida</p>
+              <h2 className="text-2xl font-bold tracking-tight">Canal de Entretenimento</h2>
+              <p className="text-sm font-medium text-muted-foreground mt-1">Vídeos, curiosidades e estilo de vida da rádio.</p>
            </div>
         </div>
         <div className="flex gap-4">
            {noticias.length === 0 && (
-             <Button onClick={insertExamples} disabled={loading} variant="outline" className="rounded-none border-primary text-primary font-black uppercase tracking-widest text-[9px] h-12 px-6 hover:bg-primary hover:text-white border-2">
+             <Button onClick={insertExamples} disabled={loading} variant="outline" className="rounded-lg font-semibold text-sm h-10 px-4">
                 Gerar Conteúdo de Exemplo
              </Button>
            )}
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-        <div className="lg:col-span-8 space-y-10">
-           <Card className="rounded-none border-none shadow-xl bg-white text-slate-900 overflow-hidden">
-             <CardHeader className="bg-primary/5 p-8 border-b border-gray-100/50">
-               <CardTitle className="text-lg font-black uppercase tracking-tight text-primary flex items-center gap-3">
-                 <Link className="w-5 h-5 text-secondary" /> Importar de Fonte Externa
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="lg:col-span-8 space-y-8">
+           <Card className="rounded-xl border border-border shadow-sm bg-card text-card-foreground overflow-hidden">
+             <CardHeader className="p-6 pb-4 border-b border-border/50">
+               <CardTitle className="text-lg font-bold flex items-center gap-2">
+                 <Link className="w-5 h-5 text-muted-foreground" /> Importar de Fonte Externa
                </CardTitle>
              </CardHeader>
-             <CardContent className="p-8 space-y-6">
-               <div className="flex gap-4">
-                 <Input value={scrapeUrl} onChange={e => setScrapeUrl(e.target.value)} placeholder="Link de vídeo ou matéria..." className="flex-1 h-14 rounded-none border-gray-100 bg-gray-50" />
-                 <Button onClick={handleScrape} disabled={isScraping || !scrapeUrl.trim()} className="h-14 px-10 rounded-none bg-accent hover:bg-accent/90 text-white font-black uppercase text-[10px]">
-                   {isScraping ? <Loader2 className="w-5 h-5 animate-spin" /> : "Capturar"}
+             <CardContent className="p-6 space-y-4">
+               <div className="flex flex-col sm:flex-row gap-3">
+                 <Input value={scrapeUrl} onChange={e => setScrapeUrl(e.target.value)} placeholder="Link do vídeo ou matéria..." className="flex-1 h-11 rounded-lg" />
+                 <Button onClick={handleScrape} disabled={isScraping || !scrapeUrl.trim()} className="h-11 px-8 rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/90 font-semibold shadow-sm">
+                   {isScraping ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Link className="w-4 h-4 mr-2" />}
+                   {isScraping ? "Capturando..." : "Importar Dados"}
                  </Button>
                </div>
              </CardContent>
            </Card>
 
-           <Card className="rounded-none border-none shadow-xl bg-white text-slate-900 overflow-hidden">
-             <CardHeader className="p-8 border-b border-gray-50 flex flex-row items-center justify-between">
-               <CardTitle className="text-xl font-black uppercase tracking-tight text-primary italic">
+           <Card className="rounded-xl border border-border shadow-sm bg-card text-card-foreground overflow-hidden">
+             <CardHeader className="p-6 pb-4 border-b border-border/50 flex flex-row items-center justify-between">
+               <CardTitle className="text-lg font-bold">
                  {editId ? "Editar Conteúdo" : "Nova Publicação"}
                </CardTitle>
-               <Button onClick={resetForm} variant="ghost" className="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-red-500">
+               <Button onClick={resetForm} variant="ghost" className="text-sm font-semibold text-muted-foreground rounded-lg h-9 px-3">
                   <Plus className="w-4 h-4 mr-2" /> Novo Post
                </Button>
              </CardHeader>
-             <CardContent className="p-8 space-y-8">
-                <div className="flex items-center justify-between p-6 bg-yellow-50/50 border border-yellow-100 rounded-none">
-                   <div className="flex items-center gap-4">
-                      <div className={`p-3 ${destaque ? 'bg-yellow-400 text-white' : 'bg-gray-100 text-gray-400'} transition-all`}>
-                         <Star className={`w-6 h-6 ${destaque ? 'fill-current' : ''}`} />
+             <CardContent className="p-6 space-y-6">
+                <div className="flex items-center justify-between p-4 bg-muted/30 border border-border rounded-xl">
+                   <div className="flex items-center gap-3">
+                      <div className={`p-2 rounded-lg ${destaque ? 'bg-yellow-500/10 text-yellow-600' : 'bg-muted text-muted-foreground'} transition-colors`}>
+                         <Star className={`w-5 h-5 ${destaque ? 'fill-current' : ''}`} />
                       </div>
                       <div>
-                         <p className="text-xs font-black uppercase text-primary">Destaque nesta editoria</p>
+                         <p className="text-sm font-semibold text-foreground">Definir como Destaque</p>
+                         <p className="text-xs text-muted-foreground">Exibir em evidência na home</p>
                       </div>
                    </div>
                    <Switch checked={destaque} onCheckedChange={setDestaque} />
                 </div>
 
-                <div className="space-y-3">
-                  <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Título Chamativo</Label>
-                  <Input value={titulo} onChange={e => setTitulo(e.target.value)} className="h-12 rounded-none border-gray-100" />
+                <div className="space-y-2">
+                  <Label className="text-sm font-semibold">Título da Publicação</Label>
+                  <Input value={titulo} onChange={e => setTitulo(e.target.value)} placeholder="Ex: Melhores momentos do show..." className="h-11 rounded-lg" />
                 </div>
                 
-                <div className="space-y-3">
-                  <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Curta Chamada (Resumo)</Label>
-                  <Textarea value={resumo} onChange={e => setResumo(e.target.value)} rows={2} className="rounded-none border-gray-100 shadow-sm" />
+                <div className="space-y-2">
+                  <Label className="text-sm font-semibold">Resumo / Linha Fina</Label>
+                  <Textarea value={resumo} onChange={e => setResumo(e.target.value)} rows={2} placeholder="Um resumo curto do assunto..." className="rounded-lg resize-none" />
                 </div>
 
-                <div className="space-y-4">
-                   <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Conteúdo / Curiosidades</Label>
-                   <Textarea value={conteudo} onChange={e => setConteudo(e.target.value)} rows={6} className="rounded-none border-gray-100 p-6 font-medium leading-relaxed resize-y" />
+                <div className="space-y-2">
+                   <Label className="text-sm font-semibold">Conteúdo Completo</Label>
+                   <Textarea value={conteudo} onChange={e => setConteudo(e.target.value)} rows={6} placeholder="Digite o conteúdo aqui..." className="rounded-lg resize-y p-3" />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="space-y-3">
-                    <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Fonte Original</Label>
-                    <Input value={fonte} onChange={e => setFonte(e.target.value)} className="h-12 rounded-none border-gray-100" />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label className="text-sm font-semibold">Fonte (Opcional)</Label>
+                    <Input value={fonte} onChange={e => setFonte(e.target.value)} placeholder="Ex: YouTube, Portal G1..." className="h-11 rounded-lg" />
                   </div>
                   
-                  <div className="space-y-3">
-                    <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Imagem do Post</Label>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-semibold">Imagem de Capa</Label>
                     <div className="flex items-center gap-2">
-                       <Input value={imagem} onChange={e => setImagem(e.target.value)} placeholder="URL ou Suba uma foto..." className="h-12 rounded-none border-gray-100 flex-1" />
-                       <label className="h-12 w-12 flex items-center justify-center bg-gray-50 border border-gray-100 cursor-pointer hover:bg-accent hover:text-white transition-all">
-                          <Upload className="w-5 h-5" />
+                       <Input value={imagem} onChange={e => setImagem(e.target.value)} placeholder="URL da imagem ou botão ao lado" className="h-11 rounded-lg flex-1" />
+                       <label className="h-11 w-11 flex items-center justify-center bg-muted border border-border rounded-lg cursor-pointer hover:bg-muted/80 transition-colors">
+                          <Upload className="w-4 h-4 text-muted-foreground" />
                           <input type="file" className="hidden" accept="image/*" onChange={async e => {
                             const f = e.target.files?.[0];
                             if (f) setImagem(await fileToBase64(f));
@@ -250,16 +252,19 @@ const AdminEntretenimento = () => {
                 </div>
 
                 {imagem && (
-                  <div className="p-4 bg-gray-50 border border-gray-100 rounded-none relative">
-                     <p className="text-[9px] font-black uppercase text-gray-400 mb-2">Prévia da imagem:</p>
-                     <img src={imagem} alt="Preview" className="h-32 w-auto object-cover border border-white shadow-md mx-auto" />
-                     <button onClick={() => setImagem("")} className="absolute top-2 right-2 text-red-500"><X className="w-4 h-4" /></button>
+                  <div className="p-4 bg-muted/20 border border-border rounded-xl relative flex justify-center">
+                     <div className="relative inline-block">
+                       <img src={imagem} alt="Preview" className="max-h-40 w-auto object-cover rounded-lg shadow-sm" />
+                       <button onClick={() => setImagem("")} className="absolute -top-2 -right-2 bg-background border border-border rounded-full p-1 text-muted-foreground hover:text-red-500 shadow-sm transition-colors">
+                          <X className="w-4 h-4" />
+                       </button>
+                     </div>
                   </div>
                 )}
 
-                <div className="flex gap-4 pt-4">
-                  <Button onClick={handleSave} className="h-14 px-12 rounded-none bg-primary hover:bg-primary/95 text-white font-black uppercase text-[10px] tracking-widest flex items-center gap-3" disabled={loading}>
-                    {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
+                <div className="pt-4 border-t border-border/50">
+                  <Button onClick={handleSave} className="w-full sm:w-auto h-11 px-8 rounded-lg bg-primary text-primary-foreground font-semibold shadow-sm transition-all" disabled={loading}>
+                    {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Save className="w-4 h-4 mr-2" />}
                     {editId ? "Salvar Alterações" : "Publicar Conteúdo"}
                   </Button>
                 </div>
@@ -267,25 +272,34 @@ const AdminEntretenimento = () => {
            </Card>
         </div>
 
-        <div className="lg:col-span-4 space-y-6">
-           <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-2">Publicações Ativas ({noticias.length})</h4>
-           <div className="space-y-4 max-h-[1000px] overflow-y-auto pr-2 custom-scrollbar">
+        <div className="lg:col-span-4 space-y-4">
+           <h4 className="text-sm font-semibold text-muted-foreground px-1">Ativas ({noticias.length})</h4>
+           <div className="space-y-3 max-h-[800px] overflow-y-auto pr-2 custom-scrollbar">
+             {noticias.length === 0 && (
+               <div className="p-8 text-center bg-muted/30 border-2 border-dashed border-border rounded-xl">
+                 <p className="text-sm font-medium text-muted-foreground">Nenhuma publicação ainda.</p>
+               </div>
+             )}
              {noticias.map(n => (
-               <Card key={n.id} className="rounded-none border-none shadow-md overflow-hidden bg-white text-slate-900 group">
-                 <CardContent className="p-4 flex gap-4">
-                   <div className="w-24 h-24 rounded-none overflow-hidden bg-gray-100 shrink-0 relative">
+               <Card key={n.id} className="rounded-xl border border-border shadow-sm overflow-hidden bg-card hover:shadow-md transition-shadow group">
+                 <CardContent className="p-3 flex gap-3">
+                   <div className="w-20 h-20 rounded-md overflow-hidden bg-muted shrink-0 relative">
                      {n.imagem ? (
-                        <img src={n.imagem} alt={n.titulo} className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700" />
+                        <img src={n.imagem} alt={n.titulo} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" />
                      ) : (
-                        <div className="w-full h-full flex items-center justify-center"><ImageIcon className="w-8 h-8 text-gray-200" /></div>
+                        <div className="w-full h-full flex items-center justify-center"><ImageIcon className="w-6 h-6 text-muted-foreground/30" /></div>
                      )}
-                     {n.destaque && <div className="absolute top-1 right-1 bg-yellow-400 p-1"><Star className="w-3 h-3 text-white fill-current" /></div>}
+                     {n.destaque && (
+                       <div className="absolute top-1 right-1 bg-yellow-500 rounded-full p-1 shadow-sm">
+                         <Star className="w-3 h-3 text-white fill-current" />
+                       </div>
+                     )}
                    </div>
-                   <div className="flex-1 min-w-0 flex flex-col justify-between">
-                     <h5 className="font-black text-[11px] text-primary uppercase line-clamp-2 leading-tight">{n.titulo}</h5>
-                     <div className="flex items-center gap-4 mt-3">
-                        <button onClick={() => handleEdit(n)} className="text-[10px] font-black uppercase text-blue-600 hover:underline flex items-center gap-1"><Edit2 className="w-3 h-3" /> Editar</button>
-                        <button onClick={() => handleDelete(n.id)} className="text-[10px] font-black uppercase text-red-500 hover:underline flex items-center gap-1"><Trash2 className="w-3 h-3" /> Excluir</button>
+                   <div className="flex-1 min-w-0 flex flex-col justify-between py-1">
+                     <h5 className="font-semibold text-sm text-foreground line-clamp-2 leading-tight" title={n.titulo}>{n.titulo}</h5>
+                     <div className="flex items-center gap-2 mt-2">
+                        <Button variant="ghost" className="h-7 px-2 text-xs font-semibold text-muted-foreground hover:text-foreground hover:bg-muted" onClick={() => handleEdit(n)}><Edit2 className="w-3 h-3 mr-1" /> Editar</Button>
+                        <Button variant="ghost" className="h-7 px-2 text-xs font-semibold text-muted-foreground hover:text-red-500 hover:bg-red-50" onClick={() => handleDelete(n.id)}><Trash2 className="w-3 h-3 mr-1" /> Excluir</Button>
                      </div>
                    </div>
                  </CardContent>
