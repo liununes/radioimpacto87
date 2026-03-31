@@ -44,76 +44,81 @@ const AdminDangerZone = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-12 pb-40 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <div className="bg-red-600 p-12 text-white shadow-2xl relative overflow-hidden">
-        <div className="relative z-10 space-y-4">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white text-red-600 rounded-none text-[10px] font-black tracking-widest uppercase mb-4">
-            <ShieldAlert className="w-4 h-4" /> Uso restrito ao Administrador Master
+    <div className="max-w-4xl mx-auto space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+      <div className="bg-destructive text-destructive-foreground p-8 rounded-xl shadow-lg relative overflow-hidden flex flex-col sm:flex-row items-center gap-6">
+        <div className="relative z-10 flex-1 space-y-3 text-center sm:text-left">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-background text-destructive rounded-lg text-xs font-bold uppercase tracking-wider shadow-sm">
+            <ShieldAlert className="w-3.5 h-3.5" /> Acesso Master
           </div>
-          <h2 className="text-4xl md:text-5xl font-black tracking-tighter uppercase italic leading-none">
-            Zona de <span className="text-white">Perigo</span>
+          <h2 className="text-3xl font-black tracking-tight">
+            Zona de Perigo
           </h2>
-          <p className="text-white/60 font-bold uppercase tracking-widest text-[11px]">Gerenciamento de dados críticos e limpeza de sistema</p>
+          <p className="font-semibold text-sm opacity-90">Gerenciamento de dados críticos e ações irreversíveis do sistema.</p>
         </div>
-        <AlertTriangle className="absolute top-1/2 right-[-20px] transform -translate-y-1/2 w-64 h-64 text-white/10 rotate-12" />
+        <AlertTriangle className="w-24 h-24 text-background/20 hidden sm:block rotate-12" />
       </div>
 
-      <div className="grid grid-cols-1 gap-8">
-        <Card className="rounded-none border-none shadow-xl overflow-hidden bg-white text-slate-900 border-l-4 border-l-red-600">
-          <CardHeader className="p-8 pb-4">
-               <div className="flex items-center gap-4 text-red-600 mb-2">
-                   <Trash2 className="w-8 h-8" />
-                   <CardTitle className="text-2xl font-black uppercase tracking-tight italic">Reset Total do Sistema</CardTitle>
+      <div className="grid grid-cols-1 gap-6">
+        <Card className="rounded-xl border border-destructive/20 shadow-sm bg-card text-card-foreground overflow-hidden">
+          <CardHeader className="p-6 border-b border-border/50 bg-destructive/5">
+               <div className="flex items-center justify-between">
+                   <div className="flex items-center gap-3 text-destructive">
+                       <Trash2 className="w-6 h-6" />
+                       <CardTitle className="text-xl font-bold">Reset Total do Sistema</CardTitle>
+                   </div>
+                   <span className="text-xs font-bold text-destructive/70 uppercase tracking-widest px-2.5 py-1 bg-destructive/10 rounded-md">Ação Irreversível</span>
                </div>
-               <CardDescription className="text-xs font-bold text-gray-400 uppercase tracking-widest">Ação Irreversível</CardDescription>
           </CardHeader>
-          <CardContent className="p-8 pt-4 space-y-8">
-            <p className="text-sm font-medium text-slate-600 leading-relaxed">
-                Esta ação removerá permanentemente todos os registros de <strong>Locutores</strong> e toda a <strong>Grade de Programação</strong>. 
-                Isso é útil para reconfigurar a rádio do zero ou limpar dados de teste.
+          <CardContent className="p-6 space-y-6">
+            <p className="text-sm font-medium text-muted-foreground leading-relaxed">
+                Esta ação removerá permanentemente todos os registros de <strong className="text-foreground">Locutores</strong> e toda a <strong className="text-foreground">Grade de Programação</strong>. 
+                Isso é útil para reconfigurar a rádio do zero ou limpar dados de testes iniciais.
             </p>
             
-            <div className="bg-red-50 p-6 border border-red-100 flex flex-col md:flex-row items-center justify-between gap-6">
-                <div className="flex items-center gap-4">
-                     <Zap className="w-6 h-6 text-red-500 animate-pulse" />
-                     <p className="text-[10px] font-black uppercase text-red-400 tracking-widest">Confirme se você realmente deseja prosseguir</p>
+            <div className="bg-muted/50 p-5 rounded-xl border border-border flex flex-col sm:flex-row items-center justify-between gap-6">
+                <div className="flex items-center gap-3">
+                     <Zap className="w-5 h-5 text-destructive animate-pulse" />
+                     <p className="text-sm font-bold text-destructive">Confirme se você realmente deseja prosseguir</p>
                 </div>
                 <Button 
                    onClick={handleClearAll} 
                    variant="destructive" 
                    disabled={loading}
-                   className="h-16 px-12 rounded-none font-black uppercase text-xs tracking-widest shadow-xl bg-red-600 hover:bg-red-700 transition-all"
+                   className="h-11 px-6 rounded-lg font-semibold w-full sm:w-auto shadow-sm"
                 >
-                   {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Limpar Todo o Sistema"}
+                   {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : "Limpar Todo o Sistema"}
                 </Button>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="rounded-none border-none shadow-xl overflow-hidden bg-white text-slate-900 border-l-4 border-l-orange-500">
-           <CardHeader className="p-8 pb-4">
-               <div className="flex items-center gap-4 text-orange-500 mb-2">
-                   <RotateCcw className="w-8 h-8" />
-                   <CardTitle className="text-2xl font-black uppercase tracking-tight italic">Limpar Cache de Imagens</CardTitle>
+        <Card className="rounded-xl border border-orange-500/20 shadow-sm bg-card text-card-foreground overflow-hidden">
+           <CardHeader className="p-6 border-b border-border/50 bg-orange-500/5">
+               <div className="flex items-center justify-between">
+                   <div className="flex items-center gap-3 text-orange-500">
+                       <RotateCcw className="w-6 h-6" />
+                       <CardTitle className="text-xl font-bold">Limpar Cache de Imagens</CardTitle>
+                   </div>
+                   <span className="text-xs font-bold text-orange-500/70 uppercase tracking-widest px-2.5 py-1 bg-orange-500/10 rounded-md">Otimização</span>
                </div>
            </CardHeader>
-           <CardContent className="p-8 pt-4 space-y-8">
-               <p className="text-[11px] font-black uppercase text-gray-500 tracking-widest">
-                   Esta função removerá imagens não utilizadas do Storage para otimizar espaço em disco e banco de dados. 
-                   Esta ação limpará sua biblioteca de mídia mantendo apenas as imagens que estão publicadas ativamente.
+           <CardContent className="p-6 space-y-6">
+               <p className="text-sm font-medium text-muted-foreground leading-relaxed">
+                   Esta função removerá imagens não utilizadas do Storage para otimizar o espaço em disco. 
+                   Esta ação analisará sua biblioteca de mídia mantendo apenas as imagens que estão vinculadas a algum conteúdo ativo.
                </p>
                
-               <div className="bg-orange-50 p-6 border border-orange-100 flex flex-col md:flex-row items-center justify-between gap-6">
-                   <div className="flex items-center gap-4">
-                        <Zap className="w-6 h-6 text-orange-400" />
-                        <p className="text-[10px] font-black uppercase text-orange-400 tracking-widest">Execução segura: não afeta conteúdos visíveis</p>
+               <div className="bg-muted/50 p-5 rounded-xl border border-border flex flex-col sm:flex-row items-center justify-between gap-6">
+                   <div className="flex items-center gap-3">
+                        <Zap className="w-5 h-5 text-orange-500" />
+                        <p className="text-sm font-bold text-orange-600 dark:text-orange-500">Execução segura: não afeta conteúdos visíveis</p>
                    </div>
                    <Button 
                       onClick={handleCleanImages}
                       disabled={cleaningImages}
-                      className="h-16 px-12 rounded-none font-black uppercase text-xs tracking-widest shadow-xl bg-orange-500 hover:bg-orange-600 transition-all text-white"
+                      className="h-11 px-6 rounded-lg font-semibold w-full sm:w-auto bg-orange-500 text-white hover:bg-orange-600 shadow-sm"
                    >
-                      {cleaningImages ? <Loader2 className="w-5 h-5 animate-spin" /> : "Iniciar Limpeza"}
+                      {cleaningImages ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : "Iniciar Limpeza"}
                    </Button>
                </div>
            </CardContent>

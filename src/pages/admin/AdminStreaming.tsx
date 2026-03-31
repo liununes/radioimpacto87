@@ -150,54 +150,54 @@ const AdminStreaming = () => {
 
   return (
     <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      <div className="flex justify-between items-center bg-white text-slate-900 p-8 rounded-none border border-gray-100 shadow-sm">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-card text-card-foreground p-6 rounded-xl border border-border shadow-sm">
         <div>
-          <h2 className="text-3xl font-black text-primary tracking-tighter uppercase italic leading-none">Player & <span className="text-secondary italic">Conexões</span></h2>
-          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Configure o sinal de áudio e seus canais de interação</p>
+          <h2 className="text-2xl font-bold tracking-tight">Player & Conexões</h2>
+          <p className="text-sm font-medium text-muted-foreground mt-1">Configure o sinal de áudio e os canais de interação da rádio.</p>
         </div>
         <div className="flex gap-4">
-           <Button onClick={handleSaveConfig} className="rounded-none font-black uppercase tracking-widest text-[10px] h-12 px-8 bg-primary text-white hover:bg-primary/90 transition-all shadow-lg shadow-blue-900/10" disabled={loading}>
-             {loading ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : <Save className="w-4 h-4 mr-2" />}
+           <Button onClick={handleSaveConfig} className="rounded-lg font-semibold text-sm h-11 px-8 bg-primary text-primary-foreground shadow-sm transition-all w-full sm:w-auto" disabled={loading}>
+             {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Save className="w-4 h-4 mr-2" />}
              Salvar Configurações
            </Button>
         </div>
       </div>
 
       <Tabs value={activeTab} onValueChange={onTabChange} className="space-y-8">
-        <div className="flex justify-center">
-          <TabsList className="bg-white p-1.5 h-auto rounded-none border border-gray-100 shadow-xl gap-1">
-            <TabsTrigger value="sinal" className="rounded-none px-6 py-4 data-[state=active]:bg-primary data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
+        <div className="flex flex-col items-center sm:items-start gap-4">
+          <TabsList className="bg-muted p-1 rounded-xl gap-1 flex-wrap max-w-full justify-start overflow-x-auto">
+            <TabsTrigger value="sinal" className="rounded-lg px-4 py-2.5 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm font-semibold text-sm transition-all whitespace-nowrap">
               <Radio className="w-4 h-4 mr-2" /> Sinal Online
             </TabsTrigger>
-            <TabsTrigger value="redes" className="rounded-none px-6 py-4 data-[state=active]:bg-primary data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
+            <TabsTrigger value="redes" className="rounded-lg px-4 py-2.5 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm font-semibold text-sm transition-all whitespace-nowrap">
               <Globe className="w-4 h-4 mr-2" /> Redes Sociais
             </TabsTrigger>
-            <TabsTrigger value="whatsapp" className="rounded-none px-6 py-4 data-[state=active]:bg-emerald-600 data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all">
+            <TabsTrigger value="whatsapp" className="rounded-lg px-4 py-2.5 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm font-semibold text-sm transition-all whitespace-nowrap">
               <MessageCircle className="w-4 h-4 mr-2" /> WhatsApp
             </TabsTrigger>
           </TabsList>
         </div>
 
         <TabsContent value="sinal" className="animate-in fade-in zoom-in-95 duration-500">
-           <Card className="rounded-none border-none shadow-xl bg-white text-slate-900 overflow-hidden">
-             <CardHeader className="bg-primary/5 p-8 border-b border-gray-100/50">
-               <CardTitle className="text-lg font-black uppercase tracking-tight text-primary flex items-center gap-3 italic">
-                 <Radio className="w-5 h-5 text-secondary" /> Transmissão Principal
+           <Card className="rounded-xl border border-border shadow-sm bg-card text-card-foreground overflow-hidden">
+             <CardHeader className="p-6 border-b border-border/50">
+               <CardTitle className="text-base font-bold flex items-center gap-2">
+                 <Radio className="w-5 h-5 text-primary" /> Transmissão Principal
                </CardTitle>
              </CardHeader>
-             <CardContent className="p-8 space-y-8">
-               <div className="space-y-3">
-                 <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">URL do Fluxo (Stream URL)</Label>
-                 <Input value={streamUrl} onChange={e => setStreamUrl(e.target.value)} placeholder="https://..." className="h-14 rounded-none border-gray-100 bg-gray-50 font-bold text-primary" />
+             <CardContent className="p-6 space-y-6">
+               <div className="space-y-2">
+                 <Label className="text-sm font-semibold">URL do Fluxo (Stream URL)</Label>
+                 <Input value={streamUrl} onChange={e => setStreamUrl(e.target.value)} placeholder="https://..." className="h-11 rounded-lg text-base" />
                </div>
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                 <div className="space-y-3">
-                   <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Nome Oficial da Estação</Label>
-                   <Input value={radioName} onChange={e => setRadioName(e.target.value)} className="h-12 rounded-none border-gray-100" />
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                 <div className="space-y-2">
+                   <Label className="text-sm font-semibold">Nome Oficial da Estação</Label>
+                   <Input value={radioName} onChange={e => setRadioName(e.target.value)} className="h-11 rounded-lg" />
                  </div>
-                 <div className="space-y-3">
-                   <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Sintonização (Frequência)</Label>
-                   <Input value={radioFreq} onChange={e => setRadioFreq(e.target.value)} className="h-12 rounded-none border-gray-100" />
+                 <div className="space-y-2">
+                   <Label className="text-sm font-semibold">Sintonização (Frequência)</Label>
+                   <Input value={radioFreq} onChange={e => setRadioFreq(e.target.value)} className="h-11 rounded-lg" />
                  </div>
                </div>
              </CardContent>
@@ -205,87 +205,88 @@ const AdminStreaming = () => {
         </TabsContent>
 
         <TabsContent value="whatsapp" className="animate-in fade-in zoom-in-95 duration-500">
-           <Card className="rounded-none border-none shadow-xl bg-white text-slate-900 overflow-hidden">
-             <CardHeader className="bg-emerald-600 p-8 text-white">
-                <CardTitle className="text-lg font-black uppercase tracking-tight italic flex items-center gap-3">
-                  <MessageCircle className="w-6 h-6" /> WhatsApp & Ouvintes
+           <Card className="rounded-xl border border-border shadow-sm bg-card text-card-foreground overflow-hidden">
+             <CardHeader className="p-6 border-b border-border/50 bg-emerald-500/10">
+                <CardTitle className="text-base font-bold flex items-center gap-2 text-emerald-700 dark:text-emerald-500">
+                  <MessageCircle className="w-5 h-5" /> WhatsApp & Ouvintes
                 </CardTitle>
              </CardHeader>
-             <CardContent className="p-8 space-y-8">
-                <div className="flex items-center justify-between p-8 bg-emerald-50/50 border border-emerald-100">
-                   <div className="flex items-center gap-6">
-                      <div className="w-16 h-16 bg-emerald-600 text-white rounded-none flex items-center justify-center shadow-xl shadow-emerald-900/20">
-                         <MessageCircle className="w-8 h-8" />
+             <CardContent className="p-6 space-y-8">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-6 bg-muted/50 rounded-xl border border-border gap-6">
+                   <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 bg-emerald-500 text-white rounded-full flex items-center justify-center shadow-sm shrink-0">
+                         <MessageCircle className="w-6 h-6" />
                       </div>
                       <div>
-                         <h4 className="text-sm font-black text-emerald-900 uppercase italic leading-none">Número de Contato</h4>
-                         <p className="text-[10px] font-bold text-emerald-600/60 uppercase mt-2">DDI + DDD + NÚMERO (Sem espaços ou traços)</p>
+                         <h4 className="text-base font-bold text-foreground">Número de Contato</h4>
+                         <p className="text-sm font-medium text-muted-foreground mt-0.5">DDI + DDD + NÚMERO (Sem espaços)</p>
                       </div>
                    </div>
-                   <Input value={whatsapp} onChange={e => setWhatsapp(e.target.value)} placeholder="5511999999999" className="max-w-[240px] h-16 rounded-none border-emerald-100 bg-white font-black text-center text-xl text-emerald-600" />
+                   <Input value={whatsapp} onChange={e => setWhatsapp(e.target.value)} placeholder="5511999999999" className="w-full sm:max-w-[240px] h-11 rounded-lg font-bold text-center text-lg" />
                 </div>
-                <div className="space-y-3 bg-gray-50 p-8 border border-gray-100">
-                   <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400 italic">Mensagem Padrão (Auto-preenchimento)</Label>
+                <div className="space-y-2 p-6 rounded-xl border border-border bg-card">
+                   <Label className="text-sm font-semibold">Mensagem Padrão (Auto-preenchimento)</Label>
+                   <p className="text-xs text-muted-foreground font-medium mb-2">* Esta mensagem aparecerá para o ouvinte ao clicar no botão de WhatsApp.</p>
                    <Input 
                       value={whatsappMessage} 
                       onChange={e => setWhatsappMessage(e.target.value)} 
                       placeholder="Ex: Olá Impacto! Gostaria de pedir a música..." 
-                      className="h-14 rounded-none border-gray-100 bg-white text-slate-900 font-medium" 
+                      className="h-11 rounded-lg text-sm" 
                    />
-                   <p className="text-[9px] text-gray-400 font-bold uppercase tracking-tighter">* Esta mensagem aparecerá para o ouvinte ao clicar no botão de WhatsApp.</p>
                 </div>
              </CardContent>
            </Card>
         </TabsContent>
 
         <TabsContent value="redes" className="animate-in fade-in zoom-in-95 duration-500">
-           <Card className="rounded-none border-none shadow-xl bg-white text-slate-900 overflow-hidden">
-              <CardHeader className="p-10 pb-4">
-                 <CardTitle className="text-2xl font-black uppercase tracking-tight text-primary italic">Central de Redes Sociais</CardTitle>
+           <Card className="rounded-xl border border-border shadow-sm bg-card text-card-foreground overflow-hidden">
+              <CardHeader className="p-6 border-b border-border/50">
+                 <CardTitle className="text-base font-bold">Central de Redes Sociais</CardTitle>
               </CardHeader>
-              <CardContent className="p-10 pt-4 space-y-10">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  <div className="space-y-3">
-                    <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400 italic">Nome da Rede</Label>
-                    <Input value={novaRedeNome} onChange={e => setNovaRedeNome(e.target.value)} placeholder="Ex: Instagram" className="h-14 rounded-none border-gray-100 bg-gray-50" />
+              <CardContent className="p-6 space-y-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="space-y-2">
+                    <Label className="text-sm font-semibold">Nome da Rede</Label>
+                    <Input value={novaRedeNome} onChange={e => setNovaRedeNome(e.target.value)} placeholder="Ex: Instagram" className="h-11 rounded-lg" />
                   </div>
-                  <div className="space-y-3">
-                    <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400 italic">Link Completo</Label>
-                    <Input value={novaRedeUrl} onChange={e => setNovaRedeUrl(e.target.value)} placeholder="https://..." className="h-14 rounded-none border-gray-100 bg-gray-50" />
+                  <div className="space-y-2">
+                    <Label className="text-sm font-semibold">Link Completo</Label>
+                    <Input value={novaRedeUrl} onChange={e => setNovaRedeUrl(e.target.value)} placeholder="https://..." className="h-11 rounded-lg" />
                   </div>
-                  <div className="space-y-3">
-                    <Label className="text-[10px] font-black uppercase tracking-widest text-gray-400 italic">Escolha o Ícone</Label>
-                    <select value={novaRedeIcone} onChange={e => setNovaRedeIcone(e.target.value)}
-                      className="flex h-14 w-full rounded-none border border-gray-100 bg-gray-50 px-4 text-sm font-bold text-primary focus-visible:outline-none focus:ring-2 focus:ring-primary">
-                      {ICONE_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-                    </select>
+                  <div className="space-y-2 flex flex-col justify-end">
+                    <Label className="text-sm font-semibold">Escolha o Ícone</Label>
+                    <div className="flex gap-2">
+                      <select value={novaRedeIcone} onChange={e => setNovaRedeIcone(e.target.value)}
+                        className="flex h-11 w-full rounded-lg border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+                        {ICONE_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+                      </select>
+                      <Button onClick={handleSaveRede} className="h-11 rounded-lg bg-primary text-primary-foreground font-semibold shrink-0">
+                        {editIdRede ? "Salvar" : "Adicionar"}
+                      </Button>
+                    </div>
                   </div>
                 </div>
-                
-                <Button onClick={handleSaveRede} className="h-14 px-12 rounded-none bg-primary text-white font-black uppercase text-[10px] tracking-widest shadow-xl transition-all">
-                  {editIdRede ? "Atualizar Rede Social" : "Adicionar à Lista"}
-                </Button>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-10 border-t border-gray-50">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-6 mt-4 border-t border-border/50">
                   {redes.map(rede => (
-                    <div key={rede.id} className="flex items-center justify-between p-6 bg-gray-50 rounded-none border border-gray-100 group hover:bg-white hover:shadow-2xl transition-all duration-300">
-                       <div className="flex items-center gap-5">
-                          <div className="w-14 h-14 rounded-none bg-white text-slate-900 border border-gray-100 flex items-center justify-center text-primary shadow-sm group-hover:rotate-6 transition-all">
-                                {rede.icone === 'instagram' && <Instagram className="w-6 h-6" />}
-                                {rede.icone === 'facebook' && <Facebook className="w-6 h-6" />}
-                                {rede.icone === 'youtube' && <Youtube className="w-6 h-6" />}
-                                {rede.icone === 'twitter' && <Twitter className="w-6 h-6" />}
-                                {rede.icone === 'tiktok' && <Music2 className="w-6 h-6" />}
-                                {rede.icone === 'other' && <Globe className="w-6 h-6" />}
+                    <div key={rede.id} className="flex items-center justify-between p-4 bg-muted/40 rounded-xl border border-border group hover:bg-muted/80 hover:shadow-sm transition-all">
+                       <div className="flex items-center gap-3 overflow-hidden">
+                          <div className="w-10 h-10 rounded-full bg-background flex items-center justify-center text-primary shadow-sm shrink-0 border border-border/50">
+                                {rede.icone === 'instagram' && <Instagram className="w-4 h-4" />}
+                                {rede.icone === 'facebook' && <Facebook className="w-4 h-4" />}
+                                {rede.icone === 'youtube' && <Youtube className="w-4 h-4" />}
+                                {rede.icone === 'twitter' && <Twitter className="w-4 h-4" />}
+                                {rede.icone === 'tiktok' && <Music2 className="w-4 h-4" />}
+                                {rede.icone === 'other' && <Globe className="w-4 h-4" />}
                              </div>
-                             <div>
-                                <h5 className="text-sm font-black text-primary uppercase italic leading-none">{rede.nome}</h5>
-                                <p className="text-[10px] font-bold text-gray-300 uppercase mt-2 truncate max-w-[150px]">{rede.url}</p>
+                             <div className="min-w-0 pr-2">
+                                <h5 className="text-sm font-bold text-foreground truncate">{rede.nome}</h5>
+                                <p className="text-xs font-medium text-muted-foreground truncate">{rede.url}</p>
                              </div>
                           </div>
-                          <div className="flex gap-2">
-                             <Button size="icon" variant="ghost" className="h-10 w-10 rounded-none bg-white border border-gray-100 shadow-sm" onClick={() => handleEditRede(rede)}><Edit2 className="w-4 h-4" /></Button>
-                             <Button size="icon" variant="ghost" className="h-10 w-10 rounded-none bg-red-50 text-red-400 hover:text-red-600 border border-red-100" onClick={() => handleDeleteRede(rede.id)}><Trash2 className="w-4 h-4" /></Button>
+                          <div className="flex gap-1 shrink-0">
+                             <Button size="icon" variant="ghost" className="h-8 w-8 rounded-full" onClick={() => handleEditRede(rede)}><Edit2 className="w-4 h-4" /></Button>
+                             <Button size="icon" variant="ghost" className="h-8 w-8 rounded-full text-destructive hover:text-destructive hover:bg-destructive/10" onClick={() => handleDeleteRede(rede.id)}><Trash2 className="w-4 h-4" /></Button>
                           </div>
                        </div>
                   ))}
