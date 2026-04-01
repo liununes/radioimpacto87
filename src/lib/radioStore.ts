@@ -178,7 +178,7 @@ export async function getProgramaAtual(): Promise<{ programa: Programa; locutor:
 }
 
 export async function getSiteConfig(key: string): Promise<any> {
-  const { data, error } = await supabase.from("site_config").select("value").eq("key", key).single();
+  const { data, error } = await supabase.from("site_config").select("value").eq("key", key).maybeSingle();
   if (error) return null;
   return data?.value;
 }

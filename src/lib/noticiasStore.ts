@@ -63,7 +63,7 @@ export async function deleteNoticia(id: string) {
 }
 
 export async function getCategorias(): Promise<string[]> {
-  const { data, error } = await supabase.from("site_config").select("value").eq("key", "noticias_categorias").single();
+  const { data, error } = await supabase.from("site_config").select("value").eq("key", "noticias_categorias").maybeSingle();
   if (error || !data) return [...DEFAULT_CATEGORIAS];
   return data.value as string[];
 }
