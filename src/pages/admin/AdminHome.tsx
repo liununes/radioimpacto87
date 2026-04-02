@@ -70,15 +70,18 @@ const AdminHome = () => {
         getSlides()
       ]);
 
-      const { count: pedidosCount } = await supabase.from("pedidos").select("*", { count: 'exact', head: true });
-      const { count: noticiasCount } = await supabase.from("noticias").select("*", { count: 'exact', head: true });
+      const { error: errorPedidos, count: pedidosCount } = await supabase.from("pedidos").select("*", { count: 'exact', head: true });
+      if (errorPedidos) console.error("Erro ao buscar pedidos:", errorPedidos);
+
+      const { error: errorNoticias, count: noticiasCount } = await supabase.from("noticias").select("*", { count: 'exact', head: true });
+      if (errorNoticias) console.error("Erro ao buscar noticias:", errorNoticias);
       
       setOtherStats({
         locutores: String(locs.length),
         programas: String(progs.length),
         slides: String(slides.length),
-        pedidos: String(pedidosCount || 0),
-        noticias: String(noticiasCount || 0),
+        pedidos: String(pedidosCount ?? 0),
+        noticias: String(noticiasCount ?? 0),
       });
     };
     fetchOtherStats();
