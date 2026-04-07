@@ -33,6 +33,7 @@ const ALL_PERMISSIONS = [
   { id: "patrocinadores", label: "🤝 Patrocinadores" },
   { id: "promocoes", label: "🎁 Promoções" },
   { id: "usuarios", label: "👥 Usuários / Acessos" },
+  { id: "perfil", label: "👤 Editar Meu Perfil" },
   { id: "danger_zone", label: "⚠️ Zona de Perigo" },
 ];
 
