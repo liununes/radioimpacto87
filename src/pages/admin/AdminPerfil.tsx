@@ -17,7 +17,7 @@ function fileToBase64(file: File): Promise<string> {
 }
 
 const AdminPerfil = () => {
-  const { user, supabase, isAdmin, hasPermission } = useAuth();
+  const { user, supabase, isAdmin, hasPermission, loading: authLoading } = useAuth();
   const [loading, setLoading] = useState(false);
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
@@ -71,6 +71,10 @@ const AdminPerfil = () => {
     const file = e.target.files?.[0];
     if (file) setFoto(await fileToBase64(file));
   };
+
+  if (authLoading) {
+    return <div className="p-20 flex justify-center"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>;
+  }
 
   if (!isAdmin && !hasPermission('perfil')) {
     return <div className="p-12 text-center font-black uppercase text-red-500">Acesso Restrito: Você não tem permissão para editar seu perfil.</div>;
