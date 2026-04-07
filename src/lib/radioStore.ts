@@ -101,7 +101,11 @@ export async function savePrograma(p: any) {
 }
 
 export async function deletePrograma(id: string) {
-  return await supabase.from("programas").delete().eq("id", id);
+  const result = await supabase.from("programas").delete().eq("id", id).select();
+  if (!result.error && (!result.data || result.data.length === 0)) {
+    return { error: new Error("Nenhum registro foi removido. Verifique suas permissões ou se o ID existe.") };
+  }
+  return result;
 }
 
 export async function getFotos(): Promise<Foto[]> {

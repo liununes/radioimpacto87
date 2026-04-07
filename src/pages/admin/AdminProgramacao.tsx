@@ -74,9 +74,14 @@ const AdminProgramacao = () => {
 
   const handleDelete = async (id: string) => {
     if (!confirm("Excluir este programa?")) return;
+    
+    // Optimistic update
+    setProgramas(prev => prev.filter(p => p.id !== id));
+    
     const { error } = await deletePrograma(id);
     if (error) {
       toast.error("Erro ao excluir: " + error.message);
+      await fetchData(); // Revert on error
     } else {
       toast.success("Programa removido!");
       await fetchData();
