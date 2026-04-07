@@ -463,7 +463,7 @@ const AdminAparencia = () => {
                    { l: "Entretenimento", f: "showEntretenimento", p: "vis_news" },
                    { l: "Redes Sociais", f: "showSocial", p: "aparencia" }
                  ].map(item => {
-                   const canChange = hasPermission("*") || hasPermission("aparencia") || hasPermission(item.p);
+                   const canChange = isSuperAdmin || hasPermission("aparencia") || hasPermission("visibilidade") || hasPermission(item.p);
                    if (!canChange) return null;
 
                    return (
