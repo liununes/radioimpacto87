@@ -77,7 +77,8 @@ const AdminLayout = () => {
       'entretenimento': 'entretenimento',
       'pedidos': 'pedidos',
       'promocoes': 'promocoes',
-      'patrocinadores': 'patrocinadores'
+      'patrocinadores': 'patrocinadores',
+      'perfil': 'perfil'
     };
     if (segment === 'aparencia') {
       const searchParams = new URLSearchParams(location.search);
