@@ -1,5 +1,5 @@
 import {
-  Radio, Users, Calendar, Image, FileText, Info, LayoutDashboard, Music, Settings, Palette, BarChart3, ExternalLink, Heart, Gift, Sun, Moon, HardDrive, Eye, Layers, LifeBuoy, Type, Layout, AlertTriangle, Globe, MessageCircle, Plus
+  Radio, Users, Calendar, Image, FileText, Info, LayoutDashboard, Music, Settings, Palette, BarChart3, ExternalLink, Heart, Gift, Sun, Moon, HardDrive, Eye, Layers, LifeBuoy, Type, Layout, AlertTriangle, Globe, MessageCircle, Plus, User
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -56,6 +56,7 @@ const menuItems = [
   { title: "Patrocinadores", url: "/admin/patrocinadores", icon: Heart, permission: "patrocinadores" },
   { title: "Promoções", url: "/admin/promocoes", icon: Gift, permission: "promocoes" },
   { title: "Usuários / Acessos", url: "/admin/usuarios", icon: Settings, permission: "usuarios" },
+  { title: "Meu Perfil", url: "/admin/perfil", icon: User, permission: "base" },
   { title: "Zona de Perigo", url: "/admin/danger-zone", icon: AlertTriangle, permission: "danger_zone" },
 ];
 
