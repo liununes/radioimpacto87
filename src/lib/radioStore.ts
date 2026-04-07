@@ -47,11 +47,15 @@ export async function getLocutores(): Promise<Locutor[]> {
 
 export async function saveLocutor(locutor: Partial<Locutor>) {
   if (locutor.id) {
-    const result = await supabase.from("locutores").update(locutor).eq("id", locutor.id).select();
+    const updateData = { ...locutor };
+    delete updateData.id;
+    const result = await supabase.from("locutores").update(updateData).eq("id", locutor.id).select();
     if (!result.error && (!result.data || result.data.length === 0)) return { error: new Error("Falha ao atualizar locutor. Permissão negada ou não encontrado.") };
     return result;
   } else {
-    const result = await supabase.from("locutores").insert(locutor as any).select();
+    const insertData = { ...locutor };
+    delete insertData.id;
+    const result = await supabase.from("locutores").insert(insertData as any).select();
     if (!result.error && (!result.data || result.data.length === 0)) return { error: new Error("Falha ao criar locutor.") };
     return result;
   }
@@ -135,11 +139,15 @@ export async function getSlides(): Promise<Slide[]> {
 
 export async function saveSlide(slide: Partial<Slide>) {
   if (slide.id) {
-    const result = await supabase.from("slides").update(slide as any).eq("id", slide.id).select();
+    const updateData = { ...slide };
+    delete updateData.id;
+    const result = await supabase.from("slides").update(updateData as any).eq("id", slide.id).select();
     if (!result.error && (!result.data || result.data.length === 0)) return { error: new Error("Falha ao atualizar slide.") };
     return result;
   } else {
-    const result = await supabase.from("slides").insert(slide as any).select();
+    const insertData = { ...slide };
+    delete insertData.id;
+    const result = await supabase.from("slides").insert(insertData as any).select();
     if (!result.error && (!result.data || result.data.length === 0)) return { error: new Error("Falha ao criar slide.") };
     return result;
   }
@@ -153,11 +161,15 @@ export async function deleteSlide(id: string) {
 
 export async function saveFoto(foto: Partial<Foto>) {
   if (foto.id) {
-    const result = await supabase.from("fotos").update(foto as any).eq("id", foto.id).select();
+    const updateData = { ...foto };
+    delete updateData.id;
+    const result = await supabase.from("fotos").update(updateData as any).eq("id", foto.id).select();
     if (!result.error && (!result.data || result.data.length === 0)) return { error: new Error("Falha ao atualizar foto.") };
     return result;
   } else {
-    const result = await supabase.from("fotos").insert(foto as any).select();
+    const insertData = { ...foto };
+    delete insertData.id;
+    const result = await supabase.from("fotos").insert(insertData as any).select();
     if (!result.error && (!result.data || result.data.length === 0)) return { error: new Error("Falha ao salvar foto.") };
     return result;
   }
@@ -171,11 +183,15 @@ export async function getRedesSociais(): Promise<RedeSocial[]> {
 
 export async function saveRedeSocial(rede: Partial<RedeSocial>) {
   if (rede.id) {
-    const result = await supabase.from("redes_sociais").update(rede).eq("id", rede.id).select();
+    const updateData = { ...rede };
+    delete updateData.id;
+    const result = await supabase.from("redes_sociais").update(updateData).eq("id", rede.id).select();
     if (!result.error && (!result.data || result.data.length === 0)) return { error: new Error("Falha ao atualizar rede social.") };
     return result;
   } else {
-    const result = await supabase.from("redes_sociais").insert(rede as any).select();
+    const insertData = { ...rede };
+    delete insertData.id;
+    const result = await supabase.from("redes_sociais").insert(insertData as any).select();
     if (!result.error && (!result.data || result.data.length === 0)) return { error: new Error("Falha ao criar rede social.") };
     return result;
   }
