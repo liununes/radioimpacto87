@@ -25,7 +25,7 @@ export async function getNoticias(): Promise<Noticia[]> {
   
   if (error) { console.error("Erro ao buscar noticias:", error); return []; }
   
-  return (data || []).map(n => ({
+  return (data || []).map((n: any) => ({
     id: n.id,
     titulo: n.titulo,
     resumo: n.resumo || "",
@@ -59,7 +59,9 @@ export async function saveNoticia(n: Partial<Noticia>) {
 }
 
 export async function deleteNoticia(id: string) {
-  return await supabase.from("noticias").delete().eq("id", id);
+  const result = await supabase.from("noticias").delete({ count: "exact" }).eq("id", id);
+  if (!result.error && result.count === 0) return { error: new Error("Nenhum registro removido. Permissão negada ou ID inexistente.") };
+  return result;
 }
 
 export async function getCategorias(): Promise<string[]> {

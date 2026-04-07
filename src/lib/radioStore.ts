@@ -47,19 +47,22 @@ export async function getLocutores(): Promise<Locutor[]> {
 
 export async function saveLocutor(locutor: Partial<Locutor>) {
   if (locutor.id) {
-    const { error } = await supabase.from("locutores").update(locutor).eq("id", locutor.id);
-    return { error };
+    const result = await supabase.from("locutores").update(locutor).eq("id", locutor.id).select();
+    if (!result.error && (!result.data || result.data.length === 0)) return { error: new Error("Falha ao atualizar locutor. Permissão negada ou não encontrado.") };
+    return result;
   } else {
-    // Cast to any to handle required 'nome' field if missing (though the UI should prevent this)
-    const { error } = await supabase.from("locutores").insert(locutor as any);
-    return { error };
+    const result = await supabase.from("locutores").insert(locutor as any).select();
+    if (!result.error && (!result.data || result.data.length === 0)) return { error: new Error("Falha ao criar locutor.") };
+    return result;
   }
 }
 
 export async function deleteLocutor(id: string) {
   // First, find programs referencing this locutor and either delete them or null their locutor_id
   await supabase.from("programas").update({ locutor_id: null } as any).eq("locutor_id", id);
-  return await supabase.from("locutores").delete().eq("id", id);
+  const result = await supabase.from("locutores").delete({ count: "exact" }).eq("id", id);
+  if (!result.error && result.count === 0) return { error: new Error("Falha ao remover locutor. Permissão negada.") };
+  return result;
 }
 
 export async function clearAllStationData() {
@@ -94,15 +97,19 @@ export async function savePrograma(p: any) {
   };
   
   if (p.id) {
-    return await supabase.from("programas").update(dbData as any).eq("id", p.id);
+    const result = await supabase.from("programas").update(dbData as any).eq("id", p.id).select();
+    if (!result.error && (!result.data || result.data.length === 0)) return { error: new Error("Falha ao atualizar programa.") };
+    return result;
   } else {
-    return await supabase.from("programas").insert(dbData as any);
+    const result = await supabase.from("programas").insert(dbData as any).select();
+    if (!result.error && (!result.data || result.data.length === 0)) return { error: new Error("Falha ao criar programa.") };
+    return result;
   }
 }
 
 export async function deletePrograma(id: string) {
-  const result = await supabase.from("programas").delete().eq("id", id).select();
-  if (!result.error && (!result.data || result.data.length === 0)) {
+  const result = await supabase.from("programas").delete({ count: "exact" }).eq("id", id);
+  if (!result.error && result.count === 0) {
     return { error: new Error("Nenhum registro foi removido. Verifique suas permissões ou se o ID existe.") };
   }
   return result;
@@ -115,7 +122,9 @@ export async function getFotos(): Promise<Foto[]> {
 }
 
 export async function deleteFoto(id: string) {
-  return await supabase.from("fotos").delete().eq("id", id);
+  const result = await supabase.from("fotos").delete({ count: "exact" }).eq("id", id);
+  if (!result.error && result.count === 0) return { error: new Error("Falha ao remover foto.") };
+  return result;
 }
 
 export async function getSlides(): Promise<Slide[]> {
@@ -126,21 +135,31 @@ export async function getSlides(): Promise<Slide[]> {
 
 export async function saveSlide(slide: Partial<Slide>) {
   if (slide.id) {
-    return await supabase.from("slides").update(slide as any).eq("id", slide.id);
+    const result = await supabase.from("slides").update(slide as any).eq("id", slide.id).select();
+    if (!result.error && (!result.data || result.data.length === 0)) return { error: new Error("Falha ao atualizar slide.") };
+    return result;
   } else {
-    return await supabase.from("slides").insert(slide as any);
+    const result = await supabase.from("slides").insert(slide as any).select();
+    if (!result.error && (!result.data || result.data.length === 0)) return { error: new Error("Falha ao criar slide.") };
+    return result;
   }
 }
 
 export async function deleteSlide(id: string) {
-  return await supabase.from("slides").delete().eq("id", id);
+  const result = await supabase.from("slides").delete({ count: "exact" }).eq("id", id);
+  if (!result.error && result.count === 0) return { error: new Error("Falha ao remover slide.") };
+  return result;
 }
 
 export async function saveFoto(foto: Partial<Foto>) {
   if (foto.id) {
-    return await supabase.from("fotos").update(foto as any).eq("id", foto.id);
+    const result = await supabase.from("fotos").update(foto as any).eq("id", foto.id).select();
+    if (!result.error && (!result.data || result.data.length === 0)) return { error: new Error("Falha ao atualizar foto.") };
+    return result;
   } else {
-    return await supabase.from("fotos").insert(foto as any);
+    const result = await supabase.from("fotos").insert(foto as any).select();
+    if (!result.error && (!result.data || result.data.length === 0)) return { error: new Error("Falha ao salvar foto.") };
+    return result;
   }
 }
 
@@ -152,14 +171,20 @@ export async function getRedesSociais(): Promise<RedeSocial[]> {
 
 export async function saveRedeSocial(rede: Partial<RedeSocial>) {
   if (rede.id) {
-    return await supabase.from("redes_sociais").update(rede).eq("id", rede.id);
+    const result = await supabase.from("redes_sociais").update(rede).eq("id", rede.id).select();
+    if (!result.error && (!result.data || result.data.length === 0)) return { error: new Error("Falha ao atualizar rede social.") };
+    return result;
   } else {
-    return await supabase.from("redes_sociais").insert(rede as any);
+    const result = await supabase.from("redes_sociais").insert(rede as any).select();
+    if (!result.error && (!result.data || result.data.length === 0)) return { error: new Error("Falha ao criar rede social.") };
+    return result;
   }
 }
 
 export async function deleteRedeSocial(id: string) {
-  return await supabase.from("redes_sociais").delete().eq("id", id);
+  const result = await supabase.from("redes_sociais").delete({ count: "exact" }).eq("id", id);
+  if (!result.error && result.count === 0) return { error: new Error("Falha ao remover rede social.") };
+  return result;
 }
 
 export async function getProgramaAtual(): Promise<{ programa: Programa; locutor: Locutor } | null> {
