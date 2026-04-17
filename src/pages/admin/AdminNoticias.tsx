@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Trash2, Edit2, Save, X, Plus, Link, Loader2, ExternalLink, Star } from "lucide-react";
+import { Trash2, Edit2, Save, X, Plus, Link, Loader2, ExternalLink, Star, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -11,6 +11,15 @@ import { type Noticia, getNoticias, saveNoticia, deleteNoticia, getCategorias, s
 import { toast } from "sonner";
 
 import { useSearchParams } from "react-router-dom";
+
+const fileToBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = error => reject(error);
+  });
+};
 
 const AdminNoticias = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -264,11 +273,25 @@ const AdminNoticias = () => {
                    <div className="md:col-span-4 space-y-6">
                       <div className="space-y-2">
                          <Label className="text-sm font-semibold">Capa da Notícia</Label>
-                         <div className="h-40 bg-muted border border-border rounded-lg overflow-hidden relative group">
-                            {imagem ? <img src={imagem} alt="Capa" className="w-full h-full object-cover" /> : <Plus className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 text-muted-foreground/40" />}
-                            <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                               <Button variant="ghost" className="text-foreground hover:text-red-500 rounded-full" onClick={() => setImagem("")}><Trash2 className="w-5 h-5" /></Button>
-                            </div>
+                         <div className="h-40 bg-muted border border-border rounded-lg overflow-hidden relative group cursor-pointer">
+                            {imagem ? (
+                              <>
+                                <img src={imagem} alt="Capa" className="w-full h-full object-cover" />
+                                <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                                   <label className="cursor-pointer bg-primary text-primary-foreground p-2 rounded-full hover:bg-primary/90 shadow-sm transition-colors">
+                                      <Upload className="w-5 h-5" />
+                                      <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) setImagem(await fileToBase64(f)); }} />
+                                   </label>
+                                   <Button variant="ghost" className="bg-destructive text-destructive-foreground hover:bg-destructive/90 p-2 h-9 w-9 rounded-full" onClick={(e) => { e.stopPropagation(); setImagem(""); }}><Trash2 className="w-5 h-5" /></Button>
+                                </div>
+                              </>
+                            ) : (
+                              <label className="absolute inset-0 flex flex-col items-center justify-center cursor-pointer hover:bg-primary/5 transition-colors gap-2">
+                                 <Upload className="w-8 h-8 text-muted-foreground/40" />
+                                 <span className="text-xs font-medium text-muted-foreground/60 uppercase tracking-widest">Upload de Imagem</span>
+                                 <input type="file" accept="image/*" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) setImagem(await fileToBase64(f)); }} />
+                              </label>
+                            )}
                          </div>
                          <Input value={imagem} onChange={e => setImagem(e.target.value)} placeholder="URL da imagem..." className="h-10 rounded-lg text-sm mt-2" />
                       </div>
