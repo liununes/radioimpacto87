@@ -12,7 +12,7 @@ const SponsorsSection = () => {
       <div className="container mx-auto px-6">
         <div className="flex flex-col items-center text-center mb-12">
           <span className="text-[10px] font-black uppercase tracking-[0.5em] block mb-2" style={{ color: 'var(--text-detail)' }}>Parceiros</span>
-          <h2 className="text-4xl md:text-5xl font-black tracking-tighter uppercase italic leading-none" style={{ color: 'var(--text-title)' }}>
+          <h2 className="text-4xl md:text-5xl font-black tracking-tighter italic leading-none" style={{ color: 'var(--text-title)' }}>
              {theme.labels.sponsorsTitle} <span className="underline" style={{ color: 'var(--text-detail)' }}>{theme.labels.sponsorsSubtitle}</span>
           </h2>
         </div>
@@ -35,7 +35,7 @@ const SponsorsSection = () => {
                 />
               </div>
               <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-white dark:bg-gray-800 px-3 py-1 rounded-lg shadow-md border border-gray-50 dark:border-gray-700 opacity-0 group-hover:opacity-100 transition-opacity">
-                 <span className="text-[9px] font-black uppercase tracking-widest text-[#002e5d] dark:text-white">{sponsor.nome}</span>
+                 <span className="text-[9px] font-black tracking-widest text-[#002e5d] dark:text-white">{sponsor.nome}</span>
               </div>
             </a>
           ))}

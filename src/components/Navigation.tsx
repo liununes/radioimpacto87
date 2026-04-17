@@ -105,10 +105,10 @@ const Navigation = () => {
               )}
             </div>
             <div className="flex flex-col">
-              <span className="text-2xl md:text-3xl font-black tracking-tighter leading-none uppercase italic drop-shadow-md text-white">
+              <span className="text-2xl md:text-3xl font-black tracking-tighter leading-none italic drop-shadow-md text-white">
                 {theme.radioName || "IMPACTO"}
               </span>
-              <span className="text-[11px] font-black tracking-[0.4em] text-accent uppercase drop-shadow-sm">{theme.radioFreq || "87.9"} FM</span>
+              <span className="text-[11px] font-black tracking-[0.4em] text-accent drop-shadow-sm">{theme.radioFreq || "87.9"} FM</span>
             </div>
           </Link>
           

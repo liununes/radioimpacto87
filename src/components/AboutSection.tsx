@@ -35,7 +35,7 @@ const AboutSection = () => {
           <div className="space-y-12">
             <div className="space-y-4">
               <span className="text-[10px] font-black text-accent uppercase tracking-[0.5em] mb-4 block underline decoration-[var(--clube-yellow)]">NOSSA RÁDIO</span>
-              <h2 className="text-4xl md:text-7xl font-black tracking-tighter uppercase leading-[0.9]" style={{ color: 'var(--text-title)' }}>
+              <h2 className="text-4xl md:text-7xl font-black tracking-tighter leading-[0.9]" style={{ color: 'var(--text-title)' }}>
                 {theme.labels.aboutTitle} <span className="text-accent underline decoration-[var(--clube-yellow)]">{theme.labels.aboutSubtitle}</span>
               </h2>
             </div>
@@ -55,7 +55,7 @@ const AboutSection = () => {
               <Info className="w-48 h-48 text-primary shadow-2xl" />
             </div>
             
-            <h3 className="text-2xl font-black uppercase tracking-tighter flex items-center gap-4 relative z-10" style={{ color: 'var(--text-title)' }}>
+            <h3 className="text-2xl font-black tracking-tighter flex items-center gap-4 relative z-10" style={{ color: 'var(--text-title)' }}>
               Central de Contato
             </h3>
             

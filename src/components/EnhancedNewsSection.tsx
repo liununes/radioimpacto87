@@ -32,7 +32,7 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[], loading: boo
     <div className="container mx-auto px-4 py-20">
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-l-[12px] pl-6" style={{ borderColor: 'var(--plantao-line)' }}>
         <div>
-          <h2 className="text-4xl md:text-5xl font-black tracking-tighter uppercase leading-none" style={{ color: 'var(--plantao-title)' }}>
+          <h2 className="text-4xl md:text-5xl font-black tracking-tighter leading-none" style={{ color: 'var(--plantao-title)' }}>
             {theme.labels.newsTitle} <span className="underline" style={{ color: 'var(--plantao-subtitle)', textDecorationColor: 'var(--nav-item-active)' }}>{theme.labels.newsSubtitle}</span>
           </h2>
           <p className="text-gray-400 font-bold uppercase tracking-[0.2em] text-[10px] mt-2">Destaques e últimas notícias</p>
@@ -65,7 +65,7 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[], loading: boo
                 </div>
                 <CardContent className="p-10 flex flex-col justify-between flex-1 bg-white">
                   <div>
-                    <h3 className="text-3xl md:text-4xl font-black mb-6 transition-colors leading-[1.1] uppercase tracking-tight" style={{ color: 'var(--text-title)' }}>
+                    <h3 className="text-3xl md:text-4xl font-black mb-6 transition-colors leading-[1.1] tracking-tight" style={{ color: 'var(--text-title)' }}>
                       {featured.titulo}
                     </h3>
                   </div>
@@ -108,7 +108,7 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[], loading: boo
                 </div>
                 <CardContent className="p-4 flex flex-col justify-center gap-1.5 flex-1">
                   <span className="text-[9px] font-black uppercase" style={{ color: 'var(--nav-item-active)' }}>{item.categoria || "NEWS"}</span>
-                  <CardTitle className="text-sm font-black line-clamp-2 leading-tight uppercase tracking-tight" style={{ color: 'var(--plantao-card-text)' }}>
+                  <CardTitle className="text-sm font-black line-clamp-2 leading-tight tracking-tight" style={{ color: 'var(--plantao-card-text)' }}>
                     {item.titulo}
                   </CardTitle>
                 </CardContent>
@@ -129,7 +129,7 @@ export const RemainingNews = ({ news, loading, showAll = false }: { news: NewsIt
   return (
     <div className="container mx-auto px-4 py-20 bg-gray-50/50 rounded-[3rem] my-12 shadow-inner">
       <div className="flex items-center gap-4 mb-16">
-        <h2 className="text-2xl font-black uppercase tracking-tighter shrink-0" style={{ color: 'var(--text-title)' }}>CONTEÚDOS</h2>
+        <h2 className="text-2xl font-black tracking-tighter shrink-0" style={{ color: 'var(--text-title)' }}>CONTEÚDOS</h2>
         <div className="h-0.5 w-full bg-gray-200" />
       </div>
       
@@ -153,7 +153,7 @@ export const RemainingNews = ({ news, loading, showAll = false }: { news: NewsIt
               <span className="text-[10px] font-black text-accent uppercase tracking-widest mb-3 block">
                 {item.categoria || "LOCAL"}
               </span>
-              <CardTitle className="text-base font-black line-clamp-2 hover:underline uppercase tracking-tight leading-tight" style={{ color: 'var(--text-title)' }}>
+              <CardTitle className="text-base font-black line-clamp-2 hover:underline tracking-tight leading-tight" style={{ color: 'var(--text-title)' }}>
                 {item.titulo}
               </CardTitle>
             </CardHeader>

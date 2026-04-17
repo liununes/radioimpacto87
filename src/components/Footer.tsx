@@ -56,7 +56,7 @@ const Footer = () => {
               </div>
             )}
             <div className="h-10 w-px bg-gray-200" />
-            <div className="text-left font-black uppercase tracking-tighter">
+            <div className="text-left font-black tracking-tighter">
               <h3 className="text-lg leading-none" style={{ color: 'var(--text-title)' }}>{siteConfig.radioName || "Impacto FM"}</h3>
               <p className="text-accent text-sm mt-1">{theme.radioFreq || "105.5"} FM</p>
             </div>
@@ -78,13 +78,13 @@ const Footer = () => {
           )}
 
           <div className="text-center flex flex-col items-center max-w-sm">
-             <p className="text-[10px] font-bold uppercase tracking-widest leading-loose text-center" style={{ color: 'var(--text-content)' }}>
+             <p className="text-[10px] font-bold tracking-widest leading-loose text-center" style={{ color: 'var(--text-content)' }}>
                 {theme.labels.footerAbout}
              </p>
           </div>
 
           <div className="text-center md:text-right">
-            <p className="text-[10px] font-black uppercase tracking-widest leading-loose" style={{ color: 'var(--text-content)' }}>
+            <p className="text-[10px] font-black tracking-widest leading-loose" style={{ color: 'var(--text-content)' }}>
               © {new Date().getFullYear()} {siteConfig.radioName || "IMPACTO FM"}.<br/>
               {theme.labels.footerRights}
             </p>

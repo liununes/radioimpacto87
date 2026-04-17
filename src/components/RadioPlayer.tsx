@@ -185,12 +185,12 @@ const RadioPlayer = () => {
               {programaAtual ? "No Ar Agora" : "Programação Automática"}
             </span>
           </div>
-          <span className="text-sm md:text-3xl font-[900] text-primary leading-none uppercase tracking-tighter">
+          <span className="text-sm md:text-3xl font-[900] text-primary leading-none tracking-tighter">
             {siteConfig.radioFreq || theme.radioFreq || "87.9"} FM
           </span>
           {/* Programa Atual Subtitle */}
           <div className="flex flex-col mt-0.5">
-            <span className="text-[9px] md:text-[11px] font-black text-primary uppercase truncate max-w-[120px] md:max-w-none">
+            <span className="text-[9px] md:text-[11px] font-black text-primary truncate max-w-[120px] md:max-w-none">
                {programaAtual?.programa?.nome || "Música e Informação"}
             </span>
           </div>
@@ -207,7 +207,7 @@ const RadioPlayer = () => {
              <img src={programaAtual.locutor.foto} alt="Locutor" className="w-full h-full object-cover" />
              <div className="absolute inset-x-0 bottom-0 p-10 bg-gradient-to-t from-black/80 via-black/40 to-transparent text-white">
                 <p className="text-[10px] font-black uppercase tracking-[0.4em] text-accent mb-2">Locutor no Ar</p>
-                <h3 className="text-4xl md:text-5xl font-black uppercase italic tracking-tighter leading-none">{programaAtual.locutor.nome}</h3>
+                <h3 className="text-4xl md:text-5xl font-black italic tracking-tighter leading-none">{programaAtual.locutor.nome}</h3>
                 <p className="text-white/60 font-bold uppercase tracking-widest text-[11px] mt-4">{programaAtual.programa.nome}</p>
              </div>
              <button className="absolute top-8 right-8 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md flex items-center justify-center text-white transition-all">

@@ -87,7 +87,7 @@ const ProgramacaoSection = () => {
                   )}
 
                   <div className="space-y-1">
-                    <h3 className="font-black text-white text-base md:text-lg leading-tight group-hover:text-accent transition-colors line-clamp-2 uppercase italic tracking-tighter">{prog.nome}</h3>
+                    <h3 className="font-black text-white text-base md:text-lg leading-tight group-hover:text-accent transition-colors line-clamp-2 italic tracking-tighter">{prog.nome}</h3>
                     <p className="text-[10px] font-bold text-white/50 uppercase tracking-widest">{getLocutorNome(prog.locutorId)}</p>
                     <div className="flex items-center gap-2 text-accent font-black text-[11px] mt-2">
                       <Clock className="w-3.5 h-3.5" />

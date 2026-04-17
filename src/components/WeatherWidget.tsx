@@ -111,7 +111,7 @@ const WeatherWidget = ({ showWeather = true }: WeatherWidgetProps) => {
         <>
           {getWeatherIcon(weather.icon)}
           <div className="flex flex-col leading-none">
-            <span className="text-[10px] font-black uppercase tracking-tighter" style={{ color: 'var(--text-content)' }}>{weather.city}</span>
+            <span className="text-[10px] font-black tracking-tighter" style={{ color: 'var(--text-content)' }}>{weather.city}</span>
             <div className="flex items-center gap-1">
               <span className="text-xs font-black">{weather.temp}°</span>
               <span className="text-[9px] opacity-60 hidden sm:inline capitalize">{weather.description}</span>

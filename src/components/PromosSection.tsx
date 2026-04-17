@@ -12,7 +12,7 @@ const PromosSection = () => {
       <div className="container mx-auto px-6">
         <div className="flex flex-col items-center text-center mb-20">
            <span className="text-[10px] font-black uppercase tracking-[0.5em] block mb-2" style={{ color: 'var(--text-detail)' }}>Participe</span>
-           <h2 className="text-4xl md:text-6xl font-black tracking-tighter uppercase italic leading-none mb-4" style={{ color: 'var(--text-title)' }}>
+           <h2 className="text-4xl md:text-6xl font-black tracking-tighter italic leading-none mb-4" style={{ color: 'var(--text-title)' }}>
               {theme.labels.promosTitle} <span className="underline underline-offset-8" style={{ color: 'var(--text-detail)' }}>{theme.labels.promosSubtitle}</span>
            </h2>
         </div>
@@ -30,7 +30,7 @@ const PromosSection = () => {
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" 
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-10">
-                   <h3 className="text-3xl font-black text-white uppercase italic tracking-tighter leading-none mb-6">{promo.titulo}</h3>
+                   <h3 className="text-3xl font-black text-white italic tracking-tighter leading-none mb-6">{promo.titulo}</h3>
                    {promo.link && (
                      <a 
                        href={promo.link}
@@ -44,7 +44,7 @@ const PromosSection = () => {
                 </div>
               </div>
               <div className="p-10 border-t border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900">
-                 <h4 className="text-xl font-black text-primary uppercase tracking-tighter truncate italic">{promo.titulo}</h4>
+                 <h4 className="text-xl font-black text-primary tracking-tighter truncate italic">{promo.titulo}</h4>
                  <div className="flex items-center justify-between mt-4">
                     <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Aproveite agora</span>
                     <div className="flex gap-1">

@@ -104,7 +104,7 @@ const PlayerPage = () => {
          <div className="w-24 h-24 bg-white rounded-3xl p-4 mx-auto mb-4 shadow-2xl flex items-center justify-center">
             <img src={siteConfig.logo} alt="Logo" className="w-full h-full object-contain" />
          </div>
-         <h1 className="text-2xl font-black uppercase tracking-tighter italic" style={{ color: 'var(--text-title)' }}>{siteConfig.radioName || "Impacto FM"}</h1>
+         <h1 className="text-2xl font-black tracking-tighter italic" style={{ color: 'var(--text-title)' }}>{siteConfig.radioName || "Impacto FM"}</h1>
          <span className="font-black text-xl italic" style={{ color: 'var(--text-detail)' }}>{siteConfig.radioFreq || "87.9"} FM</span>
       </div>
 
@@ -138,10 +138,10 @@ const PlayerPage = () => {
             <div className={`w-2 h-2 rounded-full ${isPlaying ? 'bg-red-500 animate-pulse' : 'bg-gray-500'}`} />
             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50">Ao Vivo Agora</span>
          </div>
-         <h2 className="text-3xl font-black uppercase tracking-tighter italic leading-none" style={{ color: 'var(--text-title)' }}>
+         <h2 className="text-3xl font-black tracking-tighter italic leading-none" style={{ color: 'var(--text-title)' }}>
             {programaAtual?.programa?.nome || "Impacto Musical"}
          </h2>
-         <p className="font-bold uppercase tracking-widest text-xs italic" style={{ color: 'var(--text-detail)' }}>
+         <p className="font-bold tracking-widest text-xs italic" style={{ color: 'var(--text-detail)' }}>
             Com {programaAtual?.locutor?.nome || "Equipe Impacto"}
          </p>
       </div>
