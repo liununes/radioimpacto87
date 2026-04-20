@@ -13,7 +13,7 @@ const HeroCarousel = () => {
       if (data && data.length > 0) {
         setSlides(data.map(s => ({ 
           image: s.imagem, 
-          title: s.titulo || "Sintonize a melhor programação",
+          title: s.titulo,
           category: "DESTAQUE",
           link: s.link
         })));
@@ -55,45 +55,46 @@ const HeroCarousel = () => {
             i === current ? "opacity-100 scale-100 blur-0" : "opacity-0 scale-105 blur-sm"
           }`}
         >
-          {/* Smooth Gradient Overlay with Image Behind */}
+          {/* Smooth Gradient Overlay with Image Behind - Removed overlay per user request */}
           <div className="absolute inset-0 z-0">
              <img
                src={slide.image}
                alt={slide.title}
                className="w-full h-full object-cover object-[center_right]"
              />
-             <div className="absolute inset-0 bg-gradient-to-r from-[var(--clube-blue)] via-[var(--clube-blue)]/60 to-[var(--clube-blue)]/10" />
           </div>
 
-          {/* Text Content */}
-          <div className="container mx-auto h-full px-12 md:px-20 lg:px-32 flex flex-col justify-center relative z-10">
-            <div className="max-w-4xl space-y-10">
-               <span className="text-[var(--clube-yellow)] font-black uppercase tracking-[0.4em] text-xs underline decoration-2 underline-offset-8">
-                 {slide.category}
-               </span>
-               <h2 className="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-[1.05] tracking-tight drop-shadow-2xl animate-in fade-in slide-in-from-left duration-1000">
-                {slide.title}
-              </h2>
-              <div className="pt-12 flex flex-wrap gap-6 animate-in fade-in slide-in-from-bottom duration-1000">
-                 {slide.link ? (
-                    <a href={slide.link} target="_blank" rel="noopener noreferrer">
+          {/* Text Content - Only show if title exists */}
+          {slide.title && (
+            <div className="container mx-auto h-full px-12 md:px-20 lg:px-32 flex flex-col justify-center relative z-10">
+              <div className="max-w-4xl space-y-10">
+                 <span className="text-[var(--clube-yellow)] font-black uppercase tracking-[0.4em] text-xs underline decoration-2 underline-offset-8">
+                   {slide.category}
+                 </span>
+                 <h2 className="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-[1.05] tracking-tight drop-shadow-2xl animate-in fade-in slide-in-from-left duration-1000">
+                  {slide.title}
+                </h2>
+                <div className="pt-12 flex flex-wrap gap-6 animate-in fade-in slide-in-from-bottom duration-1000">
+                   {slide.link ? (
+                      <a href={slide.link} target="_blank" rel="noopener noreferrer">
+                        <button className="clube-btn-yellow h-14 px-12 text-sm tracking-widest">
+                          {theme.labels.heroReadMore}
+                        </button>
+                      </a>
+                   ) : (
                       <button className="clube-btn-yellow h-14 px-12 text-sm tracking-widest">
                         {theme.labels.heroReadMore}
                       </button>
-                    </a>
-                 ) : (
-                    <button className="clube-btn-yellow h-14 px-12 text-sm tracking-widest">
-                      {theme.labels.heroReadMore}
-                    </button>
-                 )}
-                 <a href="#noticias">
-                   <button className="clube-btn-outline h-14 px-12 text-sm tracking-widest border-2">
-                     {theme.labels.heroMoreNews}
-                   </button>
-                 </a>
+                   )}
+                   <a href="#noticias">
+                     <button className="clube-btn-outline h-14 px-12 text-sm tracking-widest border-2">
+                       {theme.labels.heroMoreNews}
+                     </button>
+                   </a>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       ))}
 
