@@ -71,9 +71,13 @@ const ThemeLoader = () => {
         };
 
         channel
-          .subscribe(async (status) => {
+          .subscribe(async (status, err) => {
             if (status === 'SUBSCRIBED') {
               await trackStatus(currentListening);
+            }
+            if (status === 'CHANNEL_ERROR') {
+              console.warn("Realtime (Online Presence) indisponível. Erro de conexão com o servidor Supabase.");
+              // O SDK do Supabase tentará reconectar automaticamente.
             }
           });
 
