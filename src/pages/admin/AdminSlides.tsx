@@ -32,8 +32,8 @@ const AdminSlides = () => {
   useEffect(() => { fetchSlides(); }, []);
 
   const handleSave = async () => {
-    if (!titulo.trim() || !imagem) {
-      toast.error("Preencha o título e escolha uma imagem.");
+    if (!imagem) {
+      toast.error("Selecione uma imagem para o slide.");
       return;
     }
     setLoading(true);
@@ -101,7 +101,8 @@ const AdminSlides = () => {
         <CardContent className="p-6 space-y-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             <div className="lg:col-span-8 space-y-2">
-              <Label className="text-sm font-semibold">Título / Chamada Curta</Label>
+              <Label className="text-sm font-semibold">Título / Chamada Curta (Opcional)</Label>
+              <p className="text-[11px] text-muted-foreground mt-0.5 mb-2">Se quiser que a imagem apareça sem qualquer texto por cima, deixe em branco.</p>
               <Input value={titulo} onChange={e => setTitulo(e.target.value)} placeholder="Ex: Grande Show de Prêmios Clube" className="h-11 rounded-lg text-base" />
             </div>
 
