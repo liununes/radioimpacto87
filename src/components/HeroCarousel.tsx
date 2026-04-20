@@ -78,25 +78,25 @@ const HeroCarousel = () => {
             </div>
           )}
 
-          {/* Action Buttons - Moved to Top Right per user request */}
-          <div className="absolute top-48 right-8 md:right-16 lg:right-24 z-20 flex flex-col gap-4 animate-in fade-in slide-in-from-right duration-1000">
-             {slide.link ? (
-                <a href={slide.link} target="_blank" rel="noopener noreferrer">
-                  <button className="clube-btn-yellow h-14 px-12 text-sm tracking-widest w-full">
-                    {theme.labels.heroReadMore}
-                  </button>
-                </a>
-             ) : (
-                <button className="clube-btn-yellow h-14 px-12 text-sm tracking-widest w-full">
-                  {theme.labels.heroReadMore}
-                </button>
-             )}
-             <a href="#noticias">
-               <button className="clube-btn-outline h-14 px-12 text-sm tracking-widest border-2 w-full bg-black/20 backdrop-blur-sm">
-                 {theme.labels.heroMoreNews}
-               </button>
-             </a>
-          </div>
+          {/* Action Buttons - Shown only if corresponding links exist */}
+          {(slide.link || theme.showNews) && (
+            <div className="absolute top-48 right-8 md:right-16 lg:right-24 z-20 flex flex-col gap-4 animate-in fade-in slide-in-from-right duration-1000">
+               {slide.link && (
+                  <a href={slide.link} target="_blank" rel="noopener noreferrer">
+                    <button className="clube-btn-yellow h-14 px-12 text-sm tracking-widest w-full">
+                      {theme.labels.heroReadMore}
+                    </button>
+                  </a>
+               )}
+               {theme.showNews && (
+                 <a href="#noticias">
+                   <button className="clube-btn-outline h-14 px-12 text-sm tracking-widest border-2 w-full bg-black/20 backdrop-blur-sm">
+                     {theme.labels.heroMoreNews}
+                   </button>
+                 </a>
+               )}
+            </div>
+          )}
         </div>
       ))}
 
