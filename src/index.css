@@ -338,3 +338,97 @@
   border-color: hsl(var(--border)) !important;
 }
 @media (max-width: 768px) { .admin-view main { padding: 1rem !important; } }
+
+
+/* Identidade visual pública — refinamento de interface */
+.radio-site-shell {
+  --site-surface: #ffffff;
+  --site-surface-soft: #f4f7fb;
+  --site-line: rgba(0, 46, 93, 0.10);
+  background:
+    radial-gradient(ellipse at 12% 0%, rgba(255, 237, 50, 0.07), transparent 28rem),
+    var(--background, #fff);
+}
+.radio-site-shell.dark {
+  --site-surface: #101a2a;
+  --site-surface-soft: #142238;
+  --site-line: rgba(226, 232, 240, 0.10);
+}
+.radio-site-shell > nav.sticky {
+  border-bottom: 1px solid rgba(255,255,255,.12);
+  box-shadow: 0 10px 34px rgba(0, 20, 48, .16);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+}
+.radio-site-shell > nav.sticky .container {
+  max-width: 1440px;
+}
+.radio-site-shell > nav.sticky a:focus-visible,
+.radio-site-shell > nav.sticky button:focus-visible {
+  outline: 2px solid var(--clube-yellow);
+  outline-offset: 4px;
+}
+.radio-site-shell main section[id] {
+  scroll-margin-top: 6rem;
+}
+.radio-site-shell .bottom-player-clube {
+  border-top: 1px solid rgba(0, 46, 93, .12);
+  box-shadow: 0 -12px 38px rgba(0, 25, 55, .13);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+}
+.radio-site-shell.dark .bottom-player-clube {
+  border-top-color: rgba(226,232,240,.12);
+  box-shadow: 0 -12px 38px rgba(0,0,0,.32);
+}
+.radio-site-shell .clube-btn-yellow {
+  border-radius: 999px;
+  letter-spacing: .12em;
+  box-shadow: 0 8px 20px rgba(0, 46, 93, .16);
+}
+.radio-site-shell .clube-btn-yellow:hover {
+  box-shadow: 0 12px 26px rgba(0, 46, 93, .22);
+}
+.radio-site-shell .clube-btn-outline {
+  border-radius: 999px;
+}
+.radio-site-shell .container {
+  width: min(100% - 2rem, 1280px);
+}
+.radio-site-shell .rounded-3xl,
+.radio-site-shell .rounded-\[3rem\] {
+  border-radius: 1.35rem;
+}
+.radio-site-shell .shadow-2xl {
+  box-shadow: 0 18px 48px rgba(15, 35, 60, .12);
+}
+.radio-site-shell.dark .shadow-2xl {
+  box-shadow: 0 18px 48px rgba(0, 0, 0, .28);
+}
+.radio-site-shell .text-gray-400 {
+  color: #64748b;
+}
+.radio-site-shell.dark .text-gray-400 {
+  color: #a8b6c9;
+}
+@media (max-width: 767px) {
+  .radio-site-shell > nav.sticky {
+    padding-top: .7rem !important;
+    padding-bottom: .7rem !important;
+  }
+  .radio-site-shell .bottom-player-clube {
+    min-height: 5.25rem;
+    padding-left: .85rem;
+    padding-right: .85rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .radio-site-shell *,
+  .radio-site-shell *::before,
+  .radio-site-shell *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
