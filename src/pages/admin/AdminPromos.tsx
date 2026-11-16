@@ -78,9 +78,9 @@ const AdminPromos = () => {
               <div key={p.id || idx} className="relative group bg-card border border-border rounded-xl p-6 flex flex-col gap-6 transition-all hover:shadow-md" style={{ opacity: p.ativa ? 1 : 0.6 }}>
                 <div className="grid grid-cols-1 sm:grid-cols-12 gap-8">
                   <div className="sm:col-span-4 space-y-4">
-                    <div className="aspect-[4/5] bg-muted rounded-xl flex items-center justify-center p-1 border border-border shadow-inner relative overflow-hidden group-hover:border-pink-300 transition-all">
+                    <div className={`${p.formato === "9:16" ? "aspect-[9/16]" : "aspect-video"} w-full bg-muted rounded-xl flex items-center justify-center p-1 border border-border shadow-inner relative overflow-hidden group-hover:border-primary/40 transition-all`}>
                       {p.imagem ? (
-                        <img src={p.imagem} alt={p.titulo} className="w-full h-full object-cover rounded-lg transition-transform group-hover:scale-105 duration-500" />
+                        <img src={p.imagem} alt={p.titulo} className="w-full h-full object-contain rounded-lg" />
                       ) : (
                         <Gift className="w-12 h-12 text-muted-foreground/30" />
                       )}
@@ -119,6 +119,23 @@ const AdminPromos = () => {
                   </div>
 
                   <div className="sm:col-span-8 flex flex-col justify-center space-y-6">
+                    <div className="space-y-2">
+                      <Label className="text-sm font-semibold text-foreground">Formato da arte</Label>
+                      <select
+                        value={p.formato || "16:9"}
+                        onChange={e => {
+                          const newPromos = [...(theme.promos || [])];
+                          newPromos[idx] = { ...newPromos[idx], formato: e.target.value as "16:9" | "9:16" };
+                          updatePromos(newPromos);
+                        }}
+                        className="h-11 w-full rounded-lg border border-input bg-background px-3 text-sm font-medium text-foreground"
+                      >
+                        <option value="16:9">Horizontal — 16:9</option>
+                        <option value="9:16">Vertical — 9:16</option>
+                      </select>
+                      <p className="text-xs text-muted-foreground">A prévia se ajusta ao formato escolhido, sem cortar a imagem.</p>
+                    </div>
+
                     <div className="space-y-2">
                       <Label className="text-sm font-semibold text-foreground">Título Chamativo da Promoção</Label>
                       <Input 
@@ -172,7 +189,7 @@ const AdminPromos = () => {
 
             <button 
               onClick={() => {
-                const newPromos = [...(theme.promos || []), { id: crypto.randomUUID(), titulo: "Nova Promoção", imagem: "", link: "", ativa: true }];
+                const newPromos = [...(theme.promos || []), { id: crypto.randomUUID(), titulo: "Nova Promoção", imagem: "", formato: "16:9", link: "", ativa: true }];
                 updatePromos(newPromos);
               }}
               className="border-2 border-dashed border-border rounded-xl flex flex-col items-center justify-center p-12 gap-4 hover:border-pink-300 hover:bg-pink-500/5 transition-all text-muted-foreground hover:text-pink-500 group min-h-[300px]"
