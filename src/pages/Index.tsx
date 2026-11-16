@@ -52,6 +52,7 @@ const Index = () => {
       {theme.showNews && (
         <section id="noticias" className="radio-editorial-section">
           <FeaturedNews news={regularNews} loading={loading} />
+          <RemainingNews news={regularNews} loading={loading} />
 
           {theme.showPedidos && (
             <div className="radio-pedido-wrap">
