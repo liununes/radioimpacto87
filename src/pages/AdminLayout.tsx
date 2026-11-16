@@ -125,33 +125,30 @@ const AdminLayout = () => {
 
   return (
     <SidebarProvider>
-      <div className={`min-h-screen flex w-full admin-view ${isDark ? 'dark bg-slate-950 text-white' : 'bg-gray-50/50'}`}>
+      <div className={`min-h-screen flex w-full admin-view ${isDark ? "dark" : ""}`}>
         <AdminSidebar isDark={isDark} onToggleDark={() => setIsDark(!isDark)} />
         <div className="flex-1 flex flex-col min-h-screen">
           <header 
-            className="h-20 flex items-center justify-between border-b border-gray-100 backdrop-blur-md px-8 sticky top-0 z-50 transition-all duration-500 glass-header"
-            style={{ 
-              background: `linear-gradient(to right, var(--admin-header-grad-start), var(--admin-header-grad-end))`
-            }}
+            className="h-16 md:h-[72px] flex items-center justify-between border-b border-border bg-card/95 backdrop-blur-md px-4 md:px-7 sticky top-0 z-50 transition-colors duration-200"
           >
             <div className="flex items-center gap-6">
               <SidebarTrigger className="text-primary hover:bg-primary/5 p-2 transition-all" />
-              <div className="h-4 w-px bg-gray-200 hidden md:block" />
+              <div className="h-5 w-px bg-border hidden md:block" />
                 <div className="flex flex-col">
-                 <h1 className="text-xl font-bold tracking-tight text-primary">Impacto FM <span className="opacity-70 font-medium">Admin</span></h1>
+                 <h1 className="text-lg font-bold tracking-tight text-foreground">Impacto FM <span className="opacity-70 font-medium">Admin</span></h1>
                  <span className="text-xs font-medium text-muted-foreground mt-0.5">Sistema de Gestão</span>
               </div>
             </div>
             
             <div className="flex items-center gap-8">
-              <div className="hidden lg:flex items-center gap-4 border-r border-gray-100 pr-8">
+              <div className="hidden lg:flex items-center gap-4 border-r border-border pr-6">
                 <div className="flex flex-col items-end">
                   <span className="text-sm font-semibold text-foreground">{user.email?.split('@')[0]}</span>
                   <span className="text-[10px] font-medium text-primary flex items-center gap-1.5 mt-0.5">
                     <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" /> Sessão Ativa
                   </span>
                 </div>
-                <div className="w-10 h-10 bg-primary/5 rounded-full border border-primary/10 flex items-center justify-center font-bold text-primary text-sm">
+                <div className="w-10 h-10 bg-muted rounded-full border border-border flex items-center justify-center font-bold text-primary text-sm">
                   {user.email?.[0].toUpperCase()}
                 </div>
               </div>
@@ -159,14 +156,14 @@ const AdminLayout = () => {
                 variant="ghost" 
                 size="sm" 
                 onClick={signOut} 
-                className="gap-2 h-10 px-4 font-medium text-sm text-red-500 hover:bg-red-50 hover:text-red-600 transition-all rounded-lg"
+                className="gap-2 h-9 px-3 font-medium text-sm text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-all rounded-lg"
               >
                 <LogOut className="w-4 h-4" /> Sair
               </Button>
             </div>
           </header>
-          <main key={location.pathname} className="flex-1 overflow-auto p-12 bg-transparent h-full">
-            <div className="max-w-7xl mx-auto space-y-10 h-full">
+          <main key={location.pathname} className="flex-1 min-w-0 overflow-auto p-4 md:p-7 bg-transparent h-full">
+            <div className="max-w-[1500px] mx-auto space-y-6 md:space-y-8 min-h-full">
               {forbidden ? (
                   <div className="bg-card text-card-foreground p-12 text-center space-y-4 border border-border shadow-sm rounded-xl max-w-lg w-full">
                    <div className="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
