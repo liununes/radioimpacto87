@@ -109,7 +109,6 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[], loading: boo
               Ver todos os conteúdos
               <span aria-hidden="true">→</span>
             </a>
- </Dialog>
         </div>
       </div>
     </div>
