@@ -50,10 +50,10 @@ const Navigation = () => {
     })
     .filter((item, index, items) => {
       const label = item.label.trim().toLocaleLowerCase("pt-BR");
-      const href = item.href.trim().replace(/\\/$/, "").toLocaleLowerCase("pt-BR");
+      const href = item.href.trim().replace(/\/$/, "").toLocaleLowerCase("pt-BR");
       return items.findIndex(candidate =>
         candidate.label.trim().toLocaleLowerCase("pt-BR") === label ||
-        candidate.href.trim().replace(/\\/$/, "").toLocaleLowerCase("pt-BR") === href
+        candidate.href.trim().replace(/\/$/, "").toLocaleLowerCase("pt-BR") === href
       ) === index;
     });
 
