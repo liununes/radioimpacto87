@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { type Slide, getSlides, saveSlide, deleteSlide } from "@/lib/radioStore";
 import { toast } from "sonner";
 
-// Ajusta qualquer imagem ao formato fixo 1920x600, esticando-a para preencher todo o banner.
+// Recorta proporcionalmente ao centro para preencher 1920x600 sem deformar a imagem.
 function fileToBannerBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const objectUrl = URL.createObjectURL(file);
@@ -27,7 +27,24 @@ function fileToBannerBase64(file: File): Promise<string> {
         return;
       }
 
-      context.drawImage(image, 0, 0, width, height);
+      const scale = Math.max(width / image.width, height / image.height);
+      const sourceWidth = width / scale;
+      const sourceHeight = height / scale;
+      const sourceX = (image.width - sourceWidth) / 2;
+      const sourceY = (image.height - sourceHeight) / 2;
+
+      context.drawImage(
+        image,
+        sourceX,
+        sourceY,
+        sourceWidth,
+        sourceHeight,
+        0,
+        0,
+        width,
+        height
+      );
+
       URL.revokeObjectURL(objectUrl);
       resolve(canvas.toDataURL("image/jpeg", 0.9));
     };
@@ -148,13 +165,13 @@ const AdminSlides = () => {
             <div className="lg:col-span-8 space-y-3">
               <div>
                 <Label className="text-sm font-semibold block">Escolha a Imagem</Label>
-                <p className="text-xs text-muted-foreground font-medium mt-1 mb-3">A imagem será ajustada automaticamente para banner 1920x600, preenchendo todo o espaço. Imagens fora dessa proporção serão esticadas (JPG, PNG ou WebP).</p>
+                <p className="text-xs text-muted-foreground font-medium mt-1 mb-3">A imagem será ajustada automaticamente para banner 1920x600, preenchendo todo o espaço sem deformar. Se necessário, as bordas serão cortadas proporcionalmente (JPG, PNG ou WebP).</p>
               </div>
 
               <div className="relative group rounded-xl overflow-hidden border-2 border-dashed bg-muted border-border hover:border-primary/50 hover:bg-muted/80 transition-colors flex flex-col items-center justify-center p-4 min-h-[220px]">
                 {imagem ? (
                   <div className="relative w-full aspect-[16/5] rounded-lg overflow-hidden border border-border shadow-sm">
-                    <img src={imagem} alt="Prévia do banner ajustado" className="w-full h-full object-fill bg-muted" />
+                    <img src={imagem} alt="Prévia do banner ajustado" className="w-full h-full object-cover object-center bg-muted" />
                     <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                       <label className="cursor-pointer bg-background text-foreground hover:bg-muted font-bold text-sm px-4 py-2 rounded-lg flex items-center gap-2 shadow-sm transition-colors">
                         <Upload className="w-4 h-4" /> Trocar Imagem
@@ -193,7 +210,7 @@ const AdminSlides = () => {
         {slides.map(slide => (
           <Card key={slide.id} className="group overflow-hidden rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow bg-card">
             <div className="aspect-[16/5] relative overflow-hidden bg-muted">
-              <img src={slide.imagem} alt={slide.titulo} className="w-full h-full object-fill group-hover:scale-[1.02] transition-transform duration-500" />
+              <img src={slide.imagem} alt={slide.titulo} className="w-full h-full object-cover object-center group-hover:scale-[1.02] transition-transform duration-500" />
               <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
                 <Button size="icon" variant="secondary" className="h-9 w-9 rounded-full shadow-sm" onClick={() => handleEdit(slide)}>
                   <Edit2 className="w-4 h-4" />
