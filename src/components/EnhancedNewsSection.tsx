@@ -76,17 +76,10 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[]; loading: boo
   if (mainNews.length === 0 && !loading) return null;
 
   return (
-    <div className="container mx-auto px-4 py-14 news-editorial-section">
-      <div className="news-editorial-heading">
-        <div>
-          <h2 style={{ color: "var(--plantao-title)" }}>
-            {theme.labels.newsTitle}{" "}
-            <span style={{ color: "var(--plantao-subtitle)", textDecorationColor: "var(--nav-item-active)" }}>
-              {theme.labels.newsSubtitle}
-            </span>
-          </h2>
-          <p>As três principais notícias do dia</p>
-        </div>
+    <div id="conteudos" className="container mx-auto px-4 py-14 news-editorial-section scroll-mt-24">
+      <div className="news-remaining-heading">
+        <h2>CONTEÚDOS</h2>
+        <p>Confira as principais notícias e acesse cada matéria completa.</p>
       </div>
 
       <div className="news-editorial-layout news-feature-layout">
@@ -124,12 +117,13 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[]; loading: boo
             <p>Selecione uma notícia para visualizar</p>
           </div>
           {mainNews.map((item, index) => (
-            <button
-              type="button"
+            <a
               key={item.id}
+              href={item.url || "#conteudos"}
+              target={item.url ? "_blank" : undefined}
+              rel={item.url ? "noopener noreferrer" : undefined}
               className={`news-feature-summary${index === activeIndex ? " is-active" : ""}`}
-              onClick={() => setActiveIndex(index)}
-              aria-pressed={index === activeIndex}
+              aria-current={index === activeIndex ? "true" : undefined}
             >
               {item.imagem && (
                 <span className="news-summary-image-wrap">
@@ -141,10 +135,10 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[]; loading: boo
                 <strong>{item.titulo}</strong>
                 {item.resumo && <span className="news-summary-excerpt">{item.resumo}</span>}
               </span>
-            </button>
+            </a>
           ))}
-          <a href="#conteudos" className="news-all-link">
-            Ver todos os conteúdos <span aria-hidden="true">→</span>
+          <a href="#mais-conteudos" className="news-all-link">
+            Ver mais conteúdos <span aria-hidden="true">→</span>
           </a>
         </aside>
       </div>
@@ -153,15 +147,15 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[]; loading: boo
 };
 
 export const RemainingNews = ({ news, loading, showAll = false }: { news: NewsItem[]; loading: boolean; showAll?: boolean }) => {
-  const remaining = showAll ? news : news.slice(6);
+  const remaining = showAll ? news.slice(3) : news.slice(3, 24);
 
   if (remaining.length === 0 && !loading) return null;
 
   return (
-    <div id="conteudos" className="container mx-auto px-4 py-12 news-remaining-section scroll-mt-24">
+    <div id="mais-conteudos" className="container mx-auto px-4 py-12 news-remaining-section scroll-mt-24">
       <div className="news-remaining-heading">
-        <h2>CONTEÚDOS</h2>
-        <p>Mais notícias e publicações</p>
+        <h2>MAIS NOTÍCIAS</h2>
+        <p>Outras notícias e publicações</p>
       </div>
       <div className="news-remaining-list">
         {remaining.map((item) => (
