@@ -21,12 +21,12 @@ function fileToImageBase64(file: File): Promise<string> {
 }
 
 function getImageExtension(image: string): string {
-  const mime = image.match(/^data:image\\/([a-zA-Z0-9.+-]+);/)?.[1]?.toLowerCase();
+  const mime = image.match(/^data:image\/([a-zA-Z0-9.+-]+);/)?.[1]?.toLowerCase();
   if (mime === "jpeg" || mime === "pjpeg") return "jpg";
   if (mime === "svg+xml") return "svg";
   if (mime && ["png", "webp", "gif", "avif", "bmp"].includes(mime)) return mime;
   const path = image.split("?")[0].split("#")[0];
-  const extension = path.match(/\\.([a-zA-Z0-9]{2,5})$/)?.[1]?.toLowerCase();
+  const extension = path.match(/\.([a-zA-Z0-9]{2,5})$/)?.[1]?.toLowerCase();
   return extension && ["jpg", "jpeg", "png", "webp", "gif", "avif", "bmp", "svg"].includes(extension)
     ? (extension === "jpeg" ? "jpg" : extension)
     : "jpg";
@@ -35,7 +35,7 @@ function getImageExtension(image: string): string {
 function getDownloadName(title: string, image: string): string {
   const safeTitle = title
     .normalize("NFD")
-    .replace(/[\\u0300-\\u036f]/g, "")
+    .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-zA-Z0-9]+/g, "-")
     .replace(/^-|-$/g, "")
     .toLowerCase() || "banner";
