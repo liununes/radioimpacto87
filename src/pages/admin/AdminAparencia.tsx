@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Save, Upload, Palette, Image as ImageIcon, Layout, Type, Smartphone, Globe, Radio, ExternalLink, MapPin, CheckCircle2, Settings, Eye, Heart, Gift, Trash2, Plus, Info } from "lucide-react";
+import { Save, Upload, Palette, Image as ImageIcon, Layout, Type, Smartphone, Globe, Radio, ExternalLink, MapPin, CheckCircle2, Settings, Eye, Heart, Gift, Trash2, Plus, Info, ArrowUp, ArrowDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -74,6 +74,28 @@ const AdminAparencia = () => {
       ...prev,
       labels: { ...prev.labels, [key]: value }
     }));
+  };
+
+  const updateMenuItem = (index: number, field: "label" | "href", value: string) => {
+    const normalized = value.trim().toLocaleLowerCase("pt-BR");
+    const duplicate = (theme.navMenus || []).some((item, i) =>
+      i !== index && item[field].trim().toLocaleLowerCase("pt-BR") === normalized
+    );
+    if (normalized && duplicate) {
+      toast.error(field === "label" ? "Já existe um item com esse nome." : "Esse destino já está cadastrado no menu.");
+      return;
+    }
+    const menus = [...(theme.navMenus || [])];
+    menus[index] = { ...menus[index], [field]: value };
+    updateField("navMenus", menus);
+  };
+
+  const moveMenuItem = (index: number, direction: -1 | 1) => {
+    const menus = [...(theme.navMenus || [])];
+    const target = index + direction;
+    if (target < 0 || target >= menus.length) return;
+    [menus[index], menus[target]] = [menus[target], menus[index]];
+    updateField("navMenus", menus);
   };
 
   const handleSave = async () => {
@@ -352,55 +374,42 @@ const AdminAparencia = () => {
               <CardDescription className="text-sm">Personalize o menu principal superior</CardDescription>
             </CardHeader>
             <CardContent className="p-8 pt-4 space-y-6">
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {(theme.navMenus || []).map((menu, idx) => (
-                  <div key={idx} className="flex items-center gap-4 bg-gray-50 p-6 rounded-none border border-gray-100 hover:bg-white transition-all">
-                    <div className="flex-1 space-y-1.5">
-                      <Label className="text-[9px] font-black uppercase text-gray-400">Rótulo</Label>
-                      <Input 
-                        value={menu.label} 
-                        onChange={e => {
-                          const newMenus = [...(theme.navMenus || [])];
-                          newMenus[idx].label = e.target.value;
-                          setTheme(prev => ({ ...prev, navMenus: newMenus }));
-                        }}
-                        className="h-12 rounded-none bg-white border-gray-100"
-                      />
+                  <div key={`${idx}-${menu.href}`} className="grid grid-cols-1 gap-3 rounded-xl border border-border bg-background p-4 shadow-sm md:grid-cols-[auto_minmax(0,1fr)_minmax(0,1fr)_auto] md:items-end">
+                    <div className="flex items-center gap-2 md:pb-1">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-xs font-bold text-primary">{idx + 1}</span>
+                      <div className="flex flex-col gap-1">
+                        <Button type="button" size="icon" variant="ghost" disabled={idx === 0} onClick={() => moveMenuItem(idx, -1)} className="h-7 w-7" aria-label="Mover item para cima"><ArrowUp className="h-3.5 w-3.5" /></Button>
+                        <Button type="button" size="icon" variant="ghost" disabled={idx === (theme.navMenus || []).length - 1} onClick={() => moveMenuItem(idx, 1)} className="h-7 w-7" aria-label="Mover item para baixo"><ArrowDown className="h-3.5 w-3.5" /></Button>
+                      </div>
                     </div>
-                    <div className="flex-1 space-y-1.5">
-                      <Label className="text-[9px] font-black uppercase text-gray-400">Link / Destino</Label>
-                      <Input 
-                        value={menu.href}
-                        onChange={e => {
-                          const newMenus = [...(theme.navMenus || [])];
-                          newMenus[idx].href = e.target.value;
-                          setTheme(prev => ({ ...prev, navMenus: newMenus }));
-                        }}
-                        className="h-12 rounded-none bg-white border-gray-100"
-                      />
+                    <div className="min-w-0 space-y-1.5">
+                      <Label className="text-xs font-semibold text-foreground">Nome exibido</Label>
+                      <Input value={menu.label} onChange={e => updateMenuItem(idx, "label", e.target.value)} className="h-10 rounded-lg" placeholder="Ex.: Notícias" />
                     </div>
-                    <Button 
-                      variant="destructive" 
-                      className="mt-6 h-12 w-12 rounded-none p-0"
-                      onClick={() => {
-                        const newMenus = (theme.navMenus || []).filter((_, i) => i !== idx);
-                        setTheme(prev => ({ ...prev, navMenus: newMenus }));
-                      }}
-                    >
-                      <Trash2 className="w-4 h-4" />
+                    <div className="min-w-0 space-y-1.5">
+                      <Label className="text-xs font-semibold text-foreground">Destino do link</Label>
+                      <Input value={menu.href} onChange={e => updateMenuItem(idx, "href", e.target.value)} className="h-10 rounded-lg font-mono text-sm" placeholder="Ex.: #noticias ou /programacao" />
+                    </div>
+                    <Button type="button" variant="ghost" onClick={() => updateField("navMenus", (theme.navMenus || []).filter((_, i) => i !== idx))} className="h-10 w-full rounded-lg text-destructive hover:bg-destructive/10 hover:text-destructive md:w-10" aria-label={`Remover ${menu.label}`}>
+                      <Trash2 className="h-4 w-4" /><span className="md:hidden">Remover item</span>
                     </Button>
                   </div>
                 ))}
               </div>
-              <Button 
-                onClick={() => {
-                  const newMenus = [...(theme.navMenus || []), { label: "Novo Link", href: "#" }];
-                  setTheme(prev => ({ ...prev, navMenus: newMenus }));
-                }}
-                className="w-full h-14 rounded-none border-2 border-dashed border-gray-200 text-slate-700 hover:text-primary hover:border-primary/50 bg-transparent gap-2 font-bold uppercase text-[10px] tracking-widest"
-              >
-                <Plus className="w-4 h-4" /> Adicionar Novo Item
-              </Button>
+              <div className="flex flex-col gap-3 border-t border-border pt-5 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-xs leading-relaxed text-muted-foreground">Evite repetir nomes ou destinos. Use as setas para definir a ordem em que os links aparecem no site.</p>
+                <Button type="button" variant="outline" onClick={() => {
+                  const menus = theme.navMenus || [];
+                  let suffix = menus.length + 1;
+                  let label = "Novo Link";
+                  while (menus.some(item => item.label.trim().toLocaleLowerCase("pt-BR") === label.toLocaleLowerCase("pt-BR"))) label = `Novo Link ${suffix++}`;
+                  updateField("navMenus", [...menus, { label, href: `#novo-link-${suffix}` }]);
+                }} className="h-10 rounded-lg gap-2">
+                  <Plus className="h-4 w-4" /> Adicionar item
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
