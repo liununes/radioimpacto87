@@ -283,6 +283,7 @@
   --muted: 220 20% 94%; --muted-foreground: 218 12% 43%;
   --border: 220 18% 88%; --input: 220 18% 86%;
   --primary: 216 75% 38%; --primary-foreground: 0 0% 100%;
+  --secondary: 216 28% 93%; --secondary-foreground: 216 55% 24%;
   --accent: 216 60% 95%; --accent-foreground: 216 75% 30%;
   --ring: 216 75% 48%;
   background: hsl(var(--background)); color: hsl(var(--foreground)); min-height: 100vh;
@@ -294,6 +295,7 @@
   --muted: 220 27% 17%; --muted-foreground: 216 16% 70%;
   --border: 220 24% 23%; --input: 220 24% 26%;
   --primary: 215 90% 68%; --primary-foreground: 222 42% 10%;
+  --secondary: 220 24% 19%; --secondary-foreground: 214 28% 91%;
   --accent: 215 35% 19%; --accent-foreground: 214 90% 85%;
   --ring: 215 90% 68%;
   background: hsl(var(--background)); color: hsl(var(--foreground));
