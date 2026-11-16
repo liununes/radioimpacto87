@@ -159,7 +159,7 @@ export function AdminSidebar({ isDark, onToggleDark }: AdminSidebarProps) {
               </SidebarMenuButton>
            </SidebarMenuItem>
            <SidebarMenuItem>
-              <SidebarMenuButton asChild className="h-10 rounded-lg text-white/60 hover:text-[var(--admin-yellow)] hover:bg-white/5 transition-colors">
+              <SidebarMenuButton asChild className="h-10 rounded-lg text-slate-300 hover:text-white hover:bg-white/[0.07] transition-colors">
                 <NavLink to="/" className="flex items-center gap-3 px-3">
                   <ExternalLink className="h-4 w-4" />
                   {!collapsed && <span className="text-sm font-medium">Visualizar Site</span>}
