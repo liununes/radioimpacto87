@@ -1817,6 +1817,9 @@
   cursor: pointer;
   transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
 }
+.radio-site-shell a.news-feature-summary {
+  text-decoration: none;
+}
 .radio-site-shell .news-feature-summary:hover {
   transform: translateY(-1px);
   border-color: rgba(0,84,154,.42);
