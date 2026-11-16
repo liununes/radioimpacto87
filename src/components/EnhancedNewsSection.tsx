@@ -24,7 +24,7 @@ const openNews = (url: string | null) => {
   if (url) window.open(url, "_blank", "noopener,noreferrer");
 };
 
-const NewsTextItem = ({ item, index }: { item: NewsItem; index: number }) => (
+const NewsTextItem = ({ item }: { item: NewsItem }) => (
   <article
     className="news-text-item"
     onClick={() => openNews(item.url)}
@@ -70,8 +70,8 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[]; loading: boo
 
       <div className="news-editorial-layout">
         <section className="news-primary-list" aria-label="Três principais notícias">
-          {mainNews.map((item, index) => (
-            <NewsTextItem key={item.id} item={item} index={index} />
+          {mainNews.map((item) => (
+            <NewsTextItem key={item.id} item={item} />
           ))}
           {loading && mainNews.length === 0 && <p className="news-loading">Carregando notícias...</p>}
         </section>
@@ -82,7 +82,7 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[]; loading: boo
             <p>Outros destaques da Impacto FM</p>
           </div>
           {moreNews.length > 0 ? (
-            moreNews.map((item, index) => <NewsTextItem key={item.id} item={item} index={index} />)
+            moreNews.map((item) => <NewsTextItem key={item.id} item={item} />)
           ) : (
             <p className="news-more-empty">Confira outros conteúdos publicados pela rádio.</p>
           )}
@@ -107,8 +107,8 @@ export const RemainingNews = ({ news, loading, showAll = false }: { news: NewsIt
         <p>Mais notícias e publicações</p>
       </div>
       <div className="news-remaining-list">
-        {remaining.map((item, index) => (
-          <NewsTextItem key={item.id} item={item} index={index} />
+        {remaining.map((item) => (
+          <NewsTextItem key={item.id} item={item} />
         ))}
       </div>
     </div>
