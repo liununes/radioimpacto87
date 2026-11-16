@@ -741,10 +741,6 @@
 .radio-site-shell.dark #galeria {
   background: #0d1727 !important;
 }
-.radio-site-shell.dark #contato .group\/item > div:first-child {
-  background: #1b2b42;
-  border-color: rgba(226,232,240,.12);
-}
 @media (min-width: 1024px) {
   .radio-main-navigation .container {
     padding-left: 2rem;
@@ -904,10 +900,6 @@
 .dark .radio-site-shell #galeria {
   background: #0d1727 !important;
 }
-.dark .radio-site-shell #contato .group\\/item > div:first-child {
-  background: #1b2b42;
-  border-color: rgba(226,232,240,.12);
-}
 .dark .radio-site-shell .radio-music-section .container > div > div:last-child > div {
   background: #142238;
   border-color: rgba(226,232,240,.1);
@@ -1018,10 +1010,7 @@
   }
 }
 
-.dark .radio-site-shell #contato .group\\/item > div:first-child {
-  background: #1b2b42;
-  border-color: rgba(226,232,240,.12);
-}
+
 
 .dark .radio-site-shell #contato .group\/item > div:first-child {
   background: #1b2b42;
