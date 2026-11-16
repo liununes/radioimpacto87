@@ -20,6 +20,24 @@ function fileToImageBase64(file: File): Promise<string> {
   });
 }
 
+function readImageDimensions(src: string): Promise<{ width: number; height: number }> {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => resolve({ width: image.naturalWidth, height: image.naturalHeight });
+    image.onerror = () => reject(new Error("Não foi possível identificar as dimensões da imagem."));
+    image.src = src;
+  });
+}
+
+function getGreatestCommonDivisor(a: number, b: number): number {
+  return b === 0 ? a : getGreatestCommonDivisor(b, a % b);
+}
+
+function getImageRatio(width: number, height: number): string {
+  const divisor = getGreatestCommonDivisor(width, height);
+  return `${width / divisor}:${height / divisor}`;
+}
+
 function getImageExtension(image: string): string {
   const mime = image.match(/^data:image\/([a-zA-Z0-9.+-]+);/)?.[1]?.toLowerCase();
   if (mime === "jpeg" || mime === "pjpeg") return "jpg";
@@ -46,6 +64,7 @@ const AdminSlides = () => {
   const [slides, setSlides] = useState<Slide[]>([]);
   const [titulo, setTitulo] = useState("");
   const [imagem, setImagem] = useState("");
+  const [dimensoesImagem, setDimensoesImagem] = useState<{ width: number; height: number } | null>(null);
   const [link, setLink] = useState("");
   const [editId, setEditId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -84,6 +103,8 @@ const AdminSlides = () => {
     setEditId(slide.id);
     setTitulo(slide.titulo);
     setImagem(slide.imagem);
+    setDimensoesImagem(null);
+    readImageDimensions(slide.imagem).then(setDimensoesImagem).catch(() => setDimensoesImagem(null));
     setLink(slide.link || "");
   };
 
@@ -102,15 +123,21 @@ const AdminSlides = () => {
     setEditId(null);
     setTitulo("");
     setImagem("");
+    setDimensoesImagem(null);
     setLink("");
   };
 
   const handleImageChange = async (file?: File) => {
     if (!file) return;
     try {
-      setImagem(await fileToImageBase64(file));
+      const imageData = await fileToImageBase64(file);
+      setImagem(imageData);
+      setDimensoesImagem(null);
+      const dimensions = await readImageDimensions(imageData);
+      setDimensoesImagem(dimensions);
     } catch {
-      toast.error("Não foi possível ajustar essa imagem. Tente outro arquivo.");
+      setDimensoesImagem(null);
+      toast.error("Não foi possível ler as dimensões dessa imagem. Tente outro arquivo.");
     }
   };
 
@@ -149,7 +176,21 @@ const AdminSlides = () => {
             <div className="lg:col-span-8 space-y-3">
               <div>
                 <Label className="text-sm font-semibold block">Escolha a Imagem</Label>
-                <p className="text-xs text-muted-foreground font-medium mt-1 mb-3">O site ajusta automaticamente a área do slide à proporção original da imagem. Você pode enviar a arte no tamanho que criou: ela será exibida inteira, sem cortes ou distorções.</p>
+                <div className="text-xs text-muted-foreground font-medium mt-1 mb-3 space-y-1">
+                  <p>O site adapta automaticamente a área do slide à proporção da imagem enviada. A arte é exibida inteira, sem cortes e sem distorção.</p>
+                  {dimensoesImagem ? (
+                    <p className="font-semibold text-foreground">
+                      Dimensão da imagem: {dimensoesImagem.width} × {dimensoesImagem.height} px · Proporção: {getImageRatio(dimensoesImagem.width, dimensoesImagem.height)}.
+                      <span className="block text-muted-foreground font-medium">Dica para criar outras artes: mantenha essa proporção. Tamanho de referência: {(() => {
+                        const recommendedWidth = 1920;
+                        const recommendedHeight = Math.round(recommendedWidth * dimensoesImagem.height / dimensoesImagem.width);
+                        return `${recommendedWidth} × ${recommendedHeight} px`;
+                      })()}.</span>
+                    </p>
+                  ) : (
+                    <p className="font-semibold text-foreground">Dica de dimensão: selecione uma imagem para mostrar as medidas exatas em pixels e a proporção correta para criar outras artes. O tamanho do slide acompanha a imagem enviada.</p>
+                  )}
+                </div>
               </div>
 
               <div className="relative group rounded-xl overflow-hidden border-2 border-dashed bg-muted border-border hover:border-primary/50 hover:bg-muted/80 transition-colors flex flex-col items-center justify-center p-4 min-h-[220px]">
