@@ -91,7 +91,7 @@ const Navigation = () => {
 
   return (
     <nav 
-      className={`sticky top-0 left-0 right-0 z-[100] w-full transition-all duration-700 ${isScrolled ? "py-3 shadow-2xl backdrop-blur-xl" : "py-6 shadow-lg backdrop-blur-md"}`}
+      className={`radio-main-navigation sticky top-0 left-0 right-0 z-[100] w-full transition-all duration-500 ${isScrolled ? "py-2.5 shadow-xl backdrop-blur-xl" : "py-4 shadow-md backdrop-blur-md"}`}
       style={{
         background: `linear-gradient(to right, var(--header-grad-start), var(--header-grad-end))`,
         opacity: isScrolled ? 0.95 : 0.9
