@@ -5,6 +5,7 @@ import { useTheme } from "@/hooks/useTheme";
 const HeroCarousel = () => {
   const [slides, setSlides] = useState<{ image: string; title: string; category?: string; link?: string }[]>([]);
   const [current, setCurrent] = useState(0);
+  const [imageRatios, setImageRatios] = useState<Record<string, string>>({});
   const theme = useTheme();
 
   useEffect(() => {
@@ -45,8 +46,11 @@ const HeroCarousel = () => {
     );
   }
 
+  const currentImage = slides[current]?.image;
+  const currentRatio = currentImage ? imageRatios[currentImage] || "16 / 5" : "16 / 5";
+
   return (
-    <section id="home" className="relative h-[90vh] md:h-[85vh] min-h-[700px] overflow-hidden bg-[var(--clube-blue)]">
+    <section id="home" style={{ aspectRatio: currentRatio }} className="relative w-full overflow-hidden bg-[var(--clube-blue)]">
       {slides.map((slide, i) => (
         <div
           key={i}
@@ -57,7 +61,16 @@ const HeroCarousel = () => {
           <img
             src={slide.image}
             alt={slide.title || "Imagem de destaque"}
-            className="absolute inset-0 h-full w-full object-cover object-center"
+            className="absolute inset-0 h-full w-full object-contain object-center"
+            onLoad={(event) => {
+              const image = event.currentTarget;
+              if (image.naturalWidth > 0 && image.naturalHeight > 0) {
+                setImageRatios((previous) => ({
+                  ...previous,
+                  [slide.image]: `${image.naturalWidth} / ${image.naturalHeight}`,
+                }));
+              }
+            }}
             loading={i === 0 ? "eager" : "lazy"}
             decoding="async"
           />
@@ -96,7 +109,7 @@ const HeroCarousel = () => {
         </div>
       ))}
 
-      <div className="absolute bottom-40 md:bottom-32 left-0 right-0 z-20">
+      <div className="absolute bottom-4 md:bottom-6 left-0 right-0 z-20">
         <div className="container mx-auto px-6 md:px-20 lg:px-32 flex gap-3">
           {slides.map((_, i) => (
             <button
