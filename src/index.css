@@ -211,10 +211,6 @@
   opacity: 1;
 }
 
-/* Cantos retos no painel administrativo */
-.admin-view * {
-  border-radius: 0 !important;
-}
 
 @layer components {
   .clube-btn-yellow {
@@ -278,3 +274,70 @@
     background: rgba(15, 23, 42, 0.92);
   }
 }
+
+/* Sistema visual unificado do painel administrativo */
+.admin-view {
+  --background: 220 25% 97%; --foreground: 222 35% 15%;
+  --card: 0 0% 100%; --card-foreground: 222 35% 15%;
+  --popover: 0 0% 100%; --popover-foreground: 222 35% 15%;
+  --muted: 220 20% 94%; --muted-foreground: 218 12% 43%;
+  --border: 220 18% 88%; --input: 220 18% 86%;
+  --primary: 216 75% 38%; --primary-foreground: 0 0% 100%;
+  --accent: 216 60% 95%; --accent-foreground: 216 75% 30%;
+  --ring: 216 75% 48%;
+  background: hsl(var(--background)); color: hsl(var(--foreground)); min-height: 100vh;
+}
+.admin-view.dark {
+  --background: 222 42% 8%; --foreground: 214 28% 93%;
+  --card: 222 34% 12%; --card-foreground: 214 28% 93%;
+  --popover: 222 34% 13%; --popover-foreground: 214 28% 93%;
+  --muted: 220 27% 17%; --muted-foreground: 216 16% 70%;
+  --border: 220 24% 23%; --input: 220 24% 26%;
+  --primary: 215 90% 68%; --primary-foreground: 222 42% 10%;
+  --accent: 215 35% 19%; --accent-foreground: 214 90% 85%;
+  --ring: 215 90% 68%;
+  background: hsl(var(--background)); color: hsl(var(--foreground));
+}
+.admin-view h1,.admin-view h2,.admin-view h3,.admin-view h4,.admin-view h5,.admin-view h6 {
+  color: hsl(var(--foreground)); letter-spacing: -0.025em;
+}
+.admin-view .text-primary { color: hsl(var(--primary)); }
+.admin-view .text-muted-foreground { color: hsl(var(--muted-foreground)); }
+.admin-view .bg-card { background-color: hsl(var(--card)); }
+.admin-view .border-border { border-color: hsl(var(--border)); }
+.admin-view .bg-background { background-color: hsl(var(--background)); }
+.admin-view input,.admin-view textarea,.admin-view select,.admin-view [role="combobox"] {
+  background-color: hsl(var(--card)); color: hsl(var(--foreground)); border-color: hsl(var(--input));
+}
+.admin-view input:focus,.admin-view textarea:focus,.admin-view select:focus,.admin-view [role="combobox"]:focus-visible {
+  outline: 2px solid hsl(var(--ring) / 0.28); outline-offset: 1px;
+}
+.admin-view input::placeholder,.admin-view textarea::placeholder { color: hsl(var(--muted-foreground) / 0.78); }
+.admin-view .bg-gray-50,.admin-view .bg-slate-50 { background-color: hsl(var(--muted)); }
+.admin-view .dark\\:bg-slate-950 { background-color: hsl(var(--background)); }
+.admin-view .shadow-sm,.admin-view .shadow-md {
+  box-shadow: 0 1px 3px hsl(222 35% 10% / 0.06), 0 1px 2px hsl(222 35% 10% / 0.04);
+}
+.admin-view.dark .shadow-sm,.admin-view.dark .shadow-md {
+  box-shadow: 0 1px 3px hsl(0 0% 0% / 0.22), 0 8px 24px hsl(0 0% 0% / 0.12);
+}
+.admin-view .bg-primary\\/5 { background-color: hsl(var(--primary) / 0.07); }
+.admin-view .bg-primary\\/10 { background-color: hsl(var(--primary) / 0.11); }
+.admin-view .border-primary\\/10 { border-color: hsl(var(--primary) / 0.18); }
+.admin-view .border-primary\\/20 { border-color: hsl(var(--primary) / 0.25); }
+.admin-view.dark .bg-white,.admin-view.dark .bg-gray-50,.admin-view.dark .bg-gray-100,
+.admin-view.dark .bg-slate-50,.admin-view.dark .bg-slate-100 {
+  background-color: hsl(var(--card)) !important; color: hsl(var(--foreground)) !important;
+}
+.admin-view.dark .text-black,.admin-view.dark .text-gray-900,.admin-view.dark .text-gray-800,
+.admin-view.dark .text-gray-700,.admin-view.dark .text-slate-900,.admin-view.dark .text-slate-800,
+.admin-view.dark .text-slate-700 { color: hsl(var(--foreground)) !important; }
+.admin-view.dark .text-gray-600,.admin-view.dark .text-gray-500,.admin-view.dark .text-gray-400,
+.admin-view.dark .text-slate-600,.admin-view.dark .text-slate-500,.admin-view.dark .text-slate-400 {
+  color: hsl(var(--muted-foreground)) !important;
+}
+.admin-view.dark .border-gray-100,.admin-view.dark .border-gray-200,
+.admin-view.dark .border-slate-100,.admin-view.dark .border-slate-200 {
+  border-color: hsl(var(--border)) !important;
+}
+@media (max-width: 768px) { .admin-view main { padding: 1rem !important; } }
