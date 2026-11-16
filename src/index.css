@@ -6,128 +6,202 @@
 
 @layer base {
   :root {
-    --background: 220 20% 14%;
-    --foreground: 0 0% 98%;
-
-    --card: 220 20% 18%;
-    --card-foreground: 0 0% 98%;
-
-    --popover: 220 20% 18%;
-    --popover-foreground: 0 0% 98%;
-
-    --primary: 217 91% 60%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 45 93% 58%;
-    --secondary-foreground: 220 20% 10%;
-
-    --muted: 220 15% 25%;
-    --muted-foreground: 220 10% 60%;
-
-    --accent: 217 91% 60%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 220 15% 25%;
-    --input: 220 15% 25%;
-    --ring: 217 91% 60%;
-
-    --radius: 0.75rem;
-
+    color-scheme: light;
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
-    --primary: 211 100% 18%; /* Deep Blue: #002e5d */
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 211 100% 18%;
     --primary-foreground: 210 40% 98%;
-    --secondary: 48 100% 50%; /* Yellow: #ffed32 */
-    --secondary-foreground: 0 0% 0%;
-    --accent: 33 100% 50%; /* Orange: #ff8c00 */
-    --accent-foreground: 210 40% 98%;
-    
+    --secondary: 48 100% 50%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 40%;
+    --accent: 33 100% 50%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 88%;
+    --input: 214.3 31.8% 88%;
+    --ring: 211 100% 35%;
+    --radius: 0.5rem;
+
     --clube-blue: #002e5d;
     --clube-yellow: #ffed32;
     --clube-red: #ff8c00;
     --clube-gray: #f2f2f2;
-    
     --header-bg: var(--clube-blue);
     --player-bg: #ffffff;
-    --radius: 0.5rem;
+
+    --text-primary: #002e5d;
+    --text-secondary: #ffed32;
+    --text-muted: #64748b;
+    --text-accent: #c65d00;
+    --text-title: #002e5d;
+    --text-content: #334155;
+    --text-detail: #475569;
+
+    --primary-gradient: linear-gradient(135deg, #002e5d, #0757a6);
+    --highlight-btn-bg: #ffed32;
+    --highlight-btn-text: #002e5d;
+    --highlight-btn-hover: #ffdb00;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    color-scheme: dark;
+    --background: 222 47% 7%;
+    --foreground: 210 40% 96%;
+    --card: 222 40% 11%;
+    --card-foreground: 210 40% 96%;
+    --popover: 222 40% 11%;
+    --popover-foreground: 210 40% 96%;
+    --muted: 217 32% 17%;
+    --muted-foreground: 215 20% 72%;
+    --border: 217 25% 24%;
+    --input: 217 25% 24%;
+    --ring: 217 91% 60%;
+    --text-title: #f1f5f9;
+    --text-content: #dbe4ef;
+    --text-muted: #a8b4c5;
+    --text-detail: #cbd5e1;
   }
 
-  .admin-view {
-    --background: 0 0% 100% !important;
-    --foreground: 222.2 84% 4.9% !important;
-    --muted: 210 40% 96.1% !important;
-    --muted-foreground: 215.4 16.3% 46.9% !important;
-    --border: 214.3 31.8% 91.4% !important;
-    --input: 214.3 31.8% 91.4% !important;
-    --card: 0 0% 100% !important;
-    --card-foreground: 222.2 84% 4.9% !important;
-    --primary: 211 100% 18% !important;
-    --accent: 33 100% 50% !important;
-  }
-
-  .admin-view.dark {
-    --background: 222 47% 11% !important;
-    --foreground: 213 27% 84% !important;
-    --muted: 223 47% 11% !important;
-    --muted-foreground: 215 20.2% 65.1% !important;
-    --border: 217 32% 17% !important;
-    --input: 217 32% 17% !important;
-    --card: 222 47% 11% !important;
-    --card-foreground: 213 27% 84% !important;
-    --primary: 217.2 91.2% 59.8% !important;
-    --accent: 48 100% 50% !important;
-    
-    background-color: #020617 !important;
-    color: #f1f5f9 !important;
-  }
-
-  .admin-view.dark .bg-white {
-    background-color: #0f172a !important;
-    color: #f1f5f9 !important;
-  }
-
-  .admin-view.dark .text-slate-900 {
-    color: #f1f5f9 !important;
-  }
-
-  .admin-view.dark .border-gray-100 {
-    border-color: #1e293b !important;
-  }
-
-  /* FORÇAR PADRÃO INDUSTRIAL (CANTOS RETOS) NO ADMIN */
-  .admin-view * {
-    border-radius: 0 !important;
-  }
-}
-
-@layer base {
   * {
     @apply border-border;
   }
 
+  html {
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+  }
+
   body {
     @apply bg-background text-foreground;
+    margin: 0;
     font-family: 'Inter', system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
     color: var(--text-content);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-bold tracking-tight;
     color: var(--text-title);
+    line-height: 1.25;
+  }
+
+  p, li, label, input, textarea, select, button {
+    line-height: 1.5;
   }
 
   .text-dynamic-primary { color: var(--text-primary); }
   .text-dynamic-secondary { color: var(--text-secondary); }
   .text-dynamic-muted { color: var(--text-muted); }
   .text-dynamic-accent { color: var(--text-accent); }
+}
+
+.admin-view {
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 40%;
+  --border: 214.3 31.8% 88%;
+  --input: 214.3 31.8% 88%;
+  --primary: 211 100% 18%;
+  --primary-foreground: 210 40% 98%;
+  --accent: 33 100% 50%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+  --text-title: #002e5d;
+  --text-content: #334155;
+  --text-muted: #64748b;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+.admin-view.dark {
+  color-scheme: dark;
+  --background: 222 47% 8%;
+  --foreground: 210 40% 96%;
+  --card: 222 40% 12%;
+  --card-foreground: 210 40% 96%;
+  --popover: 222 40% 12%;
+  --popover-foreground: 210 40% 96%;
+  --muted: 217 32% 17%;
+  --muted-foreground: 215 20% 76%;
+  --border: 217 25% 25%;
+  --input: 217 25% 25%;
+  --primary: 217.2 91.2% 62%;
+  --primary-foreground: 222 47% 8%;
+  --accent: 48 100% 50%;
+  --accent-foreground: 222 47% 8%;
+  --ring: 217 91% 60%;
+  --text-title: #f8fafc;
+  --text-content: #e2e8f0;
+  --text-muted: #b6c2d2;
+  background-color: #0b1220;
+  color: #e2e8f0;
+}
+
+.admin-view.dark .bg-white,
+.admin-view.dark .bg-gray-50,
+.admin-view.dark .bg-gray-100,
+.admin-view.dark .bg-slate-50,
+.admin-view.dark .bg-slate-100 {
+  background-color: #151f30 !important;
+  color: #e2e8f0 !important;
+}
+
+.admin-view.dark .text-black,
+.admin-view.dark .text-gray-900,
+.admin-view.dark .text-gray-800,
+.admin-view.dark .text-gray-700,
+.admin-view.dark .text-slate-900,
+.admin-view.dark .text-slate-800,
+.admin-view.dark .text-slate-700 {
+  color: #f1f5f9 !important;
+}
+
+.admin-view.dark .text-gray-600,
+.admin-view.dark .text-gray-500,
+.admin-view.dark .text-gray-400,
+.admin-view.dark .text-slate-600,
+.admin-view.dark .text-slate-500,
+.admin-view.dark .text-slate-400 {
+  color: #b6c2d2 !important;
+}
+
+.admin-view.dark .border-gray-50,
+.admin-view.dark .border-gray-100,
+.admin-view.dark .border-gray-200,
+.admin-view.dark .border-slate-100,
+.admin-view.dark .border-slate-200 {
+  border-color: #293548 !important;
+}
+
+.admin-view.dark input,
+.admin-view.dark textarea,
+.admin-view.dark select {
+  color: #f1f5f9;
+}
+
+.admin-view.dark input::placeholder,
+.admin-view.dark textarea::placeholder {
+  color: #94a3b8;
+  opacity: 1;
+}
+
+/* Cantos retos no painel administrativo */
+.admin-view * {
+  border-radius: 0 !important;
 }
 
 @layer components {
@@ -156,7 +230,7 @@
   }
 
   .clube-btn-white-outline {
-    @apply border border-gray-300 text-primary font-bold px-6 py-2.5 rounded-lg hover:bg-gray-50 transition-all uppercase text-[10px] tracking-wider;
+    @apply border border-gray-300 text-primary font-bold px-6 py-2.5 rounded-lg hover:bg-gray-50 transition-all uppercase text-[10px] tracking-widest;
   }
 
   .top-nav-clube {
@@ -183,8 +257,12 @@
   }
 
   .glass-header {
-    background: rgba(255, 255, 255, 0.8) !important;
+    background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(12px) saturate(180%);
     -webkit-backdrop-filter: blur(12px) saturate(180%);
+  }
+
+  .dark .glass-header {
+    background: rgba(15, 23, 42, 0.92);
   }
 }
