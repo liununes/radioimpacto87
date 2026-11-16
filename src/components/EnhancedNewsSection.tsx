@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useTheme } from "@/hooks/useTheme";
@@ -109,6 +109,7 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[], loading: boo
               Ver todos os conteúdos
               <span aria-hidden="true">→</span>
             </a>
+          </div>
         </div>
       </div>
     </div>
