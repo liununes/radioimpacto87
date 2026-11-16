@@ -155,21 +155,21 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[]; loading: boo
       </div>
 
       <Dialog open={!!selectedNews} onOpenChange={(open) => { if (!open) setSelectedNews(null); }}>
-        <DialogContent className="news-full-dialog max-w-4xl">
+        <DialogContent className="news-full-dialog max-w-3xl w-[calc(100%-2rem)] max-h-[82dvh]">
           {selectedNews && (
             <>
               <DialogHeader>
                 <p className="text-xs font-bold uppercase tracking-[.14em] text-amber-700 dark:text-amber-300">
                   {selectedNews.categoria || "Notícia"} · {new Date(selectedNews.data_postagem || Date.now()).toLocaleDateString("pt-BR")}
                 </p>
-                <DialogTitle className="text-2xl sm:text-3xl">{selectedNews.titulo}</DialogTitle>
+                <DialogTitle className="news-full-title text-xl sm:text-2xl text-slate-900 dark:text-slate-50">{selectedNews.titulo}</DialogTitle>
                 <DialogDescription>{selectedNews.resumo || "Leia a matéria completa."}</DialogDescription>
               </DialogHeader>
-              <div className="px-6 py-6">
+              <div className="news-full-body px-5 py-5 sm:px-6 sm:py-6">
                 {selectedNews.imagem && (
-                  <img src={selectedNews.imagem} alt={selectedNews.titulo} className="mb-6 max-h-[420px] w-full rounded-xl object-cover" />
+                  <img src={selectedNews.imagem} alt={selectedNews.titulo} className="mb-5 max-h-[300px] w-full rounded-xl object-cover" />
                 )}
-                <div className="whitespace-pre-wrap break-words text-base leading-8 text-slate-700 dark:text-slate-200">
+                <div className="news-full-copy whitespace-pre-wrap break-words text-[0.95rem] leading-7 text-slate-700 dark:text-slate-200">
                   {selectedNews.conteudo?.trim() || selectedNews.resumo || "O conteúdo completo desta notícia ainda não foi informado."}
                 </div>
                 {selectedNews.fonte && (
