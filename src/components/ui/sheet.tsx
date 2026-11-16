@@ -29,7 +29,7 @@ const SheetOverlay = React.forwardRef<
 SheetOverlay.displayName = SheetPrimitive.Overlay.displayName;
 
 const sheetVariants = cva(
-  "fixed z-50 flex flex-col gap-0 overflow-y-auto border-border bg-card p-0 text-card-foreground shadow-2xl transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500",
+  "fixed z-50 flex flex-col gap-0 overflow-y-auto border border-slate-200/90 bg-[hsl(216,32%,97%)] p-0 text-card-foreground shadow-[0_24px_70px_rgba(15,23,42,0.28)] ring-1 ring-slate-900/[0.04] dark:border-slate-700/90 dark:bg-[hsl(222,34%,13%)] transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500",
   {
     variants: {
       side: {
@@ -68,12 +68,12 @@ const SheetContent = React.forwardRef<React.ElementRef<typeof SheetPrimitive.Con
 SheetContent.displayName = SheetPrimitive.Content.displayName;
 
 const SheetHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("flex flex-col space-y-2 border-b border-border bg-muted/30 px-6 py-5 pr-16 text-left", className)} {...props} />
+  <div className={cn("flex flex-col space-y-2 border-b border-slate-200/90 bg-[hsl(216,28%,93%)] px-6 py-5 dark:border-slate-700/90 dark:bg-[hsl(222,30%,16%)] pr-16 text-left", className)} {...props} />
 );
 SheetHeader.displayName = "SheetHeader";
 
 const SheetFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("mt-auto flex flex-col-reverse gap-2 border-t border-border bg-muted/20 px-6 py-4 sm:flex-row sm:justify-end sm:gap-3", className)} {...props} />
+  <div className={cn("mt-auto flex flex-col-reverse gap-2 border-t border-slate-200/90 bg-[hsl(216,25%,95%)] px-6 py-4 dark:border-slate-700/90 dark:bg-[hsl(222,30%,15%)] sm:flex-row sm:justify-end sm:gap-3", className)} {...props} />
 );
 SheetFooter.displayName = "SheetFooter";
 
