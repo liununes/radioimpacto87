@@ -312,8 +312,8 @@ export function applyTheme(config: ThemeConfig) {
   root.style.setProperty("--secondary-foreground", config.secondaryForeground || "222.2 47.4% 11.2%");
   root.style.setProperty("--muted", config.muted || "210 40% 96.1%");
   root.style.setProperty("--muted-foreground", config.mutedForeground || "215.4 16.3% 40%");
-  root.style.setProperty("--accent", config.accent || "33 100% 50%");
-  root.style.setProperty("--accent-foreground", config.accentForeground || "222.2 47.4% 11.2%");
+  root.style.setProperty("--accent", "33 100% 50%");
+  root.style.setProperty("--accent-foreground", "222.2 47.4% 11.2%");
   root.style.setProperty("--border", config.border || "214.3 31.8% 88%");
   root.style.setProperty("--input", config.border || "214.3 31.8% 88%");
   root.style.setProperty("--ring", config.primary || "211 100% 35%");
