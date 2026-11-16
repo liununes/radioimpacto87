@@ -37,6 +37,12 @@ const NewsTextItem = ({ item }: { item: NewsItem }) => (
     role={item.url ? "link" : undefined}
     tabIndex={item.url ? 0 : undefined}
   >
+    {item.imagem && (
+      <div className="news-text-image-wrap">
+        <img src={item.imagem} alt={item.titulo} className="news-text-image" loading="lazy" />
+      </div>
+    )}
+    <div className="news-text-copy">
     <div className="news-text-meta">
       <span>{item.categoria || "NOTÍCIA"}</span>
       <span>{new Date(item.data_postagem || Date.now()).toLocaleDateString("pt-BR")}</span>
@@ -44,6 +50,7 @@ const NewsTextItem = ({ item }: { item: NewsItem }) => (
     <h3>{item.titulo}</h3>
     {item.resumo && <p>{item.resumo}</p>}
     {item.url && <span className="news-read-link">Ler notícia <span aria-hidden="true">→</span></span>}
+    </div>
   </article>
 );
 
