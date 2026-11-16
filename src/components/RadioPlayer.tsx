@@ -14,6 +14,8 @@ const RadioPlayer = () => {
   const theme = useTheme();
   const [volume, setVolume] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
+  const [showLocationModal, setShowLocationModal] = useState(false);
+  const [locationSearch, setLocationSearch] = useState(() => localStorage.getItem("radio-selected-city") || "");
 
   const loadConfigs = async () => {
     const site = (await getSiteConfig("site")) || {};
@@ -62,6 +64,15 @@ const RadioPlayer = () => {
         setIsMuted(true);
       }
     }
+  };
+
+  const saveLocation = () => {
+    const city = locationSearch.trim();
+    if (!city) return;
+    localStorage.setItem("radio-selected-city", city);
+    window.dispatchEvent(new CustomEvent("radio-city-change", { detail: { city } }));
+    setShowLocationModal(false);
+    toast.success(`Região atualizada para ${city}`);
   };
 
   const togglePlay = () => {
@@ -125,11 +136,69 @@ const RadioPlayer = () => {
            <MapPin className="w-4 h-4 text-accent fill-accent/20" />
            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{theme.labels.playerLocation}</span>
         </div>
-        <div className="flex items-center gap-4 px-6 py-2.5 border border-primary/20 rounded-full text-primary hover:border-primary/40 transition-all cursor-pointer bg-white group shadow-sm">
-          <span className="text-[11px] font-black uppercase tracking-wider">{theme.weatherCity || siteConfig.cidade || "Impacto FM"}</span>
+        <button
+          type="button"
+          onClick={() => {
+            setLocationSearch(localStorage.getItem("radio-selected-city") || theme.weatherCity || siteConfig.cidade || "");
+            setShowLocationModal(true);
+          }}
+          className="flex items-center gap-4 px-6 py-2.5 border border-primary/20 rounded-full text-primary hover:border-primary/50 hover:bg-primary/[0.03] transition-all bg-white group shadow-sm"
+          aria-label="Alterar região"
+        >
+          <span className="text-[11px] font-black uppercase tracking-wider">{localStorage.getItem("radio-selected-city") || theme.weatherCity || siteConfig.cidade || "Impacto FM"}</span>
           <ChevronDown className="w-4 h-4 text-accent group-hover:translate-y-0.5 transition-transform" />
-        </div>
+        </button>
       </div>
+
+      {showLocationModal && (
+        <div
+          className="fixed inset-0 z-[10000] flex items-center justify-center bg-[#06172b]/75 backdrop-blur-md p-4"
+          onMouseDown={(event) => { if (event.target === event.currentTarget) setShowLocationModal(false); }}
+        >
+          <section
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="radio-location-title"
+            className="w-full max-w-lg overflow-hidden rounded-[1.75rem] border border-white/60 bg-white shadow-[0_30px_100px_rgba(0,0,0,0.35)] dark:border-slate-700 dark:bg-slate-900"
+          >
+            <header className="relative overflow-hidden bg-gradient-to-br from-[#002e5d] via-[#06447c] to-[#0876a8] px-7 py-8 text-white">
+              <div className="absolute -right-10 -top-16 h-48 w-48 rounded-full border-[24px] border-white/5" />
+              <div className="relative flex items-start justify-between gap-4">
+                <div>
+                  <span className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white/80">
+                    <MapPin className="h-3.5 w-3.5" /> Sua região
+                  </span>
+                  <h2 id="radio-location-title" className="text-2xl font-black tracking-tight text-white md:text-3xl">Qual é a sua região?</h2>
+                  <p className="mt-2 max-w-sm text-sm leading-relaxed text-blue-100">Escolha sua cidade para acompanhar as informações e a previsão do tempo local.</p>
+                </div>
+                <button type="button" onClick={() => setShowLocationModal(false)} className="rounded-full bg-white/10 p-2 text-white transition hover:bg-white/20" aria-label="Fechar">
+                  <span className="text-xl leading-none">×</span>
+                </button>
+              </div>
+            </header>
+            <div className="space-y-5 p-6 md:p-7">
+              <label htmlFor="radio-location-search" className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">Buscar cidade</label>
+              <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 transition focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800">
+                <MapPin className="h-5 w-5 shrink-0 text-blue-600 dark:text-blue-400" />
+                <input
+                  id="radio-location-search"
+                  autoFocus
+                  value={locationSearch}
+                  onChange={(event) => setLocationSearch(event.target.value)}
+                  onKeyDown={(event) => { if (event.key === "Enter") saveLocation(); if (event.key === "Escape") setShowLocationModal(false); }}
+                  placeholder="Digite o nome da cidade..."
+                  className="h-12 min-w-0 flex-1 bg-transparent text-sm font-medium text-slate-900 outline-none placeholder:text-slate-400 dark:text-white"
+                />
+              </div>
+              <p className="text-xs leading-relaxed text-slate-500 dark:text-slate-400">Informe o nome da cidade e confirme. A região escolhida será usada para atualizar o clima exibido no site.</p>
+              <div className="flex flex-col-reverse gap-3 border-t border-slate-100 pt-5 dark:border-slate-800 sm:flex-row sm:justify-end">
+                <button type="button" onClick={() => setShowLocationModal(false)} className="rounded-xl border border-slate-200 px-5 py-3 text-sm font-bold text-slate-600 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800">Cancelar</button>
+                <button type="button" onClick={saveLocation} disabled={!locationSearch.trim()} className="rounded-xl bg-[#ffed32] px-6 py-3 text-sm font-black text-[#002e5d] shadow-lg shadow-yellow-500/20 transition hover:-translate-y-0.5 hover:bg-[#ffe000] disabled:cursor-not-allowed disabled:opacity-50">Confirmar região</button>
+              </div>
+            </div>
+          </section>
+        </div>
+      )}
 
       {/* Centro: Play Button e Info do Ar - Refined for mobile */}
       <div className="flex-1 md:absolute md:left-1/2 md:-translate-x-1/2 md:-top-14 flex items-center gap-3 md:gap-8">
