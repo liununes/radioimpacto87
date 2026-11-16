@@ -9,7 +9,7 @@ const ClientLayout = () => {
   const theme = useTheme();
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950 dark:text-white overflow-x-hidden transition-colors duration-500">
+    <div className="radio-site-shell min-h-screen bg-white dark:bg-gray-950 dark:text-white overflow-x-hidden transition-colors duration-500">
       <Navigation />
       <main className="relative z-10 min-h-[60vh]">
         <Outlet />
