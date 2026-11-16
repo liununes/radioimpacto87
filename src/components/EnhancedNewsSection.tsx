@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useTheme } from "@/hooks/useTheme";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export interface NewsItem {
   id: string;
@@ -59,6 +60,7 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[]; loading: boo
   const theme = useTheme();
   const mainNews = news.slice(0, 3);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
   const activeNews = mainNews[activeIndex] || mainNews[0];
 
   useEffect(() => {
@@ -99,10 +101,14 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[]; loading: boo
                 </div>
                 <h3>{activeNews.titulo}</h3>
                 {activeNews.resumo && <p>{activeNews.resumo}</p>}
-                {activeNews.url && (
+                {activeNews.url ? (
                   <a href={activeNews.url} target="_blank" rel="noopener noreferrer" className="news-feature-link">
                     Ler matéria completa <span aria-hidden="true">→</span>
                   </a>
+                ) : (
+                  <button type="button" onClick={() => setSelectedNews(activeNews)} className="news-feature-link">
+                    Ler matéria completa <span aria-hidden="true">→</span>
+                  </button>
                 )}
               </div>
             </article>
@@ -116,32 +122,64 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[]; loading: boo
             <h3>DESTAQUES DO DIA</h3>
             <p>Clique para ler a matéria completa</p>
           </div>
-          {mainNews.map((item, index) => (
-            <a
-              key={item.id}
-              href={item.url || "#conteudos"}
-              target={item.url ? "_blank" : undefined}
-              rel={item.url ? "noopener noreferrer" : undefined}
-              className={`news-feature-summary${index === activeIndex ? " is-active" : ""}`}
-              aria-current={index === activeIndex ? "true" : undefined}
-            >
-              {item.imagem && (
-                <span className="news-summary-image-wrap">
-                  <img src={item.imagem} alt="" className="news-summary-image" loading="lazy" />
+          {mainNews.map((item, index) => {
+            const summaryContent = (
+              <>
+                {item.imagem && (
+                  <span className="news-summary-image-wrap">
+                    <img src={item.imagem} alt="" className="news-summary-image" loading="lazy" />
+                  </span>
+                )}
+                <span className="news-summary-copy">
+                  <span className="news-summary-number">0{index + 1} · {item.categoria || "NOTÍCIA"}</span>
+                  <strong>{item.titulo}</strong>
+                  {item.resumo && <span className="news-summary-excerpt">{item.resumo}</span>}
                 </span>
-              )}
-              <span className="news-summary-copy">
-                <span className="news-summary-number">0{index + 1} · {item.categoria || "NOTÍCIA"}</span>
-                <strong>{item.titulo}</strong>
-                {item.resumo && <span className="news-summary-excerpt">{item.resumo}</span>}
-              </span>
-            </a>
-          ))}
+              </>
+            );
+            const className = `news-feature-summary${index === activeIndex ? " is-active" : ""}`;
+            return item.url ? (
+              <a key={item.id} href={item.url} target="_blank" rel="noopener noreferrer" className={className}>
+                {summaryContent}
+              </a>
+            ) : (
+              <button key={item.id} type="button" onClick={() => setSelectedNews(item)} className={className}>
+                {summaryContent}
+              </button>
+            );
+          })}
           <a href="#mais-conteudos" className="news-all-link">
             Ver mais conteúdos <span aria-hidden="true">→</span>
           </a>
         </aside>
       </div>
+
+      <Dialog open={!!selectedNews} onOpenChange={(open) => { if (!open) setSelectedNews(null); }}>
+        <DialogContent className="news-full-dialog max-w-4xl">
+          {selectedNews && (
+            <>
+              <DialogHeader>
+                <p className="text-xs font-bold uppercase tracking-[.14em] text-amber-700 dark:text-amber-300">
+                  {selectedNews.categoria || "Notícia"} · {new Date(selectedNews.data_postagem || Date.now()).toLocaleDateString("pt-BR")}
+                </p>
+                <DialogTitle className="text-2xl sm:text-3xl">{selectedNews.titulo}</DialogTitle>
+                <DialogDescription>{selectedNews.resumo || "Leia a matéria completa."}</DialogDescription>
+              </DialogHeader>
+              <div className="px-6 py-6">
+                {selectedNews.imagem && (
+                  <img src={selectedNews.imagem} alt={selectedNews.titulo} className="mb-6 max-h-[420px] w-full rounded-xl object-cover" />
+                )}
+                <div className="whitespace-pre-wrap break-words text-base leading-8 text-slate-700 dark:text-slate-200">
+                  {selectedNews.conteudo?.trim() || selectedNews.resumo || "O conteúdo completo desta notícia ainda não foi informado."}
+                </div>
+                {selectedNews.fonte && (
+                  <p className="mt-8 border-t border-border pt-4 text-sm text-muted-foreground">Fonte: {selectedNews.fonte}</p>
+                )}
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
