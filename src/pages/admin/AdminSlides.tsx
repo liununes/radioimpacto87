@@ -60,6 +60,9 @@ function getDownloadName(title: string, image: string): string {
   return `${safeTitle}.${getImageExtension(image)}`;
 }
 
+const REQUIRED_WIDTH = 1920;
+const REQUIRED_HEIGHT = 600;
+
 const AdminSlides = () => {
   const [slides, setSlides] = useState<Slide[]>([]);
   const [titulo, setTitulo] = useState("");
@@ -79,6 +82,10 @@ const AdminSlides = () => {
   const handleSave = async () => {
     if (!imagem) {
       toast.error("Selecione uma imagem para o slide.");
+      return;
+    }
+    if (!dimensoesImagem || dimensoesImagem.width !== REQUIRED_WIDTH || dimensoesImagem.height !== REQUIRED_HEIGHT) {
+      toast.error(`Formato inválido. A imagem deve ter exatamente ${REQUIRED_WIDTH} × ${REQUIRED_HEIGHT} px.`);
       return;
     }
     setLoading(true);
@@ -104,7 +111,12 @@ const AdminSlides = () => {
     setTitulo(slide.titulo);
     setImagem(slide.imagem);
     setDimensoesImagem(null);
-    readImageDimensions(slide.imagem).then(setDimensoesImagem).catch(() => setDimensoesImagem(null));
+    readImageDimensions(slide.imagem).then((dimensions) => {
+      setDimensoesImagem(dimensions);
+      if (dimensions.width !== REQUIRED_WIDTH || dimensions.height !== REQUIRED_HEIGHT) {
+        toast.warning(`Este banner está fora do padrão. O formato obrigatório é ${REQUIRED_WIDTH} × ${REQUIRED_HEIGHT} px.`);
+      }
+    }).catch(() => setDimensoesImagem(null));
     setLink(slide.link || "");
   };
 
@@ -135,6 +147,11 @@ const AdminSlides = () => {
       setDimensoesImagem(null);
       const dimensions = await readImageDimensions(imageData);
       setDimensoesImagem(dimensions);
+      if (dimensions.width !== REQUIRED_WIDTH || dimensions.height !== REQUIRED_HEIGHT) {
+        toast.warning(`Imagem fora do padrão: ${dimensions.width} × ${dimensions.height} px. Envie uma imagem de exatamente ${REQUIRED_WIDTH} × ${REQUIRED_HEIGHT} px.`);
+      } else {
+        toast.success("Imagem no tamanho correto: 1920 × 600 px.");
+      }
     } catch {
       setDimensoesImagem(null);
       toast.error("Não foi possível ler as dimensões dessa imagem. Tente outro arquivo.");
@@ -176,19 +193,21 @@ const AdminSlides = () => {
             <div className="lg:col-span-8 space-y-3">
               <div>
                 <Label className="text-sm font-semibold block">Escolha a Imagem</Label>
-                <div className="text-xs text-muted-foreground font-medium mt-1 mb-3 space-y-1">
-                  <p>O site adapta automaticamente a área do slide à proporção da imagem enviada. A arte é exibida inteira, sem cortes e sem distorção.</p>
+                <div className="text-xs font-medium mt-1 mb-3 space-y-1">
+                  <p className="font-bold text-foreground">TAMANHO OBRIGATÓRIO: 1920 × 600 px (proporção 16:5).</p>
+                  <p className="text-muted-foreground">Crie e envie o banner exatamente nessas dimensões. Imagens fora desse padrão serão sinalizadas e não poderão ser publicadas.</p>
                   {dimensoesImagem ? (
-                    <p className="font-semibold text-foreground">
-                      Dimensão da imagem: {dimensoesImagem.width} × {dimensoesImagem.height} px · Proporção: {getImageRatio(dimensoesImagem.width, dimensoesImagem.height)}.
-                      <span className="block text-muted-foreground font-medium">Dica para criar outras artes: mantenha essa proporção. Tamanho de referência: {(() => {
-                        const recommendedWidth = 1920;
-                        const recommendedHeight = Math.round(recommendedWidth * dimensoesImagem.height / dimensoesImagem.width);
-                        return `${recommendedWidth} × ${recommendedHeight} px`;
-                      })()}.</span>
+                    <p className={dimensoesImagem.width === REQUIRED_WIDTH && dimensoesImagem.height === REQUIRED_HEIGHT ? "font-semibold text-green-600" : "font-semibold text-destructive"}>
+                      {dimensoesImagem.width === REQUIRED_WIDTH && dimensoesImagem.height === REQUIRED_HEIGHT
+                        ? "Imagem no formato correto: "
+                        : "Atenção: imagem fora do padrão. Dimensão recebida: "}
+                      {dimensoesImagem.width} × {dimensoesImagem.height} px · Proporção {getImageRatio(dimensoesImagem.width, dimensoesImagem.height)}.
+                      {dimensoesImagem.width !== REQUIRED_WIDTH || dimensoesImagem.height !== REQUIRED_HEIGHT
+                        ? " Envie novamente no tamanho exato de 1920 × 600 px."
+                        : ""}
                     </p>
                   ) : (
-                    <p className="font-semibold text-foreground">Dica de dimensão: selecione uma imagem para mostrar as medidas exatas em pixels e a proporção correta para criar outras artes. O tamanho do slide acompanha a imagem enviada.</p>
+                    <p className="text-muted-foreground">Após selecionar a imagem, o painel verificará automaticamente as dimensões.</p>
                   )}
                 </div>
               </div>
@@ -217,7 +236,7 @@ const AdminSlides = () => {
             </div>
 
             <div className="lg:col-span-4 flex flex-col justify-end gap-3">
-              <Button onClick={handleSave} className="h-11 rounded-lg bg-primary text-primary-foreground font-semibold shadow-sm w-full transition-all" disabled={loading}>
+              <Button onClick={handleSave} className="h-11 rounded-lg bg-primary text-primary-foreground font-semibold shadow-sm w-full transition-all" disabled={loading || !dimensoesImagem || dimensoesImagem.width !== REQUIRED_WIDTH || dimensoesImagem.height !== REQUIRED_HEIGHT}>
                 {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Save className="w-4 h-4 mr-2" />}
                 {editId ? "Confirmar Edição" : "Publicar Slide"}
               </Button>
