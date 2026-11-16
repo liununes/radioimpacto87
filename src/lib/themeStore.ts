@@ -300,12 +300,23 @@ export function saveThemeConfig(config: ThemeConfig) {
 export function applyTheme(config: ThemeConfig) {
   const root = document.documentElement;
   // HSL Variables
-  root.style.setProperty("--background", config.background);
-  root.style.setProperty("--foreground", config.foreground);
-  root.style.setProperty("--primary", config.primary);
-  root.style.setProperty("--secondary", config.secondary);
-  root.style.setProperty("--accent", config.primary);
-  root.style.setProperty("--border", config.border);
+  root.style.setProperty("--background", config.background || "0 0% 100%");
+  root.style.setProperty("--foreground", config.foreground || "222.2 84% 4.9%");
+  root.style.setProperty("--card", config.card || config.background || "0 0% 100%");
+  root.style.setProperty("--card-foreground", config.foreground || "222.2 84% 4.9%");
+  root.style.setProperty("--popover", config.card || "0 0% 100%");
+  root.style.setProperty("--popover-foreground", config.foreground || "222.2 84% 4.9%");
+  root.style.setProperty("--primary", config.primary || "211 100% 18%");
+  root.style.setProperty("--primary-foreground", config.primaryForeground || "210 40% 98%");
+  root.style.setProperty("--secondary", config.secondary || "48 100% 50%");
+  root.style.setProperty("--secondary-foreground", config.secondaryForeground || "222.2 47.4% 11.2%");
+  root.style.setProperty("--muted", config.muted || "210 40% 96.1%");
+  root.style.setProperty("--muted-foreground", config.mutedForeground || "215.4 16.3% 40%");
+  root.style.setProperty("--accent", config.accent || "33 100% 50%");
+  root.style.setProperty("--accent-foreground", config.accentForeground || "222.2 47.4% 11.2%");
+  root.style.setProperty("--border", config.border || "214.3 31.8% 88%");
+  root.style.setProperty("--input", config.border || "214.3 31.8% 88%");
+  root.style.setProperty("--ring", config.primary || "211 100% 35%");
   
   // Custom Dynamic Text Colors (Hex)
   root.style.setProperty("--text-primary", config.textPrimary);
