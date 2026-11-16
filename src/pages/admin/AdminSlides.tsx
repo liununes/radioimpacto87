@@ -7,54 +7,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { type Slide, getSlides, saveSlide, deleteSlide } from "@/lib/radioStore";
 import { toast } from "sonner";
 
-// Recorta proporcionalmente ao centro para preencher 1920x600 sem deformar a imagem.
-function fileToBannerBase64(file: File): Promise<string> {
+// Lê a imagem original sem redimensionar, recortar ou alterar sua proporção.
+function fileToImageBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
-    const objectUrl = URL.createObjectURL(file);
-    const image = new Image();
-
-    image.onload = () => {
-      const width = 1920;
-      const height = 600;
-      const canvas = document.createElement("canvas");
-      canvas.width = width;
-      canvas.height = height;
-      const context = canvas.getContext("2d");
-
-      if (!context) {
-        URL.revokeObjectURL(objectUrl);
-        reject(new Error("Não foi possível processar a imagem."));
-        return;
-      }
-
-      const scale = Math.max(width / image.width, height / image.height);
-      const sourceWidth = width / scale;
-      const sourceHeight = height / scale;
-      const sourceX = (image.width - sourceWidth) / 2;
-      const sourceY = (image.height - sourceHeight) / 2;
-
-      context.drawImage(
-        image,
-        sourceX,
-        sourceY,
-        sourceWidth,
-        sourceHeight,
-        0,
-        0,
-        width,
-        height
-      );
-
-      URL.revokeObjectURL(objectUrl);
-      resolve(canvas.toDataURL("image/jpeg", 0.9));
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === "string") resolve(reader.result);
+      else reject(new Error("Não foi possível ler a imagem."));
     };
-
-    image.onerror = () => {
-      URL.revokeObjectURL(objectUrl);
-      reject(new Error("Não foi possível abrir a imagem selecionada."));
-    };
-
-    image.src = objectUrl;
+    reader.onerror = () => reject(new Error("Não foi possível abrir a imagem selecionada."));
+    reader.readAsDataURL(file);
   });
 }
 
@@ -124,7 +86,7 @@ const AdminSlides = () => {
   const handleImageChange = async (file?: File) => {
     if (!file) return;
     try {
-      setImagem(await fileToBannerBase64(file));
+      setImagem(await fileToImageBase64(file));
     } catch {
       toast.error("Não foi possível ajustar essa imagem. Tente outro arquivo.");
     }
@@ -165,13 +127,13 @@ const AdminSlides = () => {
             <div className="lg:col-span-8 space-y-3">
               <div>
                 <Label className="text-sm font-semibold block">Escolha a Imagem</Label>
-                <p className="text-xs text-muted-foreground font-medium mt-1 mb-3">A imagem será ajustada automaticamente para banner 1920x600, preenchendo todo o espaço sem deformar. Se necessário, as bordas serão cortadas proporcionalmente (JPG, PNG ou WebP).</p>
+                <p className="text-xs text-muted-foreground font-medium mt-1 mb-3">A imagem original será preservada, sem esticar, recortar ou alterar sua proporção. Na exibição, ela será ampliada proporcionalmente para preencher o banner; apenas o excesso poderá ficar fora da área visível.</p>
               </div>
 
               <div className="relative group rounded-xl overflow-hidden border-2 border-dashed bg-muted border-border hover:border-primary/50 hover:bg-muted/80 transition-colors flex flex-col items-center justify-center p-4 min-h-[220px]">
                 {imagem ? (
                   <div className="relative w-full aspect-[16/5] rounded-lg overflow-hidden border border-border shadow-sm">
-                    <img src={imagem} alt="Prévia do banner ajustado" className="w-full h-full object-cover object-center bg-muted" />
+                    <img src={imagem} alt="Prévia do banner" className="w-full h-full object-cover object-center bg-muted" />
                     <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                       <label className="cursor-pointer bg-background text-foreground hover:bg-muted font-bold text-sm px-4 py-2 rounded-lg flex items-center gap-2 shadow-sm transition-colors">
                         <Upload className="w-4 h-4" /> Trocar Imagem
@@ -222,7 +184,7 @@ const AdminSlides = () => {
             </div>
             <CardContent className="p-4">
               <h5 className="text-sm font-bold text-foreground truncate">{slide.titulo}</h5>
-              <p className="text-xs font-semibold text-muted-foreground mt-1">Banner 1920 × 600</p>
+              <p className="text-xs font-semibold text-muted-foreground mt-1">Imagem original · proporção preservada</p>
             </CardContent>
           </Card>
         ))}
