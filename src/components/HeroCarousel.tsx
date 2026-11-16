@@ -54,23 +54,13 @@ const HeroCarousel = () => {
             i === current ? "opacity-100 scale-100 blur-0" : "opacity-0 scale-105 blur-sm"
           }`}
         >
-          {/* Fundo suavizado preenche o slide sem interferir na foto principal. */}
-          <div className="absolute inset-0 z-0 overflow-hidden bg-[var(--clube-blue)]">
-            <img
-              src={slide.image}
-              alt=""
-              aria-hidden="true"
-              className="h-full w-full object-cover scale-110 blur-2xl opacity-45"
-            />
-            {/* A imagem principal usa contain para preservar 100% do enquadramento. */}
-            <img
-              src={slide.image}
-              alt={slide.title || "Imagem de destaque"}
-              className="absolute inset-0 h-full w-full object-contain object-center"
-              loading={i === 0 ? "eager" : "lazy"}
-              decoding="async"
-            />
-          </div>
+          <img
+            src={slide.image}
+            alt={slide.title || "Imagem de destaque"}
+            className="absolute inset-0 h-full w-full object-fill"
+            loading={i === 0 ? "eager" : "lazy"}
+            decoding="async"
+          />
 
           {slide.title && (
             <div className="container mx-auto h-full px-6 md:px-20 lg:px-32 flex flex-col justify-center relative z-10 pointer-events-none">
