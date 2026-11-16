@@ -80,8 +80,7 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[]; loading: boo
   return (
     <div id="conteudos" className="container mx-auto px-4 py-14 news-editorial-section scroll-mt-24">
       <div className="news-remaining-heading">
-        <h2>CONTEÚDOS</h2>
-        <p>Confira as principais notícias e acesse cada matéria completa.</p>
+        <h2>NOTÍCIAS</h2>
       </div>
 
       <div className="news-editorial-layout news-feature-layout">
@@ -149,7 +148,7 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[]; loading: boo
             );
           })}
           <a href="#mais-conteudos" className="news-all-link">
-            Ver mais conteúdos <span aria-hidden="true">→</span>
+            Ver todas as notícias <span aria-hidden="true">→</span>
           </a>
         </aside>
       </div>
