@@ -22,20 +22,15 @@ const WeatherWidget = ({ showWeather = true }: WeatherWidgetProps) => {
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState(true);
   const theme = useTheme();
-  const [selectedCity, setSelectedCity] = useState(() => localStorage.getItem("radio-selected-city") || theme.weatherCity);
+
 
   useEffect(() => {
-    const savedCity = localStorage.getItem("radio-selected-city");
-    setSelectedCity(savedCity || theme.weatherCity);
-  }, [theme.weatherCity]);
-
-  useEffect(() => {
-    if (!showWeather || !selectedCity) return;
+    if (!showWeather || !theme.weatherCity) return;
 
     const fetchWeather = async () => {
       setLoading(true);
       try {
-        const city = encodeURIComponent(selectedCity);
+        const city = encodeURIComponent(theme.weatherCity);
         
         // Step 1: Geocoding
         const geoRes = await fetch(
@@ -85,7 +80,7 @@ const WeatherWidget = ({ showWeather = true }: WeatherWidgetProps) => {
           visibility: 10,
           description: "Parcialmente nublado",
           icon: "0",
-          city: selectedCity
+          city: theme.weatherCity
         });
       } finally {
         setLoading(false);
@@ -94,16 +89,8 @@ const WeatherWidget = ({ showWeather = true }: WeatherWidgetProps) => {
 
     fetchWeather();
     const interval = setInterval(fetchWeather, 15 * 60 * 1000);
-    const handleCityChange = (event: Event) => {
-      const customEvent = event as CustomEvent<{ city: string }>;
-      if (customEvent.detail?.city) setSelectedCity(customEvent.detail.city);
-    };
-    window.addEventListener("radio-city-change", handleCityChange);
-    return () => {
-      clearInterval(interval);
-      window.removeEventListener("radio-city-change", handleCityChange);
-    };
-  }, [showWeather, selectedCity]);
+    return () => clearInterval(interval);
+  }, [showWeather, theme.weatherCity]);
 
   const getWeatherIcon = (codeStr: string) => {
     const code = parseInt(codeStr);
