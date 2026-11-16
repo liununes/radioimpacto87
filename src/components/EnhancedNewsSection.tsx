@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-import { Calendar, ExternalLink, ImageIcon, PlayCircle, ArrowUpRight } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useTheme } from "@/hooks/useTheme";
@@ -26,7 +24,6 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[], loading: boo
   const theme = useTheme();
   const featured = news[0];
   const sidebar = news.slice(1, 4);
-  const [videosOpen, setVideosOpen] = useState(false);
 
   if (!featured && !loading) return null;
 
@@ -105,51 +102,14 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[], loading: boo
                 </p>
               ))}
             </div>
-            <button
-              type="button"
-              onClick={() => setVideosOpen(true)}
+            <a
+              href="#conteudos"
               className="mt-4 inline-flex items-center gap-2 rounded-full bg-[var(--nav-item-active)] px-4 py-2 text-[10px] font-extrabold uppercase tracking-wide text-white transition-opacity hover:opacity-90"
             >
-              <PlayCircle className="h-4 w-4" />
-              Ver conteúdos
-              <ArrowUpRight className="h-3 w-3" />
-            </button>
-          </div>
-          <Dialog open={videosOpen} onOpenChange={setVideosOpen}>
-            <DialogContent className="max-h-[85vh] overflow-y-auto rounded-2xl border border-gray-200 bg-white p-0 text-gray-900 shadow-2xl sm:max-w-xl">
-              <DialogHeader className="border-b border-gray-100 px-6 py-5 text-left">
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-accent">Impacto FM</p>
-                <DialogTitle className="text-xl font-black tracking-tight text-gray-900">Vídeos e mais</DialogTitle>
-                <DialogDescription className="text-sm text-gray-500">
-                  Outros destaques e conteúdos publicados pela rádio.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="space-y-3 px-6 py-5">
-                {sidebar.map((item) => (
-                  <article key={item.id} className="overflow-hidden rounded-xl border border-gray-200 bg-gray-50">
-                    {item.imagem && (
-                      <div className="aspect-video max-h-48 overflow-hidden bg-gray-100">
-                        <img src={item.imagem} alt={item.titulo} className="h-full w-full object-cover" />
-                      </div>
-                    )}
-                    <div className="p-4">
-                      {item.categoria && (
-                        <span className="text-[9px] font-bold uppercase tracking-wider text-accent">{item.categoria}</span>
-                      )}
-                      <h3 className="mt-1 text-sm font-bold leading-snug text-gray-900">{item.titulo}</h3>
-                      {item.resumo && <p className="mt-2 text-xs leading-relaxed text-gray-600">{item.resumo}</p>}
-                      {item.url && (
-                        <a href={item.url} target="_blank" rel="noreferrer" className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-blue-700 hover:underline">
-                          Acessar conteúdo <ExternalLink className="h-3 w-3" />
-                        </a>
-                      )}
-                    </div>
-                  </article>
-                ))}
-                {sidebar.length === 0 && <p className="py-8 text-center text-sm text-gray-500">Novos conteúdos serão exibidos aqui.</p>}
-              </div>
-            </DialogContent>
-          </Dialog>
+              Ver todos os conteúdos
+              <span aria-hidden="true">→</span>
+            </a>
+ </Dialog>
         </div>
       </div>
     </div>
@@ -162,7 +122,7 @@ export const RemainingNews = ({ news, loading, showAll = false }: { news: NewsIt
   if (remaining.length === 0 && !loading) return null;
 
   return (
-    <div className="container mx-auto px-4 py-12 bg-gray-50/50 rounded-3xl my-8 shadow-inner">
+    <div id="conteudos" className="container mx-auto px-4 py-12 bg-gray-50/50 rounded-3xl my-8 shadow-inner scroll-mt-24">
       <div className="flex items-center gap-3 mb-7">
         <h2 className="text-xs font-extrabold tracking-tight shrink-0" style={{ color: 'var(--text-title)' }}>CONTEÚDOS</h2>
         <div className="h-0.5 w-full bg-gray-200" />
