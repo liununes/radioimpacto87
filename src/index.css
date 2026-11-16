@@ -872,3 +872,104 @@
     transition-duration: .01ms !important;
   }
 }
+
+
+/* Correção de escopo do tema: o modo escuro é aplicado no elemento raiz. */
+.dark .radio-site-shell .radio-entertainment-section,
+.dark .radio-site-shell .radio-music-section,
+.dark .radio-site-shell .radio-about-section {
+  background: #111d30;
+  border-color: rgba(226,232,240,.1);
+}
+.dark .radio-site-shell .radio-pedido-wrap {
+  background: #142238;
+  border-color: rgba(226,232,240,.1);
+}
+.dark .radio-site-shell .radio-eyebrow {
+  color: #ffd84d;
+}
+.dark .radio-site-shell #noticias .group > [class*="rounded-3xl"] {
+  background: #142238;
+  border-color: rgba(226,232,240,.1);
+}
+.dark .radio-site-shell #noticias .group [class*="CardContent"] {
+  background: #142238 !important;
+}
+.dark .radio-site-shell #noticias .group p,
+.dark .radio-site-shell #noticias .group .text-gray-500 {
+  color: #c2ccda;
+}
+.dark .radio-site-shell #promocoes .grid > div,
+.dark .radio-site-shell #promocoes .grid > div > div:last-child {
+  background: #142238;
+  border-color: rgba(226,232,240,.1);
+}
+.dark .radio-site-shell #galeria {
+  background: #0d1727 !important;
+}
+.dark .radio-site-shell #contato .group\\/item > div:first-child {
+  background: #1b2b42;
+  border-color: rgba(226,232,240,.12);
+}
+.dark .radio-site-shell .radio-music-section .container > div > div:last-child > div {
+  background: #142238;
+  border-color: rgba(226,232,240,.1);
+}
+
+/* Página de programação: grade editorial consistente e cartões equilibrados. */
+.radio-programacao-page {
+  width: min(calc(100% - 3rem), 1320px);
+  padding-top: clamp(2rem, 4vw, 3.5rem);
+  padding-bottom: clamp(3rem, 6vw, 5rem);
+}
+.radio-programacao-page > div:first-child {
+  gap: 1.25rem;
+  margin-bottom: clamp(2rem, 4vw, 3.5rem);
+}
+.radio-programacao-page h1 {
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  line-height: 1.05;
+}
+.radio-programacao-page h2 {
+  font-size: clamp(1.35rem, 2vw, 1.8rem);
+}
+.radio-programacao-page .grid {
+  gap: clamp(.85rem, 1.5vw, 1.4rem);
+}
+.radio-programacao-page .group.relative.aspect-square {
+  aspect-ratio: 4 / 5;
+  border-width: 1px;
+  border-radius: 1.2rem;
+  box-shadow: 0 12px 30px rgba(0, 35, 75, .12);
+}
+.radio-programacao-page .group.relative.aspect-square > div:last-child {
+  padding: clamp(1rem, 2vw, 1.5rem);
+}
+.dark .radio-site-shell .radio-programacao-page .group.relative.aspect-square {
+  border-color: rgba(255,255,255,.18);
+  box-shadow: 0 14px 34px rgba(0,0,0,.28);
+}
+@media (max-width: 767px) {
+  .radio-programacao-page {
+    width: calc(100% - 1.5rem);
+    padding: 1.5rem 0 3rem;
+  }
+  .radio-programacao-page > div:first-child {
+    align-items: flex-start;
+    gap: .85rem;
+    margin-bottom: 2rem;
+  }
+  .radio-programacao-page .grid {
+    gap: .75rem;
+  }
+  .radio-programacao-page .group.relative.aspect-square {
+    aspect-ratio: 3 / 4;
+    border-radius: .9rem;
+  }
+  .radio-programacao-page .group.relative.aspect-square > div:last-child {
+    padding: .85rem;
+  }
+  .radio-programacao-page .group.relative.aspect-square h3 {
+    font-size: 1rem;
+  }
+}
