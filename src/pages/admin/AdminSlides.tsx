@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Trash2, Upload, Plus, Loader2, Edit2, Save, X, Image as ImageIcon } from "lucide-react";
+import { Trash2, Upload, Plus, Loader2, Edit2, Save, X, Download, Image as ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,6 +18,28 @@ function fileToImageBase64(file: File): Promise<string> {
     reader.onerror = () => reject(new Error("Não foi possível abrir a imagem selecionada."));
     reader.readAsDataURL(file);
   });
+}
+
+function getImageExtension(image: string): string {
+  const mime = image.match(/^data:image\\/([a-zA-Z0-9.+-]+);/)?.[1]?.toLowerCase();
+  if (mime === "jpeg" || mime === "pjpeg") return "jpg";
+  if (mime === "svg+xml") return "svg";
+  if (mime && ["png", "webp", "gif", "avif", "bmp"].includes(mime)) return mime;
+  const path = image.split("?")[0].split("#")[0];
+  const extension = path.match(/\\.([a-zA-Z0-9]{2,5})$/)?.[1]?.toLowerCase();
+  return extension && ["jpg", "jpeg", "png", "webp", "gif", "avif", "bmp", "svg"].includes(extension)
+    ? (extension === "jpeg" ? "jpg" : extension)
+    : "jpg";
+}
+
+function getDownloadName(title: string, image: string): string {
+  const safeTitle = title
+    .normalize("NFD")
+    .replace(/[\\u0300-\\u036f]/g, "")
+    .replace(/[^a-zA-Z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+    .toLowerCase() || "banner";
+  return `${safeTitle}.${getImageExtension(image)}`;
 }
 
 const AdminSlides = () => {
@@ -174,6 +196,15 @@ const AdminSlides = () => {
             <div className="aspect-[16/5] relative overflow-hidden bg-muted">
               <img src={slide.imagem} alt={slide.titulo} className="w-full h-full object-cover object-center group-hover:scale-[1.02] transition-transform duration-500" />
               <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
+                <a
+                  href={slide.imagem}
+                  download={getDownloadName(slide.titulo, slide.imagem)}
+                  title="Baixar imagem original"
+                  aria-label={`Baixar imagem de ${slide.titulo || "banner"}`}
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 transition-colors"
+                >
+                  <Download className="w-4 h-4" />
+                </a>
                 <Button size="icon" variant="secondary" className="h-9 w-9 rounded-full shadow-sm" onClick={() => handleEdit(slide)}>
                   <Edit2 className="w-4 h-4" />
                 </Button>
