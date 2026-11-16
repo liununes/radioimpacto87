@@ -39,13 +39,22 @@ const Navigation = () => {
     { label: "Contato", href: "#contato" },
   ].filter(item => item.visible !== false);
 
-  const navItems = (theme.navMenus && theme.navMenus.length > 0 ? theme.navMenus : defaultNavItems).filter(item => {
-    if (item.label === "Promoções") return theme.showPromos !== false;
-    if (item.label === "Música" || item.label === "MÚSICA" || item.label === theme.labels.navMusic) return theme.showTopSongs !== false;
-    if (item.label === "Programação") return theme.showProgramas !== false;
-    if (item.label === "Sobre") return theme.showAbout !== false;
-    return true;
-  });
+  const navItems = (theme.navMenus && theme.navMenus.length > 0 ? theme.navMenus : defaultNavItems)
+    .filter(item => {
+      if (item.label === "Promoções") return theme.showPromos !== false;
+      if (item.label === "Música" || item.label === "MÚSICA" || item.label === theme.labels.navMusic) return theme.showTopSongs !== false;
+      if (item.label === "Programação") return theme.showProgramas !== false;
+      if (item.label === "Sobre") return theme.showAbout !== false;
+      return true;
+    })
+    .filter((item, index, items) => {
+      const label = item.label.trim().toLocaleLowerCase("pt-BR");
+      const href = item.href.trim().replace(/\\/$/, "").toLocaleLowerCase("pt-BR");
+      return items.findIndex(candidate =>
+        candidate.label.trim().toLocaleLowerCase("pt-BR") === label ||
+        candidate.href.trim().replace(/\\/$/, "").toLocaleLowerCase("pt-BR") === href
+      ) === index;
+    });
 
   const getLinkTo = (href: string) => {
     if (href === "#programacao" || href === "programacao") return "/programacao";
