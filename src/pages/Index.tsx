@@ -93,7 +93,7 @@ const Index = () => {
       {(theme.showAbout || (theme.showTopSongs && (topSongsPos === "news" || topSongsPos === "contact"))) && (
         <section className="radio-about-section">
           {theme.showAbout && (
-            <div id="sobre">
+            <div>
               <AboutSection />
             </div>
           )}
