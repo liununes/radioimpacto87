@@ -149,13 +149,13 @@ const AdminSlides = () => {
             <div className="lg:col-span-8 space-y-3">
               <div>
                 <Label className="text-sm font-semibold block">Escolha a Imagem</Label>
-                <p className="text-xs text-muted-foreground font-medium mt-1 mb-3">Para preencher o banner sem sobras, use a proporção 16:5 (por exemplo, 1920 × 600 px ou 1600 × 500 px). A imagem original será preservada, sem distorção. Imagens em outras proporções serão ampliadas para preencher o espaço e poderão ter partes das bordas cortadas.</p>
+                <p className="text-xs text-muted-foreground font-medium mt-1 mb-3">O site ajusta automaticamente a área do slide à proporção original da imagem. Você pode enviar a arte no tamanho que criou: ela será exibida inteira, sem cortes ou distorções.</p>
               </div>
 
               <div className="relative group rounded-xl overflow-hidden border-2 border-dashed bg-muted border-border hover:border-primary/50 hover:bg-muted/80 transition-colors flex flex-col items-center justify-center p-4 min-h-[220px]">
                 {imagem ? (
-                  <div className="relative w-full aspect-[16/5] rounded-lg overflow-hidden border border-border shadow-sm">
-                    <img src={imagem} alt="Prévia do banner" className="w-full h-full object-cover object-center bg-muted" />
+                  <div className="relative w-full max-h-[360px] rounded-lg overflow-hidden border border-border shadow-sm bg-muted flex items-center justify-center">
+                    <img src={imagem} alt="Prévia do banner" className="block w-full max-h-[360px] object-contain object-center" />
                     <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                       <label className="cursor-pointer bg-background text-foreground hover:bg-muted font-bold text-sm px-4 py-2 rounded-lg flex items-center gap-2 shadow-sm transition-colors">
                         <Upload className="w-4 h-4" /> Trocar Imagem
@@ -193,8 +193,8 @@ const AdminSlides = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {slides.map(slide => (
           <Card key={slide.id} className="group overflow-hidden rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow bg-card">
-            <div className="aspect-[16/5] relative overflow-hidden bg-muted">
-              <img src={slide.imagem} alt={slide.titulo} className="w-full h-full object-cover object-center group-hover:scale-[1.02] transition-transform duration-500" />
+            <div className="relative min-h-[120px] max-h-[240px] overflow-hidden bg-muted flex items-center justify-center">
+              <img src={slide.imagem} alt={slide.titulo} className="block w-full max-h-[240px] object-contain object-center" />
               <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
                 <a
                   href={slide.imagem}
