@@ -1,5 +1,4 @@
-import { Trophy, Music } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Trophy, Music, ArrowUpRight } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 
 const songs = [
@@ -8,55 +7,47 @@ const songs = [
   { rank: 3, title: "Asa Branca", artist: "Luiz Gonzaga", url: "https://www.youtube.com/results?search_query=luiz+gonzaga+asa+branca" },
 ];
 
-const rankColors = [
-  "bg-accent",
-  "bg-gray-400",
-  "bg-gray-300",
-];
-
 const TopSongs = () => {
   const theme = useTheme();
 
-  const alignment = theme.topSongsAlignment || 'center';
-  const alignClass = alignment === 'left' ? 'mr-auto items-start' : alignment === 'right' ? 'ml-auto items-end' : 'mx-auto items-center';
-  const textClass = alignment === 'left' ? 'text-left' : alignment === 'right' ? 'text-right' : 'text-center';
-
-
   return (
-    <section className="py-24 bg-white border-y border-gray-100">
+    <section className="radio-top-songs py-16 bg-white border-y border-gray-100">
       <div className="container mx-auto px-6">
-        <div className={`max-w-4xl flex flex-col ${alignClass}`}>
-          <div className={`flex flex-col gap-2 mb-12 ${textClass}`}>
-             <span className="font-black uppercase tracking-[0.5em] text-[10px]" style={{ color: 'var(--text-detail)' }}>AS MAIS PEDIDAS</span>
-             <h2 className="text-4xl md:text-5xl font-black tracking-tighter leading-none" style={{ color: 'var(--text-title)' }}>
-                {theme.labels.topSongsTitle} <span className="underline decoration-[var(--clube-yellow)]" style={{ color: 'var(--text-detail)' }}>{theme.labels.topSongsSubtitle}</span>
-              </h2>
+        <div className="radio-top-songs-inner max-w-4xl flex flex-col mx-auto">
+          <div className="radio-top-songs-heading flex flex-col gap-2 mb-12">
+            <span className="radio-top-songs-kicker">
+              <Trophy className="w-4 h-4" />
+              AS MAIS PEDIDAS
+            </span>
+            <h2>
+              {theme.labels.topSongsTitle}{" "}
+              <span className="underline decoration-[var(--clube-yellow)]" style={{ color: "var(--text-detail)" }}>
+                {theme.labels.topSongsSubtitle}
+              </span>
+            </h2>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 w-full">
-            {songs.map((song, i) => (
-              <div
+          <div className="radio-top-songs-grid">
+            {songs.map((song) => (
+              <a
                 key={song.rank}
-                className="flex items-center gap-6 p-6 md:p-8 group hover:bg-gray-50 transition-all duration-300 border border-gray-100 rounded-3xl"
+                href={song.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="radio-song-card group"
+                aria-label={`Ouvir ${song.title}, de ${song.artist}, em uma nova aba`}
               >
-                <div className={`w-12 h-12 md:w-16 md:h-16 rounded-2xl ${rankColors[i]} flex items-center justify-center text-2xl font-black text-white shrink-0 shadow-lg`}>
-                  {song.rank}°
+                <span className="radio-song-rank">{String(song.rank).padStart(2, "0")}</span>
+                <div className="min-w-0">
+                  <p className="radio-song-title line-clamp-2">{song.title}</p>
+                  <p className="radio-song-artist">{song.artist}</p>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xl md:text-2xl font-black group-hover:text-accent transition-colors line-clamp-1 tracking-tight" style={{ color: 'var(--text-title)' }}>
-                    {song.title}
-                  </p>
-                  <p className="text-xs md:text-sm font-bold uppercase tracking-[0.1em] mt-1" style={{ color: 'var(--text-content)' }}>{song.artist}</p>
-                </div>
-                <a 
-                  href={song.url} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="hidden md:flex w-12 h-12 rounded-full border border-gray-200 items-center justify-center group-hover:border-accent group-hover:bg-accent transition-all"
-                >
-                   <Music className="w-5 h-5 text-gray-300 group-hover:text-white transition-colors" />
-                </a>
-              </div>
+                <span className="radio-song-link">
+                  <Music className="w-4 h-4" />
+                  Ouvir música
+                  <ArrowUpRight className="w-4 h-4" />
+                </span>
+              </a>
             ))}
           </div>
         </div>
