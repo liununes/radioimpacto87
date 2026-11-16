@@ -486,3 +486,389 @@
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(255,237,50,.7), transparent);
 }
+
+
+/* --------------------------------------------------------------------------
+   Nova diagramação pública — Impacto FM
+   Sistema de espaçamento, hierarquia editorial e responsividade.
+   -------------------------------------------------------------------------- */
+.radio-home-content {
+  --radio-content-width: 1320px;
+  color: var(--text-content);
+  padding-bottom: 2rem;
+}
+.radio-home-content .container {
+  width: min(calc(100% - 3rem), var(--radio-content-width));
+}
+.radio-home-content section {
+  scroll-margin-top: 6.5rem;
+}
+.radio-home-content h1,
+.radio-home-content h2,
+.radio-home-content h3,
+.radio-home-content h4 {
+  text-wrap: balance;
+}
+.radio-main-navigation {
+  isolation: isolate;
+  border-bottom: 1px solid rgba(255,255,255,.13);
+}
+.radio-main-navigation > .container {
+  max-width: 1440px;
+}
+.radio-main-navigation a,
+.radio-main-navigation button {
+  -webkit-tap-highlight-color: transparent;
+}
+.radio-main-navigation .group > div:first-child {
+  transition: border-radius .25s ease, transform .25s ease;
+}
+.radio-main-navigation .group:hover > div:first-child {
+  border-radius: 1.1rem;
+  transform: translateY(-1px);
+}
+.radio-home-content #home {
+  display: block;
+  min-height: clamp(250px, 34vw, 620px);
+  max-height: 720px;
+  background: #002e5d;
+}
+.radio-home-content #home img {
+  object-position: center;
+}
+.radio-home-content #noticias {
+  padding-top: clamp(2.5rem, 5vw, 5rem);
+  padding-bottom: clamp(2.5rem, 5vw, 4.5rem);
+}
+.radio-home-content #noticias > .container {
+  padding-top: 1.5rem;
+  padding-bottom: 2rem;
+}
+.radio-home-content #noticias > .container > div:first-child {
+  border-left-width: 5px;
+  padding-left: 1.25rem;
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+}
+.radio-home-content #noticias h2,
+.radio-section-heading h2 {
+  font-size: clamp(1.8rem, 3.6vw, 3.25rem);
+  letter-spacing: -.045em;
+  line-height: 1.08;
+}
+.radio-home-content #noticias .grid {
+  gap: clamp(1rem, 2vw, 2rem);
+}
+.radio-home-content #noticias .group > [class*="rounded-3xl"] {
+  border: 1px solid var(--site-line);
+  border-radius: 1.25rem;
+  overflow: hidden;
+  box-shadow: 0 10px 32px rgba(0, 34, 70, .08);
+}
+.radio-home-content #noticias .group > [class*="rounded-3xl"]:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 42px rgba(0, 34, 70, .13);
+}
+.radio-home-content #noticias .group img {
+  display: block;
+}
+.radio-home-content #noticias .group .aspect-\\[16\\/9\\] {
+  aspect-ratio: 16 / 9;
+}
+.radio-home-content #noticias .group .aspect-video {
+  aspect-ratio: 16 / 9;
+}
+.radio-home-content #noticias .group [class*="CardContent"] {
+  padding: clamp(1.15rem, 2vw, 2rem);
+}
+.radio-home-content #noticias .group h3 {
+  font-size: clamp(1.35rem, 2.3vw, 2.15rem);
+  line-height: 1.16;
+  margin-bottom: 1rem;
+}
+.radio-home-content #noticias .group p {
+  font-size: clamp(.95rem, 1.15vw, 1.08rem);
+  line-height: 1.7;
+}
+.radio-home-content #noticias .group .clube-btn-yellow {
+  min-height: 2.8rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.radio-pedido-wrap {
+  width: min(calc(100% - 3rem), var(--radio-content-width));
+  margin: 1rem auto clamp(2.5rem, 5vw, 4rem);
+  padding: clamp(1rem, 2vw, 1.5rem);
+  border: 1px solid var(--site-line);
+  border-radius: 1.25rem;
+  background: var(--site-surface-soft);
+}
+.radio-pedido-wrap > div {
+  padding: 0;
+}
+.radio-entertainment-section {
+  margin: clamp(2rem, 4vw, 4rem) auto 0;
+  padding: clamp(2.5rem, 5vw, 4.5rem) 0;
+  background: var(--site-surface-soft);
+  border-top: 1px solid var(--site-line);
+  border-bottom: 1px solid var(--site-line);
+}
+.radio-section-heading {
+  margin-bottom: 1.5rem;
+}
+.radio-eyebrow {
+  display: inline-flex;
+  margin-bottom: .65rem;
+  color: #b77900;
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+.radio-home-content #entretenimento > .container:not(.radio-section-heading) {
+  background: transparent;
+}
+.radio-home-content #entretenimento .container {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+.radio-home-content #entretenimento .grid {
+  gap: 1.15rem;
+}
+.radio-home-content #entretenimento .grid > * {
+  min-width: 0;
+}
+.radio-home-content #promocoes {
+  padding-top: clamp(3.5rem, 7vw, 6rem);
+  padding-bottom: clamp(3.5rem, 7vw, 6rem);
+}
+.radio-home-content #promocoes .container > div:first-child {
+  margin-bottom: clamp(2rem, 4vw, 3.5rem);
+}
+.radio-home-content #promocoes .grid {
+  gap: clamp(1rem, 2vw, 1.75rem);
+}
+.radio-home-content #promocoes .grid > div {
+  border-radius: 1.25rem;
+  box-shadow: 0 12px 34px rgba(0, 35, 75, .09);
+}
+.radio-home-content #promocoes .grid > div > div:last-child {
+  padding: 1.25rem 1.4rem;
+}
+.radio-music-section {
+  background: var(--site-surface-soft);
+  border-top: 1px solid var(--site-line);
+  border-bottom: 1px solid var(--site-line);
+}
+.radio-music-section > section {
+  background: transparent !important;
+  border: 0 !important;
+}
+.radio-music-section .container {
+  padding-top: clamp(2.75rem, 5vw, 4.5rem);
+  padding-bottom: clamp(2.75rem, 5vw, 4.5rem);
+}
+.radio-music-section .container > div {
+  max-width: 960px;
+}
+.radio-music-section .container > div > div:last-child > div {
+  border-radius: 1rem;
+  background: var(--site-surface);
+  border-color: var(--site-line);
+  padding: clamp(1rem, 2vw, 1.5rem);
+}
+.radio-home-content #galeria {
+  padding-top: clamp(3rem, 6vw, 5rem);
+  padding-bottom: clamp(3rem, 6vw, 5rem);
+  background: var(--site-surface) !important;
+  border-color: var(--site-line);
+}
+.radio-home-content #galeria .grid {
+  gap: .85rem;
+}
+.radio-home-content #galeria .grid > div {
+  border-radius: 1rem;
+  box-shadow: 0 8px 24px rgba(0, 30, 65, .08);
+}
+.radio-about-section {
+  padding: clamp(2.5rem, 5vw, 4rem) 0;
+  background: var(--site-surface-soft);
+}
+.radio-about-section > #sobre > section,
+.radio-about-section #sobre > div > section {
+  padding-top: clamp(2.5rem, 5vw, 4rem);
+  padding-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+.radio-about-section #contato {
+  border: 1px solid var(--site-line);
+  border-radius: 1.25rem;
+  background: var(--site-surface);
+  padding: clamp(1.25rem, 3vw, 2.5rem);
+}
+.radio-home-content footer,
+.radio-site-shell > footer {
+  border-color: var(--site-line);
+}
+.radio-site-shell .bottom-player-clube {
+  min-height: 5.25rem;
+}
+.radio-site-shell.dark .radio-pedido-wrap,
+.radio-site-shell.dark .radio-entertainment-section,
+.radio-site-shell.dark .radio-music-section,
+.radio-site-shell.dark .radio-about-section {
+  background: #111d30;
+  border-color: rgba(226,232,240,.1);
+}
+.radio-site-shell.dark .radio-pedido-wrap {
+  background: #142238;
+}
+.radio-site-shell.dark .radio-eyebrow {
+  color: #ffd84d;
+}
+.radio-site-shell.dark #noticias .group > [class*="rounded-3xl"] {
+  background: #142238;
+  border-color: rgba(226,232,240,.1);
+}
+.radio-site-shell.dark #noticias .group [class*="CardContent"] {
+  background: #142238 !important;
+}
+.radio-site-shell.dark #noticias .group p,
+.radio-site-shell.dark #noticias .group .text-gray-500 {
+  color: #c2ccda;
+}
+.radio-site-shell.dark #promocoes .grid > div,
+.radio-site-shell.dark #promocoes .grid > div > div:last-child {
+  background: #142238;
+  border-color: rgba(226,232,240,.1);
+}
+.radio-site-shell.dark #galeria {
+  background: #0d1727 !important;
+}
+.radio-site-shell.dark #contato .group\/item > div:first-child {
+  background: #1b2b42;
+  border-color: rgba(226,232,240,.12);
+}
+@media (min-width: 1024px) {
+  .radio-main-navigation .container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+  .radio-main-navigation .container > div {
+    gap: clamp(1rem, 2vw, 2.25rem);
+  }
+  .radio-main-navigation .container > div > a:first-child {
+    gap: .9rem;
+  }
+  .radio-main-navigation .container > div > a:first-child > div:first-child {
+    width: 3.75rem;
+    height: 3.75rem;
+    border-radius: 1rem;
+  }
+  .radio-main-navigation .container > div > a:first-child span:first-child {
+    font-size: 1.65rem;
+  }
+  .radio-main-navigation .container > div > div:nth-child(2) {
+    gap: 1rem;
+  }
+  .radio-main-navigation .container > div > div:nth-child(2) > div:last-child {
+    gap: .8rem;
+    margin-left: .5rem;
+    padding-left: .8rem;
+  }
+  .radio-main-navigation .container > div > div:nth-child(2) > div:last-child svg {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+  .radio-main-navigation .container > div > div:last-child {
+    gap: clamp(.75rem, 1.35vw, 1.4rem);
+  }
+}
+@media (max-width: 767px) {
+  .radio-home-content .container {
+    width: min(calc(100% - 1.5rem), var(--radio-content-width));
+  }
+  .radio-home-content #home {
+    min-height: 220px;
+    max-height: 430px;
+  }
+  .radio-home-content #noticias {
+    padding-top: 1.25rem;
+    padding-bottom: 2rem;
+  }
+  .radio-home-content #noticias > .container {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .radio-home-content #noticias > .container > div:first-child {
+    padding-left: .9rem;
+    margin-bottom: 1.25rem;
+  }
+  .radio-home-content #noticias .grid {
+    gap: 1rem;
+  }
+  .radio-home-content #noticias .group h3 {
+    font-size: 1.35rem;
+  }
+  .radio-pedido-wrap {
+    width: calc(100% - 1.5rem);
+    margin: 1rem auto 2rem;
+    padding: .75rem;
+  }
+  .radio-entertainment-section {
+    padding: 2.25rem 0;
+    border-radius: 0;
+  }
+  .radio-home-content #promocoes {
+    padding: 2.75rem 0;
+  }
+  .radio-home-content #promocoes .container {
+    padding-left: .75rem;
+    padding-right: .75rem;
+  }
+  .radio-home-content #promocoes .grid {
+    gap: 1rem;
+  }
+  .radio-home-content #promocoes .grid > div {
+    border-radius: 1rem;
+  }
+  .radio-home-content #galeria {
+    padding: 2.75rem 0;
+  }
+  .radio-home-content #galeria .grid {
+    gap: .5rem;
+  }
+  .radio-about-section {
+    padding: 1.5rem 0;
+  }
+  .radio-main-navigation .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  .radio-main-navigation .container > div {
+    gap: .75rem;
+  }
+  .radio-main-navigation .container > div > a:first-child {
+    gap: .7rem;
+  }
+  .radio-main-navigation .container > div > a:first-child > div:first-child {
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: .85rem;
+  }
+  .radio-main-navigation .container > div > a:first-child span:first-child {
+    font-size: 1.3rem;
+  }
+  .radio-main-navigation .container > div > a:first-child span:last-child {
+    font-size: .58rem;
+    letter-spacing: .2em;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .radio-home-content *,
+  .radio-home-content *::before,
+  .radio-home-content *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
