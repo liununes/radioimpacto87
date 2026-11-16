@@ -41,10 +41,11 @@ const Navigation = () => {
 
   const navItems = (theme.navMenus && theme.navMenus.length > 0 ? theme.navMenus : defaultNavItems)
     .filter(item => {
-      if (item.label === "Promoções") return theme.showPromos !== false;
-      if (item.label === "Música" || item.label === "MÚSICA" || item.label === theme.labels.navMusic) return theme.showTopSongs !== false;
-      if (item.label === "Programação") return theme.showProgramas !== false;
-      if (item.label === "Sobre") return theme.showAbout !== false;
+      const label = item.label.trim().toLocaleLowerCase("pt-BR");
+      if (label === "promoções") return theme.showPromos !== false;
+      if (label === "música" || label === theme.labels.navMusic.trim().toLocaleLowerCase("pt-BR")) return theme.showTopSongs !== false;
+      if (label === "programação") return theme.showProgramas !== false;
+      if (label === "sobre" || label === "a rádio") return theme.showAbout !== false;
       return true;
     })
     .filter((item, index, items) => {
