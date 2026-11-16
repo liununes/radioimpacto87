@@ -100,10 +100,10 @@ const AdminHome = () => {
   }, [onlineListeners, activeListeners, otherStats, loginTime]);
 
   return (
-    <div className="space-y-6 pb-20 max-w-6xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-border pb-4">
+    <div className="space-y-7 pb-16 max-w-[1400px] mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-border pb-5">
         <div className="space-y-1">
-           <h2 className="text-2xl font-bold text-foreground">Dashboard</h2>
+           <h2 className="text-2xl md:text-3xl font-bold text-foreground">Dashboard</h2>
            <p className="text-sm text-muted-foreground font-medium">Controle central da Impacto FM</p>
         </div>
         <div className="flex gap-3">
@@ -116,26 +116,26 @@ const AdminHome = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-7 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4">
         {stats.map((s, idx) => (
-          <Card key={s.label} className="group rounded-xl border border-border shadow-none hover:shadow-sm transition-all bg-card text-card-foreground">
-            <CardContent className="p-4 flex flex-col items-center justify-center text-center gap-2">
-              <div className="p-2 rounded-lg bg-primary/5 text-primary">
+          <Card key={s.label} className="group rounded-xl border border-border shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all bg-card text-card-foreground">
+            <CardContent className="p-4 md:p-5 flex flex-col items-center justify-center text-center gap-3">
+              <div className="p-2.5 rounded-xl bg-primary/10 text-primary">
                 <s.icon className="w-4 h-4" />
               </div>
               <div className="space-y-0 text-center">
-                <p className="text-[10px] font-semibold text-muted-foreground uppercase">{s.label}</p>
-                <p className="text-xl font-bold text-foreground">{s.value}</p>
+                <p className="text-[10px] md:text-[11px] font-semibold text-muted-foreground uppercase tracking-wide">{s.label}</p>
+                <p className="text-2xl font-bold text-foreground tabular-nums">{s.value}</p>
               </div>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="bg-primary/5 rounded-xl p-6 relative overflow-hidden flex flex-col justify-center border border-primary/10">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="bg-card rounded-2xl p-6 md:p-7 relative overflow-hidden flex flex-col justify-center border border-border shadow-sm">
            <div className="relative z-10 space-y-2">
-              <h3 className="text-lg font-bold text-primary">Otimize o Layout</h3>
+              <h3 className="text-lg font-bold text-foreground">Otimize o Layout</h3>
               <p className="text-muted-foreground text-xs leading-relaxed max-w-xs">Ajuste as páginas do portal e crie a identidade de sua rádio.</p>
            </div>
            <Button asChild className="relative z-10 bg-primary text-primary-foreground h-9 w-max px-5 rounded-md text-xs font-semibold mt-4">
@@ -143,19 +143,19 @@ const AdminHome = () => {
            </Button>
         </div>
 
-        <div className="bg-secondary/10 rounded-xl p-6 relative overflow-hidden flex flex-col justify-center border border-secondary/20">
+        <div className="bg-card rounded-2xl p-6 md:p-7 relative overflow-hidden flex flex-col justify-center border border-border shadow-sm">
            <div className="relative z-10 space-y-2">
-              <h3 className="text-lg font-bold text-secondary-foreground">Mural de Pedidos</h3>
+              <h3 className="text-lg font-bold text-foreground">Mural de Pedidos</h3>
               <p className="text-muted-foreground text-xs leading-relaxed max-w-xs">Ouça as músicas que seus ouvintes estão pedindo e interaja.</p>
            </div>
-           <Button asChild className="relative z-10 bg-secondary text-secondary-foreground h-9 w-max px-5 rounded-md text-xs font-semibold mt-4 shadow-sm hover:brightness-105">
+           <Button asChild className="relative z-10 bg-primary text-primary-foreground h-9 w-max px-5 rounded-md text-xs font-semibold mt-4 shadow-sm hover:brightness-105">
               <Link to="/admin/pedidos">Atender Pedidos</Link>
            </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-6 gap-3 pt-2">
-         <Link to="/admin/noticias?tab=nova" className="p-4 bg-card text-card-foreground border border-border rounded-xl hover:border-primary/30 transition-colors flex flex-col items-center gap-2 text-center">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 pt-1">
+         <Link to="/admin/noticias?tab=nova" className="p-4 bg-card text-card-foreground border border-border rounded-xl hover:border-primary/50 hover:shadow-sm transition-all flex flex-col items-center gap-2.5 text-center">
             <Plus className="w-4 h-4 text-primary" />
             <span className="text-[11px] font-semibold">Nova Notícia</span>
          </Link>
