@@ -571,9 +571,6 @@
 .radio-home-content #noticias .group img {
   display: block;
 }
-.radio-home-content #noticias .group .aspect-\\[16\\/9\\] {
-  aspect-ratio: 16 / 9;
-}
 .radio-home-content #noticias .group .aspect-video {
   aspect-ratio: 16 / 9;
 }
@@ -1022,6 +1019,11 @@
 }
 
 .dark .radio-site-shell #contato .group\\/item > div:first-child {
+  background: #1b2b42;
+  border-color: rgba(226,232,240,.12);
+}
+
+.dark .radio-site-shell #contato .group\/item > div:first-child {
   background: #1b2b42;
   border-color: rgba(226,232,240,.12);
 }
