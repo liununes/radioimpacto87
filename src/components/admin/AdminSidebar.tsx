@@ -20,44 +20,44 @@ import {
 import { useTheme } from "@/hooks/useTheme";
 
 const menuItems = [
-  { title: "Dashboard", url: "/admin", icon: LayoutDashboard, permission: "base" },
-  { title: "Estatísticas", url: "/admin/estatisticas", icon: BarChart3, permission: "estatisticas" },
-  { title: "Arquivos / Mídia", url: "/admin/media", icon: HardDrive, permission: "media" },
+  { title: "Dashboard", url: "/admin", icon: LayoutDashboard, section: "Visão geral", permission: "base" },
+  { title: "Estatísticas", url: "/admin/estatisticas", icon: BarChart3, section: "Visão geral", permission: "estatisticas" },
+  { title: "Arquivos / Mídia", url: "/admin/media", icon: HardDrive, section: "Visão geral", permission: "media" },
   
   // Aparencia
-  { title: "Identidade Visual", url: "/admin/aparencia?tab=visual", icon: Palette, permission: "aparencia_visual" },
-  { title: "Texto & Cores", url: "/admin/aparencia?tab=textos", icon: Type, permission: "aparencia_textos" },
-  { title: "Menu do Site", url: "/admin/aparencia?tab=menus", icon: ExternalLink, permission: "aparencia_menus" },
-  { title: "Design do Site", url: "/admin/aparencia?tab=layout", icon: Layout, permission: "aparencia_layout" },
-  { title: "Visibilidade do Site", url: "/admin/aparencia?tab=visibilidade", icon: Eye, permission: "visibilidade" },
+  { title: "Identidade Visual", url: "/admin/aparencia?tab=visual", icon: Palette, section: "Personalização do site", permission: "aparencia_visual" },
+  { title: "Texto & Cores", url: "/admin/aparencia?tab=textos", icon: Type, section: "Personalização do site", permission: "aparencia_textos" },
+  { title: "Menu do Site", url: "/admin/aparencia?tab=menus", icon: ExternalLink, section: "Personalização do site", permission: "aparencia_menus" },
+  { title: "Design do Site", url: "/admin/aparencia?tab=layout", icon: Layout, section: "Personalização do site", permission: "aparencia_layout" },
+  { title: "Visibilidade do Site", url: "/admin/aparencia?tab=visibilidade", icon: Eye, section: "Personalização do site", permission: "visibilidade" },
   
   // Locutores & Programacao
-  { title: "Locutores", url: "/admin/locutores", icon: Users, permission: "locutores" },
-  { title: "Programação", url: "/admin/programacao", icon: Calendar, permission: "programacao" },
+  { title: "Locutores", url: "/admin/locutores", icon: Users, section: "Programação", permission: "locutores" },
+  { title: "Programação", url: "/admin/programacao", icon: Calendar, section: "Programação", permission: "programacao" },
   
   // Noticias Dismantled
-  { title: "Lista de Notícias", url: "/admin/noticias?tab=lista", icon: FileText, permission: "noticias_lista" },
-  { title: "Publicar Noticia", url: "/admin/noticias?tab=nova", icon: Plus, permission: "noticias_nova" },
-  { title: "Categorias News", url: "/admin/noticias?tab=categorias", icon: Layers, permission: "noticias_categorias" },
+  { title: "Lista de Notícias", url: "/admin/noticias?tab=lista", icon: FileText, section: "Notícias", permission: "noticias_lista" },
+  { title: "Publicar Noticia", url: "/admin/noticias?tab=nova", icon: Plus, section: "Notícias", permission: "noticias_nova" },
+  { title: "Categorias News", url: "/admin/noticias?tab=categorias", icon: Layers, section: "Notícias", permission: "noticias_categorias" },
   
   // Conteudo
-  { title: "Entretenimento", url: "/admin/entretenimento", icon: Radio, permission: "entretenimento" },
-  { title: "Banners / Slides", url: "/admin/slides", icon: Image, permission: "slides" },
-  { title: "Mural de Pedidos", url: "/admin/pedidos", icon: Music, permission: "pedidos" },
-  { title: "Galeria de Fotos", url: "/admin/fotos", icon: Image, permission: "fotos" },
-  { title: "Sobre a Rádio", url: "/admin/sobre", icon: Info, permission: "sobre" },
+  { title: "Entretenimento", url: "/admin/entretenimento", icon: Radio, section: "Conteúdo", permission: "entretenimento" },
+  { title: "Banners / Slides", url: "/admin/slides", icon: Image, section: "Conteúdo", permission: "slides" },
+  { title: "Mural de Pedidos", url: "/admin/pedidos", icon: Music, section: "Conteúdo", permission: "pedidos" },
+  { title: "Galeria de Fotos", url: "/admin/fotos", icon: Image, section: "Conteúdo", permission: "fotos" },
+  { title: "Sobre a Rádio", url: "/admin/sobre", icon: Info, section: "Conteúdo", permission: "sobre" },
   
   // Conexoes Dismantled
-  { title: "Sinal do Player", url: "/admin/streaming?tab=sinal", icon: Radio, permission: "streaming_sinal" },
-  { title: "Redes Sociais", url: "/admin/streaming?tab=redes", icon: Globe, permission: "streaming_redes" },
-  { title: "WhatsApp & Ouvintes", url: "/admin/streaming?tab=whatsapp", icon: MessageCircle, permission: "streaming_whatsapp" },
+  { title: "Sinal do Player", url: "/admin/streaming?tab=sinal", icon: Radio, section: "Conexões", permission: "streaming_sinal" },
+  { title: "Redes Sociais", url: "/admin/streaming?tab=redes", icon: Globe, section: "Conexões", permission: "streaming_redes" },
+  { title: "WhatsApp & Ouvintes", url: "/admin/streaming?tab=whatsapp", icon: MessageCircle, section: "Conexões", permission: "streaming_whatsapp" },
   
   // Admin
-  { title: "Patrocinadores", url: "/admin/patrocinadores", icon: Heart, permission: "patrocinadores" },
-  { title: "Promoções", url: "/admin/promocoes", icon: Gift, permission: "promocoes" },
-  { title: "Usuários / Acessos", url: "/admin/usuarios", icon: Settings, permission: "usuarios" },
-  { title: "Meu Perfil", url: "/admin/perfil", icon: User, permission: "perfil" },
-  { title: "Zona de Perigo", url: "/admin/danger-zone", icon: AlertTriangle, permission: "danger_zone" },
+  { title: "Patrocinadores", url: "/admin/patrocinadores", icon: Heart, section: "Gestão", permission: "patrocinadores" },
+  { title: "Promoções", url: "/admin/promocoes", icon: Gift, section: "Gestão", permission: "promocoes" },
+  { title: "Usuários / Acessos", url: "/admin/usuarios", icon: Settings, section: "Gestão", permission: "usuarios" },
+  { title: "Meu Perfil", url: "/admin/perfil", icon: User, section: "Gestão", permission: "perfil" },
+  { title: "Zona de Perigo", url: "/admin/danger-zone", icon: AlertTriangle, section: "Gestão", permission: "danger_zone" },
 ];
 
 interface AdminSidebarProps {
@@ -97,8 +97,8 @@ export function AdminSidebar({ isDark, onToggleDark }: AdminSidebarProps) {
       </SidebarHeader>
 
       <SidebarContent className="bg-[#111c2e] px-3 pt-4 overflow-y-auto custom-scrollbar">
-        <SidebarMenu className="gap-1">
-          {filteredItems.map((item) => {
+        <div className="space-y-5">
+          {filteredItems.map((item, index) => {
             let isActive = false;
             if (item.url.includes("?")) {
               isActive = location.pathname + location.search === item.url;
@@ -107,25 +107,26 @@ export function AdminSidebar({ isDark, onToggleDark }: AdminSidebarProps) {
             }
             
             return (
-              <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild isActive={isActive} className={`h-10 rounded-lg transition-all duration-200 ${isActive ? "bg-blue-500/15 text-blue-100 font-semibold ring-1 ring-inset ring-blue-400/20" : "text-slate-300 hover:bg-white/[0.07] hover:text-white font-medium"}`}>
-                  <NavLink
-                    to={item.url}
-                    end={item.url === "/admin"}
-                    className="flex items-center gap-3 px-3"
-                  >
-                    <item.icon className="h-4 w-4 shrink-0 transition-transform duration-300" style={{ color: isActive ? "#bfdbfe" : "#91a2b8", opacity: isActive ? 1 : 0.9 }} />
-                    {!collapsed && (
-                      <span className="text-sm truncate" style={{ color: isActive ? "#dbeafe" : "#aebdd0" }}>
-                        {item.title}
-                      </span>
-                    )}
-                  </NavLink>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              <div key={item.title}>
+                {!collapsed && (index === 0 || filteredItems[index - 1].section !== item.section) && (
+                  <div className={`px-3 pb-2 ${index === 0 ? "" : "pt-3"} text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500`}>
+                    {item.section}
+                  </div>
+                )}
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={isActive} className={`h-10 rounded-lg transition-all duration-200 ${isActive ? "bg-blue-500/15 text-blue-100 font-semibold ring-1 ring-inset ring-blue-400/20" : "text-slate-300 hover:bg-white/[0.07] hover:text-white font-medium"}`}>
+                      <NavLink to={item.url} end={item.url === "/admin"} className="flex items-center gap-3 px-3">
+                        <item.icon className="h-4 w-4 shrink-0 transition-transform duration-300" style={{ color: isActive ? "#bfdbfe" : "#91a2b8", opacity: isActive ? 1 : 0.9 }} />
+                        {!collapsed && <span className="text-sm truncate" style={{ color: isActive ? "#dbeafe" : "#aebdd0" }}>{item.title}</span>}
+                      </NavLink>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </div>
             );
           })}
-        </SidebarMenu>
+        </div>
       </SidebarContent>
 
       <SidebarFooter className="bg-[#0d1726] p-4 border-t border-white/10">
