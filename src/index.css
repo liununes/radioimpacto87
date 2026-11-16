@@ -1016,3 +1016,215 @@
   background: #1b2b42;
   border-color: rgba(226,232,240,.12);
 }
+
+
+/* Ajustes de legibilidade e hierarquia — Impacto FM */
+.dark .radio-site-shell {
+  --site-surface: #1b2b42;
+  --site-surface-soft: #202f46;
+  --site-line: rgba(226, 235, 248, .16);
+  background-color: #17263a;
+  color: #f1f5fb;
+}
+.dark .radio-site-shell .radio-home-content,
+.dark .radio-site-shell .radio-home-content p,
+.dark .radio-site-shell .radio-home-content li,
+.dark .radio-site-shell .radio-home-content label {
+  color: #e2eaf5;
+}
+.dark .radio-site-shell .radio-home-content h1,
+.dark .radio-site-shell .radio-home-content h2,
+.dark .radio-site-shell .radio-home-content h3,
+.dark .radio-site-shell .radio-home-content h4 {
+  color: #f8fbff;
+}
+.dark .radio-site-shell .text-gray-500,
+.dark .radio-site-shell .text-gray-400,
+.dark .radio-site-shell .text-slate-500,
+.dark .radio-site-shell .text-slate-400 {
+  color: #c1cede !important;
+}
+.dark .radio-site-shell .radio-entertainment-section {
+  background: #1c2d44;
+  border-color: rgba(226,235,248,.16);
+}
+.radio-site-shell .radio-entertainment-section .radio-section-heading {
+  margin-bottom: 1.15rem;
+}
+.radio-site-shell .radio-entertainment-section .radio-section-heading h2 {
+  font-size: clamp(1.35rem, 2.15vw, 2rem);
+  line-height: 1.15;
+  letter-spacing: -.035em;
+}
+.radio-site-shell .radio-entertainment-section .radio-section-heading h2 span {
+  font-size: inherit;
+}
+.radio-site-shell .radio-entertainment-section .radio-eyebrow {
+  font-size: .62rem;
+  letter-spacing: .16em;
+}
+.radio-site-shell .radio-music-section > section {
+  padding-top: clamp(2.5rem, 4vw, 3.75rem);
+  padding-bottom: clamp(2.5rem, 4vw, 3.75rem);
+}
+.radio-site-shell .radio-top-songs {
+  background: transparent;
+  border: 0;
+}
+.radio-site-shell .radio-top-songs .radio-top-songs-inner {
+  width: min(100%, 1180px);
+  max-width: none;
+  align-items: stretch;
+}
+.radio-site-shell .radio-top-songs .radio-top-songs-heading {
+  align-items: flex-start;
+  text-align: left;
+  margin-bottom: 1.6rem;
+  gap: .45rem;
+}
+.radio-site-shell .radio-top-songs .radio-top-songs-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  color: #b77900;
+  font-size: .68rem;
+  letter-spacing: .2em;
+  font-weight: 900;
+}
+.radio-site-shell .radio-top-songs .radio-top-songs-heading h2 {
+  font-size: clamp(1.75rem, 3vw, 2.6rem);
+  line-height: 1.08;
+  letter-spacing: -.045em;
+}
+.radio-site-shell .radio-top-songs .radio-top-songs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+.radio-site-shell .radio-top-songs .radio-song-card {
+  position: relative;
+  min-height: 190px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.25rem;
+  padding: 1.35rem;
+  overflow: hidden;
+  border: 1px solid rgba(0,46,93,.12);
+  border-radius: 1.2rem;
+  background: #fff;
+  box-shadow: 0 12px 28px rgba(0,35,75,.08);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.radio-site-shell .radio-top-songs .radio-song-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 36px rgba(0,35,75,.14);
+}
+.radio-site-shell .radio-top-songs .radio-song-card:first-child {
+  color: #fff;
+  background: linear-gradient(145deg, #002e5d 0%, #0757a6 100%);
+  border-color: #0757a6;
+}
+.radio-site-shell .radio-top-songs .radio-song-card:nth-child(2) {
+  background: linear-gradient(145deg, #fffdf0 0%, #fff4bd 100%);
+  border-color: rgba(226,166,0,.3);
+}
+.radio-site-shell .radio-top-songs .radio-song-card:nth-child(3) {
+  background: linear-gradient(145deg, #edf4fc 0%, #dce9f8 100%);
+  border-color: rgba(0,46,93,.13);
+}
+.radio-site-shell .radio-top-songs .radio-song-rank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.7rem;
+  height: 2.7rem;
+  border-radius: .85rem;
+  color: #002e5d;
+  background: #ffdf4d;
+  font-size: 1.1rem;
+  font-weight: 900;
+  box-shadow: 0 6px 16px rgba(0,0,0,.12);
+}
+.radio-site-shell .radio-top-songs .radio-song-card:first-child .radio-song-rank {
+  color: #002e5d;
+  background: #ffdf4d;
+}
+.radio-site-shell .radio-top-songs .radio-song-card:nth-child(2) .radio-song-rank {
+  background: #002e5d;
+  color: #fff;
+}
+.radio-site-shell .radio-top-songs .radio-song-card:nth-child(3) .radio-song-rank {
+  background: #f3a712;
+  color: #002e5d;
+}
+.radio-site-shell .radio-top-songs .radio-song-title {
+  color: #002e5d;
+  font-size: clamp(1.2rem, 1.7vw, 1.55rem);
+  font-weight: 900;
+  line-height: 1.15;
+}
+.radio-site-shell .radio-top-songs .radio-song-card:first-child .radio-song-title,
+.radio-site-shell .radio-top-songs .radio-song-card:first-child .radio-song-artist {
+  color: #fff;
+}
+.radio-site-shell .radio-top-songs .radio-song-artist {
+  margin-top: .4rem;
+  color: #41536b;
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.radio-site-shell .radio-top-songs .radio-song-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  color: #002e5d;
+  font-size: .72rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.radio-site-shell .radio-top-songs .radio-song-card:first-child .radio-song-link {
+  color: #ffdf4d;
+}
+.dark .radio-site-shell .radio-top-songs .radio-top-songs-kicker {
+  color: #ffdc59;
+}
+.dark .radio-site-shell .radio-top-songs .radio-song-card {
+  border-color: rgba(226,235,248,.16);
+  box-shadow: 0 14px 30px rgba(0,0,0,.2);
+}
+.dark .radio-site-shell .radio-top-songs .radio-song-card:first-child {
+  background: linear-gradient(145deg, #06427d 0%, #1264ad 100%);
+}
+.dark .radio-site-shell .radio-top-songs .radio-song-card:nth-child(2) {
+  background: linear-gradient(145deg, #3b3a2c 0%, #514526 100%);
+}
+.dark .radio-site-shell .radio-top-songs .radio-song-card:nth-child(3) {
+  background: linear-gradient(145deg, #263b55 0%, #304d70 100%);
+}
+.dark .radio-site-shell .radio-top-songs .radio-song-title,
+.dark .radio-site-shell .radio-top-songs .radio-song-artist,
+.dark .radio-site-shell .radio-top-songs .radio-song-link {
+  color: #f5f8fc;
+}
+.dark .radio-site-shell .radio-top-songs .radio-song-card:first-child .radio-song-title,
+.dark .radio-site-shell .radio-top-songs .radio-song-card:first-child .radio-song-artist {
+  color: #fff;
+}
+@media (max-width: 767px) {
+  .radio-site-shell .radio-top-songs .radio-top-songs-grid {
+    grid-template-columns: 1fr;
+    gap: .75rem;
+  }
+  .radio-site-shell .radio-top-songs .radio-song-card {
+    min-height: 145px;
+    padding: 1.1rem;
+  }
+  .radio-site-shell .radio-entertainment-section .radio-section-heading h2 {
+    font-size: 1.35rem;
+  }
+}
