@@ -77,26 +77,26 @@ export function AdminSidebar({ isDark, onToggleDark }: AdminSidebarProps) {
   const filteredItems = menuItems.filter(item => item.permission === "base" || hasPermission(item.permission));
 
   return (
-    <Sidebar collapsible="icon" className="border-r border-white/5 shadow-2xl">
-      <SidebarHeader className="bg-[var(--admin-blue)] p-6 pb-4" style={{ backgroundColor: 'var(--admin-blue)' }}>
+    <Sidebar collapsible="icon" className="border-r border-slate-800 bg-[#111c2e] text-slate-100 shadow-xl">
+      <SidebarHeader className="bg-[#111c2e] p-5 pb-4 border-b border-white/10">
         <div className={`flex items-center gap-4 ${collapsed ? "justify-center" : ""}`}>
-          <div className="w-10 h-10 rounded-xl bg-[var(--admin-yellow)] flex items-center justify-center shrink-0 shadow-sm" style={{ backgroundColor: 'var(--admin-yellow)' }}>
+          <div className="w-10 h-10 rounded-xl bg-blue-500/15 ring-1 ring-blue-300/20 flex items-center justify-center shrink-0">
             {theme.adminLogo ? (
               <img src={theme.adminLogo} alt="Admin Logo" className="w-8 h-8 object-contain" />
             ) : (
-              <Radio className="w-5 h-5 text-[var(--admin-blue)]" style={{ color: 'var(--admin-blue)' }} />
+              <Radio className="w-5 h-5 text-blue-300" />
             )}
           </div>
           {!collapsed && (
             <div className="flex flex-col leading-tight">
-              <span className="text-base font-bold" style={{ color: 'var(--admin-text)' }}>Admin Panel</span>
-              <span className="text-xs font-medium opacity-90" style={{ color: 'var(--admin-yellow)' }}>Gestão Integrada</span>
+              <span className="text-base font-bold" style={{ color: "#f8fafc" }}>Admin Panel</span>
+              <span className="text-xs font-medium opacity-90" style={{ color: "#93c5fd" }}>Gestão Integrada</span>
             </div>
           )}
         </div>
       </SidebarHeader>
 
-      <SidebarContent className="bg-[var(--admin-blue)] px-4 pt-4 overflow-y-auto custom-scrollbar" style={{ backgroundColor: 'var(--admin-blue)' }}>
+      <SidebarContent className="bg-[#111c2e] px-3 pt-4 overflow-y-auto custom-scrollbar">
         <SidebarMenu className="gap-1">
           {filteredItems.map((item) => {
             let isActive = false;
@@ -108,21 +108,15 @@ export function AdminSidebar({ isDark, onToggleDark }: AdminSidebarProps) {
             
             return (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild isActive={isActive} className={`
-                  h-10 rounded-lg transition-all duration-200
-                  ${isActive ? "bg-[var(--admin-yellow)] text-[var(--admin-blue)] font-semibold shadow-sm" : "hover:bg-white/10 hover:text-white font-medium"}
-                `} style={{ 
-                  backgroundColor: isActive ? 'var(--admin-yellow)' : 'transparent',
-                  color: isActive ? 'var(--admin-blue)' : 'var(--admin-sidebar-text)'
-                }}>
+                <SidebarMenuButton asChild isActive={isActive} className={`h-10 rounded-lg transition-all duration-200 ${isActive ? "bg-blue-500/15 text-blue-100 font-semibold ring-1 ring-inset ring-blue-400/20" : "text-slate-300 hover:bg-white/[0.07] hover:text-white font-medium"}`}>
                   <NavLink
                     to={item.url}
                     end={item.url === "/admin"}
                     className="flex items-center gap-3 px-3"
                   >
-                    <item.icon className="h-4 w-4 shrink-0 transition-transform duration-300" style={{ color: isActive ? 'var(--admin-blue)' : 'var(--admin-sidebar-text)', opacity: isActive ? 1 : 0.8 }} />
+                    <item.icon className="h-4 w-4 shrink-0 transition-transform duration-300" style={{ color: isActive ? "#bfdbfe" : "#91a2b8", opacity: isActive ? 1 : 0.9 }} />
                     {!collapsed && (
-                      <span className="text-sm truncate" style={{ color: isActive ? 'var(--admin-blue)' : 'var(--admin-sidebar-text)' }}>
+                      <span className="text-sm truncate" style={{ color: isActive ? "#dbeafe" : "#aebdd0" }}>
                         {item.title}
                       </span>
                     )}
@@ -134,7 +128,7 @@ export function AdminSidebar({ isDark, onToggleDark }: AdminSidebarProps) {
         </SidebarMenu>
       </SidebarContent>
 
-      <SidebarFooter className="bg-black/10 p-4 border-t border-white/5" style={{ backgroundColor: 'rgba(0,0,0,0.1)' }}>
+      <SidebarFooter className="bg-[#0d1726] p-4 border-t border-white/10">
         <SidebarMenu className="gap-2">
            {!isMainAdmin && (
              <SidebarMenuItem>
@@ -143,11 +137,11 @@ export function AdminSidebar({ isDark, onToggleDark }: AdminSidebarProps) {
                   className="h-12 w-full flex items-center gap-3 px-3 rounded-lg hover:bg-white/10 transition-colors group"
                 >
                   <a href="https://wa.me/5533999837414" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-3">
-                    <LifeBuoy className="h-5 w-5 text-white/50 group-hover:text-[var(--admin-yellow)] transition-colors" />
+                    <LifeBuoy className="h-5 w-5 text-slate-400 group-hover:text-blue-300 transition-colors" />
                     {!collapsed && (
                       <div className="flex flex-col text-left">
-                        <span className="text-xs font-semibold leading-tight text-white/80 group-hover:text-white transition-colors">Suporte Técnico</span>
-                        <span className="text-[10px] text-white/40 group-hover:text-[var(--admin-yellow)] opacity-80 transition-colors">(33) 99983-7414</span>
+                        <span className="text-xs font-semibold leading-tight text-slate-200 group-hover:text-white transition-colors">Suporte Técnico</span>
+                        <span className="text-[10px] text-slate-500 group-hover:text-blue-300 opacity-80 transition-colors">(33) 99983-7414</span>
                       </div>
                     )}
                   </a>
@@ -158,7 +152,7 @@ export function AdminSidebar({ isDark, onToggleDark }: AdminSidebarProps) {
            <SidebarMenuItem>
               <SidebarMenuButton 
                 onClick={onToggleDark} 
-                className="h-10 w-full flex items-center gap-3 px-3 rounded-lg text-white/60 hover:text-[var(--admin-yellow)] hover:bg-white/5 transition-colors group"
+                className="h-10 w-full flex items-center gap-3 px-3 rounded-lg text-slate-300 hover:text-white hover:bg-white/[0.07] transition-colors group"
               >
                 {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
                 {!collapsed && <span className="text-sm font-medium">{isDark ? "Modo Claro" : "Modo Escuro"}</span>}
