@@ -16,6 +16,7 @@ const RadioPlayer = () => {
   const [isMuted, setIsMuted] = useState(false);
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [locationSearch, setLocationSearch] = useState(() => localStorage.getItem("radio-selected-city") || "");
+  const [displayCity, setDisplayCity] = useState(() => localStorage.getItem("radio-selected-city") || "");
 
   const loadConfigs = async () => {
     const site = (await getSiteConfig("site")) || {};
@@ -70,6 +71,7 @@ const RadioPlayer = () => {
     const city = locationSearch.trim();
     if (!city) return;
     localStorage.setItem("radio-selected-city", city);
+    setDisplayCity(city);
     window.dispatchEvent(new CustomEvent("radio-city-change", { detail: { city } }));
     setShowLocationModal(false);
     toast.success(`Região atualizada para ${city}`);
@@ -139,13 +141,13 @@ const RadioPlayer = () => {
         <button
           type="button"
           onClick={() => {
-            setLocationSearch(localStorage.getItem("radio-selected-city") || theme.weatherCity || siteConfig.cidade || "");
+            setLocationSearch(displayCity || theme.weatherCity || siteConfig.cidade || "");
             setShowLocationModal(true);
           }}
           className="flex items-center gap-4 px-6 py-2.5 border border-primary/20 rounded-full text-primary hover:border-primary/50 hover:bg-primary/[0.03] transition-all bg-white group shadow-sm"
           aria-label="Alterar região"
         >
-          <span className="text-[11px] font-black uppercase tracking-wider">{localStorage.getItem("radio-selected-city") || theme.weatherCity || siteConfig.cidade || "Impacto FM"}</span>
+          <span className="text-[11px] font-black uppercase tracking-wider">{displayCity || theme.weatherCity || siteConfig.cidade || "Impacto FM"}</span>
           <ChevronDown className="w-4 h-4 text-accent group-hover:translate-y-0.5 transition-transform" />
         </button>
       </div>
