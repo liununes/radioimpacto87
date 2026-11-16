@@ -58,7 +58,20 @@ const NewsTextItem = ({ item, compact = false }: { item: NewsItem; compact?: boo
 export const FeaturedNews = ({ news, loading }: { news: NewsItem[]; loading: boolean }) => {
   const theme = useTheme();
   const mainNews = news.slice(0, 3);
-  const moreNews = news.slice(3, 6);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const activeNews = mainNews[activeIndex] || mainNews[0];
+
+  useEffect(() => {
+    if (mainNews.length < 2) return;
+    const timer = window.setInterval(() => {
+      setActiveIndex((current) => (current + 1) % mainNews.length);
+    }, 6500);
+    return () => window.clearInterval(timer);
+  }, [mainNews.length]);
+
+  useEffect(() => {
+    if (activeIndex >= mainNews.length) setActiveIndex(0);
+  }, [activeIndex, mainNews.length]);
 
   if (mainNews.length === 0 && !loading) return null;
 
@@ -72,27 +85,64 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[]; loading: boo
               {theme.labels.newsSubtitle}
             </span>
           </h2>
-          <p>As três principais notícias</p>
+          <p>As três principais notícias do dia</p>
         </div>
       </div>
 
-      <div className="news-editorial-layout">
-        <section className="news-primary-list" aria-label="Três principais notícias">
-          {mainNews.map((item) => (
-            <NewsTextItem key={item.id} item={item} />
-          ))}
-          {loading && mainNews.length === 0 && <p className="news-loading">Carregando notícias...</p>}
+      <div className="news-editorial-layout news-feature-layout">
+        <section className="news-primary-list" aria-label="Notícia em destaque">
+          {activeNews ? (
+            <article className="news-feature-card" key={activeNews.id}>
+              {activeNews.imagem && (
+                <div className="news-feature-image-wrap">
+                  <img src={activeNews.imagem} alt={activeNews.titulo} className="news-feature-image" />
+                  <span className="news-feature-counter">{activeIndex + 1} / {mainNews.length}</span>
+                </div>
+              )}
+              <div className="news-feature-copy">
+                <div className="news-text-meta">
+                  <span>{activeNews.categoria || "NOTÍCIA"}</span>
+                  <span>{new Date(activeNews.data_postagem || Date.now()).toLocaleDateString("pt-BR")}</span>
+                </div>
+                <h3>{activeNews.titulo}</h3>
+                {activeNews.resumo && <p>{activeNews.resumo}</p>}
+                {activeNews.url && (
+                  <a href={activeNews.url} target="_blank" rel="noopener noreferrer" className="news-feature-link">
+                    Ler matéria completa <span aria-hidden="true">→</span>
+                  </a>
+                )}
+              </div>
+            </article>
+          ) : (
+            <p className="news-loading">Carregando notícias...</p>
+          )}
         </section>
 
-        <aside className="news-more-list" style={{ padding: ".85rem", alignSelf: "start" }}>
+        <aside className="news-more-list news-feature-list" aria-label="Selecione uma das três notícias">
           <div className="news-more-heading">
-            <h3 style={{ fontSize: ".78rem", lineHeight: 1.2, letterSpacing: ".1em", margin: 0 }}>VÍDEOS E MAIS</h3>
+            <h3>DESTAQUES DO DIA</h3>
+            <p>Selecione uma notícia para visualizar</p>
           </div>
-          {moreNews.length > 0 ? (
-            moreNews.map((item) => <NewsTextItem key={item.id} item={item} compact />)
-          ) : (
-            <p className="news-more-empty">Confira outros conteúdos publicados pela rádio.</p>
-          )}
+          {mainNews.map((item, index) => (
+            <button
+              type="button"
+              key={item.id}
+              className={`news-feature-summary${index === activeIndex ? " is-active" : ""}`}
+              onClick={() => setActiveIndex(index)}
+              aria-pressed={index === activeIndex}
+            >
+              {item.imagem && (
+                <span className="news-summary-image-wrap">
+                  <img src={item.imagem} alt="" className="news-summary-image" loading="lazy" />
+                </span>
+              )}
+              <span className="news-summary-copy">
+                <span className="news-summary-number">0{index + 1} · {item.categoria || "NOTÍCIA"}</span>
+                <strong>{item.titulo}</strong>
+                {item.resumo && <span className="news-summary-excerpt">{item.resumo}</span>}
+              </span>
+            </button>
+          ))}
           <a href="#conteudos" className="news-all-link">
             Ver todos os conteúdos <span aria-hidden="true">→</span>
           </a>
