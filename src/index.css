@@ -1393,3 +1393,41 @@
     min-height: 7.5rem;
   }
 }
+
+
+/* Refinamento compacto das chamadas editoriais e dos conteúdos. */
+.radio-site-shell .radio-home-content #noticias > .container:first-child [class~="lg:col-span-4"] > h4 {
+  font-size: .5rem !important;
+  letter-spacing: .1em !important;
+  margin: 0 0 .1rem !important;
+}
+.radio-site-shell .radio-home-content #noticias > .container:first-child [class~="lg:col-span-4"] > div > div {
+  padding-bottom: .45rem;
+  margin-bottom: .35rem;
+}
+.radio-site-shell .radio-home-content #noticias > .container:first-child [class~="lg:col-span-4"] p:first-child {
+  font-size: .68rem !important;
+  line-height: 1.3 !important;
+}
+.radio-site-shell .radio-home-content #noticias > .container:first-child [class~="lg:col-span-4"] p + p {
+  font-size: .61rem !important;
+  line-height: 1.3 !important;
+}
+.radio-site-shell .radio-home-content #noticias > .container + .container h2 {
+  font-size: .72rem !important;
+  line-height: 1.2 !important;
+}
+.radio-site-shell .radio-home-content #noticias > .container + .container [class*="CardTitle"] {
+  font-size: .7rem !important;
+  line-height: 1.3 !important;
+}
+.radio-site-shell .radio-home-content #noticias > .container + .container p {
+  font-size: .62rem !important;
+  line-height: 1.4 !important;
+}
+.radio-site-shell .radio-home-content #noticias > .container + .container [class*="CardHeader"] {
+  padding: .75rem .85rem .35rem !important;
+}
+.radio-site-shell .radio-home-content #noticias > .container + .container [class*="CardContent"] {
+  padding: .15rem .85rem .75rem !important;
+}
