@@ -111,10 +111,10 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[]; loading: boo
           )}
         </section>
 
-        <aside className="news-more-list news-feature-list" aria-label="Selecione uma das três notícias">
+        <aside className="news-more-list news-feature-list" aria-label="Acesse uma das três notícias">
           <div className="news-more-heading">
             <h3>DESTAQUES DO DIA</h3>
-            <p>Selecione uma notícia para visualizar</p>
+            <p>Clique para ler a matéria completa</p>
           </div>
           {mainNews.map((item, index) => (
             <a
