@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useTheme } from "@/hooks/useTheme";
 
@@ -20,147 +20,95 @@ interface EnhancedNewsSectionProps {
   showNews?: boolean;
 }
 
-export const FeaturedNews = ({ news, loading }: { news: NewsItem[], loading: boolean }) => {
-  const theme = useTheme();
-  const featured = news[0];
-  const sidebar = news.slice(1, 4);
+const openNews = (url: string | null) => {
+  if (url) window.open(url, "_blank", "noopener,noreferrer");
+};
 
-  if (!featured && !loading) return null;
+const NewsTextItem = ({ item, index }: { item: NewsItem; index: number }) => (
+  <article
+    className="news-text-item"
+    onClick={() => openNews(item.url)}
+    onKeyDown={(event) => {
+      if ((event.key === "Enter" || event.key === " ") && item.url) {
+        event.preventDefault();
+        openNews(item.url);
+      }
+    }}
+    role={item.url ? "link" : undefined}
+    tabIndex={item.url ? 0 : undefined}
+  >
+    <div className="news-text-meta">
+      <span>{item.categoria || "NOTÍCIA"}</span>
+      <span>{new Date(item.data_postagem || Date.now()).toLocaleDateString("pt-BR")}</span>
+    </div>
+    <h3>{item.titulo}</h3>
+    {item.resumo && <p>{item.resumo}</p>}
+    {item.url && <span className="news-read-link">Ler notícia <span aria-hidden="true">→</span></span>}
+  </article>
+);
+
+export const FeaturedNews = ({ news, loading }: { news: NewsItem[]; loading: boolean }) => {
+  const theme = useTheme();
+  const mainNews = news.slice(0, 3);
+  const moreNews = news.slice(3, 6);
+
+  if (mainNews.length === 0 && !loading) return null;
 
   return (
-    <div className="container mx-auto px-4 py-20">
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-l-[12px] pl-6" style={{ borderColor: 'var(--plantao-line)' }}>
+    <div className="container mx-auto px-4 py-14 news-editorial-section">
+      <div className="news-editorial-heading">
         <div>
-          <h2 className="text-4xl md:text-5xl font-black tracking-tighter leading-none" style={{ color: 'var(--plantao-title)' }}>
-            {theme.labels.newsTitle} <span className="underline" style={{ color: 'var(--plantao-subtitle)', textDecorationColor: 'var(--nav-item-active)' }}>{theme.labels.newsSubtitle}</span>
+          <h2 style={{ color: "var(--plantao-title)" }}>
+            {theme.labels.newsTitle}{" "}
+            <span style={{ color: "var(--plantao-subtitle)", textDecorationColor: "var(--nav-item-active)" }}>
+              {theme.labels.newsSubtitle}
+            </span>
           </h2>
-          <p className="text-gray-400 font-bold uppercase tracking-[0.2em] text-[10px] mt-2">Destaques e últimas notícias</p>
+          <p>As três principais notícias</p>
         </div>
-        <div className="hidden md:block h-0.5 flex-1 bg-gray-100 mx-12 mb-2" />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-        {featured && (
-          <div 
-            className="lg:col-span-8 group cursor-pointer"
-            onClick={() => featured.url && window.open(featured.url, '_blank')}
-          >
-            <Card className="h-full relative overflow-hidden rounded-3xl border-none shadow-2xl hover:shadow-primary/10 transition-all duration-500">
-              <div className="flex flex-col h-full">
-                <div className="aspect-[16/9] overflow-hidden relative">
-                  <img 
-                    src={featured.imagem || ""} 
-                    alt={featured.titulo}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80" />
-                  <div className="absolute top-8 left-8">
-                    {featured.categoria && (
-                      <span className="px-6 py-2 bg-accent text-white text-[10px] font-black rounded-lg shadow-xl uppercase tracking-widest">
-                        {featured.categoria}
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <CardContent className="p-10 flex flex-col justify-between flex-1 bg-white">
-                  <div>
-                    <h3 className="text-2xl md:text-3xl font-black mb-3 transition-colors leading-[1.15] tracking-tight" style={{ color: 'var(--text-title)' }}>
-                      {featured.titulo}
-                    </h3>
-                  </div>
-                  {featured.resumo && (
-                    <p className="text-gray-500 mb-5 line-clamp-4 text-sm md:text-base leading-relaxed font-normal">
-                      {featured.resumo}
-                    </p>
-                  )}
-                  {featured.url && (
-                    <div className="clube-btn-yellow w-fit">
-                      LER NOTÍCIA
-                    </div>
-                  )}
-                </CardContent>
-              </div>
-            </Card>
-          </div>
-        )}
+      <div className="news-editorial-layout">
+        <section className="news-primary-list" aria-label="Três principais notícias">
+          {mainNews.map((item, index) => (
+            <NewsTextItem key={item.id} item={item} index={index} />
+          ))}
+          {loading && mainNews.length === 0 && <p className="news-loading">Carregando notícias...</p>}
+        </section>
 
-        {/* Sidebar News Grid */}
-        <div className="lg:col-span-4 flex flex-col gap-3">
-          <div className="rounded-2xl border border-gray-200/80 bg-white/70 p-4 shadow-sm">
-            <div className="mb-3">
-              <h4 className="text-[9px] font-extrabold text-accent uppercase tracking-[0.12em]">
-                VÍDEOS E MAIS
-              </h4>
-              <p className="mt-1 text-[10px] leading-relaxed text-gray-500">
-                Acompanhe outros destaques da Impacto FM.
-              </p>
-            </div>
-            <div className="space-y-2">
-              {sidebar.slice(0, 2).map((item) => (
-                <p key={item.id} className="line-clamp-1 text-[11px] font-semibold leading-snug" style={{ color: 'var(--plantao-card-text)' }}>
-                  {item.titulo}
-                </p>
-              ))}
-            </div>
-            <a
-              href="#conteudos"
-              className="mt-4 inline-flex items-center gap-2 rounded-full bg-[var(--nav-item-active)] px-4 py-2 text-[10px] font-extrabold uppercase tracking-wide text-white transition-opacity hover:opacity-90"
-            >
-              Ver todos os conteúdos
-              <span aria-hidden="true">→</span>
-            </a>
+        <aside className="news-more-list">
+          <div className="news-more-heading">
+            <h3>VÍDEOS E MAIS</h3>
+            <p>Outros destaques da Impacto FM</p>
           </div>
-        </div>
+          {moreNews.length > 0 ? (
+            moreNews.map((item, index) => <NewsTextItem key={item.id} item={item} index={index} />)
+          ) : (
+            <p className="news-more-empty">Confira outros conteúdos publicados pela rádio.</p>
+          )}
+          <a href="#conteudos" className="news-all-link">
+            Ver todos os conteúdos <span aria-hidden="true">→</span>
+          </a>
+        </aside>
       </div>
     </div>
   );
 };
 
-export const RemainingNews = ({ news, loading, showAll = false }: { news: NewsItem[], loading: boolean, showAll?: boolean }) => {
-  const remaining = showAll ? news : news.slice(4);
+export const RemainingNews = ({ news, loading, showAll = false }: { news: NewsItem[]; loading: boolean; showAll?: boolean }) => {
+  const remaining = showAll ? news : news.slice(6);
 
   if (remaining.length === 0 && !loading) return null;
 
   return (
-    <div id="conteudos" className="container mx-auto px-4 py-12 bg-gray-50/50 rounded-3xl my-8 shadow-inner scroll-mt-24">
-      <div className="flex items-center gap-3 mb-7">
-        <h2 className="text-xs font-extrabold tracking-tight shrink-0" style={{ color: 'var(--text-title)' }}>CONTEÚDOS</h2>
-        <div className="h-0.5 w-full bg-gray-200" />
+    <div id="conteudos" className="container mx-auto px-4 py-12 news-remaining-section scroll-mt-24">
+      <div className="news-remaining-heading">
+        <h2>CONTEÚDOS</h2>
+        <p>Mais notícias e publicações</p>
       </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {remaining.map((item) => (
-          <Card 
-            key={item.id} 
-            className="group hover:-translate-y-1 cursor-pointer transition-all duration-300 border-none shadow-md rounded-xl overflow-hidden bg-white"
-            onClick={() => item.url && window.open(item.url, '_blank')}
-          >
-            {item.imagem && (
-              <div className="aspect-video overflow-hidden">
-                <img 
-                  src={item.imagem} 
-                  alt={item.titulo}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                />
-              </div>
-            )}
-            <CardHeader className="p-4 pb-2">
-              <span className="text-[8px] font-bold text-accent uppercase tracking-wider mb-2 block">
-                {item.categoria || "LOCAL"}
-              </span>
-              <CardTitle className="text-xs font-semibold line-clamp-2 hover:underline tracking-tight leading-snug" style={{ color: 'var(--text-title)' }}>
-                {item.titulo}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="px-4 pb-4 pt-0">
-              {item.resumo && (
-                <p className="text-[10px] leading-snug text-gray-600 line-clamp-2 mb-2">
-                  {item.resumo}
-                </p>
-              )}
-               <div className="text-[9px] font-bold text-gray-400 uppercase">{new Date(item.data_postagem || new Date()).toLocaleDateString('pt-BR')}</div>
-            </CardContent>
-          </Card>
+      <div className="news-remaining-list">
+        {remaining.map((item, index) => (
+          <NewsTextItem key={item.id} item={item} index={index} />
         ))}
       </div>
     </div>
@@ -179,7 +127,7 @@ export const useNews = () => {
       .order("destaque", { ascending: false })
       .order("data_postagem", { ascending: false })
       .limit(24);
-    
+
     if (error) console.error("Erro ao buscar notícias:", error.message);
     else setNews(data || []);
     setLoading(false);
