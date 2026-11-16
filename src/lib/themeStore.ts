@@ -9,6 +9,7 @@ export interface Promo {
   id: string;
   titulo: string;
   imagem: string;
+  formato?: "16:9" | "9:16";
   link?: string;
   ativa: boolean;
 }
