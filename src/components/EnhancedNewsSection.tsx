@@ -24,9 +24,10 @@ const openNews = (url: string | null) => {
   if (url) window.open(url, "_blank", "noopener,noreferrer");
 };
 
-const NewsTextItem = ({ item }: { item: NewsItem }) => (
+const NewsTextItem = ({ item, compact = false }: { item: NewsItem; compact?: boolean }) => (
   <article
-    className="news-text-item"
+    className={`news-text-item${compact ? " news-more-card" : ""}`}
+    style={compact ? { gridTemplateColumns: "96px minmax(0, 1fr)", gap: ".7rem", padding: ".7rem", borderRadius: ".75rem", alignItems: "start" } : undefined}
     onClick={() => openNews(item.url)}
     onKeyDown={(event) => {
       if ((event.key === "Enter" || event.key === " ") && item.url) {
@@ -38,17 +39,17 @@ const NewsTextItem = ({ item }: { item: NewsItem }) => (
     tabIndex={item.url ? 0 : undefined}
   >
     {item.imagem && (
-      <div className="news-text-image-wrap">
+      <div className="news-text-image-wrap" style={compact ? { aspectRatio: "4 / 3", borderRadius: ".55rem" } : undefined}>
         <img src={item.imagem} alt={item.titulo} className="news-text-image" loading="lazy" />
       </div>
     )}
-    <div className="news-text-copy">
-    <div className="news-text-meta">
+    <div className="news-text-copy" style={compact ? { minWidth: 0 } : undefined}>
+    <div className="news-text-meta" style={compact ? { fontSize: ".64rem", gap: ".25rem .45rem", marginBottom: ".3rem" } : undefined}>
       <span>{item.categoria || "NOTÍCIA"}</span>
       <span>{new Date(item.data_postagem || Date.now()).toLocaleDateString("pt-BR")}</span>
     </div>
-    <h3>{item.titulo}</h3>
-    {item.resumo && <p>{item.resumo}</p>}
+    <h3 style={compact ? { fontSize: ".92rem", lineHeight: 1.28, margin: 0 } : undefined}>{item.titulo}</h3>
+    {item.resumo && <p style={compact ? { fontSize: ".8rem", lineHeight: 1.42, marginTop: ".35rem", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" } : undefined}>{item.resumo}</p>}
     {item.url && <span className="news-read-link">Ler notícia <span aria-hidden="true">→</span></span>}
     </div>
   </article>
@@ -83,13 +84,12 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[]; loading: boo
           {loading && mainNews.length === 0 && <p className="news-loading">Carregando notícias...</p>}
         </section>
 
-        <aside className="news-more-list">
+        <aside className="news-more-list" style={{ padding: ".85rem", alignSelf: "start" }}>
           <div className="news-more-heading">
-            <h3>VÍDEOS E MAIS</h3>
-            <p>Outros destaques da Impacto FM</p>
+            <h3 style={{ fontSize: ".78rem", lineHeight: 1.2, letterSpacing: ".1em", margin: 0 }}>VÍDEOS E MAIS</h3>
           </div>
           {moreNews.length > 0 ? (
-            moreNews.map((item) => <NewsTextItem key={item.id} item={item} />)
+            moreNews.map((item) => <NewsTextItem key={item.id} item={item} compact />)
           ) : (
             <p className="news-more-empty">Confira outros conteúdos publicados pela rádio.</p>
           )}
