@@ -149,7 +149,7 @@ const AdminSlides = () => {
             <div className="lg:col-span-8 space-y-3">
               <div>
                 <Label className="text-sm font-semibold block">Escolha a Imagem</Label>
-                <p className="text-xs text-muted-foreground font-medium mt-1 mb-3">A imagem original será preservada, sem esticar, recortar ou alterar sua proporção. Na exibição, ela será ampliada proporcionalmente para preencher o banner; apenas o excesso poderá ficar fora da área visível.</p>
+                <p className="text-xs text-muted-foreground font-medium mt-1 mb-3">Para preencher o banner sem sobras, use a proporção 16:5 (por exemplo, 1920 × 600 px ou 1600 × 500 px). A imagem original será preservada, sem distorção. Imagens em outras proporções serão ampliadas para preencher o espaço e poderão ter partes das bordas cortadas.</p>
               </div>
 
               <div className="relative group rounded-xl overflow-hidden border-2 border-dashed bg-muted border-border hover:border-primary/50 hover:bg-muted/80 transition-colors flex flex-col items-center justify-center p-4 min-h-[220px]">
