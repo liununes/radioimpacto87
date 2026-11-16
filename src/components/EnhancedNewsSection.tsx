@@ -87,39 +87,27 @@ export const FeaturedNews = ({ news, loading }: { news: NewsItem[], loading: boo
 
         {/* Sidebar News Grid */}
         <div className="lg:col-span-4 flex flex-col gap-3">
-          <h4 className="text-[9px] font-extrabold text-accent uppercase tracking-[0.18em] mb-1 flex items-center gap-2">
-            <div className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse" />
+          <h4 className="text-[8px] font-bold text-accent uppercase tracking-[0.12em] mb-1">
             VÍDEOS E MAIS
           </h4>
-          {sidebar.map((item) => (
-            <Card 
-              key={item.id} 
-              className="min-h-32 group cursor-pointer border-none shadow-md rounded-xl overflow-hidden hover:shadow-lg transition-all" 
-              style={{ backgroundColor: 'var(--plantao-card-bg)' }}
-              onClick={() => item.url && window.open(item.url, '_blank')}
-            >
-              <div className="flex h-full">
-                <div className="w-28 shrink-0 overflow-hidden relative">
-                  <img 
-                    src={item.imagem || ""} 
-                    alt={item.titulo}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  />
-                </div>
-                <CardContent className="p-3 flex flex-col justify-center gap-1 flex-1 min-w-0">
-                  <span className="text-[8px] font-bold uppercase tracking-wide" style={{ color: 'var(--nav-item-active)' }}>{item.categoria || "NEWS"}</span>
-                  <CardTitle className="text-xs font-bold line-clamp-2 leading-snug tracking-normal" style={{ color: 'var(--plantao-card-text)' }}>
-                    {item.titulo}
-                  </CardTitle>
-                  {item.resumo && (
-                    <p className="text-[11px] leading-snug line-clamp-2" style={{ color: 'var(--plantao-card-text)', opacity: 0.78 }}>
-                      {item.resumo}
-                    </p>
-                  )}
-                </CardContent>
+          <div className="flex flex-col gap-2">
+            {sidebar.map((item) => (
+              <div
+                key={item.id}
+                className="cursor-pointer border-b border-gray-200/80 pb-2 last:border-0 hover:opacity-75 transition-opacity"
+                onClick={() => item.url && window.open(item.url, '_blank')}
+              >
+                <p className="text-[11px] font-semibold leading-snug" style={{ color: 'var(--plantao-card-text)' }}>
+                  {item.titulo}
+                </p>
+                {item.resumo && (
+                  <p className="mt-1 text-[10px] leading-snug line-clamp-1" style={{ color: 'var(--plantao-card-text)', opacity: 0.72 }}>
+                    {item.resumo}
+                  </p>
+                )}
               </div>
-            </Card>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -134,7 +122,7 @@ export const RemainingNews = ({ news, loading, showAll = false }: { news: NewsIt
   return (
     <div className="container mx-auto px-4 py-12 bg-gray-50/50 rounded-3xl my-8 shadow-inner">
       <div className="flex items-center gap-3 mb-7">
-        <h2 className="text-base font-extrabold tracking-tight shrink-0" style={{ color: 'var(--text-title)' }}>CONTEÚDOS</h2>
+        <h2 className="text-xs font-extrabold tracking-tight shrink-0" style={{ color: 'var(--text-title)' }}>CONTEÚDOS</h2>
         <div className="h-0.5 w-full bg-gray-200" />
       </div>
       
@@ -158,13 +146,13 @@ export const RemainingNews = ({ news, loading, showAll = false }: { news: NewsIt
               <span className="text-[8px] font-bold text-accent uppercase tracking-wider mb-2 block">
                 {item.categoria || "LOCAL"}
               </span>
-              <CardTitle className="text-sm font-bold line-clamp-2 hover:underline tracking-tight leading-snug" style={{ color: 'var(--text-title)' }}>
+              <CardTitle className="text-xs font-semibold line-clamp-2 hover:underline tracking-tight leading-snug" style={{ color: 'var(--text-title)' }}>
                 {item.titulo}
               </CardTitle>
             </CardHeader>
             <CardContent className="px-4 pb-4 pt-0">
               {item.resumo && (
-                <p className="text-xs leading-relaxed text-gray-600 line-clamp-3 mb-3">
+                <p className="text-[10px] leading-snug text-gray-600 line-clamp-2 mb-2">
                   {item.resumo}
                 </p>
               )}
