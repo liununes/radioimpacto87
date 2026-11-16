@@ -57,7 +57,7 @@ const HeroCarousel = () => {
           <img
             src={slide.image}
             alt={slide.title || "Imagem de destaque"}
-            className="absolute inset-0 h-full w-full object-fill"
+            className="absolute inset-0 h-full w-full object-cover object-center"
             loading={i === 0 ? "eager" : "lazy"}
             decoding="async"
           />
