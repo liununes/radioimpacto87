@@ -1928,3 +1928,49 @@
     font-size: 1.35rem;
   }
 }
+
+
+/* Leitura interna de notícias: janela compacta e hierarquia de contraste. */
+.radio-site-shell .news-full-dialog {
+  max-width:  min(860px, calc(100vw - 2rem));
+  max-height: 82dvh;
+  overflow-y: auto;
+  background: #f8fafc;
+}
+.radio-site-shell .news-full-dialog [data-radix-dialog-title],
+.news-full-dialog .news-full-title {
+  color: #102b46 !important;
+  font-size: clamp(1.25rem, 2vw, 1.7rem);
+  line-height: 1.25;
+  font-weight: 850;
+  letter-spacing: -.025em;
+}
+.radio-site-shell .news-full-dialog [data-radix-dialog-description] {
+  color: #526174 !important;
+  line-height: 1.55;
+}
+.radio-site-shell .news-full-dialog .news-full-copy {
+  max-width: 72ch;
+  margin-inline: auto;
+  font-size: .96rem;
+  line-height: 1.8;
+}
+.dark .radio-site-shell .news-full-dialog {
+  background: #17263a;
+}
+.dark .radio-site-shell .news-full-dialog [data-radix-dialog-title],
+.dark .news-full-dialog .news-full-title {
+  color: #f8fafc !important;
+}
+.dark .radio-site-shell .news-full-dialog [data-radix-dialog-description] {
+  color: #c4d0df !important;
+}
+@media (max-width: 640px) {
+  .radio-site-shell .news-full-dialog {
+    max-height: 88dvh;
+  }
+  .radio-site-shell .news-full-dialog .news-full-copy {
+    font-size: .92rem;
+    line-height: 1.72;
+  }
+}
