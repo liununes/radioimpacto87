@@ -25,6 +25,11 @@ const WeatherWidget = ({ showWeather = true }: WeatherWidgetProps) => {
   const [selectedCity, setSelectedCity] = useState(() => localStorage.getItem("radio-selected-city") || theme.weatherCity);
 
   useEffect(() => {
+    const savedCity = localStorage.getItem("radio-selected-city");
+    setSelectedCity(savedCity || theme.weatherCity);
+  }, [theme.weatherCity]);
+
+  useEffect(() => {
     if (!showWeather || !selectedCity) return;
 
     const fetchWeather = async () => {
