@@ -1,5 +1,5 @@
 import { useTheme } from "@/hooks/useTheme";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Radio } from "lucide-react";
 
 const PromosSection = () => {
   const theme = useTheme();
@@ -8,54 +8,70 @@ const PromosSection = () => {
   if (!theme.showPromos || promos.length === 0) return null;
 
   return (
-    <section id="promocoes" className="py-32 bg-white dark:bg-gray-950 border-y border-gray-50 dark:border-gray-900 transition-all duration-700">
-      <div className="container mx-auto px-6">
-        <div className="flex flex-col items-center text-center mb-20">
-           <span className="text-[10px] font-black uppercase tracking-[0.5em] block mb-2" style={{ color: 'var(--text-detail)' }}>Participe</span>
-           <h2 className="text-4xl md:text-6xl font-black tracking-tighter italic leading-none mb-4" style={{ color: 'var(--text-title)' }}>
-              {theme.labels.promosTitle} <span className="underline underline-offset-8" style={{ color: 'var(--text-detail)' }}>{theme.labels.promosSubtitle}</span>
-           </h2>
+    <section id="promocoes" className="py-20 md:py-24 bg-slate-50 dark:bg-gray-950 border-y border-slate-200/70 dark:border-gray-900 transition-colors">
+      <div className="container mx-auto px-4 sm:px-6">
+        <div className="flex flex-col items-center text-center mb-12 md:mb-16">
+          <span className="inline-flex items-center gap-2 rounded-full bg-[#ffed32]/20 px-4 py-2 text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#002e5d] dark:text-[#ffed32] mb-5">
+            <Radio className="w-4 h-4" />
+            Participe e concorra
+          </span>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-none text-[#002e5d] dark:text-white">
+            PROMOÇÃO <span className="text-[#e5a900] dark:text-[#ffed32]">NO AR!</span>
+          </h2>
+          <div className="mt-5 h-1 w-16 rounded-full bg-[#ffed32]" />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16">
-          {promos.map((promo) => (
-            <div 
-              key={promo.id} 
-              className="group relative bg-gray-50 dark:bg-gray-900 rounded-[3rem] overflow-hidden shadow-2xl transition-all duration-500 hover:shadow-pink-500/10 hover:scale-[1.02] active:scale-95 border border-gray-100 dark:border-gray-800"
-            >
-              <div className="aspect-[4/5] relative overflow-hidden">
-                <img 
-                  src={promo.imagem} 
-                  alt={promo.titulo} 
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" 
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-10">
-                   <h3 className="text-3xl font-black text-white italic tracking-tighter leading-none mb-6">{promo.titulo}</h3>
-                   {promo.link && (
-                     <a 
-                       href={promo.link}
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       className="h-16 bg-accent text-white rounded-2xl flex items-center justify-center gap-4 font-black uppercase text-xs tracking-widest shadow-xl hover:bg-white hover:text-accent transition-all"
-                     >
-                        Quero Ganhar <ExternalLink className="w-4 h-4" />
-                     </a>
-                   )}
-                </div>
-              </div>
-              <div className="p-10 border-t border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900">
-                 <h4 className="text-xl font-black text-primary tracking-tighter truncate italic">{promo.titulo}</h4>
-                 <div className="flex items-center justify-between mt-4">
-                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Aproveite agora</span>
-                    <div className="flex gap-1">
-                       <div className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse" />
-                       <div className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse delay-75" />
-                       <div className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse delay-150" />
+        <div className="flex flex-wrap items-start justify-center gap-7 md:gap-9">
+          {promos.map((promo) => {
+            const isVertical = promo.formato === "9:16";
+            return (
+              <article
+                key={promo.id}
+                className={`group w-full ${isVertical ? "max-w-[360px]" : "max-w-[760px]"} overflow-hidden rounded-2xl border border-slate-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg shadow-slate-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl`}
+              >
+                <div className={`relative w-full ${isVertical ? "aspect-[9/16]" : "aspect-video"} overflow-hidden bg-slate-100 dark:bg-gray-950 flex items-center justify-center`}>
+                  {promo.imagem ? (
+                    <img
+                      src={promo.imagem}
+                      alt={promo.titulo}
+                      className="h-full w-full object-contain object-center"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center text-sm font-semibold text-slate-400">
+                      Imagem da promoção
                     </div>
-                 </div>
-              </div>
-            </div>
-          ))}
+                  )}
+                  {promo.link && (
+                    <a
+                      href={promo.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Participar: ${promo.titulo}`}
+                      className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-2 bg-gradient-to-t from-black/85 to-transparent px-5 pb-5 pt-14 text-sm font-extrabold uppercase tracking-wider text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 focus:opacity-100"
+                    >
+                      Quero participar <ExternalLink className="h-4 w-4" />
+                    </a>
+                  )}
+                </div>
+                <div className="flex items-center justify-between gap-4 border-t border-slate-100 dark:border-gray-800 px-5 py-4 sm:px-6">
+                  <h3 className="min-w-0 truncate text-base sm:text-lg font-extrabold tracking-tight text-[#002e5d] dark:text-white">
+                    {promo.titulo}
+                  </h3>
+                  {promo.link && (
+                    <a
+                      href={promo.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="shrink-0 inline-flex items-center gap-2 rounded-lg bg-[#ffed32] px-4 py-2.5 text-xs font-black uppercase tracking-wide text-[#002e5d] transition-colors hover:bg-[#ffdb00]"
+                    >
+                      Participar <ExternalLink className="h-3.5 w-3.5" />
+                    </a>
+                  )}
+                </div>
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>
