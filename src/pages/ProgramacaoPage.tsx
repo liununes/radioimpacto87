@@ -2,9 +2,6 @@ import { useState, useEffect } from "react";
 import { Radio, Clock, ArrowLeft } from "lucide-react";
 import { getProgramas, getLocutores, getProgramaAtual, type Programa, type Locutor } from "@/lib/radioStore";
 import PhotoLightbox from "@/components/PhotoLightbox";
-import RadioPlayer from "@/components/RadioPlayer";
-import Navigation from "@/components/Navigation";
-import Footer from "@/components/Footer";
 import { Link } from "react-router-dom";
 
 const DIAS_COMPLETOS = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
@@ -50,7 +47,7 @@ const ProgramacaoPage = () => {
   }
 
   return (
-    <div className="container mx-auto px-6 py-12">
+    <div className="radio-programacao-page container mx-auto px-6 py-12">
       <div className="flex items-center gap-6 mb-16">
         <Link to="/" className="w-12 h-12 rounded-full bg-white border border-gray-100 shadow-md flex items-center justify-center hover:bg-gray-50 transition-all group">
           <ArrowLeft className="w-6 h-6 text-primary group-hover:-translate-x-1 transition-transform" />
