@@ -34,7 +34,7 @@ const AlertDialogContent = React.forwardRef<
     <AlertDialogPrimitive.Content
       ref={ref}
       className={cn(
-        "fixed left-[50%] top-[50%] z-50 grid max-h-[min(88dvh,900px)] w-[calc(100%-1.5rem)] max-w-md translate-x-[-50%] translate-y-[-50%] gap-0 overflow-y-auto rounded-2xl border border-border/80 bg-card p-6 text-card-foreground shadow-[0_28px_90px_rgba(15,23,42,0.32)] duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-2xl",
+        "fixed left-[50%] top-[50%] z-50 grid max-h-[min(88dvh,900px)] w-[calc(100%-1.5rem)] max-w-md translate-x-[-50%] translate-y-[-50%] gap-0 overflow-y-auto rounded-2xl border border-slate-200/90 bg-[hsl(216,32%,97%)] p-6 text-card-foreground shadow-[0_28px_90px_rgba(15,23,42,0.38)] ring-1 ring-slate-900/[0.04] dark:border-slate-700/90 dark:bg-[hsl(222,34%,13%)] duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-2xl",
         className,
       )}
       {...props}
@@ -44,12 +44,12 @@ const AlertDialogContent = React.forwardRef<
 AlertDialogContent.displayName = AlertDialogPrimitive.Content.displayName;
 
 const AlertDialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("flex flex-col space-y-2 border-b border-border bg-muted/30 px-6 py-5 pr-8 text-left", className)} {...props} />
+  <div className={cn("flex flex-col space-y-2 border-b border-slate-200/90 bg-[hsl(216,28%,93%)] px-6 py-5 dark:border-slate-700/90 dark:bg-[hsl(222,30%,16%)] pr-8 text-left", className)} {...props} />
 );
 AlertDialogHeader.displayName = "AlertDialogHeader";
 
 const AlertDialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("mt-4 flex flex-col-reverse gap-2 border-t border-border bg-muted/20 px-6 py-4 sm:flex-row sm:justify-end sm:gap-3", className)} {...props} />
+  <div className={cn("mt-4 flex flex-col-reverse gap-2 border-t border-slate-200/90 bg-[hsl(216,25%,95%)] px-6 py-4 dark:border-slate-700/90 dark:bg-[hsl(222,30%,15%)] sm:flex-row sm:justify-end sm:gap-3", className)} {...props} />
 );
 AlertDialogFooter.displayName = "AlertDialogFooter";
 
