@@ -359,6 +359,14 @@ const AdminAparencia = () => {
                              <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-slate-700 uppercase">Promoções 1</Label> <Input value={theme.labels.promosTitle} onChange={e => updateLabel("promosTitle", e.target.value)} className="rounded-none border-gray-100 h-12" /> </div>
                              <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-slate-700 uppercase">Promoções 2</Label> <Input value={theme.labels.promosSubtitle} onChange={e => updateLabel("promosSubtitle", e.target.value)} className="rounded-none border-gray-100 h-12" /> </div>
                           </div>
+                          <div className="grid grid-cols-2 gap-4">
+                             <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-slate-700 uppercase">Galeria · título</Label> <Input value={theme.labels.galleryTitle} onChange={e => updateLabel("galleryTitle", e.target.value)} className="rounded-lg border-border h-11" /> </div>
+                             <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-slate-700 uppercase">Galeria · subtítulo</Label> <Input value={theme.labels.gallerySubtitle} onChange={e => updateLabel("gallerySubtitle", e.target.value)} className="rounded-lg border-border h-11" /> </div>
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                             <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-slate-700 uppercase">Sobre · título</Label> <Input value={theme.labels.aboutTitle} onChange={e => updateLabel("aboutTitle", e.target.value)} className="rounded-lg border-border h-11" /> </div>
+                             <div className="space-y-1.5"> <Label className="text-[10px] font-bold text-slate-700 uppercase">Sobre · subtítulo</Label> <Input value={theme.labels.aboutSubtitle} onChange={e => updateLabel("aboutSubtitle", e.target.value)} className="rounded-lg border-border h-11" /> </div>
+                          </div>
                        </div>
                     </div>
                  </div>
