@@ -1975,3 +1975,10 @@
     line-height: 1.72;
   }
 }
+
+
+/* Cores configuráveis da barra fixa do player. */
+.bottom-player-clube { color: var(--player-text-primary, #002e5d); }
+.bottom-player-clube button:not(.clube-btn-yellow):not(.bg-green-500),
+.bottom-player-clube input[type="range"] { accent-color: var(--player-controls-color, #002e5d); }
+.bottom-player-clube .player-secondary-text { color: var(--player-text-secondary, #64748b); }
