@@ -427,6 +427,20 @@ const AdminAparencia = () => {
            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <Card className="rounded-xl border border-border shadow-sm bg-card text-card-foreground">
                  <CardHeader className="p-6 border-b border-border/50">
+                    <CardTitle className="text-base font-bold text-foreground">Fundo do Slide Principal</CardTitle>
+                    <CardDescription className="text-sm">Controla a cor que aparece atrás das imagens do carrossel no topo do site.</CardDescription>
+                 </CardHeader>
+                 <CardContent className="p-6 space-y-3">
+                    <Label className="text-xs font-semibold text-muted-foreground">Cor de fundo</Label>
+                    <div className="flex items-center gap-4">
+                       <input type="color" value={theme.heroBackgroundColor || "#ffffff"} onChange={e => updateField("heroBackgroundColor", e.target.value)} className="h-12 w-20 cursor-pointer rounded-md border border-border bg-background p-1" />
+                       <span className="text-sm font-mono text-muted-foreground">{theme.heroBackgroundColor || "#ffffff"}</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground">Padrão definido como branco (#FFFFFF).</p>
+                 </CardContent>
+              </Card>
+              <Card className="rounded-xl border border-border shadow-sm bg-card text-card-foreground">
+                 <CardHeader className="p-6 border-b border-border/50">
                     <CardTitle className="text-base font-bold text-foreground">Cidade Padrão</CardTitle>
                     <CardDescription className="text-sm">Define a localização base exibida no site</CardDescription>
                  </CardHeader>
