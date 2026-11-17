@@ -167,7 +167,7 @@ const RadioPlayer = () => {
            >
              <div 
                className={`absolute inset-0 flex items-center justify-center transition-opacity ${isPlaying && programaAtual?.programa?.foto ? 'opacity-0 hover:opacity-100' : 'opacity-100'}`}
-               style={{ backgroundColor: 'rgba(0,0,0,0.4)', color: 'var(--player-live-text)' }}
+               style={{ backgroundColor: 'rgba(0,0,0,0.4)', color: 'var(--player-controls-color, var(--player-live-text))' }}
              >
                 {isPlaying ? 
                   <Pause className="w-6 h-6 md:w-12 md:h-12 fill-current" /> : 
@@ -254,7 +254,7 @@ const RadioPlayer = () => {
            className="clube-btn-yellow flex items-center justify-center p-2.5 h-10 md:h-12 rounded-full md:rounded-xl md:px-10"
            title={theme.labels.playerOpen}
         >
-          <ExternalLink className="w-4 h-4" />
+          <ExternalLink className="w-4 h-4" style={{ color: "var(--player-controls-color)" }} />
           <span className="font-black hidden md:inline ml-3">{theme.labels.playerOpen}</span>
         </button>
       </div>
