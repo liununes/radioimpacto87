@@ -46,6 +46,8 @@ export interface ThemeConfig {
   clubeBlue: string;
   clubeYellow: string;
   clubeRed: string;
+  // Hero carousel background
+  heroBackgroundColor?: string;
   // Gradients
   primaryGradient?: string;
   secondaryGradient?: string;
@@ -87,7 +89,6 @@ export interface ThemeConfig {
   // Dynamic Labels
   labels: {
     heroReadMore: string;
-    heroMoreNews: string;
     newsTitle: string;
     newsSubtitle: string;
     topSongsTitle: string;
@@ -186,6 +187,7 @@ export const DEFAULT_THEME: ThemeConfig = {
   clubeBlue: "#002e5d",
   clubeYellow: "#ffed32",
   clubeRed: "#ff8c00",
+  heroBackgroundColor: "#ffffff",
   headerGradStart: "#002e5d",
   headerGradEnd: "#001a35",
   headerTextColor: "#ffffff",
@@ -225,7 +227,6 @@ export const DEFAULT_THEME: ThemeConfig = {
   ],
   labels: {
     heroReadMore: "LEIA A NOTÍCIA",
-    heroMoreNews: "MAIS NOTÍCIAS!",
     newsTitle: "Plantão",
     newsSubtitle: "Impacto",
     topSongsTitle: "Top 3",
