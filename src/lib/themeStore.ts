@@ -50,6 +50,10 @@ export interface ThemeConfig {
   heroBackgroundColor?: string;
   // Main radio player bar background
   playerBarBg?: string;
+  // Player bar foreground colors
+  playerTextPrimary?: string;
+  playerTextSecondary?: string;
+  playerControlsColor?: string;
   // Gradients
   primaryGradient?: string;
   secondaryGradient?: string;
@@ -191,6 +195,9 @@ export const DEFAULT_THEME: ThemeConfig = {
   clubeRed: "#ff8c00",
   heroBackgroundColor: "#ffffff",
   playerBarBg: "#ffffff",
+  playerTextPrimary: "#002e5d",
+  playerTextSecondary: "#64748b",
+  playerControlsColor: "#002e5d",
   headerGradStart: "#002e5d",
   headerGradEnd: "#001a35",
   headerTextColor: "#ffffff",
@@ -340,6 +347,9 @@ export function applyTheme(config: ThemeConfig) {
   root.style.setProperty("--header-grad-end", config.headerGradEnd || "#001a35");
   root.style.setProperty("--header-text-color", config.headerTextColor || "#ffffff");
   root.style.setProperty("--player-bar-bg", config.playerBarBg || "#ffffff");
+  root.style.setProperty("--player-text-primary", config.playerTextPrimary || "#002e5d");
+  root.style.setProperty("--player-text-secondary", config.playerTextSecondary || "#64748b");
+  root.style.setProperty("--player-controls-color", config.playerControlsColor || "#002e5d");
 
   // Admin Variables
   root.style.setProperty("--admin-blue", config.adminBlue || "#002e5d");
