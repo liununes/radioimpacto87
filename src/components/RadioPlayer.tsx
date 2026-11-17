@@ -122,12 +122,12 @@ const RadioPlayer = () => {
       {/* Esquerda: Localização - Hidden on mobile to avoid crowding */}
       <div className="hidden md:flex items-center gap-4 shrink-0">
         <div className="flex items-center gap-2">
-           <MapPin className="w-4 h-4 text-accent fill-accent/20" />
-           <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{theme.labels.playerLocation}</span>
+           <MapPin className="w-4 h-4" style={{ color: "var(--player-controls-color)", fill: "var(--player-controls-color)", fillOpacity: 0.2 }} />
+           <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: "var(--player-text-secondary)" }}>{theme.labels.playerLocation}</span>
         </div>
-        <div className="flex items-center gap-3 px-5 py-2.5 border border-primary/20 rounded-full text-primary bg-white/90 shadow-sm">
-          <MapPin className="h-4 w-4 text-accent" />
-          <span className="text-[11px] font-black uppercase tracking-wider">{theme.weatherCity || siteConfig.cidade || "Impacto FM"}</span>
+        <div className="flex items-center gap-3 px-5 py-2.5 border border-primary/20 rounded-full shadow-sm" style={{ color: "var(--player-text-primary)", backgroundColor: "var(--player-bar-bg)" }}>
+          <MapPin className="h-4 w-4" style={{ color: "var(--player-controls-color)" }} />
+          <span className="text-[11px] font-black uppercase tracking-wider" style={{ color: "var(--player-text-primary)" }}>{theme.weatherCity || siteConfig.cidade || "Impacto FM"}</span>
         </div>
       </div>
       {/* Centro: Play Button e Info do Ar - Refined for mobile */}
@@ -180,16 +180,16 @@ const RadioPlayer = () => {
         <div className="flex flex-col pt-2 md:pt-16 whitespace-nowrap overflow-hidden">
           <div className="flex items-center gap-2">
             <div className={`w-2 h-2 rounded-full ${programaAtual ? 'bg-red-500 animate-pulse' : 'bg-gray-400'}`} />
-            <span className={`text-[8px] md:text-[10px] font-black uppercase tracking-widest ${programaAtual ? 'text-red-500' : 'text-gray-400'}`}>
+            <span className="text-[8px] md:text-[10px] font-black uppercase tracking-widest" style={{ color: "var(--player-text-secondary)" }}>
               {programaAtual ? "No Ar Agora" : "Programação Automática"}
             </span>
           </div>
-          <span className="text-sm md:text-3xl font-[900] text-primary leading-none tracking-tighter">
+          <span className="text-sm md:text-3xl font-[900] leading-none tracking-tighter" style={{ color: "var(--player-text-primary)" }}>
             {siteConfig.radioFreq || theme.radioFreq || "87.9"} FM
           </span>
           {/* Programa Atual Subtitle */}
           <div className="flex flex-col mt-0.5">
-            <span className="text-[9px] md:text-[11px] font-black text-primary truncate max-w-[120px] md:max-w-none">
+            <span className="text-[9px] md:text-[11px] font-black truncate max-w-[120px] md:max-w-none" style={{ color: "var(--player-text-secondary)" }}>
                {programaAtual?.programa?.nome || "Música e Informação"}
             </span>
           </div>
@@ -222,7 +222,7 @@ const RadioPlayer = () => {
         <div className="hidden lg:flex items-center gap-3 mr-2 px-4 py-2 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-100 dark:border-gray-700 transition-all">
             <button 
               onClick={toggleMute} 
-              className="text-primary dark:text-secondary hover:scale-110 transition-transform"
+              className="hover:scale-110 transition-transform" style={{ color: "var(--player-controls-color)" }}
               title={isMuted ? "Ativar Áudio" : "Mudar para Mudo"}
             >
                 {isMuted || volume === 0 ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
@@ -234,7 +234,7 @@ const RadioPlayer = () => {
                 step="0.01"
                 value={isMuted ? 0 : volume}
                 onChange={handleVolumeChange}
-                className="w-20 h-1.5 accent-primary dark:accent-secondary cursor-pointer appearance-none bg-gray-200 dark:bg-gray-700 rounded-lg"
+                className="w-20 h-1.5 cursor-pointer appearance-none bg-gray-200 dark:bg-gray-700 rounded-lg" style={{ accentColor: "var(--player-controls-color)" }}
             />
         </div>
 
