@@ -455,6 +455,29 @@ const AdminAparencia = () => {
               </Card>
               <Card className="rounded-xl border border-border shadow-sm bg-card text-card-foreground">
                  <CardHeader className="p-6 border-b border-border/50">
+                    <CardTitle className="text-base font-bold text-foreground">Cores do Texto e dos Controles do Player</CardTitle>
+                    <CardDescription className="text-sm">Ajuste a leitura e o contraste dos textos e ícones da barra inferior, nos temas claro e escuro.</CardDescription>
+                 </CardHeader>
+                 <CardContent className="p-6 grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div className="space-y-3">
+                       <Label className="text-xs font-semibold text-muted-foreground">Texto principal</Label>
+                       <input type="color" value={theme.playerTextPrimary || "#002e5d"} onChange={e => updateField("playerTextPrimary", e.target.value)} className="h-12 w-full cursor-pointer rounded-md border border-border bg-background p-1" />
+                       <span className="text-xs font-mono text-muted-foreground">{theme.playerTextPrimary || "#002e5d"}</span>
+                    </div>
+                    <div className="space-y-3">
+                       <Label className="text-xs font-semibold text-muted-foreground">Texto secundário</Label>
+                       <input type="color" value={theme.playerTextSecondary || "#64748b"} onChange={e => updateField("playerTextSecondary", e.target.value)} className="h-12 w-full cursor-pointer rounded-md border border-border bg-background p-1" />
+                       <span className="text-xs font-mono text-muted-foreground">{theme.playerTextSecondary || "#64748b"}</span>
+                    </div>
+                    <div className="space-y-3">
+                       <Label className="text-xs font-semibold text-muted-foreground">Ícones e controles</Label>
+                       <input type="color" value={theme.playerControlsColor || "#002e5d"} onChange={e => updateField("playerControlsColor", e.target.value)} className="h-12 w-full cursor-pointer rounded-md border border-border bg-background p-1" />
+                       <span className="text-xs font-mono text-muted-foreground">{theme.playerControlsColor || "#002e5d"}</span>
+                    </div>
+                 </CardContent>
+              </Card>
+              <Card className="rounded-xl border border-border shadow-sm bg-card text-card-foreground">
+                 <CardHeader className="p-6 border-b border-border/50">
                     <CardTitle className="text-base font-bold text-foreground">Cidade Padrão</CardTitle>
                     <CardDescription className="text-sm">Define a localização base exibida no site</CardDescription>
                  </CardHeader>
