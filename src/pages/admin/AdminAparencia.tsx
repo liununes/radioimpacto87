@@ -441,6 +441,20 @@ const AdminAparencia = () => {
               </Card>
               <Card className="rounded-xl border border-border shadow-sm bg-card text-card-foreground">
                  <CardHeader className="p-6 border-b border-border/50">
+                    <CardTitle className="text-base font-bold text-foreground">Cor da Barra do Player</CardTitle>
+                    <CardDescription className="text-sm">Personalize o fundo da barra fixa do player de rádio, na parte inferior do site.</CardDescription>
+                 </CardHeader>
+                 <CardContent className="p-6 space-y-3">
+                    <Label className="text-xs font-semibold text-muted-foreground">Cor de fundo</Label>
+                    <div className="flex items-center gap-4">
+                       <input type="color" value={theme.playerBarBg || "#ffffff"} onChange={e => updateField("playerBarBg", e.target.value)} className="h-12 w-20 cursor-pointer rounded-md border border-border bg-background p-1" />
+                       <span className="text-sm font-mono text-muted-foreground">{theme.playerBarBg || "#ffffff"}</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground">Padrão definido como branco (#FFFFFF).</p>
+                 </CardContent>
+              </Card>
+              <Card className="rounded-xl border border-border shadow-sm bg-card text-card-foreground">
+                 <CardHeader className="p-6 border-b border-border/50">
                     <CardTitle className="text-base font-bold text-foreground">Cidade Padrão</CardTitle>
                     <CardDescription className="text-sm">Define a localização base exibida no site</CardDescription>
                  </CardHeader>
