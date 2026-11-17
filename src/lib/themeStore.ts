@@ -48,6 +48,8 @@ export interface ThemeConfig {
   clubeRed: string;
   // Hero carousel background
   heroBackgroundColor?: string;
+  // Main radio player bar background
+  playerBarBg?: string;
   // Gradients
   primaryGradient?: string;
   secondaryGradient?: string;
@@ -188,6 +190,7 @@ export const DEFAULT_THEME: ThemeConfig = {
   clubeYellow: "#ffed32",
   clubeRed: "#ff8c00",
   heroBackgroundColor: "#ffffff",
+  playerBarBg: "#ffffff",
   headerGradStart: "#002e5d",
   headerGradEnd: "#001a35",
   headerTextColor: "#ffffff",
@@ -336,6 +339,7 @@ export function applyTheme(config: ThemeConfig) {
   root.style.setProperty("--header-grad-start", config.headerGradStart || "#002e5d");
   root.style.setProperty("--header-grad-end", config.headerGradEnd || "#001a35");
   root.style.setProperty("--header-text-color", config.headerTextColor || "#ffffff");
+  root.style.setProperty("--player-bar-bg", config.playerBarBg || "#ffffff");
 
   // Admin Variables
   root.style.setProperty("--admin-blue", config.adminBlue || "#002e5d");
